@@ -1,6 +1,6 @@
 // ======================================================================
 // RGB_LCD.v generated from TopDesign.cysch
-// 12/29/2017 at 11:47
+// 12/29/2017 at 12:02
 // This file is auto generated. ANY EDITS YOU MAKE MAY BE LOST WHEN THIS FILE IS REGENERATED!!!
 // ======================================================================
 
@@ -519,6 +519,8 @@ endmodule
 // top
 module top ;
 
+    electrical  Net_23;
+    electrical  Net_22;
           wire  Net_19;
           wire  Net_18;
           wire  Net_17;
@@ -709,6 +711,24 @@ module top ;
 		  .out_reset({1'b0}));
 
 	assign tmpOE__LCD_Reset_net = (`CYDEV_CHIP_MEMBER_USED == `CYDEV_CHIP_MEMBER_3A && `CYDEV_CHIP_REVISION_USED < `CYDEV_CHIP_REVISION_3A_ES3) ? ~{1'b1} : {1'b1};
+
+    cy_annotation_universal_v1_0 GND_1 (
+        .connect({
+            Net_22
+        })
+    );
+    defparam GND_1.comp_name = "Gnd_v1_0";
+    defparam GND_1.port_names = "T1";
+    defparam GND_1.width = 1;
+
+    cy_annotation_universal_v1_0 PWR (
+        .connect({
+            Net_23
+        })
+    );
+    defparam PWR.comp_name = "Power_v1_0";
+    defparam PWR.port_names = "T1";
+    defparam PWR.width = 1;
 
 
 

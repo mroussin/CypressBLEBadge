@@ -1,5 +1,5 @@
 -- Project:   C:\Users\micha_000\Documents\GitHub\CypressBLEBadge\RGB_OLED\RGB_LCD.cydsn\RGB_LCD.cyprj
--- Generated: 12/29/2017 11:47:24
+-- Generated: 12/29/2017 12:02:51
 -- PSoC Creator  4.1 Update 1
 
 ENTITY RGB_LCD IS

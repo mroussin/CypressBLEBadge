@@ -2,7 +2,7 @@
 <CyXmlSerializer>
 <!--This file is machine generated and read. It is not intended to be edited by hand.-->
 <!--Due to this, there is no schema for this file.-->
-<CyGuid_2867d519-54d2-4c01-9830-c51cb08bc3dd type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize" version="5" xml_contents_version="3" name="RGB_OLED" persistent="RGB_OLED.cywrk" platform="NOT_USED">
+<CyGuid_2867d519-54d2-4c01-9830-c51cb08bc3dd type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize" version="5" xml_contents_version="3" name="BLE_Badge" persistent="BLE_Badge.cywrk" platform="NOT_USED">
 <current_project name=".\RGB_LCD.cydsn\RGB_LCD.cyprj" />
 <wrkspc_folders />
 <files />

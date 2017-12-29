@@ -1,5 +1,5 @@
 -- Project:   RGB_LCD
--- Generated: 12/29/2017 11:47:22
+-- Generated: 12/29/2017 12:02:50
 -- PSoC Creator  4.1 Update 1
 
 ENTITY RGB_LCD IS
