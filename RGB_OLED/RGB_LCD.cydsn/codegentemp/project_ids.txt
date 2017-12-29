@@ -1,0 +1,7 @@
+C:\Users\micha_000\Documents\GitHub\CypressBLEBadge\RGB_OLED\RGB_LCD.cydsn\RGB_LCD.cyprj|f5afab4b-37ee-4544-bbb4-7fc85a8176a5
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|e35586c8-fbae-48d0-a312-71f4951d625c
+C:\Users\micha_000\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|816f4c40-c7c1-434a-8786-178612468e49
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|1b3ecb94-bbcc-44db-a177-8ed9ead7b0f4
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|cf1ecc81-aba4-49ae-9fc8-8ce664a30b37
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|4afa43d2-2c57-49e2-a1d0-3479744c9578
+C:\Users\micha_000\Documents\GitHub\CypressBLEBadge\RGB_OLED\RGB_OLED.cydsn\RGB_OLED.cyprj|bd325fa3-e97d-4435-b730-3aae5b014390

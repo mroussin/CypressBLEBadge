@@ -1,0 +1,1678 @@
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"SPI_Master_SPI.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.SPI_Master_SpiPostEnable,"ax",%progbits
+  20              		.align	2
+  21              		.global	SPI_Master_SpiPostEnable
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	SPI_Master_SpiPostEnable, %function
+  25              	SPI_Master_SpiPostEnable:
+  26              	.LFB3:
+  27              		.file 1 "Generated_Source\\PSoC4\\SPI_Master_SPI.c"
+   1:Generated_Source\PSoC4/SPI_Master_SPI.c **** /***************************************************************************//**
+   2:Generated_Source\PSoC4/SPI_Master_SPI.c **** * \file SPI_Master_SPI.c
+   3:Generated_Source\PSoC4/SPI_Master_SPI.c **** * \version 3.20
+   4:Generated_Source\PSoC4/SPI_Master_SPI.c **** *
+   5:Generated_Source\PSoC4/SPI_Master_SPI.c **** * \brief
+   6:Generated_Source\PSoC4/SPI_Master_SPI.c **** *  This file provides the source code to the API for the SCB Component in
+   7:Generated_Source\PSoC4/SPI_Master_SPI.c **** *  SPI mode.
+   8:Generated_Source\PSoC4/SPI_Master_SPI.c **** *
+   9:Generated_Source\PSoC4/SPI_Master_SPI.c **** * Note:
+  10:Generated_Source\PSoC4/SPI_Master_SPI.c **** *
+  11:Generated_Source\PSoC4/SPI_Master_SPI.c **** *******************************************************************************
+  12:Generated_Source\PSoC4/SPI_Master_SPI.c **** * \copyright
+  13:Generated_Source\PSoC4/SPI_Master_SPI.c **** * Copyright 2013-2016, Cypress Semiconductor Corporation.  All rights reserved.
+  14:Generated_Source\PSoC4/SPI_Master_SPI.c **** * You may use this file only in accordance with the license, terms, conditions,
+  15:Generated_Source\PSoC4/SPI_Master_SPI.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  16:Generated_Source\PSoC4/SPI_Master_SPI.c **** * the software package with which this file was provided.
+  17:Generated_Source\PSoC4/SPI_Master_SPI.c **** *******************************************************************************/
+  18:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+  19:Generated_Source\PSoC4/SPI_Master_SPI.c **** #include "SPI_Master_PVT.h"
+  20:Generated_Source\PSoC4/SPI_Master_SPI.c **** #include "SPI_Master_SPI_UART_PVT.h"
+  21:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+  22:Generated_Source\PSoC4/SPI_Master_SPI.c **** #if(SPI_Master_SCB_MODE_UNCONFIG_CONST_CFG)
+  23:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+  24:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /***************************************
+  25:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  Configuration Structure Initialization
+  26:Generated_Source\PSoC4/SPI_Master_SPI.c ****     ***************************************/
+  27:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+  28:Generated_Source\PSoC4/SPI_Master_SPI.c ****     const SPI_Master_SPI_INIT_STRUCT SPI_Master_configSpi =
+  29:Generated_Source\PSoC4/SPI_Master_SPI.c ****     {
+  30:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_MODE,
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 2
+
+
+  31:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_SUB_MODE,
+  32:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_CLOCK_MODE,
+  33:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_OVS_FACTOR,
+  34:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_MEDIAN_FILTER_ENABLE,
+  35:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_LATE_MISO_SAMPLE_ENABLE,
+  36:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_WAKE_ENABLE,
+  37:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_RX_DATA_BITS_NUM,
+  38:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_TX_DATA_BITS_NUM,
+  39:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_BITS_ORDER,
+  40:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_TRANSFER_SEPARATION,
+  41:Generated_Source\PSoC4/SPI_Master_SPI.c ****         0u,
+  42:Generated_Source\PSoC4/SPI_Master_SPI.c ****         NULL,
+  43:Generated_Source\PSoC4/SPI_Master_SPI.c ****         0u,
+  44:Generated_Source\PSoC4/SPI_Master_SPI.c ****         NULL,
+  45:Generated_Source\PSoC4/SPI_Master_SPI.c ****         (uint32) SPI_Master_SCB_IRQ_INTERNAL,
+  46:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_INTR_RX_MASK,
+  47:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_RX_TRIGGER_LEVEL,
+  48:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_INTR_TX_MASK,
+  49:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_TX_TRIGGER_LEVEL,
+  50:Generated_Source\PSoC4/SPI_Master_SPI.c ****         (uint8) SPI_Master_SPI_BYTE_MODE_ENABLE,
+  51:Generated_Source\PSoC4/SPI_Master_SPI.c ****         (uint8) SPI_Master_SPI_FREE_RUN_SCLK_ENABLE,
+  52:Generated_Source\PSoC4/SPI_Master_SPI.c ****         (uint8) SPI_Master_SPI_SS_POLARITY
+  53:Generated_Source\PSoC4/SPI_Master_SPI.c ****     };
+  54:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+  55:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+  56:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /*******************************************************************************
+  57:Generated_Source\PSoC4/SPI_Master_SPI.c ****     * Function Name: SPI_Master_SpiInit
+  58:Generated_Source\PSoC4/SPI_Master_SPI.c ****     ****************************************************************************//**
+  59:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+  60:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  Configures the SPI_Master for SPI operation.
+  61:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+  62:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  This function is intended specifically to be used when the SPI_Master 
+  63:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  configuration is set to “Unconfigured SPI_Master” in the customizer. 
+  64:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  After initializing the SPI_Master in SPI mode using this function, 
+  65:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  the component can be enabled using the SPI_Master_Start() or 
+  66:Generated_Source\PSoC4/SPI_Master_SPI.c ****     * SPI_Master_Enable() function.
+  67:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  This function uses a pointer to a structure that provides the configuration 
+  68:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  settings. This structure contains the same information that would otherwise 
+  69:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  be provided by the customizer settings.
+  70:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+  71:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  \param config: pointer to a structure that contains the following list of 
+  72:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   fields. These fields match the selections available in the customizer. 
+  73:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   Refer to the customizer for further description of the settings.
+  74:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+  75:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *******************************************************************************/
+  76:Generated_Source\PSoC4/SPI_Master_SPI.c ****     void SPI_Master_SpiInit(const SPI_Master_SPI_INIT_STRUCT *config)
+  77:Generated_Source\PSoC4/SPI_Master_SPI.c ****     {
+  78:Generated_Source\PSoC4/SPI_Master_SPI.c ****         if(NULL == config)
+  79:Generated_Source\PSoC4/SPI_Master_SPI.c ****         {
+  80:Generated_Source\PSoC4/SPI_Master_SPI.c ****             CYASSERT(0u != 0u); /* Halt execution due to bad function parameter */
+  81:Generated_Source\PSoC4/SPI_Master_SPI.c ****         }
+  82:Generated_Source\PSoC4/SPI_Master_SPI.c ****         else
+  83:Generated_Source\PSoC4/SPI_Master_SPI.c ****         {
+  84:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Configure pins */
+  85:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_SetPins(SPI_Master_SCB_MODE_SPI, config->mode, SPI_Master_DUMMY_PARAM);
+  86:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+  87:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Store internal configuration */
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 3
+
+
+  88:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_scbMode       = (uint8) SPI_Master_SCB_MODE_SPI;
+  89:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_scbEnableWake = (uint8) config->enableWake;
+  90:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_scbEnableIntr = (uint8) config->enableInterrupt;
+  91:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+  92:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Set RX direction internal variables */
+  93:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_rxBuffer      =         config->rxBuffer;
+  94:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_rxDataBits    = (uint8) config->rxDataBits;
+  95:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_rxBufferSize  = (uint8) config->rxBufferSize;
+  96:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+  97:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Set TX direction internal variables */
+  98:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_txBuffer      =         config->txBuffer;
+  99:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_txDataBits    = (uint8) config->txDataBits;
+ 100:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_txBufferSize  = (uint8) config->txBufferSize;
+ 101:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 102:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Configure SPI interface */
+ 103:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_CTRL_REG     = SPI_Master_GET_CTRL_OVS(config->oversample)           |
+ 104:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                             SPI_Master_GET_CTRL_BYTE_MODE(config->enableByteMode) |
+ 105:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                             SPI_Master_GET_CTRL_EC_AM_MODE(config->enableWake)    |
+ 106:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                             SPI_Master_CTRL_SPI;
+ 107:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 108:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_SPI_CTRL_REG = SPI_Master_GET_SPI_CTRL_CONTINUOUS    (config->transferSepera
+ 109:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                             SPI_Master_GET_SPI_CTRL_SELECT_PRECEDE(config->submode 
+ 110:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                                                           SPI_Master_SPI_MODE_TI_PR
+ 111:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                             SPI_Master_GET_SPI_CTRL_SCLK_MODE     (config->sclkMode
+ 112:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                             SPI_Master_GET_SPI_CTRL_LATE_MISO_SAMPLE(config->enable
+ 113:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                             SPI_Master_GET_SPI_CTRL_SCLK_CONTINUOUS(config->enableF
+ 114:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                             SPI_Master_GET_SPI_CTRL_SSEL_POLARITY (config->polarity
+ 115:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                             SPI_Master_GET_SPI_CTRL_SUB_MODE      (config->submode)
+ 116:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                             SPI_Master_GET_SPI_CTRL_MASTER_MODE   (config->mode);
+ 117:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 118:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Configure RX direction */
+ 119:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_RX_CTRL_REG     =  SPI_Master_GET_RX_CTRL_DATA_WIDTH(config->rxDataBits)    
+ 120:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                                 SPI_Master_GET_RX_CTRL_BIT_ORDER (config->bitOrder)
+ 121:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                                 SPI_Master_GET_RX_CTRL_MEDIAN    (config->enableMed
+ 122:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                                 SPI_Master_SPI_RX_CTRL;
+ 123:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 124:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_RX_FIFO_CTRL_REG = SPI_Master_GET_RX_FIFO_CTRL_TRIGGER_LEVEL(config->rxTrigg
+ 125:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 126:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Configure TX direction */
+ 127:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_TX_CTRL_REG      = SPI_Master_GET_TX_CTRL_DATA_WIDTH(config->txDataBits) |
+ 128:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                                 SPI_Master_GET_TX_CTRL_BIT_ORDER (config->bitOrder)
+ 129:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                                 SPI_Master_SPI_TX_CTRL;
+ 130:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 131:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_TX_FIFO_CTRL_REG = SPI_Master_GET_TX_FIFO_CTRL_TRIGGER_LEVEL(config->txTrigg
+ 132:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 133:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Configure interrupt with SPI handler but do not enable it */
+ 134:Generated_Source\PSoC4/SPI_Master_SPI.c ****             CyIntDisable    (SPI_Master_ISR_NUMBER);
+ 135:Generated_Source\PSoC4/SPI_Master_SPI.c ****             CyIntSetPriority(SPI_Master_ISR_NUMBER, SPI_Master_ISR_PRIORITY);
+ 136:Generated_Source\PSoC4/SPI_Master_SPI.c ****             (void) CyIntSetVector(SPI_Master_ISR_NUMBER, &SPI_Master_SPI_UART_ISR);
+ 137:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 138:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Configure interrupt sources */
+ 139:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_INTR_I2C_EC_MASK_REG = SPI_Master_NO_INTR_SOURCES;
+ 140:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_INTR_SPI_EC_MASK_REG = SPI_Master_NO_INTR_SOURCES;
+ 141:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_INTR_SLAVE_MASK_REG  = SPI_Master_GET_SPI_INTR_SLAVE_MASK(config->rxInterrup
+ 142:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_INTR_MASTER_MASK_REG = SPI_Master_GET_SPI_INTR_MASTER_MASK(config->txInterru
+ 143:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_INTR_RX_MASK_REG     = SPI_Master_GET_SPI_INTR_RX_MASK(config->rxInterruptMa
+ 144:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_INTR_TX_MASK_REG     = SPI_Master_GET_SPI_INTR_TX_MASK(config->txInterruptMa
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 4
+
+
+ 145:Generated_Source\PSoC4/SPI_Master_SPI.c ****             
+ 146:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Configure TX interrupt sources to restore. */
+ 147:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_IntrTxMask = LO16(SPI_Master_INTR_TX_MASK_REG);
+ 148:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 149:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Set active SS0 */
+ 150:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_SpiSetActiveSlaveSelect(SPI_Master_SPI_SLAVE_SELECT0);
+ 151:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 152:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Clear RX buffer indexes */
+ 153:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_rxBufferHead     = 0u;
+ 154:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_rxBufferTail     = 0u;
+ 155:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_rxBufferOverflow = 0u;
+ 156:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 157:Generated_Source\PSoC4/SPI_Master_SPI.c ****             /* Clear TX buffer indexes */
+ 158:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_txBufferHead = 0u;
+ 159:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_txBufferTail = 0u;
+ 160:Generated_Source\PSoC4/SPI_Master_SPI.c ****         }
+ 161:Generated_Source\PSoC4/SPI_Master_SPI.c ****     }
+ 162:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 163:Generated_Source\PSoC4/SPI_Master_SPI.c **** #else
+ 164:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 165:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /*******************************************************************************
+ 166:Generated_Source\PSoC4/SPI_Master_SPI.c ****     * Function Name: SPI_Master_SpiInit
+ 167:Generated_Source\PSoC4/SPI_Master_SPI.c ****     ****************************************************************************//**
+ 168:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+ 169:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  Configures the SCB for the SPI operation.
+ 170:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+ 171:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *******************************************************************************/
+ 172:Generated_Source\PSoC4/SPI_Master_SPI.c ****     void SPI_Master_SpiInit(void)
+ 173:Generated_Source\PSoC4/SPI_Master_SPI.c ****     {
+ 174:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Configure SPI interface */
+ 175:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_CTRL_REG     = SPI_Master_SPI_DEFAULT_CTRL;
+ 176:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_CTRL_REG = SPI_Master_SPI_DEFAULT_SPI_CTRL;
+ 177:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 178:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Configure TX and RX direction */
+ 179:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_RX_CTRL_REG      = SPI_Master_SPI_DEFAULT_RX_CTRL;
+ 180:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_RX_FIFO_CTRL_REG = SPI_Master_SPI_DEFAULT_RX_FIFO_CTRL;
+ 181:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 182:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Configure TX and RX direction */
+ 183:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_TX_CTRL_REG      = SPI_Master_SPI_DEFAULT_TX_CTRL;
+ 184:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_TX_FIFO_CTRL_REG = SPI_Master_SPI_DEFAULT_TX_FIFO_CTRL;
+ 185:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 186:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Configure interrupt with SPI handler but do not enable it */
+ 187:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if(SPI_Master_SCB_IRQ_INTERNAL)
+ 188:Generated_Source\PSoC4/SPI_Master_SPI.c ****             CyIntDisable    (SPI_Master_ISR_NUMBER);
+ 189:Generated_Source\PSoC4/SPI_Master_SPI.c ****             CyIntSetPriority(SPI_Master_ISR_NUMBER, SPI_Master_ISR_PRIORITY);
+ 190:Generated_Source\PSoC4/SPI_Master_SPI.c ****             (void) CyIntSetVector(SPI_Master_ISR_NUMBER, &SPI_Master_SPI_UART_ISR);
+ 191:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SCB_IRQ_INTERNAL) */
+ 192:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 193:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Configure interrupt sources */
+ 194:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_I2C_EC_MASK_REG = SPI_Master_SPI_DEFAULT_INTR_I2C_EC_MASK;
+ 195:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_SPI_EC_MASK_REG = SPI_Master_SPI_DEFAULT_INTR_SPI_EC_MASK;
+ 196:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_SLAVE_MASK_REG  = SPI_Master_SPI_DEFAULT_INTR_SLAVE_MASK;
+ 197:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_MASTER_MASK_REG = SPI_Master_SPI_DEFAULT_INTR_MASTER_MASK;
+ 198:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_RX_MASK_REG     = SPI_Master_SPI_DEFAULT_INTR_RX_MASK;
+ 199:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_TX_MASK_REG     = SPI_Master_SPI_DEFAULT_INTR_TX_MASK;
+ 200:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 201:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Configure TX interrupt sources to restore. */
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 5
+
+
+ 202:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_IntrTxMask = LO16(SPI_Master_INTR_TX_MASK_REG);
+ 203:Generated_Source\PSoC4/SPI_Master_SPI.c ****             
+ 204:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set active SS0 for master */
+ 205:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SPI_MASTER_CONST)
+ 206:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SpiSetActiveSlaveSelect(SPI_Master_SPI_SLAVE_SELECT0);
+ 207:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SPI_MASTER_CONST) */
+ 208:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 209:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if(SPI_Master_INTERNAL_RX_SW_BUFFER_CONST)
+ 210:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_rxBufferHead     = 0u;
+ 211:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_rxBufferTail     = 0u;
+ 212:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_rxBufferOverflow = 0u;
+ 213:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_INTERNAL_RX_SW_BUFFER_CONST) */
+ 214:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 215:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if(SPI_Master_INTERNAL_TX_SW_BUFFER_CONST)
+ 216:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_txBufferHead = 0u;
+ 217:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_txBufferTail = 0u;
+ 218:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_INTERNAL_TX_SW_BUFFER_CONST) */
+ 219:Generated_Source\PSoC4/SPI_Master_SPI.c ****     }
+ 220:Generated_Source\PSoC4/SPI_Master_SPI.c **** #endif /* (SPI_Master_SCB_MODE_UNCONFIG_CONST_CFG) */
+ 221:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 222:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 223:Generated_Source\PSoC4/SPI_Master_SPI.c **** /*******************************************************************************
+ 224:Generated_Source\PSoC4/SPI_Master_SPI.c **** * Function Name: SPI_Master_SpiPostEnable
+ 225:Generated_Source\PSoC4/SPI_Master_SPI.c **** ****************************************************************************//**
+ 226:Generated_Source\PSoC4/SPI_Master_SPI.c **** *
+ 227:Generated_Source\PSoC4/SPI_Master_SPI.c **** *  Restores HSIOM settings for the SPI master output pins (SCLK and/or SS0-SS3) 
+ 228:Generated_Source\PSoC4/SPI_Master_SPI.c **** *  to be controlled by the SCB SPI.
+ 229:Generated_Source\PSoC4/SPI_Master_SPI.c **** *
+ 230:Generated_Source\PSoC4/SPI_Master_SPI.c **** *******************************************************************************/
+ 231:Generated_Source\PSoC4/SPI_Master_SPI.c **** void SPI_Master_SpiPostEnable(void)
+ 232:Generated_Source\PSoC4/SPI_Master_SPI.c **** {
+  28              		.loc 1 232 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ 233:Generated_Source\PSoC4/SPI_Master_SPI.c **** #if(SPI_Master_SCB_MODE_UNCONFIG_CONST_CFG)
+ 234:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 235:Generated_Source\PSoC4/SPI_Master_SPI.c ****     if (SPI_Master_CHECK_SPI_MASTER)
+ 236:Generated_Source\PSoC4/SPI_Master_SPI.c ****     {
+ 237:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_CTS_SCLK_PIN)
+ 238:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set SCB SPI to drive output pin */
+ 239:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_CTS_SCLK_HSIOM_REG, SPI_Master_CTS_SCLK_HSIOM_MASK,
+ 240:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_CTS_SCLK_HSIOM_POS, SPI_Master_CTS_SCLK_HSIOM_SEL
+ 241:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_CTS_SCLK_PIN) */
+ 242:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 243:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_RTS_SS0_PIN)
+ 244:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set SCB SPI to drive output pin */
+ 245:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_RTS_SS0_HSIOM_REG, SPI_Master_RTS_SS0_HSIOM_MASK,
+ 246:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_RTS_SS0_HSIOM_POS, SPI_Master_RTS_SS0_HSIOM_SEL_S
+ 247:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_RTS_SS0_PIN) */
+ 248:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 249:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SS1_PIN)
+ 250:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set SCB SPI to drive output pin */
+ 251:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SS1_HSIOM_REG, SPI_Master_SS1_HSIOM_MASK,
+ 252:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SS1_HSIOM_POS, SPI_Master_SS1_HSIOM_SEL_SPI);
+ 253:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SS1_PIN) */
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 6
+
+
+ 254:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 255:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SS2_PIN)
+ 256:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set SCB SPI to drive output pin */
+ 257:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SS2_HSIOM_REG, SPI_Master_SS2_HSIOM_MASK,
+ 258:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SS2_HSIOM_POS, SPI_Master_SS2_HSIOM_SEL_SPI);
+ 259:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SS2_PIN) */
+ 260:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 261:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SS3_PIN)
+ 262:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set SCB SPI to drive output pin */
+ 263:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SS3_HSIOM_REG, SPI_Master_SS3_HSIOM_MASK,
+ 264:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SS3_HSIOM_POS, SPI_Master_SS3_HSIOM_SEL_SPI);
+ 265:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SS3_PIN) */
+ 266:Generated_Source\PSoC4/SPI_Master_SPI.c ****     }
+ 267:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 268:Generated_Source\PSoC4/SPI_Master_SPI.c **** #else
+ 269:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 270:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SPI_MASTER_SCLK_PIN)
+ 271:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set SCB SPI to drive output pin */
+ 272:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SCLK_M_HSIOM_REG, SPI_Master_SCLK_M_HSIOM_MASK,
+  33              		.loc 1 272 0
+  34 0000 074B     		ldr	r3, .L2
+  35 0002 1A68     		ldr	r2, [r3]
+  36 0004 F021     		movs	r1, #240
+  37 0006 0906     		lsls	r1, r1, #24
+  38 0008 0A43     		orrs	r2, r1
+  39 000a 1A60     		str	r2, [r3]
+ 273:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SCLK_M_HSIOM_POS, SPI_Master_SCLK_M_HSIOM_SEL_SPI
+ 274:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_MISO_SDA_TX_PIN_PIN) */
+ 275:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 276:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SPI_MASTER_SS0_PIN)
+ 277:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set SCB SPI to drive output pin */
+ 278:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SS0_M_HSIOM_REG, SPI_Master_SS0_M_HSIOM_MASK,
+  40              		.loc 1 278 0
+  41 000c 1A68     		ldr	r2, [r3]
+  42 000e F021     		movs	r1, #240
+  43 0010 0905     		lsls	r1, r1, #20
+  44 0012 0A43     		orrs	r2, r1
+  45 0014 1A60     		str	r2, [r3]
+ 279:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SS0_M_HSIOM_POS, SPI_Master_SS0_M_HSIOM_SEL_SPI);
+ 280:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SPI_MASTER_SS0_PIN) */
+ 281:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 282:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SPI_MASTER_SS1_PIN)
+ 283:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set SCB SPI to drive output pin */
+ 284:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SS1_M_HSIOM_REG, SPI_Master_SS1_M_HSIOM_MASK,
+ 285:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SS1_M_HSIOM_POS, SPI_Master_SS1_M_HSIOM_SEL_SPI);
+ 286:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SPI_MASTER_SS1_PIN) */
+ 287:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 288:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SPI_MASTER_SS2_PIN)
+ 289:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set SCB SPI to drive output pin */
+ 290:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SS2_M_HSIOM_REG, SPI_Master_SS2_M_HSIOM_MASK,
+ 291:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SS2_M_HSIOM_POS, SPI_Master_SS2_M_HSIOM_SEL_SPI);
+ 292:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SPI_MASTER_SS2_PIN) */
+ 293:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 294:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SPI_MASTER_SS3_PIN)
+ 295:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set SCB SPI to drive output pin */
+ 296:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SS3_M_HSIOM_REG, SPI_Master_SS3_M_HSIOM_MASK,
+ 297:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SS3_M_HSIOM_POS, SPI_Master_SS3_M_HSIOM_SEL_SPI);
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 7
+
+
+ 298:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SPI_MASTER_SS3_PIN) */
+ 299:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 300:Generated_Source\PSoC4/SPI_Master_SPI.c **** #endif /* (SPI_Master_SCB_MODE_UNCONFIG_CONST_CFG) */
+ 301:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 302:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Restore TX interrupt sources. */
+ 303:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_SetTxInterruptMode(SPI_Master_IntrTxMask);
+  46              		.loc 1 303 0
+  47 0016 034B     		ldr	r3, .L2+4
+  48 0018 1A88     		ldrh	r2, [r3]
+  49 001a 034B     		ldr	r3, .L2+8
+  50 001c 1A60     		str	r2, [r3]
+ 304:Generated_Source\PSoC4/SPI_Master_SPI.c **** }
+  51              		.loc 1 304 0
+  52              		@ sp needed
+  53 001e 7047     		bx	lr
+  54              	.L3:
+  55              		.align	2
+  56              	.L2:
+  57 0020 00010240 		.word	1073873152
+  58 0024 00000000 		.word	SPI_Master_IntrTxMask
+  59 0028 880F2440 		.word	1076105096
+  60              		.cfi_endproc
+  61              	.LFE3:
+  62              		.size	SPI_Master_SpiPostEnable, .-SPI_Master_SpiPostEnable
+  63              		.section	.text.SPI_Master_SpiStop,"ax",%progbits
+  64              		.align	2
+  65              		.global	SPI_Master_SpiStop
+  66              		.code	16
+  67              		.thumb_func
+  68              		.type	SPI_Master_SpiStop, %function
+  69              	SPI_Master_SpiStop:
+  70              	.LFB4:
+ 305:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 306:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 307:Generated_Source\PSoC4/SPI_Master_SPI.c **** /*******************************************************************************
+ 308:Generated_Source\PSoC4/SPI_Master_SPI.c **** * Function Name: SPI_Master_SpiStop
+ 309:Generated_Source\PSoC4/SPI_Master_SPI.c **** ****************************************************************************//**
+ 310:Generated_Source\PSoC4/SPI_Master_SPI.c **** *
+ 311:Generated_Source\PSoC4/SPI_Master_SPI.c **** *  Changes the HSIOM settings for the SPI master output pins 
+ 312:Generated_Source\PSoC4/SPI_Master_SPI.c **** *  (SCLK and/or SS0-SS3) to keep them inactive after the block is disabled. 
+ 313:Generated_Source\PSoC4/SPI_Master_SPI.c **** *  The output pins are controlled by the GPIO data register.
+ 314:Generated_Source\PSoC4/SPI_Master_SPI.c **** *
+ 315:Generated_Source\PSoC4/SPI_Master_SPI.c **** *******************************************************************************/
+ 316:Generated_Source\PSoC4/SPI_Master_SPI.c **** void SPI_Master_SpiStop(void)
+ 317:Generated_Source\PSoC4/SPI_Master_SPI.c **** {
+  71              		.loc 1 317 0
+  72              		.cfi_startproc
+  73              		@ args = 0, pretend = 0, frame = 0
+  74              		@ frame_needed = 0, uses_anonymous_args = 0
+  75 0000 70B5     		push	{r4, r5, r6, lr}
+  76              		.cfi_def_cfa_offset 16
+  77              		.cfi_offset 4, -16
+  78              		.cfi_offset 5, -12
+  79              		.cfi_offset 6, -8
+  80              		.cfi_offset 14, -4
+ 318:Generated_Source\PSoC4/SPI_Master_SPI.c **** #if(SPI_Master_SCB_MODE_UNCONFIG_CONST_CFG)
+ 319:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 8
+
+
+ 320:Generated_Source\PSoC4/SPI_Master_SPI.c ****     if (SPI_Master_CHECK_SPI_MASTER)
+ 321:Generated_Source\PSoC4/SPI_Master_SPI.c ****     {
+ 322:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_CTS_SCLK_PIN)
+ 323:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set output pin state after block is disabled */
+ 324:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_uart_cts_spi_sclk_Write(SPI_Master_GET_SPI_SCLK_INACTIVE);
+ 325:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 326:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set GPIO to drive output pin */
+ 327:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_CTS_SCLK_HSIOM_REG, SPI_Master_CTS_SCLK_HSIOM_MASK,
+ 328:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_CTS_SCLK_HSIOM_POS, SPI_Master_CTS_SCLK_HSIOM_SEL
+ 329:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_uart_cts_spi_sclk_PIN) */
+ 330:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 331:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_RTS_SS0_PIN)
+ 332:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set output pin state after block is disabled */
+ 333:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_uart_rts_spi_ss0_Write(SPI_Master_GET_SPI_SS0_INACTIVE);
+ 334:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 335:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set GPIO to drive output pin */
+ 336:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_RTS_SS0_HSIOM_REG, SPI_Master_RTS_SS0_HSIOM_MASK,
+ 337:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_RTS_SS0_HSIOM_POS, SPI_Master_RTS_SS0_HSIOM_SEL_G
+ 338:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_uart_rts_spi_ss0_PIN) */
+ 339:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 340:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SS1_PIN)
+ 341:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set output pin state after block is disabled */
+ 342:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_spi_ss1_Write(SPI_Master_GET_SPI_SS1_INACTIVE);
+ 343:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 344:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set GPIO to drive output pin */
+ 345:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SS1_HSIOM_REG, SPI_Master_SS1_HSIOM_MASK,
+ 346:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SS1_HSIOM_POS, SPI_Master_SS1_HSIOM_SEL_GPIO);
+ 347:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SS1_PIN) */
+ 348:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 349:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SS2_PIN)
+ 350:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set output pin state after block is disabled */
+ 351:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_spi_ss2_Write(SPI_Master_GET_SPI_SS2_INACTIVE);
+ 352:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 353:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set GPIO to drive output pin */
+ 354:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SS2_HSIOM_REG, SPI_Master_SS2_HSIOM_MASK,
+ 355:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SS2_HSIOM_POS, SPI_Master_SS2_HSIOM_SEL_GPIO);
+ 356:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SS2_PIN) */
+ 357:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 358:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SS3_PIN)
+ 359:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set output pin state after block is disabled */
+ 360:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_spi_ss3_Write(SPI_Master_GET_SPI_SS3_INACTIVE);
+ 361:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 362:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Set GPIO to drive output pin */
+ 363:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SET_HSIOM_SEL(SPI_Master_SS3_HSIOM_REG, SPI_Master_SS3_HSIOM_MASK,
+ 364:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                        SPI_Master_SS3_HSIOM_POS, SPI_Master_SS3_HSIOM_SEL_GPIO);
+ 365:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SS3_PIN) */
+ 366:Generated_Source\PSoC4/SPI_Master_SPI.c ****     
+ 367:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Store TX interrupt sources (exclude level triggered) for master. */
+ 368:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_IntrTxMask = LO16(SPI_Master_GetTxInterruptMode() & SPI_Master_INTR_SPIM_TX_REST
+ 369:Generated_Source\PSoC4/SPI_Master_SPI.c ****     }
+ 370:Generated_Source\PSoC4/SPI_Master_SPI.c ****     else
+ 371:Generated_Source\PSoC4/SPI_Master_SPI.c ****     {
+ 372:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Store TX interrupt sources (exclude level triggered) for slave. */
+ 373:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_IntrTxMask = LO16(SPI_Master_GetTxInterruptMode() & SPI_Master_INTR_SPIS_TX_REST
+ 374:Generated_Source\PSoC4/SPI_Master_SPI.c ****     }
+ 375:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 376:Generated_Source\PSoC4/SPI_Master_SPI.c **** #else
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 9
+
+
+ 377:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 378:Generated_Source\PSoC4/SPI_Master_SPI.c **** #if (SPI_Master_SPI_MASTER_SCLK_PIN)
+ 379:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Set output pin state after block is disabled */
+ 380:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_sclk_m_Write(SPI_Master_GET_SPI_SCLK_INACTIVE);
+  81              		.loc 1 380 0
+  82 0002 114D     		ldr	r5, .L5
+  83 0004 2B68     		ldr	r3, [r5]
+  84 0006 0820     		movs	r0, #8
+  85 0008 1840     		ands	r0, r3
+  86 000a 431E     		subs	r3, r0, #1
+  87 000c 9841     		sbcs	r0, r0, r3
+  88 000e C0B2     		uxtb	r0, r0
+  89 0010 FFF7FEFF 		bl	SPI_Master_sclk_m_Write
+  90              	.LVL0:
+ 381:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 382:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Set GPIO to drive output pin */
+ 383:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_SET_HSIOM_SEL(SPI_Master_SCLK_M_HSIOM_REG, SPI_Master_SCLK_M_HSIOM_MASK,
+  91              		.loc 1 383 0
+  92 0014 0D4C     		ldr	r4, .L5+4
+  93 0016 2368     		ldr	r3, [r4]
+  94 0018 1B01     		lsls	r3, r3, #4
+  95 001a 1B09     		lsrs	r3, r3, #4
+  96 001c 2360     		str	r3, [r4]
+ 384:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                    SPI_Master_SCLK_M_HSIOM_POS, SPI_Master_SCLK_M_HSIOM_SEL_GPIO);
+ 385:Generated_Source\PSoC4/SPI_Master_SPI.c **** #endif /* (SPI_Master_MISO_SDA_TX_PIN_PIN) */
+ 386:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 387:Generated_Source\PSoC4/SPI_Master_SPI.c **** #if (SPI_Master_SPI_MASTER_SS0_PIN)
+ 388:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Set output pin state after block is disabled */
+ 389:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_ss0_m_Write(SPI_Master_GET_SPI_SS0_INACTIVE);
+  97              		.loc 1 389 0
+  98 001e 2868     		ldr	r0, [r5]
+  99 0020 8023     		movs	r3, #128
+ 100 0022 5B00     		lsls	r3, r3, #1
+ 101 0024 1840     		ands	r0, r3
+ 102 0026 4342     		rsbs	r3, r0, #0
+ 103 0028 5841     		adcs	r0, r0, r3
+ 104 002a C0B2     		uxtb	r0, r0
+ 105 002c FFF7FEFF 		bl	SPI_Master_ss0_m_Write
+ 106              	.LVL1:
+ 390:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 391:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Set GPIO to drive output pin */
+ 392:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_SET_HSIOM_SEL(SPI_Master_SS0_M_HSIOM_REG, SPI_Master_SS0_M_HSIOM_MASK,
+ 107              		.loc 1 392 0
+ 108 0030 2268     		ldr	r2, [r4]
+ 109 0032 074B     		ldr	r3, .L5+8
+ 110 0034 1340     		ands	r3, r2
+ 111 0036 2360     		str	r3, [r4]
+ 393:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                    SPI_Master_SS0_M_HSIOM_POS, SPI_Master_SS0_M_HSIOM_SEL_GPIO);
+ 394:Generated_Source\PSoC4/SPI_Master_SPI.c **** #endif /* (SPI_Master_SPI_MASTER_SS0_PIN) */
+ 395:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 396:Generated_Source\PSoC4/SPI_Master_SPI.c **** #if (SPI_Master_SPI_MASTER_SS1_PIN)
+ 397:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Set output pin state after block is disabled */
+ 398:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_ss1_m_Write(SPI_Master_GET_SPI_SS1_INACTIVE);
+ 399:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 400:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Set GPIO to drive output pin */
+ 401:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_SET_HSIOM_SEL(SPI_Master_SS1_M_HSIOM_REG, SPI_Master_SS1_M_HSIOM_MASK,
+ 402:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                    SPI_Master_SS1_M_HSIOM_POS, SPI_Master_SS1_M_HSIOM_SEL_GPIO);
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 10
+
+
+ 403:Generated_Source\PSoC4/SPI_Master_SPI.c **** #endif /* (SPI_Master_SPI_MASTER_SS1_PIN) */
+ 404:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 405:Generated_Source\PSoC4/SPI_Master_SPI.c **** #if (SPI_Master_SPI_MASTER_SS2_PIN)
+ 406:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Set output pin state after block is disabled */
+ 407:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_ss2_m_Write(SPI_Master_GET_SPI_SS2_INACTIVE);
+ 408:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 409:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Set GPIO to drive output pin */
+ 410:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_SET_HSIOM_SEL(SPI_Master_SS2_M_HSIOM_REG, SPI_Master_SS2_M_HSIOM_MASK,
+ 411:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                    SPI_Master_SS2_M_HSIOM_POS, SPI_Master_SS2_M_HSIOM_SEL_GPIO);
+ 412:Generated_Source\PSoC4/SPI_Master_SPI.c **** #endif /* (SPI_Master_SPI_MASTER_SS2_PIN) */
+ 413:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 414:Generated_Source\PSoC4/SPI_Master_SPI.c **** #if (SPI_Master_SPI_MASTER_SS3_PIN)
+ 415:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Set output pin state after block is disabled */
+ 416:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_ss3_m_Write(SPI_Master_GET_SPI_SS3_INACTIVE);
+ 417:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 418:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /* Set GPIO to drive output pin */
+ 419:Generated_Source\PSoC4/SPI_Master_SPI.c ****     SPI_Master_SET_HSIOM_SEL(SPI_Master_SS3_M_HSIOM_REG, SPI_Master_SS3_M_HSIOM_MASK,
+ 420:Generated_Source\PSoC4/SPI_Master_SPI.c ****                                    SPI_Master_SS3_M_HSIOM_POS, SPI_Master_SS3_M_HSIOM_SEL_GPIO);
+ 421:Generated_Source\PSoC4/SPI_Master_SPI.c **** #endif /* (SPI_Master_SPI_MASTER_SS3_PIN) */
+ 422:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 423:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #if (SPI_Master_SPI_MASTER_CONST)
+ 424:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Store TX interrupt sources (exclude level triggered). */
+ 425:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_IntrTxMask = LO16(SPI_Master_GetTxInterruptMode() & SPI_Master_INTR_SPIM_TX_REST
+ 112              		.loc 1 425 0
+ 113 0038 064B     		ldr	r3, .L5+12
+ 114 003a 1B68     		ldr	r3, [r3]
+ 115 003c 2022     		movs	r2, #32
+ 116 003e 1340     		ands	r3, r2
+ 117 0040 054A     		ldr	r2, .L5+16
+ 118 0042 1380     		strh	r3, [r2]
+ 426:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #else
+ 427:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Store TX interrupt sources (exclude level triggered). */
+ 428:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_IntrTxMask = LO16(SPI_Master_GetTxInterruptMode() & SPI_Master_INTR_SPIS_TX_REST
+ 429:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SPI_MASTER_CONST) */
+ 430:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 431:Generated_Source\PSoC4/SPI_Master_SPI.c **** #endif /* (SPI_Master_SCB_MODE_UNCONFIG_CONST_CFG) */
+ 432:Generated_Source\PSoC4/SPI_Master_SPI.c **** }
+ 119              		.loc 1 432 0
+ 120              		@ sp needed
+ 121 0044 70BD     		pop	{r4, r5, r6, pc}
+ 122              	.L6:
+ 123 0046 C046     		.align	2
+ 124              	.L5:
+ 125 0048 20002440 		.word	1076101152
+ 126 004c 00010240 		.word	1073873152
+ 127 0050 FFFFFFF0 		.word	-251658241
+ 128 0054 880F2440 		.word	1076105096
+ 129 0058 00000000 		.word	SPI_Master_IntrTxMask
+ 130              		.cfi_endproc
+ 131              	.LFE4:
+ 132              		.size	SPI_Master_SpiStop, .-SPI_Master_SpiStop
+ 133              		.section	.text.SPI_Master_SpiSetActiveSlaveSelect,"ax",%progbits
+ 134              		.align	2
+ 135              		.global	SPI_Master_SpiSetActiveSlaveSelect
+ 136              		.code	16
+ 137              		.thumb_func
+ 138              		.type	SPI_Master_SpiSetActiveSlaveSelect, %function
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 11
+
+
+ 139              	SPI_Master_SpiSetActiveSlaveSelect:
+ 140              	.LFB5:
+ 433:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 434:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 435:Generated_Source\PSoC4/SPI_Master_SPI.c **** #if (SPI_Master_SPI_MASTER_CONST)
+ 436:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /*******************************************************************************
+ 437:Generated_Source\PSoC4/SPI_Master_SPI.c ****     * Function Name: SPI_Master_SetActiveSlaveSelect
+ 438:Generated_Source\PSoC4/SPI_Master_SPI.c ****     ****************************************************************************//**
+ 439:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+ 440:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  Selects one of the four slave select lines to be active during the transfer.
+ 441:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  After initialization the active slave select line is 0.
+ 442:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  The component should be in one of the following states to change the active
+ 443:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  slave select signal source correctly:
+ 444:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - The component is disabled.
+ 445:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - The component has completed transfer (TX FIFO is empty and the
+ 446:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *     SCB_INTR_MASTER_SPI_DONE status is set).
+ 447:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+ 448:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  This function does not check that these conditions are met.
+ 449:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  This function is only applicable to SPI Master mode of operation.
+ 450:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+ 451:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  \param slaveSelect: slave select line which will be active while the following
+ 452:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   transfer.
+ 453:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - SPI_Master_SPI_SLAVE_SELECT0 - Slave select 0.
+ 454:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - SPI_Master_SPI_SLAVE_SELECT1 - Slave select 1.
+ 455:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - SPI_Master_SPI_SLAVE_SELECT2 - Slave select 2.
+ 456:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - SPI_Master_SPI_SLAVE_SELECT3 - Slave select 3.
+ 457:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+ 458:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *******************************************************************************/
+ 459:Generated_Source\PSoC4/SPI_Master_SPI.c ****     void SPI_Master_SpiSetActiveSlaveSelect(uint32 slaveSelect)
+ 460:Generated_Source\PSoC4/SPI_Master_SPI.c ****     {
+ 141              		.loc 1 460 0
+ 142              		.cfi_startproc
+ 143              		@ args = 0, pretend = 0, frame = 0
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+ 145              		@ link register save eliminated.
+ 146              	.LVL2:
+ 461:Generated_Source\PSoC4/SPI_Master_SPI.c ****         uint32 spiCtrl;
+ 462:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 463:Generated_Source\PSoC4/SPI_Master_SPI.c ****         spiCtrl = SPI_Master_SPI_CTRL_REG;
+ 147              		.loc 1 463 0
+ 148 0000 0549     		ldr	r1, .L8
+ 149 0002 0A68     		ldr	r2, [r1]
+ 150              	.LVL3:
+ 464:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 465:Generated_Source\PSoC4/SPI_Master_SPI.c ****         spiCtrl &= (uint32) ~SPI_Master_SPI_CTRL_SLAVE_SELECT_MASK;
+ 151              		.loc 1 465 0
+ 152 0004 054B     		ldr	r3, .L8+4
+ 153 0006 1A40     		ands	r2, r3
+ 154              	.LVL4:
+ 466:Generated_Source\PSoC4/SPI_Master_SPI.c ****         spiCtrl |= (uint32)  SPI_Master_GET_SPI_CTRL_SS(slaveSelect);
+ 155              		.loc 1 466 0
+ 156 0008 8006     		lsls	r0, r0, #26
+ 157              	.LVL5:
+ 158 000a C023     		movs	r3, #192
+ 159 000c 1B05     		lsls	r3, r3, #20
+ 160 000e 1840     		ands	r0, r3
+ 161 0010 1043     		orrs	r0, r2
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 12
+
+
+ 162              	.LVL6:
+ 467:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 468:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_CTRL_REG = spiCtrl;
+ 163              		.loc 1 468 0
+ 164 0012 0860     		str	r0, [r1]
+ 469:Generated_Source\PSoC4/SPI_Master_SPI.c ****     }
+ 165              		.loc 1 469 0
+ 166              		@ sp needed
+ 167 0014 7047     		bx	lr
+ 168              	.L9:
+ 169 0016 C046     		.align	2
+ 170              	.L8:
+ 171 0018 20002440 		.word	1076101152
+ 172 001c FFFFFFF3 		.word	-201326593
+ 173              		.cfi_endproc
+ 174              	.LFE5:
+ 175              		.size	SPI_Master_SpiSetActiveSlaveSelect, .-SPI_Master_SpiSetActiveSlaveSelect
+ 176              		.section	.text.SPI_Master_SpiInit,"ax",%progbits
+ 177              		.align	2
+ 178              		.global	SPI_Master_SpiInit
+ 179              		.code	16
+ 180              		.thumb_func
+ 181              		.type	SPI_Master_SpiInit, %function
+ 182              	SPI_Master_SpiInit:
+ 183              	.LFB2:
+ 173:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Configure SPI interface */
+ 184              		.loc 1 173 0
+ 185              		.cfi_startproc
+ 186              		@ args = 0, pretend = 0, frame = 0
+ 187              		@ frame_needed = 0, uses_anonymous_args = 0
+ 188 0000 10B5     		push	{r4, lr}
+ 189              		.cfi_def_cfa_offset 8
+ 190              		.cfi_offset 4, -8
+ 191              		.cfi_offset 14, -4
+ 175:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_SPI_CTRL_REG = SPI_Master_SPI_DEFAULT_SPI_CTRL;
+ 192              		.loc 1 175 0
+ 193 0002 124A     		ldr	r2, .L11
+ 194 0004 124B     		ldr	r3, .L11+4
+ 195 0006 1A60     		str	r2, [r3]
+ 176:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 196              		.loc 1 176 0
+ 197 0008 124A     		ldr	r2, .L11+8
+ 198 000a 134B     		ldr	r3, .L11+12
+ 199 000c 1A60     		str	r2, [r3]
+ 179:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_RX_FIFO_CTRL_REG = SPI_Master_SPI_DEFAULT_RX_FIFO_CTRL;
+ 200              		.loc 1 179 0
+ 201 000e 134B     		ldr	r3, .L11+16
+ 202 0010 134A     		ldr	r2, .L11+20
+ 203 0012 1360     		str	r3, [r2]
+ 180:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 204              		.loc 1 180 0
+ 205 0014 0721     		movs	r1, #7
+ 206 0016 134A     		ldr	r2, .L11+24
+ 207 0018 1160     		str	r1, [r2]
+ 183:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_TX_FIFO_CTRL_REG = SPI_Master_SPI_DEFAULT_TX_FIFO_CTRL;
+ 208              		.loc 1 183 0
+ 209 001a 134A     		ldr	r2, .L11+28
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 13
+
+
+ 210 001c 1360     		str	r3, [r2]
+ 184:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 211              		.loc 1 184 0
+ 212 001e 0023     		movs	r3, #0
+ 213 0020 124A     		ldr	r2, .L11+32
+ 214 0022 1360     		str	r3, [r2]
+ 194:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_SPI_EC_MASK_REG = SPI_Master_SPI_DEFAULT_INTR_SPI_EC_MASK;
+ 215              		.loc 1 194 0
+ 216 0024 124A     		ldr	r2, .L11+36
+ 217 0026 1360     		str	r3, [r2]
+ 195:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_SLAVE_MASK_REG  = SPI_Master_SPI_DEFAULT_INTR_SLAVE_MASK;
+ 218              		.loc 1 195 0
+ 219 0028 124A     		ldr	r2, .L11+40
+ 220 002a 1360     		str	r3, [r2]
+ 196:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_MASTER_MASK_REG = SPI_Master_SPI_DEFAULT_INTR_MASTER_MASK;
+ 221              		.loc 1 196 0
+ 222 002c 124A     		ldr	r2, .L11+44
+ 223 002e 1360     		str	r3, [r2]
+ 197:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_RX_MASK_REG     = SPI_Master_SPI_DEFAULT_INTR_RX_MASK;
+ 224              		.loc 1 197 0
+ 225 0030 124A     		ldr	r2, .L11+48
+ 226 0032 1360     		str	r3, [r2]
+ 198:Generated_Source\PSoC4/SPI_Master_SPI.c ****         SPI_Master_INTR_TX_MASK_REG     = SPI_Master_SPI_DEFAULT_INTR_TX_MASK;
+ 227              		.loc 1 198 0
+ 228 0034 124A     		ldr	r2, .L11+52
+ 229 0036 1360     		str	r3, [r2]
+ 199:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 230              		.loc 1 199 0
+ 231 0038 124A     		ldr	r2, .L11+56
+ 232 003a 1360     		str	r3, [r2]
+ 202:Generated_Source\PSoC4/SPI_Master_SPI.c ****             
+ 233              		.loc 1 202 0
+ 234 003c 1268     		ldr	r2, [r2]
+ 235 003e 124B     		ldr	r3, .L11+60
+ 236 0040 1A80     		strh	r2, [r3]
+ 206:Generated_Source\PSoC4/SPI_Master_SPI.c ****     #endif /* (SPI_Master_SPI_MASTER_CONST) */
+ 237              		.loc 1 206 0
+ 238 0042 0020     		movs	r0, #0
+ 239 0044 FFF7FEFF 		bl	SPI_Master_SpiSetActiveSlaveSelect
+ 240              	.LVL7:
+ 219:Generated_Source\PSoC4/SPI_Master_SPI.c **** #endif /* (SPI_Master_SCB_MODE_UNCONFIG_CONST_CFG) */
+ 241              		.loc 1 219 0
+ 242              		@ sp needed
+ 243 0048 10BD     		pop	{r4, pc}
+ 244              	.L12:
+ 245 004a C046     		.align	2
+ 246              	.L11:
+ 247 004c 0F000001 		.word	16777231
+ 248 0050 00002440 		.word	1076101120
+ 249 0054 01000080 		.word	-2147483647
+ 250 0058 20002440 		.word	1076101152
+ 251 005c 07010080 		.word	-2147483385
+ 252 0060 00032440 		.word	1076101888
+ 253 0064 04032440 		.word	1076101892
+ 254 0068 00022440 		.word	1076101632
+ 255 006c 04022440 		.word	1076101636
+ 256 0070 880E2440 		.word	1076104840
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 14
+
+
+ 257 0074 C80E2440 		.word	1076104904
+ 258 0078 480F2440 		.word	1076105032
+ 259 007c 080F2440 		.word	1076104968
+ 260 0080 C80F2440 		.word	1076105160
+ 261 0084 880F2440 		.word	1076105096
+ 262 0088 00000000 		.word	SPI_Master_IntrTxMask
+ 263              		.cfi_endproc
+ 264              	.LFE2:
+ 265              		.size	SPI_Master_SpiInit, .-SPI_Master_SpiInit
+ 266              		.section	.text.SPI_Master_SpiSetSlaveSelectPolarity,"ax",%progbits
+ 267              		.align	2
+ 268              		.global	SPI_Master_SpiSetSlaveSelectPolarity
+ 269              		.code	16
+ 270              		.thumb_func
+ 271              		.type	SPI_Master_SpiSetSlaveSelectPolarity, %function
+ 272              	SPI_Master_SpiSetSlaveSelectPolarity:
+ 273              	.LFB6:
+ 470:Generated_Source\PSoC4/SPI_Master_SPI.c **** #endif /* (SPI_Master_SPI_MASTER_CONST) */
+ 471:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 472:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 473:Generated_Source\PSoC4/SPI_Master_SPI.c **** #if !(SPI_Master_CY_SCBIP_V0 || SPI_Master_CY_SCBIP_V1)
+ 474:Generated_Source\PSoC4/SPI_Master_SPI.c ****     /*******************************************************************************
+ 475:Generated_Source\PSoC4/SPI_Master_SPI.c ****     * Function Name: SPI_Master_SpiSetSlaveSelectPolarity
+ 476:Generated_Source\PSoC4/SPI_Master_SPI.c ****     ****************************************************************************//**
+ 477:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+ 478:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  Sets active polarity for slave select line.
+ 479:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  The component should be in one of the following states to change the active
+ 480:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  slave select signal source correctly:
+ 481:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - The component is disabled.
+ 482:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - The component has completed transfer.
+ 483:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  
+ 484:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  This function does not check that these conditions are met.
+ 485:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+ 486:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  \param slaveSelect: slave select line to change active polarity.
+ 487:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - SPI_Master_SPI_SLAVE_SELECT0 - Slave select 0.
+ 488:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - SPI_Master_SPI_SLAVE_SELECT1 - Slave select 1.
+ 489:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - SPI_Master_SPI_SLAVE_SELECT2 - Slave select 2.
+ 490:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - SPI_Master_SPI_SLAVE_SELECT3 - Slave select 3.
+ 491:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+ 492:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *  \param polarity: active polarity of slave select line.
+ 493:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - SPI_Master_SPI_SS_ACTIVE_LOW  - Slave select is active low.
+ 494:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *   - SPI_Master_SPI_SS_ACTIVE_HIGH - Slave select is active high.
+ 495:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *
+ 496:Generated_Source\PSoC4/SPI_Master_SPI.c ****     *******************************************************************************/
+ 497:Generated_Source\PSoC4/SPI_Master_SPI.c ****     void SPI_Master_SpiSetSlaveSelectPolarity(uint32 slaveSelect, uint32 polarity)
+ 498:Generated_Source\PSoC4/SPI_Master_SPI.c ****     {
+ 274              		.loc 1 498 0
+ 275              		.cfi_startproc
+ 276              		@ args = 0, pretend = 0, frame = 0
+ 277              		@ frame_needed = 0, uses_anonymous_args = 0
+ 278              		@ link register save eliminated.
+ 279              	.LVL8:
+ 499:Generated_Source\PSoC4/SPI_Master_SPI.c ****         uint32 ssPolarity;
+ 500:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 501:Generated_Source\PSoC4/SPI_Master_SPI.c ****         /* Get position of the polarity bit associated with slave select line */
+ 502:Generated_Source\PSoC4/SPI_Master_SPI.c ****         ssPolarity = SPI_Master_GET_SPI_CTRL_SSEL_POLARITY((uint32) 1u << slaveSelect);
+ 280              		.loc 1 502 0
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 15
+
+
+ 281 0000 0123     		movs	r3, #1
+ 282 0002 8340     		lsls	r3, r3, r0
+ 283 0004 1B02     		lsls	r3, r3, #8
+ 284 0006 F022     		movs	r2, #240
+ 285 0008 1201     		lsls	r2, r2, #4
+ 286 000a 1340     		ands	r3, r2
+ 287              	.LVL9:
+ 503:Generated_Source\PSoC4/SPI_Master_SPI.c **** 
+ 504:Generated_Source\PSoC4/SPI_Master_SPI.c ****         if (0u != polarity)
+ 288              		.loc 1 504 0
+ 289 000c 0029     		cmp	r1, #0
+ 290 000e 04D0     		beq	.L14
+ 505:Generated_Source\PSoC4/SPI_Master_SPI.c ****         {
+ 506:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_SPI_CTRL_REG |= (uint32)  ssPolarity;
+ 291              		.loc 1 506 0
+ 292 0010 0449     		ldr	r1, .L16
+ 293              	.LVL10:
+ 294 0012 0A68     		ldr	r2, [r1]
+ 295 0014 1343     		orrs	r3, r2
+ 296              	.LVL11:
+ 297 0016 0B60     		str	r3, [r1]
+ 298 0018 03E0     		b	.L13
+ 299              	.LVL12:
+ 300              	.L14:
+ 507:Generated_Source\PSoC4/SPI_Master_SPI.c ****         }
+ 508:Generated_Source\PSoC4/SPI_Master_SPI.c ****         else
+ 509:Generated_Source\PSoC4/SPI_Master_SPI.c ****         {
+ 510:Generated_Source\PSoC4/SPI_Master_SPI.c ****             SPI_Master_SPI_CTRL_REG &= (uint32) ~ssPolarity;
+ 301              		.loc 1 510 0
+ 302 001a 0249     		ldr	r1, .L16
+ 303              	.LVL13:
+ 304 001c 0A68     		ldr	r2, [r1]
+ 305 001e 9A43     		bics	r2, r3
+ 306 0020 0A60     		str	r2, [r1]
+ 307              	.LVL14:
+ 308              	.L13:
+ 511:Generated_Source\PSoC4/SPI_Master_SPI.c ****         }
+ 512:Generated_Source\PSoC4/SPI_Master_SPI.c ****     }
+ 309              		.loc 1 512 0
+ 310              		@ sp needed
+ 311 0022 7047     		bx	lr
+ 312              	.L17:
+ 313              		.align	2
+ 314              	.L16:
+ 315 0024 20002440 		.word	1076101152
+ 316              		.cfi_endproc
+ 317              	.LFE6:
+ 318              		.size	SPI_Master_SpiSetSlaveSelectPolarity, .-SPI_Master_SpiSetSlaveSelectPolarity
+ 319              		.text
+ 320              	.Letext0:
+ 321              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 322              		.file 3 "Generated_Source\\PSoC4\\SPI_Master_sclk_m.h"
+ 323              		.file 4 "Generated_Source\\PSoC4\\SPI_Master_ss0_m.h"
+ 324              		.file 5 "Generated_Source\\PSoC4\\SPI_Master_PVT.h"
+ 325              		.section	.debug_info,"",%progbits
+ 326              	.Ldebug_info0:
+ 327 0000 B0010000 		.4byte	0x1b0
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 16
+
+
+ 328 0004 0400     		.2byte	0x4
+ 329 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 330 000a 04       		.byte	0x4
+ 331 000b 01       		.uleb128 0x1
+ 332 000c 89010000 		.4byte	.LASF27
+ 333 0010 0C       		.byte	0xc
+ 334 0011 12000000 		.4byte	.LASF28
+ 335 0015 3E010000 		.4byte	.LASF29
+ 336 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 337 001d 00000000 		.4byte	0
+ 338 0021 00000000 		.4byte	.Ldebug_line0
+ 339 0025 02       		.uleb128 0x2
+ 340 0026 01       		.byte	0x1
+ 341 0027 06       		.byte	0x6
+ 342 0028 85020000 		.4byte	.LASF0
+ 343 002c 02       		.uleb128 0x2
+ 344 002d 01       		.byte	0x1
+ 345 002e 08       		.byte	0x8
+ 346 002f 61000000 		.4byte	.LASF1
+ 347 0033 02       		.uleb128 0x2
+ 348 0034 02       		.byte	0x2
+ 349 0035 05       		.byte	0x5
+ 350 0036 53020000 		.4byte	.LASF2
+ 351 003a 02       		.uleb128 0x2
+ 352 003b 02       		.byte	0x2
+ 353 003c 07       		.byte	0x7
+ 354 003d BD000000 		.4byte	.LASF3
+ 355 0041 02       		.uleb128 0x2
+ 356 0042 04       		.byte	0x4
+ 357 0043 05       		.byte	0x5
+ 358 0044 5D020000 		.4byte	.LASF4
+ 359 0048 02       		.uleb128 0x2
+ 360 0049 04       		.byte	0x4
+ 361 004a 07       		.byte	0x7
+ 362 004b 94000000 		.4byte	.LASF5
+ 363 004f 02       		.uleb128 0x2
+ 364 0050 08       		.byte	0x8
+ 365 0051 05       		.byte	0x5
+ 366 0052 38020000 		.4byte	.LASF6
+ 367 0056 02       		.uleb128 0x2
+ 368 0057 08       		.byte	0x8
+ 369 0058 07       		.byte	0x7
+ 370 0059 1E010000 		.4byte	.LASF7
+ 371 005d 03       		.uleb128 0x3
+ 372 005e 04       		.byte	0x4
+ 373 005f 05       		.byte	0x5
+ 374 0060 696E7400 		.ascii	"int\000"
+ 375 0064 02       		.uleb128 0x2
+ 376 0065 04       		.byte	0x4
+ 377 0066 07       		.byte	0x7
+ 378 0067 11010000 		.4byte	.LASF8
+ 379 006b 04       		.uleb128 0x4
+ 380 006c F0000000 		.4byte	.LASF9
+ 381 0070 02       		.byte	0x2
+ 382 0071 D301     		.2byte	0x1d3
+ 383 0073 3A000000 		.4byte	0x3a
+ 384 0077 04       		.uleb128 0x4
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 17
+
+
+ 385 0078 F7000000 		.4byte	.LASF10
+ 386 007c 02       		.byte	0x2
+ 387 007d D401     		.2byte	0x1d4
+ 388 007f 48000000 		.4byte	0x48
+ 389 0083 02       		.uleb128 0x2
+ 390 0084 04       		.byte	0x4
+ 391 0085 04       		.byte	0x4
+ 392 0086 45000000 		.4byte	.LASF11
+ 393 008a 02       		.uleb128 0x2
+ 394 008b 08       		.byte	0x8
+ 395 008c 04       		.byte	0x4
+ 396 008d E9000000 		.4byte	.LASF12
+ 397 0091 02       		.uleb128 0x2
+ 398 0092 01       		.byte	0x1
+ 399 0093 08       		.byte	0x8
+ 400 0094 46020000 		.4byte	.LASF13
+ 401 0098 04       		.uleb128 0x4
+ 402 0099 00000000 		.4byte	.LASF14
+ 403 009d 02       		.byte	0x2
+ 404 009e 7E02     		.2byte	0x27e
+ 405 00a0 A4000000 		.4byte	0xa4
+ 406 00a4 05       		.uleb128 0x5
+ 407 00a5 77000000 		.4byte	0x77
+ 408 00a9 02       		.uleb128 0x2
+ 409 00aa 08       		.byte	0x8
+ 410 00ab 04       		.byte	0x4
+ 411 00ac 79020000 		.4byte	.LASF15
+ 412 00b0 02       		.uleb128 0x2
+ 413 00b1 04       		.byte	0x4
+ 414 00b2 07       		.byte	0x7
+ 415 00b3 2F020000 		.4byte	.LASF16
+ 416 00b7 06       		.uleb128 0x6
+ 417 00b8 D0000000 		.4byte	.LASF30
+ 418 00bc 01       		.byte	0x1
+ 419 00bd E7       		.byte	0xe7
+ 420 00be 00000000 		.4byte	.LFB3
+ 421 00c2 2C000000 		.4byte	.LFE3-.LFB3
+ 422 00c6 01       		.uleb128 0x1
+ 423 00c7 9C       		.byte	0x9c
+ 424 00c8 07       		.uleb128 0x7
+ 425 00c9 66020000 		.4byte	.LASF17
+ 426 00cd 01       		.byte	0x1
+ 427 00ce 3C01     		.2byte	0x13c
+ 428 00d0 00000000 		.4byte	.LFB4
+ 429 00d4 5C000000 		.4byte	.LFE4-.LFB4
+ 430 00d8 01       		.uleb128 0x1
+ 431 00d9 9C       		.byte	0x9c
+ 432 00da F1000000 		.4byte	0xf1
+ 433 00de 08       		.uleb128 0x8
+ 434 00df 14000000 		.4byte	.LVL0
+ 435 00e3 9D010000 		.4byte	0x19d
+ 436 00e7 08       		.uleb128 0x8
+ 437 00e8 30000000 		.4byte	.LVL1
+ 438 00ec A8010000 		.4byte	0x1a8
+ 439 00f0 00       		.byte	0
+ 440 00f1 07       		.uleb128 0x7
+ 441 00f2 91020000 		.4byte	.LASF18
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 18
+
+
+ 442 00f6 01       		.byte	0x1
+ 443 00f7 CB01     		.2byte	0x1cb
+ 444 00f9 00000000 		.4byte	.LFB5
+ 445 00fd 20000000 		.4byte	.LFE5-.LFB5
+ 446 0101 01       		.uleb128 0x1
+ 447 0102 9C       		.byte	0x9c
+ 448 0103 28010000 		.4byte	0x128
+ 449 0107 09       		.uleb128 0x9
+ 450 0108 06000000 		.4byte	.LASF21
+ 451 010c 01       		.byte	0x1
+ 452 010d CB01     		.2byte	0x1cb
+ 453 010f 77000000 		.4byte	0x77
+ 454 0113 00000000 		.4byte	.LLST0
+ 455 0117 0A       		.uleb128 0xa
+ 456 0118 4B020000 		.4byte	.LASF23
+ 457 011c 01       		.byte	0x1
+ 458 011d CD01     		.2byte	0x1cd
+ 459 011f 77000000 		.4byte	0x77
+ 460 0123 21000000 		.4byte	.LLST1
+ 461 0127 00       		.byte	0
+ 462 0128 0B       		.uleb128 0xb
+ 463 0129 FE000000 		.4byte	.LASF19
+ 464 012d 01       		.byte	0x1
+ 465 012e AC       		.byte	0xac
+ 466 012f 00000000 		.4byte	.LFB2
+ 467 0133 8C000000 		.4byte	.LFE2-.LFB2
+ 468 0137 01       		.uleb128 0x1
+ 469 0138 9C       		.byte	0x9c
+ 470 0139 4D010000 		.4byte	0x14d
+ 471 013d 0C       		.uleb128 0xc
+ 472 013e 48000000 		.4byte	.LVL7
+ 473 0142 F1000000 		.4byte	0xf1
+ 474 0146 0D       		.uleb128 0xd
+ 475 0147 01       		.uleb128 0x1
+ 476 0148 50       		.byte	0x50
+ 477 0149 01       		.uleb128 0x1
+ 478 014a 30       		.byte	0x30
+ 479 014b 00       		.byte	0
+ 480 014c 00       		.byte	0
+ 481 014d 07       		.uleb128 0x7
+ 482 014e 6F000000 		.4byte	.LASF20
+ 483 0152 01       		.byte	0x1
+ 484 0153 F101     		.2byte	0x1f1
+ 485 0155 00000000 		.4byte	.LFB6
+ 486 0159 28000000 		.4byte	.LFE6-.LFB6
+ 487 015d 01       		.uleb128 0x1
+ 488 015e 9C       		.byte	0x9c
+ 489 015f 92010000 		.4byte	0x192
+ 490 0163 0E       		.uleb128 0xe
+ 491 0164 06000000 		.4byte	.LASF21
+ 492 0168 01       		.byte	0x1
+ 493 0169 F101     		.2byte	0x1f1
+ 494 016b 77000000 		.4byte	0x77
+ 495 016f 01       		.uleb128 0x1
+ 496 0170 50       		.byte	0x50
+ 497 0171 09       		.uleb128 0x9
+ 498 0172 35010000 		.4byte	.LASF22
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 19
+
+
+ 499 0176 01       		.byte	0x1
+ 500 0177 F101     		.2byte	0x1f1
+ 501 0179 77000000 		.4byte	0x77
+ 502 017d 3F000000 		.4byte	.LLST2
+ 503 0181 0A       		.uleb128 0xa
+ 504 0182 3A000000 		.4byte	.LASF24
+ 505 0186 01       		.byte	0x1
+ 506 0187 F301     		.2byte	0x1f3
+ 507 0189 77000000 		.4byte	0x77
+ 508 018d 79000000 		.4byte	.LLST3
+ 509 0191 00       		.byte	0
+ 510 0192 0F       		.uleb128 0xf
+ 511 0193 4B000000 		.4byte	.LASF31
+ 512 0197 05       		.byte	0x5
+ 513 0198 5B       		.byte	0x5b
+ 514 0199 6B000000 		.4byte	0x6b
+ 515 019d 10       		.uleb128 0x10
+ 516 019e 17020000 		.4byte	.LASF25
+ 517 01a2 17020000 		.4byte	.LASF25
+ 518 01a6 03       		.byte	0x3
+ 519 01a7 33       		.byte	0x33
+ 520 01a8 10       		.uleb128 0x10
+ 521 01a9 A6000000 		.4byte	.LASF26
+ 522 01ad A6000000 		.4byte	.LASF26
+ 523 01b1 04       		.byte	0x4
+ 524 01b2 33       		.byte	0x33
+ 525 01b3 00       		.byte	0
+ 526              		.section	.debug_abbrev,"",%progbits
+ 527              	.Ldebug_abbrev0:
+ 528 0000 01       		.uleb128 0x1
+ 529 0001 11       		.uleb128 0x11
+ 530 0002 01       		.byte	0x1
+ 531 0003 25       		.uleb128 0x25
+ 532 0004 0E       		.uleb128 0xe
+ 533 0005 13       		.uleb128 0x13
+ 534 0006 0B       		.uleb128 0xb
+ 535 0007 03       		.uleb128 0x3
+ 536 0008 0E       		.uleb128 0xe
+ 537 0009 1B       		.uleb128 0x1b
+ 538 000a 0E       		.uleb128 0xe
+ 539 000b 55       		.uleb128 0x55
+ 540 000c 17       		.uleb128 0x17
+ 541 000d 11       		.uleb128 0x11
+ 542 000e 01       		.uleb128 0x1
+ 543 000f 10       		.uleb128 0x10
+ 544 0010 17       		.uleb128 0x17
+ 545 0011 00       		.byte	0
+ 546 0012 00       		.byte	0
+ 547 0013 02       		.uleb128 0x2
+ 548 0014 24       		.uleb128 0x24
+ 549 0015 00       		.byte	0
+ 550 0016 0B       		.uleb128 0xb
+ 551 0017 0B       		.uleb128 0xb
+ 552 0018 3E       		.uleb128 0x3e
+ 553 0019 0B       		.uleb128 0xb
+ 554 001a 03       		.uleb128 0x3
+ 555 001b 0E       		.uleb128 0xe
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 20
+
+
+ 556 001c 00       		.byte	0
+ 557 001d 00       		.byte	0
+ 558 001e 03       		.uleb128 0x3
+ 559 001f 24       		.uleb128 0x24
+ 560 0020 00       		.byte	0
+ 561 0021 0B       		.uleb128 0xb
+ 562 0022 0B       		.uleb128 0xb
+ 563 0023 3E       		.uleb128 0x3e
+ 564 0024 0B       		.uleb128 0xb
+ 565 0025 03       		.uleb128 0x3
+ 566 0026 08       		.uleb128 0x8
+ 567 0027 00       		.byte	0
+ 568 0028 00       		.byte	0
+ 569 0029 04       		.uleb128 0x4
+ 570 002a 16       		.uleb128 0x16
+ 571 002b 00       		.byte	0
+ 572 002c 03       		.uleb128 0x3
+ 573 002d 0E       		.uleb128 0xe
+ 574 002e 3A       		.uleb128 0x3a
+ 575 002f 0B       		.uleb128 0xb
+ 576 0030 3B       		.uleb128 0x3b
+ 577 0031 05       		.uleb128 0x5
+ 578 0032 49       		.uleb128 0x49
+ 579 0033 13       		.uleb128 0x13
+ 580 0034 00       		.byte	0
+ 581 0035 00       		.byte	0
+ 582 0036 05       		.uleb128 0x5
+ 583 0037 35       		.uleb128 0x35
+ 584 0038 00       		.byte	0
+ 585 0039 49       		.uleb128 0x49
+ 586 003a 13       		.uleb128 0x13
+ 587 003b 00       		.byte	0
+ 588 003c 00       		.byte	0
+ 589 003d 06       		.uleb128 0x6
+ 590 003e 2E       		.uleb128 0x2e
+ 591 003f 00       		.byte	0
+ 592 0040 3F       		.uleb128 0x3f
+ 593 0041 19       		.uleb128 0x19
+ 594 0042 03       		.uleb128 0x3
+ 595 0043 0E       		.uleb128 0xe
+ 596 0044 3A       		.uleb128 0x3a
+ 597 0045 0B       		.uleb128 0xb
+ 598 0046 3B       		.uleb128 0x3b
+ 599 0047 0B       		.uleb128 0xb
+ 600 0048 27       		.uleb128 0x27
+ 601 0049 19       		.uleb128 0x19
+ 602 004a 11       		.uleb128 0x11
+ 603 004b 01       		.uleb128 0x1
+ 604 004c 12       		.uleb128 0x12
+ 605 004d 06       		.uleb128 0x6
+ 606 004e 40       		.uleb128 0x40
+ 607 004f 18       		.uleb128 0x18
+ 608 0050 9742     		.uleb128 0x2117
+ 609 0052 19       		.uleb128 0x19
+ 610 0053 00       		.byte	0
+ 611 0054 00       		.byte	0
+ 612 0055 07       		.uleb128 0x7
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 21
+
+
+ 613 0056 2E       		.uleb128 0x2e
+ 614 0057 01       		.byte	0x1
+ 615 0058 3F       		.uleb128 0x3f
+ 616 0059 19       		.uleb128 0x19
+ 617 005a 03       		.uleb128 0x3
+ 618 005b 0E       		.uleb128 0xe
+ 619 005c 3A       		.uleb128 0x3a
+ 620 005d 0B       		.uleb128 0xb
+ 621 005e 3B       		.uleb128 0x3b
+ 622 005f 05       		.uleb128 0x5
+ 623 0060 27       		.uleb128 0x27
+ 624 0061 19       		.uleb128 0x19
+ 625 0062 11       		.uleb128 0x11
+ 626 0063 01       		.uleb128 0x1
+ 627 0064 12       		.uleb128 0x12
+ 628 0065 06       		.uleb128 0x6
+ 629 0066 40       		.uleb128 0x40
+ 630 0067 18       		.uleb128 0x18
+ 631 0068 9742     		.uleb128 0x2117
+ 632 006a 19       		.uleb128 0x19
+ 633 006b 01       		.uleb128 0x1
+ 634 006c 13       		.uleb128 0x13
+ 635 006d 00       		.byte	0
+ 636 006e 00       		.byte	0
+ 637 006f 08       		.uleb128 0x8
+ 638 0070 898201   		.uleb128 0x4109
+ 639 0073 00       		.byte	0
+ 640 0074 11       		.uleb128 0x11
+ 641 0075 01       		.uleb128 0x1
+ 642 0076 31       		.uleb128 0x31
+ 643 0077 13       		.uleb128 0x13
+ 644 0078 00       		.byte	0
+ 645 0079 00       		.byte	0
+ 646 007a 09       		.uleb128 0x9
+ 647 007b 05       		.uleb128 0x5
+ 648 007c 00       		.byte	0
+ 649 007d 03       		.uleb128 0x3
+ 650 007e 0E       		.uleb128 0xe
+ 651 007f 3A       		.uleb128 0x3a
+ 652 0080 0B       		.uleb128 0xb
+ 653 0081 3B       		.uleb128 0x3b
+ 654 0082 05       		.uleb128 0x5
+ 655 0083 49       		.uleb128 0x49
+ 656 0084 13       		.uleb128 0x13
+ 657 0085 02       		.uleb128 0x2
+ 658 0086 17       		.uleb128 0x17
+ 659 0087 00       		.byte	0
+ 660 0088 00       		.byte	0
+ 661 0089 0A       		.uleb128 0xa
+ 662 008a 34       		.uleb128 0x34
+ 663 008b 00       		.byte	0
+ 664 008c 03       		.uleb128 0x3
+ 665 008d 0E       		.uleb128 0xe
+ 666 008e 3A       		.uleb128 0x3a
+ 667 008f 0B       		.uleb128 0xb
+ 668 0090 3B       		.uleb128 0x3b
+ 669 0091 05       		.uleb128 0x5
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 22
+
+
+ 670 0092 49       		.uleb128 0x49
+ 671 0093 13       		.uleb128 0x13
+ 672 0094 02       		.uleb128 0x2
+ 673 0095 17       		.uleb128 0x17
+ 674 0096 00       		.byte	0
+ 675 0097 00       		.byte	0
+ 676 0098 0B       		.uleb128 0xb
+ 677 0099 2E       		.uleb128 0x2e
+ 678 009a 01       		.byte	0x1
+ 679 009b 3F       		.uleb128 0x3f
+ 680 009c 19       		.uleb128 0x19
+ 681 009d 03       		.uleb128 0x3
+ 682 009e 0E       		.uleb128 0xe
+ 683 009f 3A       		.uleb128 0x3a
+ 684 00a0 0B       		.uleb128 0xb
+ 685 00a1 3B       		.uleb128 0x3b
+ 686 00a2 0B       		.uleb128 0xb
+ 687 00a3 27       		.uleb128 0x27
+ 688 00a4 19       		.uleb128 0x19
+ 689 00a5 11       		.uleb128 0x11
+ 690 00a6 01       		.uleb128 0x1
+ 691 00a7 12       		.uleb128 0x12
+ 692 00a8 06       		.uleb128 0x6
+ 693 00a9 40       		.uleb128 0x40
+ 694 00aa 18       		.uleb128 0x18
+ 695 00ab 9742     		.uleb128 0x2117
+ 696 00ad 19       		.uleb128 0x19
+ 697 00ae 01       		.uleb128 0x1
+ 698 00af 13       		.uleb128 0x13
+ 699 00b0 00       		.byte	0
+ 700 00b1 00       		.byte	0
+ 701 00b2 0C       		.uleb128 0xc
+ 702 00b3 898201   		.uleb128 0x4109
+ 703 00b6 01       		.byte	0x1
+ 704 00b7 11       		.uleb128 0x11
+ 705 00b8 01       		.uleb128 0x1
+ 706 00b9 31       		.uleb128 0x31
+ 707 00ba 13       		.uleb128 0x13
+ 708 00bb 00       		.byte	0
+ 709 00bc 00       		.byte	0
+ 710 00bd 0D       		.uleb128 0xd
+ 711 00be 8A8201   		.uleb128 0x410a
+ 712 00c1 00       		.byte	0
+ 713 00c2 02       		.uleb128 0x2
+ 714 00c3 18       		.uleb128 0x18
+ 715 00c4 9142     		.uleb128 0x2111
+ 716 00c6 18       		.uleb128 0x18
+ 717 00c7 00       		.byte	0
+ 718 00c8 00       		.byte	0
+ 719 00c9 0E       		.uleb128 0xe
+ 720 00ca 05       		.uleb128 0x5
+ 721 00cb 00       		.byte	0
+ 722 00cc 03       		.uleb128 0x3
+ 723 00cd 0E       		.uleb128 0xe
+ 724 00ce 3A       		.uleb128 0x3a
+ 725 00cf 0B       		.uleb128 0xb
+ 726 00d0 3B       		.uleb128 0x3b
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 23
+
+
+ 727 00d1 05       		.uleb128 0x5
+ 728 00d2 49       		.uleb128 0x49
+ 729 00d3 13       		.uleb128 0x13
+ 730 00d4 02       		.uleb128 0x2
+ 731 00d5 18       		.uleb128 0x18
+ 732 00d6 00       		.byte	0
+ 733 00d7 00       		.byte	0
+ 734 00d8 0F       		.uleb128 0xf
+ 735 00d9 34       		.uleb128 0x34
+ 736 00da 00       		.byte	0
+ 737 00db 03       		.uleb128 0x3
+ 738 00dc 0E       		.uleb128 0xe
+ 739 00dd 3A       		.uleb128 0x3a
+ 740 00de 0B       		.uleb128 0xb
+ 741 00df 3B       		.uleb128 0x3b
+ 742 00e0 0B       		.uleb128 0xb
+ 743 00e1 49       		.uleb128 0x49
+ 744 00e2 13       		.uleb128 0x13
+ 745 00e3 3F       		.uleb128 0x3f
+ 746 00e4 19       		.uleb128 0x19
+ 747 00e5 3C       		.uleb128 0x3c
+ 748 00e6 19       		.uleb128 0x19
+ 749 00e7 00       		.byte	0
+ 750 00e8 00       		.byte	0
+ 751 00e9 10       		.uleb128 0x10
+ 752 00ea 2E       		.uleb128 0x2e
+ 753 00eb 00       		.byte	0
+ 754 00ec 3F       		.uleb128 0x3f
+ 755 00ed 19       		.uleb128 0x19
+ 756 00ee 3C       		.uleb128 0x3c
+ 757 00ef 19       		.uleb128 0x19
+ 758 00f0 6E       		.uleb128 0x6e
+ 759 00f1 0E       		.uleb128 0xe
+ 760 00f2 03       		.uleb128 0x3
+ 761 00f3 0E       		.uleb128 0xe
+ 762 00f4 3A       		.uleb128 0x3a
+ 763 00f5 0B       		.uleb128 0xb
+ 764 00f6 3B       		.uleb128 0x3b
+ 765 00f7 0B       		.uleb128 0xb
+ 766 00f8 00       		.byte	0
+ 767 00f9 00       		.byte	0
+ 768 00fa 00       		.byte	0
+ 769              		.section	.debug_loc,"",%progbits
+ 770              	.Ldebug_loc0:
+ 771              	.LLST0:
+ 772 0000 00000000 		.4byte	.LVL2
+ 773 0004 0A000000 		.4byte	.LVL5
+ 774 0008 0100     		.2byte	0x1
+ 775 000a 50       		.byte	0x50
+ 776 000b 0A000000 		.4byte	.LVL5
+ 777 000f 20000000 		.4byte	.LFE5
+ 778 0013 0400     		.2byte	0x4
+ 779 0015 F3       		.byte	0xf3
+ 780 0016 01       		.uleb128 0x1
+ 781 0017 50       		.byte	0x50
+ 782 0018 9F       		.byte	0x9f
+ 783 0019 00000000 		.4byte	0
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 24
+
+
+ 784 001d 00000000 		.4byte	0
+ 785              	.LLST1:
+ 786 0021 04000000 		.4byte	.LVL3
+ 787 0025 12000000 		.4byte	.LVL6
+ 788 0029 0100     		.2byte	0x1
+ 789 002b 52       		.byte	0x52
+ 790 002c 12000000 		.4byte	.LVL6
+ 791 0030 20000000 		.4byte	.LFE5
+ 792 0034 0100     		.2byte	0x1
+ 793 0036 50       		.byte	0x50
+ 794 0037 00000000 		.4byte	0
+ 795 003b 00000000 		.4byte	0
+ 796              	.LLST2:
+ 797 003f 00000000 		.4byte	.LVL8
+ 798 0043 12000000 		.4byte	.LVL10
+ 799 0047 0100     		.2byte	0x1
+ 800 0049 51       		.byte	0x51
+ 801 004a 12000000 		.4byte	.LVL10
+ 802 004e 1A000000 		.4byte	.LVL12
+ 803 0052 0400     		.2byte	0x4
+ 804 0054 F3       		.byte	0xf3
+ 805 0055 01       		.uleb128 0x1
+ 806 0056 51       		.byte	0x51
+ 807 0057 9F       		.byte	0x9f
+ 808 0058 1A000000 		.4byte	.LVL12
+ 809 005c 1C000000 		.4byte	.LVL13
+ 810 0060 0100     		.2byte	0x1
+ 811 0062 51       		.byte	0x51
+ 812 0063 1C000000 		.4byte	.LVL13
+ 813 0067 28000000 		.4byte	.LFE6
+ 814 006b 0400     		.2byte	0x4
+ 815 006d F3       		.byte	0xf3
+ 816 006e 01       		.uleb128 0x1
+ 817 006f 51       		.byte	0x51
+ 818 0070 9F       		.byte	0x9f
+ 819 0071 00000000 		.4byte	0
+ 820 0075 00000000 		.4byte	0
+ 821              	.LLST3:
+ 822 0079 0C000000 		.4byte	.LVL9
+ 823 007d 16000000 		.4byte	.LVL11
+ 824 0081 0100     		.2byte	0x1
+ 825 0083 53       		.byte	0x53
+ 826 0084 16000000 		.4byte	.LVL11
+ 827 0088 1A000000 		.4byte	.LVL12
+ 828 008c 0B00     		.2byte	0xb
+ 829 008e 31       		.byte	0x31
+ 830 008f 70       		.byte	0x70
+ 831 0090 00       		.sleb128 0
+ 832 0091 24       		.byte	0x24
+ 833 0092 38       		.byte	0x38
+ 834 0093 24       		.byte	0x24
+ 835 0094 0A       		.byte	0xa
+ 836 0095 000F     		.2byte	0xf00
+ 837 0097 1A       		.byte	0x1a
+ 838 0098 9F       		.byte	0x9f
+ 839 0099 1A000000 		.4byte	.LVL12
+ 840 009d 22000000 		.4byte	.LVL14
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 25
+
+
+ 841 00a1 0100     		.2byte	0x1
+ 842 00a3 53       		.byte	0x53
+ 843 00a4 22000000 		.4byte	.LVL14
+ 844 00a8 28000000 		.4byte	.LFE6
+ 845 00ac 0B00     		.2byte	0xb
+ 846 00ae 31       		.byte	0x31
+ 847 00af 70       		.byte	0x70
+ 848 00b0 00       		.sleb128 0
+ 849 00b1 24       		.byte	0x24
+ 850 00b2 38       		.byte	0x38
+ 851 00b3 24       		.byte	0x24
+ 852 00b4 0A       		.byte	0xa
+ 853 00b5 000F     		.2byte	0xf00
+ 854 00b7 1A       		.byte	0x1a
+ 855 00b8 9F       		.byte	0x9f
+ 856 00b9 00000000 		.4byte	0
+ 857 00bd 00000000 		.4byte	0
+ 858              		.section	.debug_aranges,"",%progbits
+ 859 0000 3C000000 		.4byte	0x3c
+ 860 0004 0200     		.2byte	0x2
+ 861 0006 00000000 		.4byte	.Ldebug_info0
+ 862 000a 04       		.byte	0x4
+ 863 000b 00       		.byte	0
+ 864 000c 0000     		.2byte	0
+ 865 000e 0000     		.2byte	0
+ 866 0010 00000000 		.4byte	.LFB3
+ 867 0014 2C000000 		.4byte	.LFE3-.LFB3
+ 868 0018 00000000 		.4byte	.LFB4
+ 869 001c 5C000000 		.4byte	.LFE4-.LFB4
+ 870 0020 00000000 		.4byte	.LFB5
+ 871 0024 20000000 		.4byte	.LFE5-.LFB5
+ 872 0028 00000000 		.4byte	.LFB2
+ 873 002c 8C000000 		.4byte	.LFE2-.LFB2
+ 874 0030 00000000 		.4byte	.LFB6
+ 875 0034 28000000 		.4byte	.LFE6-.LFB6
+ 876 0038 00000000 		.4byte	0
+ 877 003c 00000000 		.4byte	0
+ 878              		.section	.debug_ranges,"",%progbits
+ 879              	.Ldebug_ranges0:
+ 880 0000 00000000 		.4byte	.LFB3
+ 881 0004 2C000000 		.4byte	.LFE3
+ 882 0008 00000000 		.4byte	.LFB4
+ 883 000c 5C000000 		.4byte	.LFE4
+ 884 0010 00000000 		.4byte	.LFB5
+ 885 0014 20000000 		.4byte	.LFE5
+ 886 0018 00000000 		.4byte	.LFB2
+ 887 001c 8C000000 		.4byte	.LFE2
+ 888 0020 00000000 		.4byte	.LFB6
+ 889 0024 28000000 		.4byte	.LFE6
+ 890 0028 00000000 		.4byte	0
+ 891 002c 00000000 		.4byte	0
+ 892              		.section	.debug_line,"",%progbits
+ 893              	.Ldebug_line0:
+ 894 0000 11010000 		.section	.debug_str,"MS",%progbits,1
+ 894      02008C00 
+ 894      00000201 
+ 894      FB0E0D00 
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 26
+
+
+ 894      01010101 
+ 895              	.LASF14:
+ 896 0000 72656733 		.ascii	"reg32\000"
+ 896      3200
+ 897              	.LASF21:
+ 898 0006 736C6176 		.ascii	"slaveSelect\000"
+ 898      6553656C 
+ 898      65637400 
+ 899              	.LASF28:
+ 900 0012 47656E65 		.ascii	"Generated_Source\\PSoC4\\SPI_Master_SPI.c\000"
+ 900      72617465 
+ 900      645F536F 
+ 900      75726365 
+ 900      5C50536F 
+ 901              	.LASF24:
+ 902 003a 7373506F 		.ascii	"ssPolarity\000"
+ 902      6C617269 
+ 902      747900
+ 903              	.LASF11:
+ 904 0045 666C6F61 		.ascii	"float\000"
+ 904      7400
+ 905              	.LASF31:
+ 906 004b 5350495F 		.ascii	"SPI_Master_IntrTxMask\000"
+ 906      4D617374 
+ 906      65725F49 
+ 906      6E747254 
+ 906      784D6173 
+ 907              	.LASF1:
+ 908 0061 756E7369 		.ascii	"unsigned char\000"
+ 908      676E6564 
+ 908      20636861 
+ 908      7200
+ 909              	.LASF20:
+ 910 006f 5350495F 		.ascii	"SPI_Master_SpiSetSlaveSelectPolarity\000"
+ 910      4D617374 
+ 910      65725F53 
+ 910      70695365 
+ 910      74536C61 
+ 911              	.LASF5:
+ 912 0094 6C6F6E67 		.ascii	"long unsigned int\000"
+ 912      20756E73 
+ 912      69676E65 
+ 912      6420696E 
+ 912      7400
+ 913              	.LASF26:
+ 914 00a6 5350495F 		.ascii	"SPI_Master_ss0_m_Write\000"
+ 914      4D617374 
+ 914      65725F73 
+ 914      73305F6D 
+ 914      5F577269 
+ 915              	.LASF3:
+ 916 00bd 73686F72 		.ascii	"short unsigned int\000"
+ 916      7420756E 
+ 916      7369676E 
+ 916      65642069 
+ 916      6E7400
+ 917              	.LASF30:
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 27
+
+
+ 918 00d0 5350495F 		.ascii	"SPI_Master_SpiPostEnable\000"
+ 918      4D617374 
+ 918      65725F53 
+ 918      7069506F 
+ 918      7374456E 
+ 919              	.LASF12:
+ 920 00e9 646F7562 		.ascii	"double\000"
+ 920      6C6500
+ 921              	.LASF9:
+ 922 00f0 75696E74 		.ascii	"uint16\000"
+ 922      313600
+ 923              	.LASF10:
+ 924 00f7 75696E74 		.ascii	"uint32\000"
+ 924      333200
+ 925              	.LASF19:
+ 926 00fe 5350495F 		.ascii	"SPI_Master_SpiInit\000"
+ 926      4D617374 
+ 926      65725F53 
+ 926      7069496E 
+ 926      697400
+ 927              	.LASF8:
+ 928 0111 756E7369 		.ascii	"unsigned int\000"
+ 928      676E6564 
+ 928      20696E74 
+ 928      00
+ 929              	.LASF7:
+ 930 011e 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 930      206C6F6E 
+ 930      6720756E 
+ 930      7369676E 
+ 930      65642069 
+ 931              	.LASF22:
+ 932 0135 706F6C61 		.ascii	"polarity\000"
+ 932      72697479 
+ 932      00
+ 933              	.LASF29:
+ 934 013e 433A5C55 		.ascii	"C:\\Users\\micha_000\\Documents\\GitHub\\CypressBLE"
+ 934      73657273 
+ 934      5C6D6963 
+ 934      68615F30 
+ 934      30305C44 
+ 935 016c 42616467 		.ascii	"Badge\\RGB_OLED\\RGB_LCD.cydsn\000"
+ 935      655C5247 
+ 935      425F4F4C 
+ 935      45445C52 
+ 935      47425F4C 
+ 936              	.LASF27:
+ 937 0189 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 937      43313120 
+ 937      352E342E 
+ 937      31203230 
+ 937      31363036 
+ 938 01bc 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 938      20726576 
+ 938      6973696F 
+ 938      6E203233 
+ 938      37373135 
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccV7TsOt.s 			page 28
+
+
+ 939 01ef 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 939      66756E63 
+ 939      74696F6E 
+ 939      2D736563 
+ 939      74696F6E 
+ 940              	.LASF25:
+ 941 0217 5350495F 		.ascii	"SPI_Master_sclk_m_Write\000"
+ 941      4D617374 
+ 941      65725F73 
+ 941      636C6B5F 
+ 941      6D5F5772 
+ 942              	.LASF16:
+ 943 022f 73697A65 		.ascii	"sizetype\000"
+ 943      74797065 
+ 943      00
+ 944              	.LASF6:
+ 945 0238 6C6F6E67 		.ascii	"long long int\000"
+ 945      206C6F6E 
+ 945      6720696E 
+ 945      7400
+ 946              	.LASF13:
+ 947 0246 63686172 		.ascii	"char\000"
+ 947      00
+ 948              	.LASF23:
+ 949 024b 73706943 		.ascii	"spiCtrl\000"
+ 949      74726C00 
+ 950              	.LASF2:
+ 951 0253 73686F72 		.ascii	"short int\000"
+ 951      7420696E 
+ 951      7400
+ 952              	.LASF4:
+ 953 025d 6C6F6E67 		.ascii	"long int\000"
+ 953      20696E74 
+ 953      00
+ 954              	.LASF17:
+ 955 0266 5350495F 		.ascii	"SPI_Master_SpiStop\000"
+ 955      4D617374 
+ 955      65725F53 
+ 955      70695374 
+ 955      6F7000
+ 956              	.LASF15:
+ 957 0279 6C6F6E67 		.ascii	"long double\000"
+ 957      20646F75 
+ 957      626C6500 
+ 958              	.LASF0:
+ 959 0285 7369676E 		.ascii	"signed char\000"
+ 959      65642063 
+ 959      68617200 
+ 960              	.LASF18:
+ 961 0291 5350495F 		.ascii	"SPI_Master_SpiSetActiveSlaveSelect\000"
+ 961      4D617374 
+ 961      65725F53 
+ 961      70695365 
+ 961      74416374 
+ 962              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

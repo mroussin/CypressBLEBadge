@@ -1,0 +1,3064 @@
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"lcd_ili9163.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.lcd_Reset,"ax",%progbits
+  20              		.align	2
+  21              		.global	lcd_Reset
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	lcd_Reset, %function
+  25              	lcd_Reset:
+  26              	.LFB35:
+  27              		.file 1 "lcd_ili9163.c"
+   1:lcd_ili9163.c **** /* ========================================
+   2:lcd_ili9163.c ****  *
+   3:lcd_ili9163.c ****  * Copyright YOUR COMPANY, THE YEAR
+   4:lcd_ili9163.c ****  * All Rights Reserved
+   5:lcd_ili9163.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:lcd_ili9163.c ****  *
+   7:lcd_ili9163.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:lcd_ili9163.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:lcd_ili9163.c ****  *
+  10:lcd_ili9163.c ****  * ========================================
+  11:lcd_ili9163.c **** */
+  12:lcd_ili9163.c **** 
+  13:lcd_ili9163.c **** 
+  14:lcd_ili9163.c **** #include "lcd_ili9163.h"
+  15:lcd_ili9163.c **** #include "project.h"
+  16:lcd_ili9163.c **** 
+  17:lcd_ili9163.c **** /* Private typedef -----------------------------------------------------------*/
+  18:lcd_ili9163.c **** /* Private define ------------------------------------------------------------*/
+  19:lcd_ili9163.c **** #define LCD_CMD                     0
+  20:lcd_ili9163.c **** #define LCD_DATA                    1
+  21:lcd_ili9163.c **** 
+  22:lcd_ili9163.c **** 
+  23:lcd_ili9163.c **** 
+  24:lcd_ili9163.c **** void lcd_Reset(void);
+  25:lcd_ili9163.c **** void lcd_writeCommand(uint8_t data);
+  26:lcd_ili9163.c **** void lcd_writeData(uint8_t data);
+  27:lcd_ili9163.c **** void lcd_writeData16(uint16_t data);
+  28:lcd_ili9163.c **** void lcd_SetAddr(uint8_t X1, uint8_t Y1, uint8_t X2, uint8_t Y2);
+  29:lcd_ili9163.c **** 
+  30:lcd_ili9163.c **** 
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 2
+
+
+  31:lcd_ili9163.c **** 
+  32:lcd_ili9163.c **** /**
+  33:lcd_ili9163.c ****  * \brief Resets display using external reset pint
+  34:lcd_ili9163.c ****  *
+  35:lcd_ili9163.c ****  * This functions toggles the reset pin to perform a hard reset
+  36:lcd_ili9163.c ****  *
+  37:lcd_ili9163.c ****  * \param none
+  38:lcd_ili9163.c ****  */
+  39:lcd_ili9163.c **** void lcd_Reset(void)
+  40:lcd_ili9163.c **** {
+  28              		.loc 1 40 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32 0000 10B5     		push	{r4, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  41:lcd_ili9163.c **** 	
+  42:lcd_ili9163.c **** 	LCD_Reset_Write(1);
+  36              		.loc 1 42 0
+  37 0002 0120     		movs	r0, #1
+  38 0004 FFF7FEFF 		bl	LCD_Reset_Write
+  39              	.LVL0:
+  43:lcd_ili9163.c **** 	CyDelay(1);
+  40              		.loc 1 43 0
+  41 0008 0120     		movs	r0, #1
+  42 000a FFF7FEFF 		bl	CyDelay
+  43              	.LVL1:
+  44:lcd_ili9163.c **** 	
+  45:lcd_ili9163.c **** 	LCD_Reset_Write(0);
+  44              		.loc 1 45 0
+  45 000e 0020     		movs	r0, #0
+  46 0010 FFF7FEFF 		bl	LCD_Reset_Write
+  47              	.LVL2:
+  46:lcd_ili9163.c **** 	CyDelay(50);
+  48              		.loc 1 46 0
+  49 0014 3220     		movs	r0, #50
+  50 0016 FFF7FEFF 		bl	CyDelay
+  51              	.LVL3:
+  47:lcd_ili9163.c **** 	
+  48:lcd_ili9163.c **** 	LCD_Reset_Write(1);
+  52              		.loc 1 48 0
+  53 001a 0120     		movs	r0, #1
+  54 001c FFF7FEFF 		bl	LCD_Reset_Write
+  55              	.LVL4:
+  49:lcd_ili9163.c **** 	CyDelay(120);
+  56              		.loc 1 49 0
+  57 0020 7820     		movs	r0, #120
+  58 0022 FFF7FEFF 		bl	CyDelay
+  59              	.LVL5:
+  50:lcd_ili9163.c **** 	
+  51:lcd_ili9163.c **** }
+  60              		.loc 1 51 0
+  61              		@ sp needed
+  62 0026 10BD     		pop	{r4, pc}
+  63              		.cfi_endproc
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 3
+
+
+  64              	.LFE35:
+  65              		.size	lcd_Reset, .-lcd_Reset
+  66              		.section	.text.lcd_writeData,"ax",%progbits
+  67              		.align	2
+  68              		.global	lcd_writeData
+  69              		.code	16
+  70              		.thumb_func
+  71              		.type	lcd_writeData, %function
+  72              	lcd_writeData:
+  73              	.LFB36:
+  52:lcd_ili9163.c **** 
+  53:lcd_ili9163.c **** /**
+  54:lcd_ili9163.c ****  * \brief Write data to the display controller
+  55:lcd_ili9163.c ****  *
+  56:lcd_ili9163.c ****  * This functions sets the pin D/C# before writing to the controller. Different
+  57:lcd_ili9163.c ****  * data write function is called based on the selected interface.
+  58:lcd_ili9163.c ****  *
+  59:lcd_ili9163.c ****  * \param data the data to write
+  60:lcd_ili9163.c ****  */
+  61:lcd_ili9163.c **** void lcd_writeData(uint8_t data)
+  62:lcd_ili9163.c **** {
+  74              		.loc 1 62 0
+  75              		.cfi_startproc
+  76              		@ args = 0, pretend = 0, frame = 0
+  77              		@ frame_needed = 0, uses_anonymous_args = 0
+  78              	.LVL6:
+  79 0000 10B5     		push	{r4, lr}
+  80              		.cfi_def_cfa_offset 8
+  81              		.cfi_offset 4, -8
+  82              		.cfi_offset 14, -4
+  83 0002 0400     		movs	r4, r0
+  63:lcd_ili9163.c **** 
+  64:lcd_ili9163.c ****         LCD_DC_Write(LCD_DATA);
+  84              		.loc 1 64 0
+  85 0004 0120     		movs	r0, #1
+  86              	.LVL7:
+  87 0006 FFF7FEFF 		bl	LCD_DC_Write
+  88              	.LVL8:
+  65:lcd_ili9163.c ****         SPI_Master_SpiUartWriteTxData(data);
+  89              		.loc 1 65 0
+  90 000a 2000     		movs	r0, r4
+  91 000c FFF7FEFF 		bl	SPI_Master_SpiUartWriteTxData
+  92              	.LVL9:
+  93              	.L3:
+  66:lcd_ili9163.c ****         
+  67:lcd_ili9163.c ****         /* Wait for the end of the transfer. The number of transmitted data
+  68:lcd_ili9163.c ****         * elements has to be equal to the number of received data elements.
+  69:lcd_ili9163.c ****         */
+  70:lcd_ili9163.c ****         while(1 != SPI_Master_SpiUartGetRxBufferSize())
+  94              		.loc 1 70 0 discriminator 1
+  95 0010 FFF7FEFF 		bl	SPI_Master_SpiUartGetRxBufferSize
+  96              	.LVL10:
+  97 0014 0128     		cmp	r0, #1
+  98 0016 FBD1     		bne	.L3
+  71:lcd_ili9163.c ****         {
+  72:lcd_ili9163.c ****             /* Wait */
+  73:lcd_ili9163.c ****         }
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 4
+
+
+  74:lcd_ili9163.c **** 
+  75:lcd_ili9163.c ****         /* Clear dummy bytes from RX buffer */
+  76:lcd_ili9163.c ****         SPI_Master_SpiUartClearRxBuffer();
+  99              		.loc 1 76 0
+ 100 0018 FFF7FEFF 		bl	SPI_Master_SpiUartClearRxBuffer
+ 101              	.LVL11:
+  77:lcd_ili9163.c **** }
+ 102              		.loc 1 77 0
+ 103              		@ sp needed
+ 104 001c 10BD     		pop	{r4, pc}
+ 105              		.cfi_endproc
+ 106              	.LFE36:
+ 107              		.size	lcd_writeData, .-lcd_writeData
+ 108 001e C046     		.section	.text.lcd_writeData16,"ax",%progbits
+ 109              		.align	2
+ 110              		.global	lcd_writeData16
+ 111              		.code	16
+ 112              		.thumb_func
+ 113              		.type	lcd_writeData16, %function
+ 114              	lcd_writeData16:
+ 115              	.LFB37:
+  78:lcd_ili9163.c **** 
+  79:lcd_ili9163.c **** /**
+  80:lcd_ili9163.c ****  * \brief Write 16-bit data to the display controller
+  81:lcd_ili9163.c ****  *
+  82:lcd_ili9163.c ****  * This functions sets the pin D/C# before writing to the controller. Different
+  83:lcd_ili9163.c ****  * data write function is called based on the selected interface.
+  84:lcd_ili9163.c ****  *
+  85:lcd_ili9163.c ****  * \param data = the data to write
+  86:lcd_ili9163.c ****  */
+  87:lcd_ili9163.c **** void lcd_writeData16(uint16_t data)
+  88:lcd_ili9163.c **** {
+ 116              		.loc 1 88 0
+ 117              		.cfi_startproc
+ 118              		@ args = 0, pretend = 0, frame = 0
+ 119              		@ frame_needed = 0, uses_anonymous_args = 0
+ 120              	.LVL12:
+ 121 0000 70B5     		push	{r4, r5, r6, lr}
+ 122              		.cfi_def_cfa_offset 16
+ 123              		.cfi_offset 4, -16
+ 124              		.cfi_offset 5, -12
+ 125              		.cfi_offset 6, -8
+ 126              		.cfi_offset 14, -4
+  89:lcd_ili9163.c **** 		uint8_t data1, data2;
+  90:lcd_ili9163.c **** 		
+  91:lcd_ili9163.c **** 		data1 = data >> 8;
+ 127              		.loc 1 91 0
+ 128 0002 050A     		lsrs	r5, r0, #8
+ 129              	.LVL13:
+  92:lcd_ili9163.c **** 		data2 = data & 0xFF;
+ 130              		.loc 1 92 0
+ 131 0004 C4B2     		uxtb	r4, r0
+ 132              	.LVL14:
+  93:lcd_ili9163.c **** 		
+  94:lcd_ili9163.c **** 
+  95:lcd_ili9163.c **** 		LCD_DC_Write(LCD_DATA);
+ 133              		.loc 1 95 0
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 5
+
+
+ 134 0006 0120     		movs	r0, #1
+ 135              	.LVL15:
+ 136 0008 FFF7FEFF 		bl	LCD_DC_Write
+ 137              	.LVL16:
+  96:lcd_ili9163.c **** 		SPI_Master_SpiUartWriteTxData(data1);
+ 138              		.loc 1 96 0
+ 139 000c 2800     		movs	r0, r5
+ 140 000e FFF7FEFF 		bl	SPI_Master_SpiUartWriteTxData
+ 141              	.LVL17:
+ 142              	.L5:
+  97:lcd_ili9163.c ****         /* Wait for the end of the transfer. The number of transmitted data
+  98:lcd_ili9163.c ****         * elements has to be equal to the number of received data elements.
+  99:lcd_ili9163.c ****         */
+ 100:lcd_ili9163.c ****         while(1 != SPI_Master_SpiUartGetRxBufferSize())
+ 143              		.loc 1 100 0 discriminator 1
+ 144 0012 FFF7FEFF 		bl	SPI_Master_SpiUartGetRxBufferSize
+ 145              	.LVL18:
+ 146 0016 0128     		cmp	r0, #1
+ 147 0018 FBD1     		bne	.L5
+ 101:lcd_ili9163.c ****         {
+ 102:lcd_ili9163.c ****             /* Wait */
+ 103:lcd_ili9163.c ****         }
+ 104:lcd_ili9163.c **** 
+ 105:lcd_ili9163.c ****         /* Clear dummy bytes from RX buffer */    
+ 106:lcd_ili9163.c ****         SPI_Master_SpiUartClearRxBuffer();
+ 148              		.loc 1 106 0
+ 149 001a FFF7FEFF 		bl	SPI_Master_SpiUartClearRxBuffer
+ 150              	.LVL19:
+ 107:lcd_ili9163.c **** 		
+ 108:lcd_ili9163.c ****         SPI_Master_SpiUartWriteTxData(data2);
+ 151              		.loc 1 108 0
+ 152 001e 2000     		movs	r0, r4
+ 153 0020 FFF7FEFF 		bl	SPI_Master_SpiUartWriteTxData
+ 154              	.LVL20:
+ 155              	.L6:
+ 109:lcd_ili9163.c **** 		/* Wait for the end of the transfer. The number of transmitted data
+ 110:lcd_ili9163.c ****         * elements has to be equal to the number of received data elements.
+ 111:lcd_ili9163.c ****         */
+ 112:lcd_ili9163.c ****         while(1 != SPI_Master_SpiUartGetRxBufferSize())
+ 156              		.loc 1 112 0 discriminator 1
+ 157 0024 FFF7FEFF 		bl	SPI_Master_SpiUartGetRxBufferSize
+ 158              	.LVL21:
+ 159 0028 0128     		cmp	r0, #1
+ 160 002a FBD1     		bne	.L6
+ 113:lcd_ili9163.c ****         {
+ 114:lcd_ili9163.c ****             /* Wait */
+ 115:lcd_ili9163.c ****         }
+ 116:lcd_ili9163.c **** 
+ 117:lcd_ili9163.c ****         /* Clear dummy bytes from RX buffer */
+ 118:lcd_ili9163.c ****         SPI_Master_SpiUartClearRxBuffer();
+ 161              		.loc 1 118 0
+ 162 002c FFF7FEFF 		bl	SPI_Master_SpiUartClearRxBuffer
+ 163              	.LVL22:
+ 119:lcd_ili9163.c **** }
+ 164              		.loc 1 119 0
+ 165              		@ sp needed
+ 166              	.LVL23:
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 6
+
+
+ 167              	.LVL24:
+ 168 0030 70BD     		pop	{r4, r5, r6, pc}
+ 169              		.cfi_endproc
+ 170              	.LFE37:
+ 171              		.size	lcd_writeData16, .-lcd_writeData16
+ 172 0032 C046     		.section	.text.lcd_writeCommand,"ax",%progbits
+ 173              		.align	2
+ 174              		.global	lcd_writeCommand
+ 175              		.code	16
+ 176              		.thumb_func
+ 177              		.type	lcd_writeCommand, %function
+ 178              	lcd_writeCommand:
+ 179              	.LFB38:
+ 120:lcd_ili9163.c **** 
+ 121:lcd_ili9163.c **** 
+ 122:lcd_ili9163.c ****  /**
+ 123:lcd_ili9163.c ****  * \brief Writes a command to the display controller
+ 124:lcd_ili9163.c ****  *
+ 125:lcd_ili9163.c ****  * This functions pull pin D/C# low before writing to the controller. Different
+ 126:lcd_ili9163.c ****  * data write function is called based on the selected interface.
+ 127:lcd_ili9163.c ****  *
+ 128:lcd_ili9163.c ****  * \param command the command to write
+ 129:lcd_ili9163.c ****  */
+ 130:lcd_ili9163.c **** void lcd_writeCommand(uint8_t command)
+ 131:lcd_ili9163.c **** {
+ 180              		.loc 1 131 0
+ 181              		.cfi_startproc
+ 182              		@ args = 0, pretend = 0, frame = 0
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+ 184              	.LVL25:
+ 185 0000 10B5     		push	{r4, lr}
+ 186              		.cfi_def_cfa_offset 8
+ 187              		.cfi_offset 4, -8
+ 188              		.cfi_offset 14, -4
+ 189 0002 0400     		movs	r4, r0
+ 132:lcd_ili9163.c **** 
+ 133:lcd_ili9163.c **** 	LCD_DC_Write(LCD_CMD);
+ 190              		.loc 1 133 0
+ 191 0004 0020     		movs	r0, #0
+ 192              	.LVL26:
+ 193 0006 FFF7FEFF 		bl	LCD_DC_Write
+ 194              	.LVL27:
+ 134:lcd_ili9163.c ****     SPI_Master_SpiUartWriteTxData(command);
+ 195              		.loc 1 134 0
+ 196 000a 2000     		movs	r0, r4
+ 197 000c FFF7FEFF 		bl	SPI_Master_SpiUartWriteTxData
+ 198              	.LVL28:
+ 199              	.L8:
+ 135:lcd_ili9163.c **** 		
+ 136:lcd_ili9163.c ****     /* Wait for the end of the transfer. The number of transmitted data
+ 137:lcd_ili9163.c ****     * elements has to be equal to the number of received data elements.
+ 138:lcd_ili9163.c ****     */
+ 139:lcd_ili9163.c ****     while(1 != SPI_Master_SpiUartGetRxBufferSize())
+ 200              		.loc 1 139 0 discriminator 1
+ 201 0010 FFF7FEFF 		bl	SPI_Master_SpiUartGetRxBufferSize
+ 202              	.LVL29:
+ 203 0014 0128     		cmp	r0, #1
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 7
+
+
+ 204 0016 FBD1     		bne	.L8
+ 140:lcd_ili9163.c ****     {
+ 141:lcd_ili9163.c ****         /* Wait */
+ 142:lcd_ili9163.c ****     }
+ 143:lcd_ili9163.c **** 
+ 144:lcd_ili9163.c ****     /* Clear dummy bytes from RX buffer */
+ 145:lcd_ili9163.c ****     SPI_Master_SpiUartClearRxBuffer();    
+ 205              		.loc 1 145 0
+ 206 0018 FFF7FEFF 		bl	SPI_Master_SpiUartClearRxBuffer
+ 207              	.LVL30:
+ 146:lcd_ili9163.c ****     
+ 147:lcd_ili9163.c ****     
+ 148:lcd_ili9163.c **** }
+ 208              		.loc 1 148 0
+ 209              		@ sp needed
+ 210 001c 10BD     		pop	{r4, pc}
+ 211              		.cfi_endproc
+ 212              	.LFE38:
+ 213              		.size	lcd_writeCommand, .-lcd_writeCommand
+ 214 001e C046     		.section	.text.lcd_SetAddr,"ax",%progbits
+ 215              		.align	2
+ 216              		.global	lcd_SetAddr
+ 217              		.code	16
+ 218              		.thumb_func
+ 219              		.type	lcd_SetAddr, %function
+ 220              	lcd_SetAddr:
+ 221              	.LFB39:
+ 149:lcd_ili9163.c **** 
+ 150:lcd_ili9163.c **** /**
+ 151:lcd_ili9163.c ****  * \brief Set area to write data to the display controller
+ 152:lcd_ili9163.c ****  *
+ 153:lcd_ili9163.c ****  * This functions sets the area in pixels to write data to
+ 154:lcd_ili9163.c ****  * 
+ 155:lcd_ili9163.c ****  *
+ 156:lcd_ili9163.c ****  * \param X1 = Start Column, X2= End Column, Y1 = Start Row
+ 157:lcd_ili9163.c ****  *  Y2 = End Row
+ 158:lcd_ili9163.c ****  */
+ 159:lcd_ili9163.c **** void lcd_SetAddr(uint8_t X1, uint8_t Y1, uint8_t X2, uint8_t Y2)
+ 160:lcd_ili9163.c **** {
+ 222              		.loc 1 160 0
+ 223              		.cfi_startproc
+ 224              		@ args = 0, pretend = 0, frame = 0
+ 225              		@ frame_needed = 0, uses_anonymous_args = 0
+ 226              	.LVL31:
+ 227 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 228              		.cfi_def_cfa_offset 24
+ 229              		.cfi_offset 3, -24
+ 230              		.cfi_offset 4, -20
+ 231              		.cfi_offset 5, -16
+ 232              		.cfi_offset 6, -12
+ 233              		.cfi_offset 7, -8
+ 234              		.cfi_offset 14, -4
+ 235 0002 0700     		movs	r7, r0
+ 236 0004 0D00     		movs	r5, r1
+ 237 0006 1600     		movs	r6, r2
+ 238 0008 1C00     		movs	r4, r3
+ 161:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_COL_ADDRESS);
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 8
+
+
+ 239              		.loc 1 161 0
+ 240 000a 2A20     		movs	r0, #42
+ 241              	.LVL32:
+ 242 000c FFF7FEFF 		bl	lcd_writeCommand
+ 243              	.LVL33:
+ 162:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 244              		.loc 1 162 0
+ 245 0010 0020     		movs	r0, #0
+ 246 0012 FFF7FEFF 		bl	lcd_writeData
+ 247              	.LVL34:
+ 163:lcd_ili9163.c **** 	lcd_writeData(X1);
+ 248              		.loc 1 163 0
+ 249 0016 3800     		movs	r0, r7
+ 250 0018 FFF7FEFF 		bl	lcd_writeData
+ 251              	.LVL35:
+ 164:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 252              		.loc 1 164 0
+ 253 001c 0020     		movs	r0, #0
+ 254 001e FFF7FEFF 		bl	lcd_writeData
+ 255              	.LVL36:
+ 165:lcd_ili9163.c **** 	lcd_writeData(X2);
+ 256              		.loc 1 165 0
+ 257 0022 3000     		movs	r0, r6
+ 258 0024 FFF7FEFF 		bl	lcd_writeData
+ 259              	.LVL37:
+ 166:lcd_ili9163.c **** 	
+ 167:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_PAGE_ADDRESS);
+ 260              		.loc 1 167 0
+ 261 0028 2B20     		movs	r0, #43
+ 262 002a FFF7FEFF 		bl	lcd_writeCommand
+ 263              	.LVL38:
+ 168:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 264              		.loc 1 168 0
+ 265 002e 0020     		movs	r0, #0
+ 266 0030 FFF7FEFF 		bl	lcd_writeData
+ 267              	.LVL39:
+ 169:lcd_ili9163.c **** 	lcd_writeData(Y1);  // Value was 32+Y1
+ 268              		.loc 1 169 0
+ 269 0034 2800     		movs	r0, r5
+ 270 0036 FFF7FEFF 		bl	lcd_writeData
+ 271              	.LVL40:
+ 170:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 272              		.loc 1 170 0
+ 273 003a 0020     		movs	r0, #0
+ 274 003c FFF7FEFF 		bl	lcd_writeData
+ 275              	.LVL41:
+ 171:lcd_ili9163.c **** 	lcd_writeData(Y2);  // Value was 32+Y2
+ 276              		.loc 1 171 0
+ 277 0040 2000     		movs	r0, r4
+ 278 0042 FFF7FEFF 		bl	lcd_writeData
+ 279              	.LVL42:
+ 172:lcd_ili9163.c **** 
+ 173:lcd_ili9163.c **** 	lcd_writeCommand(LCD_WRITE_MEM_START);
+ 280              		.loc 1 173 0
+ 281 0046 2C20     		movs	r0, #44
+ 282 0048 FFF7FEFF 		bl	lcd_writeCommand
+ 283              	.LVL43:
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 9
+
+
+ 174:lcd_ili9163.c **** 
+ 175:lcd_ili9163.c **** }
+ 284              		.loc 1 175 0
+ 285              		@ sp needed
+ 286 004c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 287              		.cfi_endproc
+ 288              	.LFE39:
+ 289              		.size	lcd_SetAddr, .-lcd_SetAddr
+ 290 004e C046     		.section	.text.lcd_drawPixel,"ax",%progbits
+ 291              		.align	2
+ 292              		.global	lcd_drawPixel
+ 293              		.code	16
+ 294              		.thumb_func
+ 295              		.type	lcd_drawPixel, %function
+ 296              	lcd_drawPixel:
+ 297              	.LFB40:
+ 176:lcd_ili9163.c **** 
+ 177:lcd_ili9163.c **** void lcd_drawPixel(uint16_t x, uint16_t y, uint16_t color)
+ 178:lcd_ili9163.c **** {
+ 298              		.loc 1 178 0
+ 299              		.cfi_startproc
+ 300              		@ args = 0, pretend = 0, frame = 0
+ 301              		@ frame_needed = 0, uses_anonymous_args = 0
+ 302              	.LVL44:
+ 303 0000 10B5     		push	{r4, lr}
+ 304              		.cfi_def_cfa_offset 8
+ 305              		.cfi_offset 4, -8
+ 306              		.cfi_offset 14, -4
+ 307 0002 1400     		movs	r4, r2
+ 179:lcd_ili9163.c **** 	lcd_SetAddr(x, y, x, y);
+ 308              		.loc 1 179 0
+ 309 0004 C0B2     		uxtb	r0, r0
+ 310              	.LVL45:
+ 311 0006 C9B2     		uxtb	r1, r1
+ 312              	.LVL46:
+ 313 0008 0B00     		movs	r3, r1
+ 314 000a 0200     		movs	r2, r0
+ 315              	.LVL47:
+ 316 000c FFF7FEFF 		bl	lcd_SetAddr
+ 317              	.LVL48:
+ 180:lcd_ili9163.c **** 
+ 181:lcd_ili9163.c **** 	lcd_writeCommand(LCD_WRITE_MEM_START);
+ 318              		.loc 1 181 0
+ 319 0010 2C20     		movs	r0, #44
+ 320 0012 FFF7FEFF 		bl	lcd_writeCommand
+ 321              	.LVL49:
+ 182:lcd_ili9163.c **** 	lcd_writeData(color >> 8);
+ 322              		.loc 1 182 0
+ 323 0016 200A     		lsrs	r0, r4, #8
+ 324 0018 FFF7FEFF 		bl	lcd_writeData
+ 325              	.LVL50:
+ 183:lcd_ili9163.c **** 	lcd_writeData(color & 0xFF);
+ 326              		.loc 1 183 0
+ 327 001c E0B2     		uxtb	r0, r4
+ 328 001e FFF7FEFF 		bl	lcd_writeData
+ 329              	.LVL51:
+ 184:lcd_ili9163.c **** }
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 10
+
+
+ 330              		.loc 1 184 0
+ 331              		@ sp needed
+ 332 0022 10BD     		pop	{r4, pc}
+ 333              		.cfi_endproc
+ 334              	.LFE40:
+ 335              		.size	lcd_drawPixel, .-lcd_drawPixel
+ 336              		.section	.text.lcd_setScreen,"ax",%progbits
+ 337              		.align	2
+ 338              		.global	lcd_setScreen
+ 339              		.code	16
+ 340              		.thumb_func
+ 341              		.type	lcd_setScreen, %function
+ 342              	lcd_setScreen:
+ 343              	.LFB41:
+ 185:lcd_ili9163.c **** 
+ 186:lcd_ili9163.c **** 
+ 187:lcd_ili9163.c **** /**
+ 188:lcd_ili9163.c ****  * \brief Set background color
+ 189:lcd_ili9163.c ****  *
+ 190:lcd_ili9163.c ****  * This function sets the background to defined color
+ 191:lcd_ili9163.c ****  * 
+ 192:lcd_ili9163.c ****  *
+ 193:lcd_ili9163.c ****  * \param Color = Color background is set to
+ 194:lcd_ili9163.c ****  */
+ 195:lcd_ili9163.c **** void lcd_setScreen(uint16_t Color)
+ 196:lcd_ili9163.c **** {
+ 344              		.loc 1 196 0
+ 345              		.cfi_startproc
+ 346              		@ args = 0, pretend = 0, frame = 8
+ 347              		@ frame_needed = 0, uses_anonymous_args = 0
+ 348              	.LVL52:
+ 349 0000 10B5     		push	{r4, lr}
+ 350              		.cfi_def_cfa_offset 8
+ 351              		.cfi_offset 4, -8
+ 352              		.cfi_offset 14, -4
+ 353 0002 82B0     		sub	sp, sp, #8
+ 354              		.cfi_def_cfa_offset 16
+ 355 0004 0400     		movs	r4, r0
+ 197:lcd_ili9163.c **** 	volatile uint16_t XCnt, YCnt;
+ 198:lcd_ili9163.c **** 
+ 199:lcd_ili9163.c **** 	lcd_SetAddr(0, 0, MAX_HORIZ-1, MAX_VERT-1);
+ 356              		.loc 1 199 0
+ 357 0006 7F23     		movs	r3, #127
+ 358 0008 7F22     		movs	r2, #127
+ 359 000a 0021     		movs	r1, #0
+ 360 000c 0020     		movs	r0, #0
+ 361              	.LVL53:
+ 362 000e FFF7FEFF 		bl	lcd_SetAddr
+ 363              	.LVL54:
+ 200:lcd_ili9163.c **** 
+ 201:lcd_ili9163.c **** 	for(XCnt = 0; XCnt<MAX_HORIZ; XCnt++)
+ 364              		.loc 1 201 0
+ 365 0012 0022     		movs	r2, #0
+ 366 0014 6B46     		mov	r3, sp
+ 367 0016 DA80     		strh	r2, [r3, #6]
+ 368 0018 16E0     		b	.L12
+ 369              	.L15:
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 11
+
+
+ 202:lcd_ili9163.c **** 	{
+ 203:lcd_ili9163.c **** 		for(YCnt = 0; YCnt<MAX_VERT; YCnt++)
+ 370              		.loc 1 203 0
+ 371 001a 0022     		movs	r2, #0
+ 372 001c 01AB     		add	r3, sp, #4
+ 373 001e 1A80     		strh	r2, [r3]
+ 374 0020 07E0     		b	.L13
+ 375              	.L14:
+ 204:lcd_ili9163.c **** 		{
+ 205:lcd_ili9163.c **** 			lcd_writeData16(Color);
+ 376              		.loc 1 205 0 discriminator 3
+ 377 0022 2000     		movs	r0, r4
+ 378 0024 FFF7FEFF 		bl	lcd_writeData16
+ 379              	.LVL55:
+ 203:lcd_ili9163.c **** 		{
+ 380              		.loc 1 203 0 discriminator 3
+ 381 0028 01AA     		add	r2, sp, #4
+ 382 002a 1388     		ldrh	r3, [r2]
+ 383 002c 0133     		adds	r3, r3, #1
+ 384 002e 9BB2     		uxth	r3, r3
+ 385 0030 1380     		strh	r3, [r2]
+ 386              	.L13:
+ 203:lcd_ili9163.c **** 		{
+ 387              		.loc 1 203 0 is_stmt 0 discriminator 1
+ 388 0032 01AB     		add	r3, sp, #4
+ 389 0034 1B88     		ldrh	r3, [r3]
+ 390 0036 9BB2     		uxth	r3, r3
+ 391 0038 7F2B     		cmp	r3, #127
+ 392 003a F2D9     		bls	.L14
+ 201:lcd_ili9163.c **** 	{
+ 393              		.loc 1 201 0 is_stmt 1 discriminator 2
+ 394 003c 6B46     		mov	r3, sp
+ 395 003e 9A1D     		adds	r2, r3, #6
+ 396 0040 DB88     		ldrh	r3, [r3, #6]
+ 397 0042 0133     		adds	r3, r3, #1
+ 398 0044 9BB2     		uxth	r3, r3
+ 399 0046 1380     		strh	r3, [r2]
+ 400              	.L12:
+ 201:lcd_ili9163.c **** 	{
+ 401              		.loc 1 201 0 is_stmt 0 discriminator 1
+ 402 0048 6B46     		mov	r3, sp
+ 403 004a 0633     		adds	r3, r3, #6
+ 404 004c 1B88     		ldrh	r3, [r3]
+ 405 004e 9BB2     		uxth	r3, r3
+ 406 0050 7F2B     		cmp	r3, #127
+ 407 0052 E2D9     		bls	.L15
+ 206:lcd_ili9163.c **** 		}
+ 207:lcd_ili9163.c **** 	}
+ 208:lcd_ili9163.c **** }
+ 408              		.loc 1 208 0 is_stmt 1
+ 409 0054 02B0     		add	sp, sp, #8
+ 410              		@ sp needed
+ 411 0056 10BD     		pop	{r4, pc}
+ 412              		.cfi_endproc
+ 413              	.LFE41:
+ 414              		.size	lcd_setScreen, .-lcd_setScreen
+ 415              		.section	.text.lcd_setArea,"ax",%progbits
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 12
+
+
+ 416              		.align	2
+ 417              		.global	lcd_setArea
+ 418              		.code	16
+ 419              		.thumb_func
+ 420              		.type	lcd_setArea, %function
+ 421              	lcd_setArea:
+ 422              	.LFB42:
+ 209:lcd_ili9163.c **** 
+ 210:lcd_ili9163.c **** void lcd_setArea(uint16_t Color, uint8_t sizeX, uint8_t sizeY, uint8_t startX, uint8_t startY)
+ 211:lcd_ili9163.c **** {
+ 423              		.loc 1 211 0
+ 424              		.cfi_startproc
+ 425              		@ args = 4, pretend = 0, frame = 8
+ 426              		@ frame_needed = 0, uses_anonymous_args = 0
+ 427              	.LVL56:
+ 428 0000 70B5     		push	{r4, r5, r6, lr}
+ 429              		.cfi_def_cfa_offset 16
+ 430              		.cfi_offset 4, -16
+ 431              		.cfi_offset 5, -12
+ 432              		.cfi_offset 6, -8
+ 433              		.cfi_offset 14, -4
+ 434 0002 82B0     		sub	sp, sp, #8
+ 435              		.cfi_def_cfa_offset 24
+ 436 0004 0500     		movs	r5, r0
+ 437 0006 0E00     		movs	r6, r1
+ 438 0008 1400     		movs	r4, r2
+ 439 000a 1800     		movs	r0, r3
+ 440              	.LVL57:
+ 441 000c 06AB     		add	r3, sp, #24
+ 442              	.LVL58:
+ 443 000e 1978     		ldrb	r1, [r3]
+ 444              	.LVL59:
+ 212:lcd_ili9163.c **** 	volatile uint16_t XCnt, YCnt;
+ 213:lcd_ili9163.c ****     
+ 214:lcd_ili9163.c ****     if(sizeX > 127 || sizeY > 127 || startX > 127 || startY > 127)
+ 445              		.loc 1 214 0
+ 446 0010 73B2     		sxtb	r3, r6
+ 447              	.LVL60:
+ 448 0012 002B     		cmp	r3, #0
+ 449 0014 31DB     		blt	.L16
+ 450              		.loc 1 214 0 is_stmt 0 discriminator 1
+ 451 0016 53B2     		sxtb	r3, r2
+ 452 0018 002B     		cmp	r3, #0
+ 453 001a 2EDB     		blt	.L16
+ 454              		.loc 1 214 0 discriminator 2
+ 455 001c 43B2     		sxtb	r3, r0
+ 456 001e 002B     		cmp	r3, #0
+ 457 0020 2BDB     		blt	.L16
+ 458              		.loc 1 214 0 discriminator 3
+ 459 0022 4BB2     		sxtb	r3, r1
+ 460 0024 002B     		cmp	r3, #0
+ 461 0026 28DB     		blt	.L16
+ 215:lcd_ili9163.c ****         return;
+ 216:lcd_ili9163.c ****     
+ 217:lcd_ili9163.c **** 	lcd_SetAddr(startX, startY, sizeX-1, sizeY-1);
+ 462              		.loc 1 217 0 is_stmt 1
+ 463 0028 531E     		subs	r3, r2, #1
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 13
+
+
+ 464 002a DBB2     		uxtb	r3, r3
+ 465 002c 721E     		subs	r2, r6, #1
+ 466              	.LVL61:
+ 467 002e D2B2     		uxtb	r2, r2
+ 468 0030 FFF7FEFF 		bl	lcd_SetAddr
+ 469              	.LVL62:
+ 218:lcd_ili9163.c **** 
+ 219:lcd_ili9163.c **** 	for(XCnt = 0; XCnt<sizeX; XCnt++)
+ 470              		.loc 1 219 0
+ 471 0034 0022     		movs	r2, #0
+ 472 0036 6B46     		mov	r3, sp
+ 473 0038 DA80     		strh	r2, [r3, #6]
+ 474 003a 17E0     		b	.L18
+ 475              	.L21:
+ 220:lcd_ili9163.c **** 	{
+ 221:lcd_ili9163.c **** 		for(YCnt = 0; YCnt<sizeY; YCnt++)
+ 476              		.loc 1 221 0
+ 477 003c 0022     		movs	r2, #0
+ 478 003e 01AB     		add	r3, sp, #4
+ 479 0040 1A80     		strh	r2, [r3]
+ 480 0042 07E0     		b	.L19
+ 481              	.L20:
+ 222:lcd_ili9163.c **** 		{
+ 223:lcd_ili9163.c **** 			lcd_writeData16(Color);
+ 482              		.loc 1 223 0 discriminator 3
+ 483 0044 2800     		movs	r0, r5
+ 484 0046 FFF7FEFF 		bl	lcd_writeData16
+ 485              	.LVL63:
+ 221:lcd_ili9163.c **** 		{
+ 486              		.loc 1 221 0 discriminator 3
+ 487 004a 01AA     		add	r2, sp, #4
+ 488 004c 1388     		ldrh	r3, [r2]
+ 489 004e 0133     		adds	r3, r3, #1
+ 490 0050 9BB2     		uxth	r3, r3
+ 491 0052 1380     		strh	r3, [r2]
+ 492              	.L19:
+ 221:lcd_ili9163.c **** 		{
+ 493              		.loc 1 221 0 is_stmt 0 discriminator 1
+ 494 0054 A2B2     		uxth	r2, r4
+ 495 0056 01AB     		add	r3, sp, #4
+ 496 0058 1B88     		ldrh	r3, [r3]
+ 497 005a 9BB2     		uxth	r3, r3
+ 498 005c 9A42     		cmp	r2, r3
+ 499 005e F1D8     		bhi	.L20
+ 219:lcd_ili9163.c **** 	{
+ 500              		.loc 1 219 0 is_stmt 1 discriminator 2
+ 501 0060 6B46     		mov	r3, sp
+ 502 0062 9A1D     		adds	r2, r3, #6
+ 503 0064 DB88     		ldrh	r3, [r3, #6]
+ 504 0066 0133     		adds	r3, r3, #1
+ 505 0068 9BB2     		uxth	r3, r3
+ 506 006a 1380     		strh	r3, [r2]
+ 507              	.L18:
+ 219:lcd_ili9163.c **** 	{
+ 508              		.loc 1 219 0 is_stmt 0 discriminator 1
+ 509 006c B2B2     		uxth	r2, r6
+ 510 006e 6B46     		mov	r3, sp
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 14
+
+
+ 511 0070 0633     		adds	r3, r3, #6
+ 512 0072 1B88     		ldrh	r3, [r3]
+ 513 0074 9BB2     		uxth	r3, r3
+ 514 0076 9A42     		cmp	r2, r3
+ 515 0078 E0D8     		bhi	.L21
+ 516              	.L16:
+ 224:lcd_ili9163.c **** 		}
+ 225:lcd_ili9163.c **** 	}
+ 226:lcd_ili9163.c **** }
+ 517              		.loc 1 226 0 is_stmt 1
+ 518 007a 02B0     		add	sp, sp, #8
+ 519              		@ sp needed
+ 520 007c 70BD     		pop	{r4, r5, r6, pc}
+ 521              		.cfi_endproc
+ 522              	.LFE42:
+ 523              		.size	lcd_setArea, .-lcd_setArea
+ 524 007e C046     		.section	.text.lcd_init,"ax",%progbits
+ 525              		.align	2
+ 526              		.global	lcd_init
+ 527              		.code	16
+ 528              		.thumb_func
+ 529              		.type	lcd_init, %function
+ 530              	lcd_init:
+ 531              	.LFB43:
+ 227:lcd_ili9163.c **** 
+ 228:lcd_ili9163.c **** 
+ 229:lcd_ili9163.c **** void lcd_init(void)
+ 230:lcd_ili9163.c **** {
+ 532              		.loc 1 230 0
+ 533              		.cfi_startproc
+ 534              		@ args = 0, pretend = 0, frame = 0
+ 535              		@ frame_needed = 0, uses_anonymous_args = 0
+ 536 0000 10B5     		push	{r4, lr}
+ 537              		.cfi_def_cfa_offset 8
+ 538              		.cfi_offset 4, -8
+ 539              		.cfi_offset 14, -4
+ 231:lcd_ili9163.c **** 	lcd_Reset();
+ 540              		.loc 1 231 0
+ 541 0002 FFF7FEFF 		bl	lcd_Reset
+ 542              	.LVL64:
+ 232:lcd_ili9163.c **** 	
+ 233:lcd_ili9163.c **** 	//lcd_writeCommand(LCD_SOFT_RESET);
+ 234:lcd_ili9163.c **** 	lcd_writeCommand(LCD_EXIT_SLEEP_MODE);
+ 543              		.loc 1 234 0
+ 544 0006 1120     		movs	r0, #17
+ 545 0008 FFF7FEFF 		bl	lcd_writeCommand
+ 546              	.LVL65:
+ 235:lcd_ili9163.c **** 	CyDelay(100);
+ 547              		.loc 1 235 0
+ 548 000c 6420     		movs	r0, #100
+ 549 000e FFF7FEFF 		bl	CyDelay
+ 550              	.LVL66:
+ 236:lcd_ili9163.c **** 	
+ 237:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_GAMMA_CURVE);
+ 551              		.loc 1 237 0
+ 552 0012 2620     		movs	r0, #38
+ 553 0014 FFF7FEFF 		bl	lcd_writeCommand
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 15
+
+
+ 554              	.LVL67:
+ 238:lcd_ili9163.c **** 	lcd_writeData(0x04); // Set Default Gamma
+ 555              		.loc 1 238 0
+ 556 0018 0420     		movs	r0, #4
+ 557 001a FFF7FEFF 		bl	lcd_writeData
+ 558              	.LVL68:
+ 239:lcd_ili9163.c **** 	
+ 240:lcd_ili9163.c **** 	lcd_writeData(LCD_ENTER_NORM_MODE);
+ 559              		.loc 1 240 0
+ 560 001e 1320     		movs	r0, #19
+ 561 0020 FFF7FEFF 		bl	lcd_writeData
+ 562              	.LVL69:
+ 241:lcd_ili9163.c **** 	
+ 242:lcd_ili9163.c **** 	lcd_writeCommand(LCD_POWER_CONTROL1);
+ 563              		.loc 1 242 0
+ 564 0024 C020     		movs	r0, #192
+ 565 0026 FFF7FEFF 		bl	lcd_writeCommand
+ 566              	.LVL70:
+ 243:lcd_ili9163.c **** 	lcd_writeData(0x0A); // VRH = 10:  GVDD = 4.3
+ 567              		.loc 1 243 0
+ 568 002a 0A20     		movs	r0, #10
+ 569 002c FFF7FEFF 		bl	lcd_writeData
+ 570              	.LVL71:
+ 244:lcd_ili9163.c **** 	lcd_writeData(0x02); // VC = 2: VCI1 = 2.65
+ 571              		.loc 1 244 0
+ 572 0030 0220     		movs	r0, #2
+ 573 0032 FFF7FEFF 		bl	lcd_writeData
+ 574              	.LVL72:
+ 245:lcd_ili9163.c **** 	
+ 246:lcd_ili9163.c **** 	lcd_writeCommand(LCD_POWER_CONTROL2);
+ 575              		.loc 1 246 0
+ 576 0036 C120     		movs	r0, #193
+ 577 0038 FFF7FEFF 		bl	lcd_writeCommand
+ 578              	.LVL73:
+ 247:lcd_ili9163.c **** 	lcd_writeData(0x02); // BT = 0: AVDD = 2xVCI1, VCL = -1xVCI1, VGH = 4xVCI1, VGL = -3xVCI1
+ 579              		.loc 1 247 0
+ 580 003c 0220     		movs	r0, #2
+ 581 003e FFF7FEFF 		bl	lcd_writeData
+ 582              	.LVL74:
+ 248:lcd_ili9163.c **** 
+ 249:lcd_ili9163.c **** 	//lcd_writeCommand(LCD_POWER_CONTROL3);
+ 250:lcd_ili9163.c **** 	//lcd_writeData(0x00); // Least power in current amplifier
+ 251:lcd_ili9163.c **** 	//lcd_writeData(0x07); // Booster Circ #1 =BCLK/8, Booster Circ #2&3 =BCLK/64
+ 252:lcd_ili9163.c **** 	
+ 253:lcd_ili9163.c **** 	//lcd_writeCommand(LCD_POWER_CONTROL4);
+ 254:lcd_ili9163.c **** 	//lcd_writeData(0x00); // Least power in current amplifier
+ 255:lcd_ili9163.c **** 	//lcd_writeData(0x07); // Booster Circ #1 =BCLK/8, Booster Circ #2&3 =BCLK/64
+ 256:lcd_ili9163.c **** 	
+ 257:lcd_ili9163.c **** 	lcd_writeCommand(LCD_VCOM_CONTROL1);
+ 583              		.loc 1 257 0
+ 584 0042 C520     		movs	r0, #197
+ 585 0044 FFF7FEFF 		bl	lcd_writeCommand
+ 586              	.LVL75:
+ 258:lcd_ili9163.c **** 	lcd_writeData(0x50); // 
+ 587              		.loc 1 258 0
+ 588 0048 5020     		movs	r0, #80
+ 589 004a FFF7FEFF 		bl	lcd_writeData
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 16
+
+
+ 590              	.LVL76:
+ 259:lcd_ili9163.c **** 	lcd_writeData(0x99); // 
+ 591              		.loc 1 259 0
+ 592 004e 9920     		movs	r0, #153
+ 593 0050 FFF7FEFF 		bl	lcd_writeData
+ 594              	.LVL77:
+ 260:lcd_ili9163.c **** 		
+ 261:lcd_ili9163.c **** 	lcd_writeCommand(LCD_VCOM_OFFSET_CONTROL);
+ 595              		.loc 1 261 0
+ 596 0054 C720     		movs	r0, #199
+ 597 0056 FFF7FEFF 		bl	lcd_writeCommand
+ 598              	.LVL78:
+ 262:lcd_ili9163.c **** 	lcd_writeData(0x00); // nVM = 0, VMF = 64: VCOMH output = VMH, VCOML output = VML
+ 599              		.loc 1 262 0
+ 600 005a 0020     		movs	r0, #0
+ 601 005c FFF7FEFF 		bl	lcd_writeData
+ 602              	.LVL79:
+ 263:lcd_ili9163.c **** 	
+ 264:lcd_ili9163.c **** 	lcd_writeCommand(LCD_EXIT_IDLE_MODE);
+ 603              		.loc 1 264 0
+ 604 0060 3820     		movs	r0, #56
+ 605 0062 FFF7FEFF 		bl	lcd_writeCommand
+ 606              	.LVL80:
+ 265:lcd_ili9163.c **** 	
+ 266:lcd_ili9163.c ****     /* 16 bits per pixel R5 G6 B5 */
+ 267:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_PIXEL_FMT);
+ 607              		.loc 1 267 0
+ 608 0066 3A20     		movs	r0, #58
+ 609 0068 FFF7FEFF 		bl	lcd_writeCommand
+ 610              	.LVL81:
+ 268:lcd_ili9163.c **** 	lcd_writeData(0x05); 
+ 611              		.loc 1 268 0
+ 612 006c 0520     		movs	r0, #5
+ 613 006e FFF7FEFF 		bl	lcd_writeData
+ 614              	.LVL82:
+ 269:lcd_ili9163.c **** 	
+ 270:lcd_ili9163.c **** 	lcd_writeCommand(LCD_FRAME_RATE_CTRL1);
+ 615              		.loc 1 270 0
+ 616 0072 B120     		movs	r0, #177
+ 617 0074 FFF7FEFF 		bl	lcd_writeCommand
+ 618              	.LVL83:
+ 271:lcd_ili9163.c **** 	lcd_writeData(0x08); // DIVA = 8
+ 619              		.loc 1 271 0
+ 620 0078 0820     		movs	r0, #8
+ 621 007a FFF7FEFF 		bl	lcd_writeData
+ 622              	.LVL84:
+ 272:lcd_ili9163.c **** 	lcd_writeData(0x02); // VPA = 9  Was value = 0x08
+ 623              		.loc 1 272 0
+ 624 007e 0220     		movs	r0, #2
+ 625 0080 FFF7FEFF 		bl	lcd_writeData
+ 626              	.LVL85:
+ 273:lcd_ili9163.c **** 		                                                                                 
+ 274:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_COL_ADDRESS);
+ 627              		.loc 1 274 0
+ 628 0084 2A20     		movs	r0, #42
+ 629 0086 FFF7FEFF 		bl	lcd_writeCommand
+ 630              	.LVL86:
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 17
+
+
+ 275:lcd_ili9163.c **** 	lcd_writeData(0x00); // XSH
+ 631              		.loc 1 275 0
+ 632 008a 0020     		movs	r0, #0
+ 633 008c FFF7FEFF 		bl	lcd_writeData
+ 634              	.LVL87:
+ 276:lcd_ili9163.c **** 	lcd_writeData(0x00); // XSL
+ 635              		.loc 1 276 0
+ 636 0090 0020     		movs	r0, #0
+ 637 0092 FFF7FEFF 		bl	lcd_writeData
+ 638              	.LVL88:
+ 277:lcd_ili9163.c **** 	lcd_writeData(0x00); // XEH
+ 639              		.loc 1 277 0
+ 640 0096 0020     		movs	r0, #0
+ 641 0098 FFF7FEFF 		bl	lcd_writeData
+ 642              	.LVL89:
+ 278:lcd_ili9163.c **** 	lcd_writeData(0x7f); // XEL 128 pixels x
+ 643              		.loc 1 278 0
+ 644 009c 7F20     		movs	r0, #127
+ 645 009e FFF7FEFF 		bl	lcd_writeData
+ 646              	.LVL90:
+ 279:lcd_ili9163.c **** 	
+ 280:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_PAGE_ADDRESS);
+ 647              		.loc 1 280 0
+ 648 00a2 2B20     		movs	r0, #43
+ 649 00a4 FFF7FEFF 		bl	lcd_writeCommand
+ 650              	.LVL91:
+ 281:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 651              		.loc 1 281 0
+ 652 00a8 0020     		movs	r0, #0
+ 653 00aa FFF7FEFF 		bl	lcd_writeData
+ 654              	.LVL92:
+ 282:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 655              		.loc 1 282 0
+ 656 00ae 0020     		movs	r0, #0
+ 657 00b0 FFF7FEFF 		bl	lcd_writeData
+ 658              	.LVL93:
+ 283:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 659              		.loc 1 283 0
+ 660 00b4 0020     		movs	r0, #0
+ 661 00b6 FFF7FEFF 		bl	lcd_writeData
+ 662              	.LVL94:
+ 284:lcd_ili9163.c **** 	lcd_writeData(0x7f); // 128 pixels y
+ 663              		.loc 1 284 0
+ 664 00ba 7F20     		movs	r0, #127
+ 665 00bc FFF7FEFF 		bl	lcd_writeData
+ 666              	.LVL95:
+ 285:lcd_ili9163.c **** 	
+ 286:lcd_ili9163.c **** 	//lcd_writeCommand(LCD_DISPLAY_INVERSION);
+ 287:lcd_ili9163.c **** 	//lcd_writeData(0x07); // NLA = 1, NLB = 1, NLC = 1 (all on Frame Inversion)
+ 288:lcd_ili9163.c **** 	
+ 289:lcd_ili9163.c **** 	// Select display orientation
+ 290:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_ADDRESS_MODE);
+ 667              		.loc 1 290 0
+ 668 00c0 3620     		movs	r0, #54
+ 669 00c2 FFF7FEFF 		bl	lcd_writeCommand
+ 670              	.LVL96:
+ 291:lcd_ili9163.c **** 	lcd_writeData(0x00); //
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 18
+
+
+ 671              		.loc 1 291 0
+ 672 00c6 0020     		movs	r0, #0
+ 673 00c8 FFF7FEFF 		bl	lcd_writeData
+ 674              	.LVL97:
+ 292:lcd_ili9163.c **** 
+ 293:lcd_ili9163.c **** 	// Set the display to on
+ 294:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_DISP_ON);
+ 675              		.loc 1 294 0
+ 676 00cc 2920     		movs	r0, #41
+ 677 00ce FFF7FEFF 		bl	lcd_writeCommand
+ 678              	.LVL98:
+ 295:lcd_ili9163.c **** 	
+ 296:lcd_ili9163.c **** 	lcd_writeCommand(LCD_EXIT_INVERT_MODE);
+ 679              		.loc 1 296 0
+ 680 00d2 2020     		movs	r0, #32
+ 681 00d4 FFF7FEFF 		bl	lcd_writeCommand
+ 682              	.LVL99:
+ 297:lcd_ili9163.c **** 	
+ 298:lcd_ili9163.c **** 	lcd_writeCommand(LCD_WRITE_MEM_START);
+ 683              		.loc 1 298 0
+ 684 00d8 2C20     		movs	r0, #44
+ 685 00da FFF7FEFF 		bl	lcd_writeCommand
+ 686              	.LVL100:
+ 299:lcd_ili9163.c **** 	
+ 300:lcd_ili9163.c **** }
+ 687              		.loc 1 300 0
+ 688              		@ sp needed
+ 689 00de 10BD     		pop	{r4, pc}
+ 690              		.cfi_endproc
+ 691              	.LFE43:
+ 692              		.size	lcd_init, .-lcd_init
+ 693              		.text
+ 694              	.Letext0:
+ 695              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 696              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 697              		.file 4 "Generated_Source\\PSoC4/LCD_Reset.h"
+ 698              		.file 5 "Generated_Source\\PSoC4/CyLib.h"
+ 699              		.file 6 "Generated_Source\\PSoC4/LCD_DC.h"
+ 700              		.file 7 "Generated_Source\\PSoC4/SPI_Master_SPI_UART.h"
+ 701              		.section	.debug_info,"",%progbits
+ 702              	.Ldebug_info0:
+ 703 0000 A8080000 		.4byte	0x8a8
+ 704 0004 0400     		.2byte	0x4
+ 705 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 706 000a 04       		.byte	0x4
+ 707 000b 01       		.uleb128 0x1
+ 708 000c C9010000 		.4byte	.LASF45
+ 709 0010 0C       		.byte	0xc
+ 710 0011 25010000 		.4byte	.LASF46
+ 711 0015 7E010000 		.4byte	.LASF47
+ 712 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 713 001d 00000000 		.4byte	0
+ 714 0021 00000000 		.4byte	.Ldebug_line0
+ 715 0025 02       		.uleb128 0x2
+ 716 0026 01       		.byte	0x1
+ 717 0027 06       		.byte	0x6
+ 718 0028 E8020000 		.4byte	.LASF0
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 19
+
+
+ 719 002c 03       		.uleb128 0x3
+ 720 002d 39000000 		.4byte	.LASF3
+ 721 0031 02       		.byte	0x2
+ 722 0032 1D       		.byte	0x1d
+ 723 0033 37000000 		.4byte	0x37
+ 724 0037 02       		.uleb128 0x2
+ 725 0038 01       		.byte	0x1
+ 726 0039 08       		.byte	0x8
+ 727 003a 9C000000 		.4byte	.LASF1
+ 728 003e 02       		.uleb128 0x2
+ 729 003f 02       		.byte	0x2
+ 730 0040 05       		.byte	0x5
+ 731 0041 C0020000 		.4byte	.LASF2
+ 732 0045 03       		.uleb128 0x3
+ 733 0046 07010000 		.4byte	.LASF4
+ 734 004a 02       		.byte	0x2
+ 735 004b 2B       		.byte	0x2b
+ 736 004c 50000000 		.4byte	0x50
+ 737 0050 02       		.uleb128 0x2
+ 738 0051 02       		.byte	0x2
+ 739 0052 07       		.byte	0x7
+ 740 0053 E8000000 		.4byte	.LASF5
+ 741 0057 02       		.uleb128 0x2
+ 742 0058 04       		.byte	0x4
+ 743 0059 05       		.byte	0x5
+ 744 005a D3020000 		.4byte	.LASF6
+ 745 005e 02       		.uleb128 0x2
+ 746 005f 04       		.byte	0x4
+ 747 0060 07       		.byte	0x7
+ 748 0061 B6000000 		.4byte	.LASF7
+ 749 0065 02       		.uleb128 0x2
+ 750 0066 08       		.byte	0x8
+ 751 0067 05       		.byte	0x5
+ 752 0068 74020000 		.4byte	.LASF8
+ 753 006c 02       		.uleb128 0x2
+ 754 006d 08       		.byte	0x8
+ 755 006e 07       		.byte	0x7
+ 756 006f 53010000 		.4byte	.LASF9
+ 757 0073 04       		.uleb128 0x4
+ 758 0074 04       		.byte	0x4
+ 759 0075 05       		.byte	0x5
+ 760 0076 696E7400 		.ascii	"int\000"
+ 761 007a 02       		.uleb128 0x2
+ 762 007b 04       		.byte	0x4
+ 763 007c 07       		.byte	0x7
+ 764 007d 46010000 		.4byte	.LASF10
+ 765 0081 03       		.uleb128 0x3
+ 766 0082 6A010000 		.4byte	.LASF11
+ 767 0086 03       		.byte	0x3
+ 768 0087 18       		.byte	0x18
+ 769 0088 2C000000 		.4byte	0x2c
+ 770 008c 03       		.uleb128 0x3
+ 771 008d CA020000 		.4byte	.LASF12
+ 772 0091 03       		.byte	0x3
+ 773 0092 24       		.byte	0x24
+ 774 0093 45000000 		.4byte	0x45
+ 775 0097 02       		.uleb128 0x2
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 20
+
+
+ 776 0098 04       		.byte	0x4
+ 777 0099 04       		.byte	0x4
+ 778 009a 69000000 		.4byte	.LASF13
+ 779 009e 02       		.uleb128 0x2
+ 780 009f 08       		.byte	0x8
+ 781 00a0 04       		.byte	0x4
+ 782 00a1 62000000 		.4byte	.LASF14
+ 783 00a5 02       		.uleb128 0x2
+ 784 00a6 01       		.byte	0x1
+ 785 00a7 08       		.byte	0x8
+ 786 00a8 82020000 		.4byte	.LASF15
+ 787 00ac 02       		.uleb128 0x2
+ 788 00ad 08       		.byte	0x8
+ 789 00ae 04       		.byte	0x4
+ 790 00af DC020000 		.4byte	.LASF16
+ 791 00b3 02       		.uleb128 0x2
+ 792 00b4 04       		.byte	0x4
+ 793 00b5 07       		.byte	0x7
+ 794 00b6 57020000 		.4byte	.LASF17
+ 795 00ba 05       		.uleb128 0x5
+ 796 00bb 92000000 		.4byte	.LASF18
+ 797 00bf 01       		.byte	0x1
+ 798 00c0 27       		.byte	0x27
+ 799 00c1 00000000 		.4byte	.LFB35
+ 800 00c5 28000000 		.4byte	.LFE35-.LFB35
+ 801 00c9 01       		.uleb128 0x1
+ 802 00ca 9C       		.byte	0x9c
+ 803 00cb 40010000 		.4byte	0x140
+ 804 00cf 06       		.uleb128 0x6
+ 805 00d0 08000000 		.4byte	.LVL0
+ 806 00d4 66080000 		.4byte	0x866
+ 807 00d8 E2000000 		.4byte	0xe2
+ 808 00dc 07       		.uleb128 0x7
+ 809 00dd 01       		.uleb128 0x1
+ 810 00de 50       		.byte	0x50
+ 811 00df 01       		.uleb128 0x1
+ 812 00e0 31       		.byte	0x31
+ 813 00e1 00       		.byte	0
+ 814 00e2 06       		.uleb128 0x6
+ 815 00e3 0E000000 		.4byte	.LVL1
+ 816 00e7 71080000 		.4byte	0x871
+ 817 00eb F5000000 		.4byte	0xf5
+ 818 00ef 07       		.uleb128 0x7
+ 819 00f0 01       		.uleb128 0x1
+ 820 00f1 50       		.byte	0x50
+ 821 00f2 01       		.uleb128 0x1
+ 822 00f3 31       		.byte	0x31
+ 823 00f4 00       		.byte	0
+ 824 00f5 06       		.uleb128 0x6
+ 825 00f6 14000000 		.4byte	.LVL2
+ 826 00fa 66080000 		.4byte	0x866
+ 827 00fe 08010000 		.4byte	0x108
+ 828 0102 07       		.uleb128 0x7
+ 829 0103 01       		.uleb128 0x1
+ 830 0104 50       		.byte	0x50
+ 831 0105 01       		.uleb128 0x1
+ 832 0106 30       		.byte	0x30
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 21
+
+
+ 833 0107 00       		.byte	0
+ 834 0108 06       		.uleb128 0x6
+ 835 0109 1A000000 		.4byte	.LVL3
+ 836 010d 71080000 		.4byte	0x871
+ 837 0111 1C010000 		.4byte	0x11c
+ 838 0115 07       		.uleb128 0x7
+ 839 0116 01       		.uleb128 0x1
+ 840 0117 50       		.byte	0x50
+ 841 0118 02       		.uleb128 0x2
+ 842 0119 08       		.byte	0x8
+ 843 011a 32       		.byte	0x32
+ 844 011b 00       		.byte	0
+ 845 011c 06       		.uleb128 0x6
+ 846 011d 20000000 		.4byte	.LVL4
+ 847 0121 66080000 		.4byte	0x866
+ 848 0125 2F010000 		.4byte	0x12f
+ 849 0129 07       		.uleb128 0x7
+ 850 012a 01       		.uleb128 0x1
+ 851 012b 50       		.byte	0x50
+ 852 012c 01       		.uleb128 0x1
+ 853 012d 31       		.byte	0x31
+ 854 012e 00       		.byte	0
+ 855 012f 08       		.uleb128 0x8
+ 856 0130 26000000 		.4byte	.LVL5
+ 857 0134 71080000 		.4byte	0x871
+ 858 0138 07       		.uleb128 0x7
+ 859 0139 01       		.uleb128 0x1
+ 860 013a 50       		.byte	0x50
+ 861 013b 02       		.uleb128 0x2
+ 862 013c 08       		.byte	0x8
+ 863 013d 78       		.byte	0x78
+ 864 013e 00       		.byte	0
+ 865 013f 00       		.byte	0
+ 866 0140 05       		.uleb128 0x5
+ 867 0141 60020000 		.4byte	.LASF19
+ 868 0145 01       		.byte	0x1
+ 869 0146 3D       		.byte	0x3d
+ 870 0147 00000000 		.4byte	.LFB36
+ 871 014b 1E000000 		.4byte	.LFE36-.LFB36
+ 872 014f 01       		.uleb128 0x1
+ 873 0150 9C       		.byte	0x9c
+ 874 0151 9E010000 		.4byte	0x19e
+ 875 0155 09       		.uleb128 0x9
+ 876 0156 6F000000 		.4byte	.LASF21
+ 877 015a 01       		.byte	0x1
+ 878 015b 3D       		.byte	0x3d
+ 879 015c 81000000 		.4byte	0x81
+ 880 0160 00000000 		.4byte	.LLST0
+ 881 0164 06       		.uleb128 0x6
+ 882 0165 0A000000 		.4byte	.LVL8
+ 883 0169 7C080000 		.4byte	0x87c
+ 884 016d 77010000 		.4byte	0x177
+ 885 0171 07       		.uleb128 0x7
+ 886 0172 01       		.uleb128 0x1
+ 887 0173 50       		.byte	0x50
+ 888 0174 01       		.uleb128 0x1
+ 889 0175 31       		.byte	0x31
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 22
+
+
+ 890 0176 00       		.byte	0
+ 891 0177 06       		.uleb128 0x6
+ 892 0178 10000000 		.4byte	.LVL9
+ 893 017c 87080000 		.4byte	0x887
+ 894 0180 8B010000 		.4byte	0x18b
+ 895 0184 07       		.uleb128 0x7
+ 896 0185 01       		.uleb128 0x1
+ 897 0186 50       		.byte	0x50
+ 898 0187 02       		.uleb128 0x2
+ 899 0188 74       		.byte	0x74
+ 900 0189 00       		.sleb128 0
+ 901 018a 00       		.byte	0
+ 902 018b 0A       		.uleb128 0xa
+ 903 018c 14000000 		.4byte	.LVL10
+ 904 0190 93080000 		.4byte	0x893
+ 905 0194 0A       		.uleb128 0xa
+ 906 0195 1C000000 		.4byte	.LVL11
+ 907 0199 9F080000 		.4byte	0x89f
+ 908 019d 00       		.byte	0
+ 909 019e 05       		.uleb128 0x5
+ 910 019f B0020000 		.4byte	.LASF20
+ 911 01a3 01       		.byte	0x1
+ 912 01a4 57       		.byte	0x57
+ 913 01a5 00000000 		.4byte	.LFB37
+ 914 01a9 32000000 		.4byte	.LFE37-.LFB37
+ 915 01ad 01       		.uleb128 0x1
+ 916 01ae 9C       		.byte	0x9c
+ 917 01af 40020000 		.4byte	0x240
+ 918 01b3 09       		.uleb128 0x9
+ 919 01b4 6F000000 		.4byte	.LASF21
+ 920 01b8 01       		.byte	0x1
+ 921 01b9 57       		.byte	0x57
+ 922 01ba 8C000000 		.4byte	0x8c
+ 923 01be 21000000 		.4byte	.LLST1
+ 924 01c2 0B       		.uleb128 0xb
+ 925 01c3 72010000 		.4byte	.LASF22
+ 926 01c7 01       		.byte	0x1
+ 927 01c8 59       		.byte	0x59
+ 928 01c9 81000000 		.4byte	0x81
+ 929 01cd 42000000 		.4byte	.LLST2
+ 930 01d1 0B       		.uleb128 0xb
+ 931 01d2 78010000 		.4byte	.LASF23
+ 932 01d6 01       		.byte	0x1
+ 933 01d7 59       		.byte	0x59
+ 934 01d8 81000000 		.4byte	0x81
+ 935 01dc 55000000 		.4byte	.LLST3
+ 936 01e0 06       		.uleb128 0x6
+ 937 01e1 0C000000 		.4byte	.LVL16
+ 938 01e5 7C080000 		.4byte	0x87c
+ 939 01e9 F3010000 		.4byte	0x1f3
+ 940 01ed 07       		.uleb128 0x7
+ 941 01ee 01       		.uleb128 0x1
+ 942 01ef 50       		.byte	0x50
+ 943 01f0 01       		.uleb128 0x1
+ 944 01f1 31       		.byte	0x31
+ 945 01f2 00       		.byte	0
+ 946 01f3 06       		.uleb128 0x6
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 23
+
+
+ 947 01f4 12000000 		.4byte	.LVL17
+ 948 01f8 87080000 		.4byte	0x887
+ 949 01fc 07020000 		.4byte	0x207
+ 950 0200 07       		.uleb128 0x7
+ 951 0201 01       		.uleb128 0x1
+ 952 0202 50       		.byte	0x50
+ 953 0203 02       		.uleb128 0x2
+ 954 0204 75       		.byte	0x75
+ 955 0205 00       		.sleb128 0
+ 956 0206 00       		.byte	0
+ 957 0207 0A       		.uleb128 0xa
+ 958 0208 16000000 		.4byte	.LVL18
+ 959 020c 93080000 		.4byte	0x893
+ 960 0210 0A       		.uleb128 0xa
+ 961 0211 1E000000 		.4byte	.LVL19
+ 962 0215 9F080000 		.4byte	0x89f
+ 963 0219 06       		.uleb128 0x6
+ 964 021a 24000000 		.4byte	.LVL20
+ 965 021e 87080000 		.4byte	0x887
+ 966 0222 2D020000 		.4byte	0x22d
+ 967 0226 07       		.uleb128 0x7
+ 968 0227 01       		.uleb128 0x1
+ 969 0228 50       		.byte	0x50
+ 970 0229 02       		.uleb128 0x2
+ 971 022a 74       		.byte	0x74
+ 972 022b 00       		.sleb128 0
+ 973 022c 00       		.byte	0
+ 974 022d 0A       		.uleb128 0xa
+ 975 022e 28000000 		.4byte	.LVL21
+ 976 0232 93080000 		.4byte	0x893
+ 977 0236 0A       		.uleb128 0xa
+ 978 0237 30000000 		.4byte	.LVL22
+ 979 023b 9F080000 		.4byte	0x89f
+ 980 023f 00       		.byte	0
+ 981 0240 05       		.uleb128 0x5
+ 982 0241 9F020000 		.4byte	.LASF24
+ 983 0245 01       		.byte	0x1
+ 984 0246 82       		.byte	0x82
+ 985 0247 00000000 		.4byte	.LFB38
+ 986 024b 1E000000 		.4byte	.LFE38-.LFB38
+ 987 024f 01       		.uleb128 0x1
+ 988 0250 9C       		.byte	0x9c
+ 989 0251 9E020000 		.4byte	0x29e
+ 990 0255 09       		.uleb128 0x9
+ 991 0256 51000000 		.4byte	.LASF25
+ 992 025a 01       		.byte	0x1
+ 993 025b 82       		.byte	0x82
+ 994 025c 81000000 		.4byte	0x81
+ 995 0260 76000000 		.4byte	.LLST4
+ 996 0264 06       		.uleb128 0x6
+ 997 0265 0A000000 		.4byte	.LVL27
+ 998 0269 7C080000 		.4byte	0x87c
+ 999 026d 77020000 		.4byte	0x277
+ 1000 0271 07       		.uleb128 0x7
+ 1001 0272 01       		.uleb128 0x1
+ 1002 0273 50       		.byte	0x50
+ 1003 0274 01       		.uleb128 0x1
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 24
+
+
+ 1004 0275 30       		.byte	0x30
+ 1005 0276 00       		.byte	0
+ 1006 0277 06       		.uleb128 0x6
+ 1007 0278 10000000 		.4byte	.LVL28
+ 1008 027c 87080000 		.4byte	0x887
+ 1009 0280 8B020000 		.4byte	0x28b
+ 1010 0284 07       		.uleb128 0x7
+ 1011 0285 01       		.uleb128 0x1
+ 1012 0286 50       		.byte	0x50
+ 1013 0287 02       		.uleb128 0x2
+ 1014 0288 74       		.byte	0x74
+ 1015 0289 00       		.sleb128 0
+ 1016 028a 00       		.byte	0
+ 1017 028b 0A       		.uleb128 0xa
+ 1018 028c 14000000 		.4byte	.LVL29
+ 1019 0290 93080000 		.4byte	0x893
+ 1020 0294 0A       		.uleb128 0xa
+ 1021 0295 1C000000 		.4byte	.LVL30
+ 1022 0299 9F080000 		.4byte	0x89f
+ 1023 029d 00       		.byte	0
+ 1024 029e 05       		.uleb128 0x5
+ 1025 029f 87020000 		.4byte	.LASF26
+ 1026 02a3 01       		.byte	0x1
+ 1027 02a4 9F       		.byte	0x9f
+ 1028 02a5 00000000 		.4byte	.LFB39
+ 1029 02a9 4E000000 		.4byte	.LFE39-.LFB39
+ 1030 02ad 01       		.uleb128 0x1
+ 1031 02ae 9C       		.byte	0x9c
+ 1032 02af C0030000 		.4byte	0x3c0
+ 1033 02b3 0C       		.uleb128 0xc
+ 1034 02b4 583100   		.ascii	"X1\000"
+ 1035 02b7 01       		.byte	0x1
+ 1036 02b8 9F       		.byte	0x9f
+ 1037 02b9 81000000 		.4byte	0x81
+ 1038 02bd 97000000 		.4byte	.LLST5
+ 1039 02c1 0C       		.uleb128 0xc
+ 1040 02c2 593100   		.ascii	"Y1\000"
+ 1041 02c5 01       		.byte	0x1
+ 1042 02c6 9F       		.byte	0x9f
+ 1043 02c7 81000000 		.4byte	0x81
+ 1044 02cb B8000000 		.4byte	.LLST6
+ 1045 02cf 0C       		.uleb128 0xc
+ 1046 02d0 583200   		.ascii	"X2\000"
+ 1047 02d3 01       		.byte	0x1
+ 1048 02d4 9F       		.byte	0x9f
+ 1049 02d5 81000000 		.4byte	0x81
+ 1050 02d9 D9000000 		.4byte	.LLST7
+ 1051 02dd 0C       		.uleb128 0xc
+ 1052 02de 593200   		.ascii	"Y2\000"
+ 1053 02e1 01       		.byte	0x1
+ 1054 02e2 9F       		.byte	0x9f
+ 1055 02e3 81000000 		.4byte	0x81
+ 1056 02e7 FA000000 		.4byte	.LLST8
+ 1057 02eb 06       		.uleb128 0x6
+ 1058 02ec 10000000 		.4byte	.LVL33
+ 1059 02f0 40020000 		.4byte	0x240
+ 1060 02f4 FF020000 		.4byte	0x2ff
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 25
+
+
+ 1061 02f8 07       		.uleb128 0x7
+ 1062 02f9 01       		.uleb128 0x1
+ 1063 02fa 50       		.byte	0x50
+ 1064 02fb 02       		.uleb128 0x2
+ 1065 02fc 08       		.byte	0x8
+ 1066 02fd 2A       		.byte	0x2a
+ 1067 02fe 00       		.byte	0
+ 1068 02ff 06       		.uleb128 0x6
+ 1069 0300 16000000 		.4byte	.LVL34
+ 1070 0304 40010000 		.4byte	0x140
+ 1071 0308 12030000 		.4byte	0x312
+ 1072 030c 07       		.uleb128 0x7
+ 1073 030d 01       		.uleb128 0x1
+ 1074 030e 50       		.byte	0x50
+ 1075 030f 01       		.uleb128 0x1
+ 1076 0310 30       		.byte	0x30
+ 1077 0311 00       		.byte	0
+ 1078 0312 06       		.uleb128 0x6
+ 1079 0313 1C000000 		.4byte	.LVL35
+ 1080 0317 40010000 		.4byte	0x140
+ 1081 031b 26030000 		.4byte	0x326
+ 1082 031f 07       		.uleb128 0x7
+ 1083 0320 01       		.uleb128 0x1
+ 1084 0321 50       		.byte	0x50
+ 1085 0322 02       		.uleb128 0x2
+ 1086 0323 77       		.byte	0x77
+ 1087 0324 00       		.sleb128 0
+ 1088 0325 00       		.byte	0
+ 1089 0326 06       		.uleb128 0x6
+ 1090 0327 22000000 		.4byte	.LVL36
+ 1091 032b 40010000 		.4byte	0x140
+ 1092 032f 39030000 		.4byte	0x339
+ 1093 0333 07       		.uleb128 0x7
+ 1094 0334 01       		.uleb128 0x1
+ 1095 0335 50       		.byte	0x50
+ 1096 0336 01       		.uleb128 0x1
+ 1097 0337 30       		.byte	0x30
+ 1098 0338 00       		.byte	0
+ 1099 0339 06       		.uleb128 0x6
+ 1100 033a 28000000 		.4byte	.LVL37
+ 1101 033e 40010000 		.4byte	0x140
+ 1102 0342 4D030000 		.4byte	0x34d
+ 1103 0346 07       		.uleb128 0x7
+ 1104 0347 01       		.uleb128 0x1
+ 1105 0348 50       		.byte	0x50
+ 1106 0349 02       		.uleb128 0x2
+ 1107 034a 76       		.byte	0x76
+ 1108 034b 00       		.sleb128 0
+ 1109 034c 00       		.byte	0
+ 1110 034d 06       		.uleb128 0x6
+ 1111 034e 2E000000 		.4byte	.LVL38
+ 1112 0352 40020000 		.4byte	0x240
+ 1113 0356 61030000 		.4byte	0x361
+ 1114 035a 07       		.uleb128 0x7
+ 1115 035b 01       		.uleb128 0x1
+ 1116 035c 50       		.byte	0x50
+ 1117 035d 02       		.uleb128 0x2
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 26
+
+
+ 1118 035e 08       		.byte	0x8
+ 1119 035f 2B       		.byte	0x2b
+ 1120 0360 00       		.byte	0
+ 1121 0361 06       		.uleb128 0x6
+ 1122 0362 34000000 		.4byte	.LVL39
+ 1123 0366 40010000 		.4byte	0x140
+ 1124 036a 74030000 		.4byte	0x374
+ 1125 036e 07       		.uleb128 0x7
+ 1126 036f 01       		.uleb128 0x1
+ 1127 0370 50       		.byte	0x50
+ 1128 0371 01       		.uleb128 0x1
+ 1129 0372 30       		.byte	0x30
+ 1130 0373 00       		.byte	0
+ 1131 0374 06       		.uleb128 0x6
+ 1132 0375 3A000000 		.4byte	.LVL40
+ 1133 0379 40010000 		.4byte	0x140
+ 1134 037d 88030000 		.4byte	0x388
+ 1135 0381 07       		.uleb128 0x7
+ 1136 0382 01       		.uleb128 0x1
+ 1137 0383 50       		.byte	0x50
+ 1138 0384 02       		.uleb128 0x2
+ 1139 0385 75       		.byte	0x75
+ 1140 0386 00       		.sleb128 0
+ 1141 0387 00       		.byte	0
+ 1142 0388 06       		.uleb128 0x6
+ 1143 0389 40000000 		.4byte	.LVL41
+ 1144 038d 40010000 		.4byte	0x140
+ 1145 0391 9B030000 		.4byte	0x39b
+ 1146 0395 07       		.uleb128 0x7
+ 1147 0396 01       		.uleb128 0x1
+ 1148 0397 50       		.byte	0x50
+ 1149 0398 01       		.uleb128 0x1
+ 1150 0399 30       		.byte	0x30
+ 1151 039a 00       		.byte	0
+ 1152 039b 06       		.uleb128 0x6
+ 1153 039c 46000000 		.4byte	.LVL42
+ 1154 03a0 40010000 		.4byte	0x140
+ 1155 03a4 AF030000 		.4byte	0x3af
+ 1156 03a8 07       		.uleb128 0x7
+ 1157 03a9 01       		.uleb128 0x1
+ 1158 03aa 50       		.byte	0x50
+ 1159 03ab 02       		.uleb128 0x2
+ 1160 03ac 74       		.byte	0x74
+ 1161 03ad 00       		.sleb128 0
+ 1162 03ae 00       		.byte	0
+ 1163 03af 08       		.uleb128 0x8
+ 1164 03b0 4C000000 		.4byte	.LVL43
+ 1165 03b4 40020000 		.4byte	0x240
+ 1166 03b8 07       		.uleb128 0x7
+ 1167 03b9 01       		.uleb128 0x1
+ 1168 03ba 50       		.byte	0x50
+ 1169 03bb 02       		.uleb128 0x2
+ 1170 03bc 08       		.byte	0x8
+ 1171 03bd 2C       		.byte	0x2c
+ 1172 03be 00       		.byte	0
+ 1173 03bf 00       		.byte	0
+ 1174 03c0 05       		.uleb128 0x5
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 27
+
+
+ 1175 03c1 38010000 		.4byte	.LASF27
+ 1176 03c5 01       		.byte	0x1
+ 1177 03c6 B1       		.byte	0xb1
+ 1178 03c7 00000000 		.4byte	.LFB40
+ 1179 03cb 24000000 		.4byte	.LFE40-.LFB40
+ 1180 03cf 01       		.uleb128 0x1
+ 1181 03d0 9C       		.byte	0x9c
+ 1182 03d1 63040000 		.4byte	0x463
+ 1183 03d5 0C       		.uleb128 0xc
+ 1184 03d6 7800     		.ascii	"x\000"
+ 1185 03d8 01       		.byte	0x1
+ 1186 03d9 B1       		.byte	0xb1
+ 1187 03da 8C000000 		.4byte	0x8c
+ 1188 03de 1B010000 		.4byte	.LLST9
+ 1189 03e2 0C       		.uleb128 0xc
+ 1190 03e3 7900     		.ascii	"y\000"
+ 1191 03e5 01       		.byte	0x1
+ 1192 03e6 B1       		.byte	0xb1
+ 1193 03e7 8C000000 		.4byte	0x8c
+ 1194 03eb 3C010000 		.4byte	.LLST10
+ 1195 03ef 09       		.uleb128 0x9
+ 1196 03f0 1F010000 		.4byte	.LASF28
+ 1197 03f4 01       		.byte	0x1
+ 1198 03f5 B1       		.byte	0xb1
+ 1199 03f6 8C000000 		.4byte	0x8c
+ 1200 03fa 5D010000 		.4byte	.LLST11
+ 1201 03fe 06       		.uleb128 0x6
+ 1202 03ff 10000000 		.4byte	.LVL48
+ 1203 0403 9E020000 		.4byte	0x29e
+ 1204 0407 28040000 		.4byte	0x428
+ 1205 040b 07       		.uleb128 0x7
+ 1206 040c 01       		.uleb128 0x1
+ 1207 040d 50       		.byte	0x50
+ 1208 040e 03       		.uleb128 0x3
+ 1209 040f F3       		.byte	0xf3
+ 1210 0410 01       		.uleb128 0x1
+ 1211 0411 50       		.byte	0x50
+ 1212 0412 07       		.uleb128 0x7
+ 1213 0413 01       		.uleb128 0x1
+ 1214 0414 51       		.byte	0x51
+ 1215 0415 03       		.uleb128 0x3
+ 1216 0416 F3       		.byte	0xf3
+ 1217 0417 01       		.uleb128 0x1
+ 1218 0418 51       		.byte	0x51
+ 1219 0419 07       		.uleb128 0x7
+ 1220 041a 01       		.uleb128 0x1
+ 1221 041b 52       		.byte	0x52
+ 1222 041c 03       		.uleb128 0x3
+ 1223 041d F3       		.byte	0xf3
+ 1224 041e 01       		.uleb128 0x1
+ 1225 041f 50       		.byte	0x50
+ 1226 0420 07       		.uleb128 0x7
+ 1227 0421 01       		.uleb128 0x1
+ 1228 0422 53       		.byte	0x53
+ 1229 0423 03       		.uleb128 0x3
+ 1230 0424 F3       		.byte	0xf3
+ 1231 0425 01       		.uleb128 0x1
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 28
+
+
+ 1232 0426 51       		.byte	0x51
+ 1233 0427 00       		.byte	0
+ 1234 0428 06       		.uleb128 0x6
+ 1235 0429 16000000 		.4byte	.LVL49
+ 1236 042d 40020000 		.4byte	0x240
+ 1237 0431 3C040000 		.4byte	0x43c
+ 1238 0435 07       		.uleb128 0x7
+ 1239 0436 01       		.uleb128 0x1
+ 1240 0437 50       		.byte	0x50
+ 1241 0438 02       		.uleb128 0x2
+ 1242 0439 08       		.byte	0x8
+ 1243 043a 2C       		.byte	0x2c
+ 1244 043b 00       		.byte	0
+ 1245 043c 06       		.uleb128 0x6
+ 1246 043d 1C000000 		.4byte	.LVL50
+ 1247 0441 40010000 		.4byte	0x140
+ 1248 0445 52040000 		.4byte	0x452
+ 1249 0449 07       		.uleb128 0x7
+ 1250 044a 01       		.uleb128 0x1
+ 1251 044b 50       		.byte	0x50
+ 1252 044c 04       		.uleb128 0x4
+ 1253 044d 74       		.byte	0x74
+ 1254 044e 00       		.sleb128 0
+ 1255 044f 38       		.byte	0x38
+ 1256 0450 25       		.byte	0x25
+ 1257 0451 00       		.byte	0
+ 1258 0452 08       		.uleb128 0x8
+ 1259 0453 22000000 		.4byte	.LVL51
+ 1260 0457 40010000 		.4byte	0x140
+ 1261 045b 07       		.uleb128 0x7
+ 1262 045c 01       		.uleb128 0x1
+ 1263 045d 50       		.byte	0x50
+ 1264 045e 02       		.uleb128 0x2
+ 1265 045f 74       		.byte	0x74
+ 1266 0460 00       		.sleb128 0
+ 1267 0461 00       		.byte	0
+ 1268 0462 00       		.byte	0
+ 1269 0463 05       		.uleb128 0x5
+ 1270 0464 43000000 		.4byte	.LASF29
+ 1271 0468 01       		.byte	0x1
+ 1272 0469 C3       		.byte	0xc3
+ 1273 046a 00000000 		.4byte	.LFB41
+ 1274 046e 58000000 		.4byte	.LFE41-.LFB41
+ 1275 0472 01       		.uleb128 0x1
+ 1276 0473 9C       		.byte	0x9c
+ 1277 0474 D8040000 		.4byte	0x4d8
+ 1278 0478 09       		.uleb128 0x9
+ 1279 0479 6E020000 		.4byte	.LASF30
+ 1280 047d 01       		.byte	0x1
+ 1281 047e C3       		.byte	0xc3
+ 1282 047f 8C000000 		.4byte	0x8c
+ 1283 0483 7E010000 		.4byte	.LLST12
+ 1284 0487 0D       		.uleb128 0xd
+ 1285 0488 AA000000 		.4byte	.LASF31
+ 1286 048c 01       		.byte	0x1
+ 1287 048d C5       		.byte	0xc5
+ 1288 048e D8040000 		.4byte	0x4d8
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 29
+
+
+ 1289 0492 02       		.uleb128 0x2
+ 1290 0493 91       		.byte	0x91
+ 1291 0494 76       		.sleb128 -10
+ 1292 0495 0D       		.uleb128 0xd
+ 1293 0496 33010000 		.4byte	.LASF32
+ 1294 049a 01       		.byte	0x1
+ 1295 049b C5       		.byte	0xc5
+ 1296 049c D8040000 		.4byte	0x4d8
+ 1297 04a0 02       		.uleb128 0x2
+ 1298 04a1 91       		.byte	0x91
+ 1299 04a2 74       		.sleb128 -12
+ 1300 04a3 06       		.uleb128 0x6
+ 1301 04a4 12000000 		.4byte	.LVL54
+ 1302 04a8 9E020000 		.4byte	0x29e
+ 1303 04ac C7040000 		.4byte	0x4c7
+ 1304 04b0 07       		.uleb128 0x7
+ 1305 04b1 01       		.uleb128 0x1
+ 1306 04b2 50       		.byte	0x50
+ 1307 04b3 01       		.uleb128 0x1
+ 1308 04b4 30       		.byte	0x30
+ 1309 04b5 07       		.uleb128 0x7
+ 1310 04b6 01       		.uleb128 0x1
+ 1311 04b7 51       		.byte	0x51
+ 1312 04b8 01       		.uleb128 0x1
+ 1313 04b9 30       		.byte	0x30
+ 1314 04ba 07       		.uleb128 0x7
+ 1315 04bb 01       		.uleb128 0x1
+ 1316 04bc 52       		.byte	0x52
+ 1317 04bd 02       		.uleb128 0x2
+ 1318 04be 08       		.byte	0x8
+ 1319 04bf 7F       		.byte	0x7f
+ 1320 04c0 07       		.uleb128 0x7
+ 1321 04c1 01       		.uleb128 0x1
+ 1322 04c2 53       		.byte	0x53
+ 1323 04c3 02       		.uleb128 0x2
+ 1324 04c4 08       		.byte	0x8
+ 1325 04c5 7F       		.byte	0x7f
+ 1326 04c6 00       		.byte	0
+ 1327 04c7 08       		.uleb128 0x8
+ 1328 04c8 28000000 		.4byte	.LVL55
+ 1329 04cc 9E010000 		.4byte	0x19e
+ 1330 04d0 07       		.uleb128 0x7
+ 1331 04d1 01       		.uleb128 0x1
+ 1332 04d2 50       		.byte	0x50
+ 1333 04d3 02       		.uleb128 0x2
+ 1334 04d4 74       		.byte	0x74
+ 1335 04d5 00       		.sleb128 0
+ 1336 04d6 00       		.byte	0
+ 1337 04d7 00       		.byte	0
+ 1338 04d8 0E       		.uleb128 0xe
+ 1339 04d9 8C000000 		.4byte	0x8c
+ 1340 04dd 05       		.uleb128 0x5
+ 1341 04de 93020000 		.4byte	.LASF33
+ 1342 04e2 01       		.byte	0x1
+ 1343 04e3 D2       		.byte	0xd2
+ 1344 04e4 00000000 		.4byte	.LFB42
+ 1345 04e8 7E000000 		.4byte	.LFE42-.LFB42
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 30
+
+
+ 1346 04ec 01       		.uleb128 0x1
+ 1347 04ed 9C       		.byte	0x9c
+ 1348 04ee 8C050000 		.4byte	0x58c
+ 1349 04f2 09       		.uleb128 0x9
+ 1350 04f3 6E020000 		.4byte	.LASF30
+ 1351 04f7 01       		.byte	0x1
+ 1352 04f8 D2       		.byte	0xd2
+ 1353 04f9 8C000000 		.4byte	0x8c
+ 1354 04fd 9F010000 		.4byte	.LLST13
+ 1355 0501 09       		.uleb128 0x9
+ 1356 0502 FB000000 		.4byte	.LASF34
+ 1357 0506 01       		.byte	0x1
+ 1358 0507 D2       		.byte	0xd2
+ 1359 0508 81000000 		.4byte	0x81
+ 1360 050c C0010000 		.4byte	.LLST14
+ 1361 0510 09       		.uleb128 0x9
+ 1362 0511 01010000 		.4byte	.LASF35
+ 1363 0515 01       		.byte	0x1
+ 1364 0516 D2       		.byte	0xd2
+ 1365 0517 81000000 		.4byte	0x81
+ 1366 051b E1010000 		.4byte	.LLST15
+ 1367 051f 09       		.uleb128 0x9
+ 1368 0520 32000000 		.4byte	.LASF36
+ 1369 0524 01       		.byte	0x1
+ 1370 0525 D2       		.byte	0xd2
+ 1371 0526 81000000 		.4byte	0x81
+ 1372 052a 02020000 		.4byte	.LLST16
+ 1373 052e 09       		.uleb128 0x9
+ 1374 052f AF000000 		.4byte	.LASF37
+ 1375 0533 01       		.byte	0x1
+ 1376 0534 D2       		.byte	0xd2
+ 1377 0535 81000000 		.4byte	0x81
+ 1378 0539 23020000 		.4byte	.LLST17
+ 1379 053d 0D       		.uleb128 0xd
+ 1380 053e AA000000 		.4byte	.LASF31
+ 1381 0542 01       		.byte	0x1
+ 1382 0543 D4       		.byte	0xd4
+ 1383 0544 D8040000 		.4byte	0x4d8
+ 1384 0548 02       		.uleb128 0x2
+ 1385 0549 91       		.byte	0x91
+ 1386 054a 6E       		.sleb128 -18
+ 1387 054b 0D       		.uleb128 0xd
+ 1388 054c 33010000 		.4byte	.LASF32
+ 1389 0550 01       		.byte	0x1
+ 1390 0551 D4       		.byte	0xd4
+ 1391 0552 D8040000 		.4byte	0x4d8
+ 1392 0556 02       		.uleb128 0x2
+ 1393 0557 91       		.byte	0x91
+ 1394 0558 6C       		.sleb128 -20
+ 1395 0559 06       		.uleb128 0x6
+ 1396 055a 34000000 		.4byte	.LVL62
+ 1397 055e 9E020000 		.4byte	0x29e
+ 1398 0562 7B050000 		.4byte	0x57b
+ 1399 0566 07       		.uleb128 0x7
+ 1400 0567 01       		.uleb128 0x1
+ 1401 0568 51       		.byte	0x51
+ 1402 0569 04       		.uleb128 0x4
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 31
+
+
+ 1403 056a 91       		.byte	0x91
+ 1404 056b 00       		.sleb128 0
+ 1405 056c 94       		.byte	0x94
+ 1406 056d 01       		.byte	0x1
+ 1407 056e 07       		.uleb128 0x7
+ 1408 056f 01       		.uleb128 0x1
+ 1409 0570 52       		.byte	0x52
+ 1410 0571 02       		.uleb128 0x2
+ 1411 0572 76       		.byte	0x76
+ 1412 0573 7F       		.sleb128 -1
+ 1413 0574 07       		.uleb128 0x7
+ 1414 0575 01       		.uleb128 0x1
+ 1415 0576 53       		.byte	0x53
+ 1416 0577 02       		.uleb128 0x2
+ 1417 0578 74       		.byte	0x74
+ 1418 0579 7F       		.sleb128 -1
+ 1419 057a 00       		.byte	0
+ 1420 057b 08       		.uleb128 0x8
+ 1421 057c 4A000000 		.4byte	.LVL63
+ 1422 0580 9E010000 		.4byte	0x19e
+ 1423 0584 07       		.uleb128 0x7
+ 1424 0585 01       		.uleb128 0x1
+ 1425 0586 50       		.byte	0x50
+ 1426 0587 02       		.uleb128 0x2
+ 1427 0588 75       		.byte	0x75
+ 1428 0589 00       		.sleb128 0
+ 1429 058a 00       		.byte	0
+ 1430 058b 00       		.byte	0
+ 1431 058c 05       		.uleb128 0x5
+ 1432 058d 59000000 		.4byte	.LASF38
+ 1433 0591 01       		.byte	0x1
+ 1434 0592 E5       		.byte	0xe5
+ 1435 0593 00000000 		.4byte	.LFB43
+ 1436 0597 E0000000 		.4byte	.LFE43-.LFB43
+ 1437 059b 01       		.uleb128 0x1
+ 1438 059c 9C       		.byte	0x9c
+ 1439 059d 66080000 		.4byte	0x866
+ 1440 05a1 0A       		.uleb128 0xa
+ 1441 05a2 06000000 		.4byte	.LVL64
+ 1442 05a6 BA000000 		.4byte	0xba
+ 1443 05aa 06       		.uleb128 0x6
+ 1444 05ab 0C000000 		.4byte	.LVL65
+ 1445 05af 40020000 		.4byte	0x240
+ 1446 05b3 BD050000 		.4byte	0x5bd
+ 1447 05b7 07       		.uleb128 0x7
+ 1448 05b8 01       		.uleb128 0x1
+ 1449 05b9 50       		.byte	0x50
+ 1450 05ba 01       		.uleb128 0x1
+ 1451 05bb 41       		.byte	0x41
+ 1452 05bc 00       		.byte	0
+ 1453 05bd 06       		.uleb128 0x6
+ 1454 05be 12000000 		.4byte	.LVL66
+ 1455 05c2 71080000 		.4byte	0x871
+ 1456 05c6 D1050000 		.4byte	0x5d1
+ 1457 05ca 07       		.uleb128 0x7
+ 1458 05cb 01       		.uleb128 0x1
+ 1459 05cc 50       		.byte	0x50
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 32
+
+
+ 1460 05cd 02       		.uleb128 0x2
+ 1461 05ce 08       		.byte	0x8
+ 1462 05cf 64       		.byte	0x64
+ 1463 05d0 00       		.byte	0
+ 1464 05d1 06       		.uleb128 0x6
+ 1465 05d2 18000000 		.4byte	.LVL67
+ 1466 05d6 40020000 		.4byte	0x240
+ 1467 05da E5050000 		.4byte	0x5e5
+ 1468 05de 07       		.uleb128 0x7
+ 1469 05df 01       		.uleb128 0x1
+ 1470 05e0 50       		.byte	0x50
+ 1471 05e1 02       		.uleb128 0x2
+ 1472 05e2 08       		.byte	0x8
+ 1473 05e3 26       		.byte	0x26
+ 1474 05e4 00       		.byte	0
+ 1475 05e5 06       		.uleb128 0x6
+ 1476 05e6 1E000000 		.4byte	.LVL68
+ 1477 05ea 40010000 		.4byte	0x140
+ 1478 05ee F8050000 		.4byte	0x5f8
+ 1479 05f2 07       		.uleb128 0x7
+ 1480 05f3 01       		.uleb128 0x1
+ 1481 05f4 50       		.byte	0x50
+ 1482 05f5 01       		.uleb128 0x1
+ 1483 05f6 34       		.byte	0x34
+ 1484 05f7 00       		.byte	0
+ 1485 05f8 06       		.uleb128 0x6
+ 1486 05f9 24000000 		.4byte	.LVL69
+ 1487 05fd 40010000 		.4byte	0x140
+ 1488 0601 0B060000 		.4byte	0x60b
+ 1489 0605 07       		.uleb128 0x7
+ 1490 0606 01       		.uleb128 0x1
+ 1491 0607 50       		.byte	0x50
+ 1492 0608 01       		.uleb128 0x1
+ 1493 0609 43       		.byte	0x43
+ 1494 060a 00       		.byte	0
+ 1495 060b 06       		.uleb128 0x6
+ 1496 060c 2A000000 		.4byte	.LVL70
+ 1497 0610 40020000 		.4byte	0x240
+ 1498 0614 1F060000 		.4byte	0x61f
+ 1499 0618 07       		.uleb128 0x7
+ 1500 0619 01       		.uleb128 0x1
+ 1501 061a 50       		.byte	0x50
+ 1502 061b 02       		.uleb128 0x2
+ 1503 061c 09       		.byte	0x9
+ 1504 061d C0       		.byte	0xc0
+ 1505 061e 00       		.byte	0
+ 1506 061f 06       		.uleb128 0x6
+ 1507 0620 30000000 		.4byte	.LVL71
+ 1508 0624 40010000 		.4byte	0x140
+ 1509 0628 32060000 		.4byte	0x632
+ 1510 062c 07       		.uleb128 0x7
+ 1511 062d 01       		.uleb128 0x1
+ 1512 062e 50       		.byte	0x50
+ 1513 062f 01       		.uleb128 0x1
+ 1514 0630 3A       		.byte	0x3a
+ 1515 0631 00       		.byte	0
+ 1516 0632 06       		.uleb128 0x6
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 33
+
+
+ 1517 0633 36000000 		.4byte	.LVL72
+ 1518 0637 40010000 		.4byte	0x140
+ 1519 063b 45060000 		.4byte	0x645
+ 1520 063f 07       		.uleb128 0x7
+ 1521 0640 01       		.uleb128 0x1
+ 1522 0641 50       		.byte	0x50
+ 1523 0642 01       		.uleb128 0x1
+ 1524 0643 32       		.byte	0x32
+ 1525 0644 00       		.byte	0
+ 1526 0645 06       		.uleb128 0x6
+ 1527 0646 3C000000 		.4byte	.LVL73
+ 1528 064a 40020000 		.4byte	0x240
+ 1529 064e 59060000 		.4byte	0x659
+ 1530 0652 07       		.uleb128 0x7
+ 1531 0653 01       		.uleb128 0x1
+ 1532 0654 50       		.byte	0x50
+ 1533 0655 02       		.uleb128 0x2
+ 1534 0656 09       		.byte	0x9
+ 1535 0657 C1       		.byte	0xc1
+ 1536 0658 00       		.byte	0
+ 1537 0659 06       		.uleb128 0x6
+ 1538 065a 42000000 		.4byte	.LVL74
+ 1539 065e 40010000 		.4byte	0x140
+ 1540 0662 6C060000 		.4byte	0x66c
+ 1541 0666 07       		.uleb128 0x7
+ 1542 0667 01       		.uleb128 0x1
+ 1543 0668 50       		.byte	0x50
+ 1544 0669 01       		.uleb128 0x1
+ 1545 066a 32       		.byte	0x32
+ 1546 066b 00       		.byte	0
+ 1547 066c 06       		.uleb128 0x6
+ 1548 066d 48000000 		.4byte	.LVL75
+ 1549 0671 40020000 		.4byte	0x240
+ 1550 0675 80060000 		.4byte	0x680
+ 1551 0679 07       		.uleb128 0x7
+ 1552 067a 01       		.uleb128 0x1
+ 1553 067b 50       		.byte	0x50
+ 1554 067c 02       		.uleb128 0x2
+ 1555 067d 09       		.byte	0x9
+ 1556 067e C5       		.byte	0xc5
+ 1557 067f 00       		.byte	0
+ 1558 0680 06       		.uleb128 0x6
+ 1559 0681 4E000000 		.4byte	.LVL76
+ 1560 0685 40010000 		.4byte	0x140
+ 1561 0689 94060000 		.4byte	0x694
+ 1562 068d 07       		.uleb128 0x7
+ 1563 068e 01       		.uleb128 0x1
+ 1564 068f 50       		.byte	0x50
+ 1565 0690 02       		.uleb128 0x2
+ 1566 0691 08       		.byte	0x8
+ 1567 0692 50       		.byte	0x50
+ 1568 0693 00       		.byte	0
+ 1569 0694 06       		.uleb128 0x6
+ 1570 0695 54000000 		.4byte	.LVL77
+ 1571 0699 40010000 		.4byte	0x140
+ 1572 069d A8060000 		.4byte	0x6a8
+ 1573 06a1 07       		.uleb128 0x7
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 34
+
+
+ 1574 06a2 01       		.uleb128 0x1
+ 1575 06a3 50       		.byte	0x50
+ 1576 06a4 02       		.uleb128 0x2
+ 1577 06a5 09       		.byte	0x9
+ 1578 06a6 99       		.byte	0x99
+ 1579 06a7 00       		.byte	0
+ 1580 06a8 06       		.uleb128 0x6
+ 1581 06a9 5A000000 		.4byte	.LVL78
+ 1582 06ad 40020000 		.4byte	0x240
+ 1583 06b1 BC060000 		.4byte	0x6bc
+ 1584 06b5 07       		.uleb128 0x7
+ 1585 06b6 01       		.uleb128 0x1
+ 1586 06b7 50       		.byte	0x50
+ 1587 06b8 02       		.uleb128 0x2
+ 1588 06b9 09       		.byte	0x9
+ 1589 06ba C7       		.byte	0xc7
+ 1590 06bb 00       		.byte	0
+ 1591 06bc 06       		.uleb128 0x6
+ 1592 06bd 60000000 		.4byte	.LVL79
+ 1593 06c1 40010000 		.4byte	0x140
+ 1594 06c5 CF060000 		.4byte	0x6cf
+ 1595 06c9 07       		.uleb128 0x7
+ 1596 06ca 01       		.uleb128 0x1
+ 1597 06cb 50       		.byte	0x50
+ 1598 06cc 01       		.uleb128 0x1
+ 1599 06cd 30       		.byte	0x30
+ 1600 06ce 00       		.byte	0
+ 1601 06cf 06       		.uleb128 0x6
+ 1602 06d0 66000000 		.4byte	.LVL80
+ 1603 06d4 40020000 		.4byte	0x240
+ 1604 06d8 E3060000 		.4byte	0x6e3
+ 1605 06dc 07       		.uleb128 0x7
+ 1606 06dd 01       		.uleb128 0x1
+ 1607 06de 50       		.byte	0x50
+ 1608 06df 02       		.uleb128 0x2
+ 1609 06e0 08       		.byte	0x8
+ 1610 06e1 38       		.byte	0x38
+ 1611 06e2 00       		.byte	0
+ 1612 06e3 06       		.uleb128 0x6
+ 1613 06e4 6C000000 		.4byte	.LVL81
+ 1614 06e8 40020000 		.4byte	0x240
+ 1615 06ec F7060000 		.4byte	0x6f7
+ 1616 06f0 07       		.uleb128 0x7
+ 1617 06f1 01       		.uleb128 0x1
+ 1618 06f2 50       		.byte	0x50
+ 1619 06f3 02       		.uleb128 0x2
+ 1620 06f4 08       		.byte	0x8
+ 1621 06f5 3A       		.byte	0x3a
+ 1622 06f6 00       		.byte	0
+ 1623 06f7 06       		.uleb128 0x6
+ 1624 06f8 72000000 		.4byte	.LVL82
+ 1625 06fc 40010000 		.4byte	0x140
+ 1626 0700 0A070000 		.4byte	0x70a
+ 1627 0704 07       		.uleb128 0x7
+ 1628 0705 01       		.uleb128 0x1
+ 1629 0706 50       		.byte	0x50
+ 1630 0707 01       		.uleb128 0x1
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 35
+
+
+ 1631 0708 35       		.byte	0x35
+ 1632 0709 00       		.byte	0
+ 1633 070a 06       		.uleb128 0x6
+ 1634 070b 78000000 		.4byte	.LVL83
+ 1635 070f 40020000 		.4byte	0x240
+ 1636 0713 1E070000 		.4byte	0x71e
+ 1637 0717 07       		.uleb128 0x7
+ 1638 0718 01       		.uleb128 0x1
+ 1639 0719 50       		.byte	0x50
+ 1640 071a 02       		.uleb128 0x2
+ 1641 071b 09       		.byte	0x9
+ 1642 071c B1       		.byte	0xb1
+ 1643 071d 00       		.byte	0
+ 1644 071e 06       		.uleb128 0x6
+ 1645 071f 7E000000 		.4byte	.LVL84
+ 1646 0723 40010000 		.4byte	0x140
+ 1647 0727 31070000 		.4byte	0x731
+ 1648 072b 07       		.uleb128 0x7
+ 1649 072c 01       		.uleb128 0x1
+ 1650 072d 50       		.byte	0x50
+ 1651 072e 01       		.uleb128 0x1
+ 1652 072f 38       		.byte	0x38
+ 1653 0730 00       		.byte	0
+ 1654 0731 06       		.uleb128 0x6
+ 1655 0732 84000000 		.4byte	.LVL85
+ 1656 0736 40010000 		.4byte	0x140
+ 1657 073a 44070000 		.4byte	0x744
+ 1658 073e 07       		.uleb128 0x7
+ 1659 073f 01       		.uleb128 0x1
+ 1660 0740 50       		.byte	0x50
+ 1661 0741 01       		.uleb128 0x1
+ 1662 0742 32       		.byte	0x32
+ 1663 0743 00       		.byte	0
+ 1664 0744 06       		.uleb128 0x6
+ 1665 0745 8A000000 		.4byte	.LVL86
+ 1666 0749 40020000 		.4byte	0x240
+ 1667 074d 58070000 		.4byte	0x758
+ 1668 0751 07       		.uleb128 0x7
+ 1669 0752 01       		.uleb128 0x1
+ 1670 0753 50       		.byte	0x50
+ 1671 0754 02       		.uleb128 0x2
+ 1672 0755 08       		.byte	0x8
+ 1673 0756 2A       		.byte	0x2a
+ 1674 0757 00       		.byte	0
+ 1675 0758 06       		.uleb128 0x6
+ 1676 0759 90000000 		.4byte	.LVL87
+ 1677 075d 40010000 		.4byte	0x140
+ 1678 0761 6B070000 		.4byte	0x76b
+ 1679 0765 07       		.uleb128 0x7
+ 1680 0766 01       		.uleb128 0x1
+ 1681 0767 50       		.byte	0x50
+ 1682 0768 01       		.uleb128 0x1
+ 1683 0769 30       		.byte	0x30
+ 1684 076a 00       		.byte	0
+ 1685 076b 06       		.uleb128 0x6
+ 1686 076c 96000000 		.4byte	.LVL88
+ 1687 0770 40010000 		.4byte	0x140
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 36
+
+
+ 1688 0774 7E070000 		.4byte	0x77e
+ 1689 0778 07       		.uleb128 0x7
+ 1690 0779 01       		.uleb128 0x1
+ 1691 077a 50       		.byte	0x50
+ 1692 077b 01       		.uleb128 0x1
+ 1693 077c 30       		.byte	0x30
+ 1694 077d 00       		.byte	0
+ 1695 077e 06       		.uleb128 0x6
+ 1696 077f 9C000000 		.4byte	.LVL89
+ 1697 0783 40010000 		.4byte	0x140
+ 1698 0787 91070000 		.4byte	0x791
+ 1699 078b 07       		.uleb128 0x7
+ 1700 078c 01       		.uleb128 0x1
+ 1701 078d 50       		.byte	0x50
+ 1702 078e 01       		.uleb128 0x1
+ 1703 078f 30       		.byte	0x30
+ 1704 0790 00       		.byte	0
+ 1705 0791 06       		.uleb128 0x6
+ 1706 0792 A2000000 		.4byte	.LVL90
+ 1707 0796 40010000 		.4byte	0x140
+ 1708 079a A5070000 		.4byte	0x7a5
+ 1709 079e 07       		.uleb128 0x7
+ 1710 079f 01       		.uleb128 0x1
+ 1711 07a0 50       		.byte	0x50
+ 1712 07a1 02       		.uleb128 0x2
+ 1713 07a2 08       		.byte	0x8
+ 1714 07a3 7F       		.byte	0x7f
+ 1715 07a4 00       		.byte	0
+ 1716 07a5 06       		.uleb128 0x6
+ 1717 07a6 A8000000 		.4byte	.LVL91
+ 1718 07aa 40020000 		.4byte	0x240
+ 1719 07ae B9070000 		.4byte	0x7b9
+ 1720 07b2 07       		.uleb128 0x7
+ 1721 07b3 01       		.uleb128 0x1
+ 1722 07b4 50       		.byte	0x50
+ 1723 07b5 02       		.uleb128 0x2
+ 1724 07b6 08       		.byte	0x8
+ 1725 07b7 2B       		.byte	0x2b
+ 1726 07b8 00       		.byte	0
+ 1727 07b9 06       		.uleb128 0x6
+ 1728 07ba AE000000 		.4byte	.LVL92
+ 1729 07be 40010000 		.4byte	0x140
+ 1730 07c2 CC070000 		.4byte	0x7cc
+ 1731 07c6 07       		.uleb128 0x7
+ 1732 07c7 01       		.uleb128 0x1
+ 1733 07c8 50       		.byte	0x50
+ 1734 07c9 01       		.uleb128 0x1
+ 1735 07ca 30       		.byte	0x30
+ 1736 07cb 00       		.byte	0
+ 1737 07cc 06       		.uleb128 0x6
+ 1738 07cd B4000000 		.4byte	.LVL93
+ 1739 07d1 40010000 		.4byte	0x140
+ 1740 07d5 DF070000 		.4byte	0x7df
+ 1741 07d9 07       		.uleb128 0x7
+ 1742 07da 01       		.uleb128 0x1
+ 1743 07db 50       		.byte	0x50
+ 1744 07dc 01       		.uleb128 0x1
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 37
+
+
+ 1745 07dd 30       		.byte	0x30
+ 1746 07de 00       		.byte	0
+ 1747 07df 06       		.uleb128 0x6
+ 1748 07e0 BA000000 		.4byte	.LVL94
+ 1749 07e4 40010000 		.4byte	0x140
+ 1750 07e8 F2070000 		.4byte	0x7f2
+ 1751 07ec 07       		.uleb128 0x7
+ 1752 07ed 01       		.uleb128 0x1
+ 1753 07ee 50       		.byte	0x50
+ 1754 07ef 01       		.uleb128 0x1
+ 1755 07f0 30       		.byte	0x30
+ 1756 07f1 00       		.byte	0
+ 1757 07f2 06       		.uleb128 0x6
+ 1758 07f3 C0000000 		.4byte	.LVL95
+ 1759 07f7 40010000 		.4byte	0x140
+ 1760 07fb 06080000 		.4byte	0x806
+ 1761 07ff 07       		.uleb128 0x7
+ 1762 0800 01       		.uleb128 0x1
+ 1763 0801 50       		.byte	0x50
+ 1764 0802 02       		.uleb128 0x2
+ 1765 0803 08       		.byte	0x8
+ 1766 0804 7F       		.byte	0x7f
+ 1767 0805 00       		.byte	0
+ 1768 0806 06       		.uleb128 0x6
+ 1769 0807 C6000000 		.4byte	.LVL96
+ 1770 080b 40020000 		.4byte	0x240
+ 1771 080f 1A080000 		.4byte	0x81a
+ 1772 0813 07       		.uleb128 0x7
+ 1773 0814 01       		.uleb128 0x1
+ 1774 0815 50       		.byte	0x50
+ 1775 0816 02       		.uleb128 0x2
+ 1776 0817 08       		.byte	0x8
+ 1777 0818 36       		.byte	0x36
+ 1778 0819 00       		.byte	0
+ 1779 081a 06       		.uleb128 0x6
+ 1780 081b CC000000 		.4byte	.LVL97
+ 1781 081f 40010000 		.4byte	0x140
+ 1782 0823 2D080000 		.4byte	0x82d
+ 1783 0827 07       		.uleb128 0x7
+ 1784 0828 01       		.uleb128 0x1
+ 1785 0829 50       		.byte	0x50
+ 1786 082a 01       		.uleb128 0x1
+ 1787 082b 30       		.byte	0x30
+ 1788 082c 00       		.byte	0
+ 1789 082d 06       		.uleb128 0x6
+ 1790 082e D2000000 		.4byte	.LVL98
+ 1791 0832 40020000 		.4byte	0x240
+ 1792 0836 41080000 		.4byte	0x841
+ 1793 083a 07       		.uleb128 0x7
+ 1794 083b 01       		.uleb128 0x1
+ 1795 083c 50       		.byte	0x50
+ 1796 083d 02       		.uleb128 0x2
+ 1797 083e 08       		.byte	0x8
+ 1798 083f 29       		.byte	0x29
+ 1799 0840 00       		.byte	0
+ 1800 0841 06       		.uleb128 0x6
+ 1801 0842 D8000000 		.4byte	.LVL99
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 38
+
+
+ 1802 0846 40020000 		.4byte	0x240
+ 1803 084a 55080000 		.4byte	0x855
+ 1804 084e 07       		.uleb128 0x7
+ 1805 084f 01       		.uleb128 0x1
+ 1806 0850 50       		.byte	0x50
+ 1807 0851 02       		.uleb128 0x2
+ 1808 0852 08       		.byte	0x8
+ 1809 0853 20       		.byte	0x20
+ 1810 0854 00       		.byte	0
+ 1811 0855 08       		.uleb128 0x8
+ 1812 0856 DE000000 		.4byte	.LVL100
+ 1813 085a 40020000 		.4byte	0x240
+ 1814 085e 07       		.uleb128 0x7
+ 1815 085f 01       		.uleb128 0x1
+ 1816 0860 50       		.byte	0x50
+ 1817 0861 02       		.uleb128 0x2
+ 1818 0862 08       		.byte	0x8
+ 1819 0863 2C       		.byte	0x2c
+ 1820 0864 00       		.byte	0
+ 1821 0865 00       		.byte	0
+ 1822 0866 0F       		.uleb128 0xf
+ 1823 0867 00000000 		.4byte	.LASF39
+ 1824 086b 00000000 		.4byte	.LASF39
+ 1825 086f 04       		.byte	0x4
+ 1826 0870 33       		.byte	0x33
+ 1827 0871 0F       		.uleb128 0xf
+ 1828 0872 F4020000 		.4byte	.LASF40
+ 1829 0876 F4020000 		.4byte	.LASF40
+ 1830 087a 05       		.byte	0x5
+ 1831 087b D9       		.byte	0xd9
+ 1832 087c 0F       		.uleb128 0xf
+ 1833 087d 12010000 		.4byte	.LASF41
+ 1834 0881 12010000 		.4byte	.LASF41
+ 1835 0885 06       		.byte	0x6
+ 1836 0886 33       		.byte	0x33
+ 1837 0887 10       		.uleb128 0x10
+ 1838 0888 74000000 		.4byte	.LASF42
+ 1839 088c 74000000 		.4byte	.LASF42
+ 1840 0890 07       		.byte	0x7
+ 1841 0891 3A03     		.2byte	0x33a
+ 1842 0893 10       		.uleb128 0x10
+ 1843 0894 10000000 		.4byte	.LASF43
+ 1844 0898 10000000 		.4byte	.LASF43
+ 1845 089c 07       		.byte	0x7
+ 1846 089d 3403     		.2byte	0x334
+ 1847 089f 10       		.uleb128 0x10
+ 1848 08a0 C8000000 		.4byte	.LASF44
+ 1849 08a4 C8000000 		.4byte	.LASF44
+ 1850 08a8 07       		.byte	0x7
+ 1851 08a9 3503     		.2byte	0x335
+ 1852 08ab 00       		.byte	0
+ 1853              		.section	.debug_abbrev,"",%progbits
+ 1854              	.Ldebug_abbrev0:
+ 1855 0000 01       		.uleb128 0x1
+ 1856 0001 11       		.uleb128 0x11
+ 1857 0002 01       		.byte	0x1
+ 1858 0003 25       		.uleb128 0x25
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 39
+
+
+ 1859 0004 0E       		.uleb128 0xe
+ 1860 0005 13       		.uleb128 0x13
+ 1861 0006 0B       		.uleb128 0xb
+ 1862 0007 03       		.uleb128 0x3
+ 1863 0008 0E       		.uleb128 0xe
+ 1864 0009 1B       		.uleb128 0x1b
+ 1865 000a 0E       		.uleb128 0xe
+ 1866 000b 55       		.uleb128 0x55
+ 1867 000c 17       		.uleb128 0x17
+ 1868 000d 11       		.uleb128 0x11
+ 1869 000e 01       		.uleb128 0x1
+ 1870 000f 10       		.uleb128 0x10
+ 1871 0010 17       		.uleb128 0x17
+ 1872 0011 00       		.byte	0
+ 1873 0012 00       		.byte	0
+ 1874 0013 02       		.uleb128 0x2
+ 1875 0014 24       		.uleb128 0x24
+ 1876 0015 00       		.byte	0
+ 1877 0016 0B       		.uleb128 0xb
+ 1878 0017 0B       		.uleb128 0xb
+ 1879 0018 3E       		.uleb128 0x3e
+ 1880 0019 0B       		.uleb128 0xb
+ 1881 001a 03       		.uleb128 0x3
+ 1882 001b 0E       		.uleb128 0xe
+ 1883 001c 00       		.byte	0
+ 1884 001d 00       		.byte	0
+ 1885 001e 03       		.uleb128 0x3
+ 1886 001f 16       		.uleb128 0x16
+ 1887 0020 00       		.byte	0
+ 1888 0021 03       		.uleb128 0x3
+ 1889 0022 0E       		.uleb128 0xe
+ 1890 0023 3A       		.uleb128 0x3a
+ 1891 0024 0B       		.uleb128 0xb
+ 1892 0025 3B       		.uleb128 0x3b
+ 1893 0026 0B       		.uleb128 0xb
+ 1894 0027 49       		.uleb128 0x49
+ 1895 0028 13       		.uleb128 0x13
+ 1896 0029 00       		.byte	0
+ 1897 002a 00       		.byte	0
+ 1898 002b 04       		.uleb128 0x4
+ 1899 002c 24       		.uleb128 0x24
+ 1900 002d 00       		.byte	0
+ 1901 002e 0B       		.uleb128 0xb
+ 1902 002f 0B       		.uleb128 0xb
+ 1903 0030 3E       		.uleb128 0x3e
+ 1904 0031 0B       		.uleb128 0xb
+ 1905 0032 03       		.uleb128 0x3
+ 1906 0033 08       		.uleb128 0x8
+ 1907 0034 00       		.byte	0
+ 1908 0035 00       		.byte	0
+ 1909 0036 05       		.uleb128 0x5
+ 1910 0037 2E       		.uleb128 0x2e
+ 1911 0038 01       		.byte	0x1
+ 1912 0039 3F       		.uleb128 0x3f
+ 1913 003a 19       		.uleb128 0x19
+ 1914 003b 03       		.uleb128 0x3
+ 1915 003c 0E       		.uleb128 0xe
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 40
+
+
+ 1916 003d 3A       		.uleb128 0x3a
+ 1917 003e 0B       		.uleb128 0xb
+ 1918 003f 3B       		.uleb128 0x3b
+ 1919 0040 0B       		.uleb128 0xb
+ 1920 0041 27       		.uleb128 0x27
+ 1921 0042 19       		.uleb128 0x19
+ 1922 0043 11       		.uleb128 0x11
+ 1923 0044 01       		.uleb128 0x1
+ 1924 0045 12       		.uleb128 0x12
+ 1925 0046 06       		.uleb128 0x6
+ 1926 0047 40       		.uleb128 0x40
+ 1927 0048 18       		.uleb128 0x18
+ 1928 0049 9742     		.uleb128 0x2117
+ 1929 004b 19       		.uleb128 0x19
+ 1930 004c 01       		.uleb128 0x1
+ 1931 004d 13       		.uleb128 0x13
+ 1932 004e 00       		.byte	0
+ 1933 004f 00       		.byte	0
+ 1934 0050 06       		.uleb128 0x6
+ 1935 0051 898201   		.uleb128 0x4109
+ 1936 0054 01       		.byte	0x1
+ 1937 0055 11       		.uleb128 0x11
+ 1938 0056 01       		.uleb128 0x1
+ 1939 0057 31       		.uleb128 0x31
+ 1940 0058 13       		.uleb128 0x13
+ 1941 0059 01       		.uleb128 0x1
+ 1942 005a 13       		.uleb128 0x13
+ 1943 005b 00       		.byte	0
+ 1944 005c 00       		.byte	0
+ 1945 005d 07       		.uleb128 0x7
+ 1946 005e 8A8201   		.uleb128 0x410a
+ 1947 0061 00       		.byte	0
+ 1948 0062 02       		.uleb128 0x2
+ 1949 0063 18       		.uleb128 0x18
+ 1950 0064 9142     		.uleb128 0x2111
+ 1951 0066 18       		.uleb128 0x18
+ 1952 0067 00       		.byte	0
+ 1953 0068 00       		.byte	0
+ 1954 0069 08       		.uleb128 0x8
+ 1955 006a 898201   		.uleb128 0x4109
+ 1956 006d 01       		.byte	0x1
+ 1957 006e 11       		.uleb128 0x11
+ 1958 006f 01       		.uleb128 0x1
+ 1959 0070 31       		.uleb128 0x31
+ 1960 0071 13       		.uleb128 0x13
+ 1961 0072 00       		.byte	0
+ 1962 0073 00       		.byte	0
+ 1963 0074 09       		.uleb128 0x9
+ 1964 0075 05       		.uleb128 0x5
+ 1965 0076 00       		.byte	0
+ 1966 0077 03       		.uleb128 0x3
+ 1967 0078 0E       		.uleb128 0xe
+ 1968 0079 3A       		.uleb128 0x3a
+ 1969 007a 0B       		.uleb128 0xb
+ 1970 007b 3B       		.uleb128 0x3b
+ 1971 007c 0B       		.uleb128 0xb
+ 1972 007d 49       		.uleb128 0x49
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 41
+
+
+ 1973 007e 13       		.uleb128 0x13
+ 1974 007f 02       		.uleb128 0x2
+ 1975 0080 17       		.uleb128 0x17
+ 1976 0081 00       		.byte	0
+ 1977 0082 00       		.byte	0
+ 1978 0083 0A       		.uleb128 0xa
+ 1979 0084 898201   		.uleb128 0x4109
+ 1980 0087 00       		.byte	0
+ 1981 0088 11       		.uleb128 0x11
+ 1982 0089 01       		.uleb128 0x1
+ 1983 008a 31       		.uleb128 0x31
+ 1984 008b 13       		.uleb128 0x13
+ 1985 008c 00       		.byte	0
+ 1986 008d 00       		.byte	0
+ 1987 008e 0B       		.uleb128 0xb
+ 1988 008f 34       		.uleb128 0x34
+ 1989 0090 00       		.byte	0
+ 1990 0091 03       		.uleb128 0x3
+ 1991 0092 0E       		.uleb128 0xe
+ 1992 0093 3A       		.uleb128 0x3a
+ 1993 0094 0B       		.uleb128 0xb
+ 1994 0095 3B       		.uleb128 0x3b
+ 1995 0096 0B       		.uleb128 0xb
+ 1996 0097 49       		.uleb128 0x49
+ 1997 0098 13       		.uleb128 0x13
+ 1998 0099 02       		.uleb128 0x2
+ 1999 009a 17       		.uleb128 0x17
+ 2000 009b 00       		.byte	0
+ 2001 009c 00       		.byte	0
+ 2002 009d 0C       		.uleb128 0xc
+ 2003 009e 05       		.uleb128 0x5
+ 2004 009f 00       		.byte	0
+ 2005 00a0 03       		.uleb128 0x3
+ 2006 00a1 08       		.uleb128 0x8
+ 2007 00a2 3A       		.uleb128 0x3a
+ 2008 00a3 0B       		.uleb128 0xb
+ 2009 00a4 3B       		.uleb128 0x3b
+ 2010 00a5 0B       		.uleb128 0xb
+ 2011 00a6 49       		.uleb128 0x49
+ 2012 00a7 13       		.uleb128 0x13
+ 2013 00a8 02       		.uleb128 0x2
+ 2014 00a9 17       		.uleb128 0x17
+ 2015 00aa 00       		.byte	0
+ 2016 00ab 00       		.byte	0
+ 2017 00ac 0D       		.uleb128 0xd
+ 2018 00ad 34       		.uleb128 0x34
+ 2019 00ae 00       		.byte	0
+ 2020 00af 03       		.uleb128 0x3
+ 2021 00b0 0E       		.uleb128 0xe
+ 2022 00b1 3A       		.uleb128 0x3a
+ 2023 00b2 0B       		.uleb128 0xb
+ 2024 00b3 3B       		.uleb128 0x3b
+ 2025 00b4 0B       		.uleb128 0xb
+ 2026 00b5 49       		.uleb128 0x49
+ 2027 00b6 13       		.uleb128 0x13
+ 2028 00b7 02       		.uleb128 0x2
+ 2029 00b8 18       		.uleb128 0x18
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 42
+
+
+ 2030 00b9 00       		.byte	0
+ 2031 00ba 00       		.byte	0
+ 2032 00bb 0E       		.uleb128 0xe
+ 2033 00bc 35       		.uleb128 0x35
+ 2034 00bd 00       		.byte	0
+ 2035 00be 49       		.uleb128 0x49
+ 2036 00bf 13       		.uleb128 0x13
+ 2037 00c0 00       		.byte	0
+ 2038 00c1 00       		.byte	0
+ 2039 00c2 0F       		.uleb128 0xf
+ 2040 00c3 2E       		.uleb128 0x2e
+ 2041 00c4 00       		.byte	0
+ 2042 00c5 3F       		.uleb128 0x3f
+ 2043 00c6 19       		.uleb128 0x19
+ 2044 00c7 3C       		.uleb128 0x3c
+ 2045 00c8 19       		.uleb128 0x19
+ 2046 00c9 6E       		.uleb128 0x6e
+ 2047 00ca 0E       		.uleb128 0xe
+ 2048 00cb 03       		.uleb128 0x3
+ 2049 00cc 0E       		.uleb128 0xe
+ 2050 00cd 3A       		.uleb128 0x3a
+ 2051 00ce 0B       		.uleb128 0xb
+ 2052 00cf 3B       		.uleb128 0x3b
+ 2053 00d0 0B       		.uleb128 0xb
+ 2054 00d1 00       		.byte	0
+ 2055 00d2 00       		.byte	0
+ 2056 00d3 10       		.uleb128 0x10
+ 2057 00d4 2E       		.uleb128 0x2e
+ 2058 00d5 00       		.byte	0
+ 2059 00d6 3F       		.uleb128 0x3f
+ 2060 00d7 19       		.uleb128 0x19
+ 2061 00d8 3C       		.uleb128 0x3c
+ 2062 00d9 19       		.uleb128 0x19
+ 2063 00da 6E       		.uleb128 0x6e
+ 2064 00db 0E       		.uleb128 0xe
+ 2065 00dc 03       		.uleb128 0x3
+ 2066 00dd 0E       		.uleb128 0xe
+ 2067 00de 3A       		.uleb128 0x3a
+ 2068 00df 0B       		.uleb128 0xb
+ 2069 00e0 3B       		.uleb128 0x3b
+ 2070 00e1 05       		.uleb128 0x5
+ 2071 00e2 00       		.byte	0
+ 2072 00e3 00       		.byte	0
+ 2073 00e4 00       		.byte	0
+ 2074              		.section	.debug_loc,"",%progbits
+ 2075              	.Ldebug_loc0:
+ 2076              	.LLST0:
+ 2077 0000 00000000 		.4byte	.LVL6
+ 2078 0004 06000000 		.4byte	.LVL7
+ 2079 0008 0100     		.2byte	0x1
+ 2080 000a 50       		.byte	0x50
+ 2081 000b 06000000 		.4byte	.LVL7
+ 2082 000f 1E000000 		.4byte	.LFE36
+ 2083 0013 0400     		.2byte	0x4
+ 2084 0015 F3       		.byte	0xf3
+ 2085 0016 01       		.uleb128 0x1
+ 2086 0017 50       		.byte	0x50
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 43
+
+
+ 2087 0018 9F       		.byte	0x9f
+ 2088 0019 00000000 		.4byte	0
+ 2089 001d 00000000 		.4byte	0
+ 2090              	.LLST1:
+ 2091 0021 00000000 		.4byte	.LVL12
+ 2092 0025 08000000 		.4byte	.LVL15
+ 2093 0029 0100     		.2byte	0x1
+ 2094 002b 50       		.byte	0x50
+ 2095 002c 08000000 		.4byte	.LVL15
+ 2096 0030 32000000 		.4byte	.LFE37
+ 2097 0034 0400     		.2byte	0x4
+ 2098 0036 F3       		.byte	0xf3
+ 2099 0037 01       		.uleb128 0x1
+ 2100 0038 50       		.byte	0x50
+ 2101 0039 9F       		.byte	0x9f
+ 2102 003a 00000000 		.4byte	0
+ 2103 003e 00000000 		.4byte	0
+ 2104              	.LLST2:
+ 2105 0042 04000000 		.4byte	.LVL13
+ 2106 0046 30000000 		.4byte	.LVL24
+ 2107 004a 0100     		.2byte	0x1
+ 2108 004c 55       		.byte	0x55
+ 2109 004d 00000000 		.4byte	0
+ 2110 0051 00000000 		.4byte	0
+ 2111              	.LLST3:
+ 2112 0055 06000000 		.4byte	.LVL14
+ 2113 0059 30000000 		.4byte	.LVL23
+ 2114 005d 0100     		.2byte	0x1
+ 2115 005f 54       		.byte	0x54
+ 2116 0060 30000000 		.4byte	.LVL23
+ 2117 0064 32000000 		.4byte	.LFE37
+ 2118 0068 0400     		.2byte	0x4
+ 2119 006a F3       		.byte	0xf3
+ 2120 006b 01       		.uleb128 0x1
+ 2121 006c 50       		.byte	0x50
+ 2122 006d 9F       		.byte	0x9f
+ 2123 006e 00000000 		.4byte	0
+ 2124 0072 00000000 		.4byte	0
+ 2125              	.LLST4:
+ 2126 0076 00000000 		.4byte	.LVL25
+ 2127 007a 06000000 		.4byte	.LVL26
+ 2128 007e 0100     		.2byte	0x1
+ 2129 0080 50       		.byte	0x50
+ 2130 0081 06000000 		.4byte	.LVL26
+ 2131 0085 1E000000 		.4byte	.LFE38
+ 2132 0089 0400     		.2byte	0x4
+ 2133 008b F3       		.byte	0xf3
+ 2134 008c 01       		.uleb128 0x1
+ 2135 008d 50       		.byte	0x50
+ 2136 008e 9F       		.byte	0x9f
+ 2137 008f 00000000 		.4byte	0
+ 2138 0093 00000000 		.4byte	0
+ 2139              	.LLST5:
+ 2140 0097 00000000 		.4byte	.LVL31
+ 2141 009b 0C000000 		.4byte	.LVL32
+ 2142 009f 0100     		.2byte	0x1
+ 2143 00a1 50       		.byte	0x50
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 44
+
+
+ 2144 00a2 0C000000 		.4byte	.LVL32
+ 2145 00a6 4E000000 		.4byte	.LFE39
+ 2146 00aa 0400     		.2byte	0x4
+ 2147 00ac F3       		.byte	0xf3
+ 2148 00ad 01       		.uleb128 0x1
+ 2149 00ae 50       		.byte	0x50
+ 2150 00af 9F       		.byte	0x9f
+ 2151 00b0 00000000 		.4byte	0
+ 2152 00b4 00000000 		.4byte	0
+ 2153              	.LLST6:
+ 2154 00b8 00000000 		.4byte	.LVL31
+ 2155 00bc 0F000000 		.4byte	.LVL33-1
+ 2156 00c0 0100     		.2byte	0x1
+ 2157 00c2 51       		.byte	0x51
+ 2158 00c3 0F000000 		.4byte	.LVL33-1
+ 2159 00c7 4E000000 		.4byte	.LFE39
+ 2160 00cb 0400     		.2byte	0x4
+ 2161 00cd F3       		.byte	0xf3
+ 2162 00ce 01       		.uleb128 0x1
+ 2163 00cf 51       		.byte	0x51
+ 2164 00d0 9F       		.byte	0x9f
+ 2165 00d1 00000000 		.4byte	0
+ 2166 00d5 00000000 		.4byte	0
+ 2167              	.LLST7:
+ 2168 00d9 00000000 		.4byte	.LVL31
+ 2169 00dd 0F000000 		.4byte	.LVL33-1
+ 2170 00e1 0100     		.2byte	0x1
+ 2171 00e3 52       		.byte	0x52
+ 2172 00e4 0F000000 		.4byte	.LVL33-1
+ 2173 00e8 4E000000 		.4byte	.LFE39
+ 2174 00ec 0400     		.2byte	0x4
+ 2175 00ee F3       		.byte	0xf3
+ 2176 00ef 01       		.uleb128 0x1
+ 2177 00f0 52       		.byte	0x52
+ 2178 00f1 9F       		.byte	0x9f
+ 2179 00f2 00000000 		.4byte	0
+ 2180 00f6 00000000 		.4byte	0
+ 2181              	.LLST8:
+ 2182 00fa 00000000 		.4byte	.LVL31
+ 2183 00fe 0F000000 		.4byte	.LVL33-1
+ 2184 0102 0100     		.2byte	0x1
+ 2185 0104 53       		.byte	0x53
+ 2186 0105 0F000000 		.4byte	.LVL33-1
+ 2187 0109 4E000000 		.4byte	.LFE39
+ 2188 010d 0400     		.2byte	0x4
+ 2189 010f F3       		.byte	0xf3
+ 2190 0110 01       		.uleb128 0x1
+ 2191 0111 53       		.byte	0x53
+ 2192 0112 9F       		.byte	0x9f
+ 2193 0113 00000000 		.4byte	0
+ 2194 0117 00000000 		.4byte	0
+ 2195              	.LLST9:
+ 2196 011b 00000000 		.4byte	.LVL44
+ 2197 011f 06000000 		.4byte	.LVL45
+ 2198 0123 0100     		.2byte	0x1
+ 2199 0125 50       		.byte	0x50
+ 2200 0126 06000000 		.4byte	.LVL45
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 45
+
+
+ 2201 012a 24000000 		.4byte	.LFE40
+ 2202 012e 0400     		.2byte	0x4
+ 2203 0130 F3       		.byte	0xf3
+ 2204 0131 01       		.uleb128 0x1
+ 2205 0132 50       		.byte	0x50
+ 2206 0133 9F       		.byte	0x9f
+ 2207 0134 00000000 		.4byte	0
+ 2208 0138 00000000 		.4byte	0
+ 2209              	.LLST10:
+ 2210 013c 00000000 		.4byte	.LVL44
+ 2211 0140 08000000 		.4byte	.LVL46
+ 2212 0144 0100     		.2byte	0x1
+ 2213 0146 51       		.byte	0x51
+ 2214 0147 08000000 		.4byte	.LVL46
+ 2215 014b 24000000 		.4byte	.LFE40
+ 2216 014f 0400     		.2byte	0x4
+ 2217 0151 F3       		.byte	0xf3
+ 2218 0152 01       		.uleb128 0x1
+ 2219 0153 51       		.byte	0x51
+ 2220 0154 9F       		.byte	0x9f
+ 2221 0155 00000000 		.4byte	0
+ 2222 0159 00000000 		.4byte	0
+ 2223              	.LLST11:
+ 2224 015d 00000000 		.4byte	.LVL44
+ 2225 0161 0C000000 		.4byte	.LVL47
+ 2226 0165 0100     		.2byte	0x1
+ 2227 0167 52       		.byte	0x52
+ 2228 0168 0C000000 		.4byte	.LVL47
+ 2229 016c 24000000 		.4byte	.LFE40
+ 2230 0170 0400     		.2byte	0x4
+ 2231 0172 F3       		.byte	0xf3
+ 2232 0173 01       		.uleb128 0x1
+ 2233 0174 52       		.byte	0x52
+ 2234 0175 9F       		.byte	0x9f
+ 2235 0176 00000000 		.4byte	0
+ 2236 017a 00000000 		.4byte	0
+ 2237              	.LLST12:
+ 2238 017e 00000000 		.4byte	.LVL52
+ 2239 0182 0E000000 		.4byte	.LVL53
+ 2240 0186 0100     		.2byte	0x1
+ 2241 0188 50       		.byte	0x50
+ 2242 0189 0E000000 		.4byte	.LVL53
+ 2243 018d 58000000 		.4byte	.LFE41
+ 2244 0191 0400     		.2byte	0x4
+ 2245 0193 F3       		.byte	0xf3
+ 2246 0194 01       		.uleb128 0x1
+ 2247 0195 50       		.byte	0x50
+ 2248 0196 9F       		.byte	0x9f
+ 2249 0197 00000000 		.4byte	0
+ 2250 019b 00000000 		.4byte	0
+ 2251              	.LLST13:
+ 2252 019f 00000000 		.4byte	.LVL56
+ 2253 01a3 0C000000 		.4byte	.LVL57
+ 2254 01a7 0100     		.2byte	0x1
+ 2255 01a9 50       		.byte	0x50
+ 2256 01aa 0C000000 		.4byte	.LVL57
+ 2257 01ae 7E000000 		.4byte	.LFE42
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 46
+
+
+ 2258 01b2 0400     		.2byte	0x4
+ 2259 01b4 F3       		.byte	0xf3
+ 2260 01b5 01       		.uleb128 0x1
+ 2261 01b6 50       		.byte	0x50
+ 2262 01b7 9F       		.byte	0x9f
+ 2263 01b8 00000000 		.4byte	0
+ 2264 01bc 00000000 		.4byte	0
+ 2265              	.LLST14:
+ 2266 01c0 00000000 		.4byte	.LVL56
+ 2267 01c4 10000000 		.4byte	.LVL59
+ 2268 01c8 0100     		.2byte	0x1
+ 2269 01ca 51       		.byte	0x51
+ 2270 01cb 10000000 		.4byte	.LVL59
+ 2271 01cf 7E000000 		.4byte	.LFE42
+ 2272 01d3 0400     		.2byte	0x4
+ 2273 01d5 F3       		.byte	0xf3
+ 2274 01d6 01       		.uleb128 0x1
+ 2275 01d7 51       		.byte	0x51
+ 2276 01d8 9F       		.byte	0x9f
+ 2277 01d9 00000000 		.4byte	0
+ 2278 01dd 00000000 		.4byte	0
+ 2279              	.LLST15:
+ 2280 01e1 00000000 		.4byte	.LVL56
+ 2281 01e5 2E000000 		.4byte	.LVL61
+ 2282 01e9 0100     		.2byte	0x1
+ 2283 01eb 52       		.byte	0x52
+ 2284 01ec 2E000000 		.4byte	.LVL61
+ 2285 01f0 7E000000 		.4byte	.LFE42
+ 2286 01f4 0400     		.2byte	0x4
+ 2287 01f6 F3       		.byte	0xf3
+ 2288 01f7 01       		.uleb128 0x1
+ 2289 01f8 52       		.byte	0x52
+ 2290 01f9 9F       		.byte	0x9f
+ 2291 01fa 00000000 		.4byte	0
+ 2292 01fe 00000000 		.4byte	0
+ 2293              	.LLST16:
+ 2294 0202 00000000 		.4byte	.LVL56
+ 2295 0206 0E000000 		.4byte	.LVL58
+ 2296 020a 0100     		.2byte	0x1
+ 2297 020c 53       		.byte	0x53
+ 2298 020d 0E000000 		.4byte	.LVL58
+ 2299 0211 7E000000 		.4byte	.LFE42
+ 2300 0215 0400     		.2byte	0x4
+ 2301 0217 F3       		.byte	0xf3
+ 2302 0218 01       		.uleb128 0x1
+ 2303 0219 53       		.byte	0x53
+ 2304 021a 9F       		.byte	0x9f
+ 2305 021b 00000000 		.4byte	0
+ 2306 021f 00000000 		.4byte	0
+ 2307              	.LLST17:
+ 2308 0223 00000000 		.4byte	.LVL56
+ 2309 0227 0E000000 		.4byte	.LVL58
+ 2310 022b 0200     		.2byte	0x2
+ 2311 022d 91       		.byte	0x91
+ 2312 022e 00       		.sleb128 0
+ 2313 022f 0E000000 		.4byte	.LVL58
+ 2314 0233 12000000 		.4byte	.LVL60
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 47
+
+
+ 2315 0237 0200     		.2byte	0x2
+ 2316 0239 73       		.byte	0x73
+ 2317 023a 00       		.sleb128 0
+ 2318 023b 12000000 		.4byte	.LVL60
+ 2319 023f 7E000000 		.4byte	.LFE42
+ 2320 0243 0200     		.2byte	0x2
+ 2321 0245 91       		.byte	0x91
+ 2322 0246 00       		.sleb128 0
+ 2323 0247 00000000 		.4byte	0
+ 2324 024b 00000000 		.4byte	0
+ 2325              		.section	.debug_aranges,"",%progbits
+ 2326 0000 5C000000 		.4byte	0x5c
+ 2327 0004 0200     		.2byte	0x2
+ 2328 0006 00000000 		.4byte	.Ldebug_info0
+ 2329 000a 04       		.byte	0x4
+ 2330 000b 00       		.byte	0
+ 2331 000c 0000     		.2byte	0
+ 2332 000e 0000     		.2byte	0
+ 2333 0010 00000000 		.4byte	.LFB35
+ 2334 0014 28000000 		.4byte	.LFE35-.LFB35
+ 2335 0018 00000000 		.4byte	.LFB36
+ 2336 001c 1E000000 		.4byte	.LFE36-.LFB36
+ 2337 0020 00000000 		.4byte	.LFB37
+ 2338 0024 32000000 		.4byte	.LFE37-.LFB37
+ 2339 0028 00000000 		.4byte	.LFB38
+ 2340 002c 1E000000 		.4byte	.LFE38-.LFB38
+ 2341 0030 00000000 		.4byte	.LFB39
+ 2342 0034 4E000000 		.4byte	.LFE39-.LFB39
+ 2343 0038 00000000 		.4byte	.LFB40
+ 2344 003c 24000000 		.4byte	.LFE40-.LFB40
+ 2345 0040 00000000 		.4byte	.LFB41
+ 2346 0044 58000000 		.4byte	.LFE41-.LFB41
+ 2347 0048 00000000 		.4byte	.LFB42
+ 2348 004c 7E000000 		.4byte	.LFE42-.LFB42
+ 2349 0050 00000000 		.4byte	.LFB43
+ 2350 0054 E0000000 		.4byte	.LFE43-.LFB43
+ 2351 0058 00000000 		.4byte	0
+ 2352 005c 00000000 		.4byte	0
+ 2353              		.section	.debug_ranges,"",%progbits
+ 2354              	.Ldebug_ranges0:
+ 2355 0000 00000000 		.4byte	.LFB35
+ 2356 0004 28000000 		.4byte	.LFE35
+ 2357 0008 00000000 		.4byte	.LFB36
+ 2358 000c 1E000000 		.4byte	.LFE36
+ 2359 0010 00000000 		.4byte	.LFB37
+ 2360 0014 32000000 		.4byte	.LFE37
+ 2361 0018 00000000 		.4byte	.LFB38
+ 2362 001c 1E000000 		.4byte	.LFE38
+ 2363 0020 00000000 		.4byte	.LFB39
+ 2364 0024 4E000000 		.4byte	.LFE39
+ 2365 0028 00000000 		.4byte	.LFB40
+ 2366 002c 24000000 		.4byte	.LFE40
+ 2367 0030 00000000 		.4byte	.LFB41
+ 2368 0034 58000000 		.4byte	.LFE41
+ 2369 0038 00000000 		.4byte	.LFB42
+ 2370 003c 7E000000 		.4byte	.LFE42
+ 2371 0040 00000000 		.4byte	.LFB43
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 48
+
+
+ 2372 0044 E0000000 		.4byte	.LFE43
+ 2373 0048 00000000 		.4byte	0
+ 2374 004c 00000000 		.4byte	0
+ 2375              		.section	.debug_line,"",%progbits
+ 2376              	.Ldebug_line0:
+ 2377 0000 C3020000 		.section	.debug_str,"MS",%progbits,1
+ 2377      02007701 
+ 2377      00000201 
+ 2377      FB0E0D00 
+ 2377      01010101 
+ 2378              	.LASF39:
+ 2379 0000 4C43445F 		.ascii	"LCD_Reset_Write\000"
+ 2379      52657365 
+ 2379      745F5772 
+ 2379      69746500 
+ 2380              	.LASF43:
+ 2381 0010 5350495F 		.ascii	"SPI_Master_SpiUartGetRxBufferSize\000"
+ 2381      4D617374 
+ 2381      65725F53 
+ 2381      70695561 
+ 2381      72744765 
+ 2382              	.LASF36:
+ 2383 0032 73746172 		.ascii	"startX\000"
+ 2383      745800
+ 2384              	.LASF3:
+ 2385 0039 5F5F7569 		.ascii	"__uint8_t\000"
+ 2385      6E74385F 
+ 2385      7400
+ 2386              	.LASF29:
+ 2387 0043 6C63645F 		.ascii	"lcd_setScreen\000"
+ 2387      73657453 
+ 2387      63726565 
+ 2387      6E00
+ 2388              	.LASF25:
+ 2389 0051 636F6D6D 		.ascii	"command\000"
+ 2389      616E6400 
+ 2390              	.LASF38:
+ 2391 0059 6C63645F 		.ascii	"lcd_init\000"
+ 2391      696E6974 
+ 2391      00
+ 2392              	.LASF14:
+ 2393 0062 646F7562 		.ascii	"double\000"
+ 2393      6C6500
+ 2394              	.LASF13:
+ 2395 0069 666C6F61 		.ascii	"float\000"
+ 2395      7400
+ 2396              	.LASF21:
+ 2397 006f 64617461 		.ascii	"data\000"
+ 2397      00
+ 2398              	.LASF42:
+ 2399 0074 5350495F 		.ascii	"SPI_Master_SpiUartWriteTxData\000"
+ 2399      4D617374 
+ 2399      65725F53 
+ 2399      70695561 
+ 2399      72745772 
+ 2400              	.LASF18:
+ 2401 0092 6C63645F 		.ascii	"lcd_Reset\000"
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 49
+
+
+ 2401      52657365 
+ 2401      7400
+ 2402              	.LASF1:
+ 2403 009c 756E7369 		.ascii	"unsigned char\000"
+ 2403      676E6564 
+ 2403      20636861 
+ 2403      7200
+ 2404              	.LASF31:
+ 2405 00aa 58436E74 		.ascii	"XCnt\000"
+ 2405      00
+ 2406              	.LASF37:
+ 2407 00af 73746172 		.ascii	"startY\000"
+ 2407      745900
+ 2408              	.LASF7:
+ 2409 00b6 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2409      20756E73 
+ 2409      69676E65 
+ 2409      6420696E 
+ 2409      7400
+ 2410              	.LASF44:
+ 2411 00c8 5350495F 		.ascii	"SPI_Master_SpiUartClearRxBuffer\000"
+ 2411      4D617374 
+ 2411      65725F53 
+ 2411      70695561 
+ 2411      7274436C 
+ 2412              	.LASF5:
+ 2413 00e8 73686F72 		.ascii	"short unsigned int\000"
+ 2413      7420756E 
+ 2413      7369676E 
+ 2413      65642069 
+ 2413      6E7400
+ 2414              	.LASF34:
+ 2415 00fb 73697A65 		.ascii	"sizeX\000"
+ 2415      5800
+ 2416              	.LASF35:
+ 2417 0101 73697A65 		.ascii	"sizeY\000"
+ 2417      5900
+ 2418              	.LASF4:
+ 2419 0107 5F5F7569 		.ascii	"__uint16_t\000"
+ 2419      6E743136 
+ 2419      5F7400
+ 2420              	.LASF41:
+ 2421 0112 4C43445F 		.ascii	"LCD_DC_Write\000"
+ 2421      44435F57 
+ 2421      72697465 
+ 2421      00
+ 2422              	.LASF28:
+ 2423 011f 636F6C6F 		.ascii	"color\000"
+ 2423      7200
+ 2424              	.LASF46:
+ 2425 0125 6C63645F 		.ascii	"lcd_ili9163.c\000"
+ 2425      696C6939 
+ 2425      3136332E 
+ 2425      6300
+ 2426              	.LASF32:
+ 2427 0133 59436E74 		.ascii	"YCnt\000"
+ 2427      00
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 50
+
+
+ 2428              	.LASF27:
+ 2429 0138 6C63645F 		.ascii	"lcd_drawPixel\000"
+ 2429      64726177 
+ 2429      50697865 
+ 2429      6C00
+ 2430              	.LASF10:
+ 2431 0146 756E7369 		.ascii	"unsigned int\000"
+ 2431      676E6564 
+ 2431      20696E74 
+ 2431      00
+ 2432              	.LASF9:
+ 2433 0153 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2433      206C6F6E 
+ 2433      6720756E 
+ 2433      7369676E 
+ 2433      65642069 
+ 2434              	.LASF11:
+ 2435 016a 75696E74 		.ascii	"uint8_t\000"
+ 2435      385F7400 
+ 2436              	.LASF22:
+ 2437 0172 64617461 		.ascii	"data1\000"
+ 2437      3100
+ 2438              	.LASF23:
+ 2439 0178 64617461 		.ascii	"data2\000"
+ 2439      3200
+ 2440              	.LASF47:
+ 2441 017e 433A5C55 		.ascii	"C:\\Users\\micha_000\\Documents\\GitHub\\CypressBLE"
+ 2441      73657273 
+ 2441      5C6D6963 
+ 2441      68615F30 
+ 2441      30305C44 
+ 2442 01ac 42616467 		.ascii	"Badge\\RGB_OLED\\RGB_LCD.cydsn\000"
+ 2442      655C5247 
+ 2442      425F4F4C 
+ 2442      45445C52 
+ 2442      47425F4C 
+ 2443              	.LASF45:
+ 2444 01c9 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 2444      43313120 
+ 2444      352E342E 
+ 2444      31203230 
+ 2444      31363036 
+ 2445 01fc 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 2445      20726576 
+ 2445      6973696F 
+ 2445      6E203233 
+ 2445      37373135 
+ 2446 022f 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 2446      66756E63 
+ 2446      74696F6E 
+ 2446      2D736563 
+ 2446      74696F6E 
+ 2447              	.LASF17:
+ 2448 0257 73697A65 		.ascii	"sizetype\000"
+ 2448      74797065 
+ 2448      00
+ 2449              	.LASF19:
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 51
+
+
+ 2450 0260 6C63645F 		.ascii	"lcd_writeData\000"
+ 2450      77726974 
+ 2450      65446174 
+ 2450      6100
+ 2451              	.LASF30:
+ 2452 026e 436F6C6F 		.ascii	"Color\000"
+ 2452      7200
+ 2453              	.LASF8:
+ 2454 0274 6C6F6E67 		.ascii	"long long int\000"
+ 2454      206C6F6E 
+ 2454      6720696E 
+ 2454      7400
+ 2455              	.LASF15:
+ 2456 0282 63686172 		.ascii	"char\000"
+ 2456      00
+ 2457              	.LASF26:
+ 2458 0287 6C63645F 		.ascii	"lcd_SetAddr\000"
+ 2458      53657441 
+ 2458      64647200 
+ 2459              	.LASF33:
+ 2460 0293 6C63645F 		.ascii	"lcd_setArea\000"
+ 2460      73657441 
+ 2460      72656100 
+ 2461              	.LASF24:
+ 2462 029f 6C63645F 		.ascii	"lcd_writeCommand\000"
+ 2462      77726974 
+ 2462      65436F6D 
+ 2462      6D616E64 
+ 2462      00
+ 2463              	.LASF20:
+ 2464 02b0 6C63645F 		.ascii	"lcd_writeData16\000"
+ 2464      77726974 
+ 2464      65446174 
+ 2464      61313600 
+ 2465              	.LASF2:
+ 2466 02c0 73686F72 		.ascii	"short int\000"
+ 2466      7420696E 
+ 2466      7400
+ 2467              	.LASF12:
+ 2468 02ca 75696E74 		.ascii	"uint16_t\000"
+ 2468      31365F74 
+ 2468      00
+ 2469              	.LASF6:
+ 2470 02d3 6C6F6E67 		.ascii	"long int\000"
+ 2470      20696E74 
+ 2470      00
+ 2471              	.LASF16:
+ 2472 02dc 6C6F6E67 		.ascii	"long double\000"
+ 2472      20646F75 
+ 2472      626C6500 
+ 2473              	.LASF0:
+ 2474 02e8 7369676E 		.ascii	"signed char\000"
+ 2474      65642063 
+ 2474      68617200 
+ 2475              	.LASF40:
+ 2476 02f4 43794465 		.ascii	"CyDelay\000"
+ 2476      6C617900 
+ARM GAS  C:\Users\MICHA_~1\AppData\Local\Temp\ccSDcX6Y.s 			page 52
+
+
+ 2477              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

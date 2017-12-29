@@ -1,0 +1,5159 @@
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"oled_ssd1331.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.ssd1331_write_byte,"ax",%progbits
+  20              		.align	2
+  21              		.code	16
+  22              		.thumb_func
+  23              		.type	ssd1331_write_byte, %function
+  24              	ssd1331_write_byte:
+  25              	.LFB66:
+  26              		.file 1 "oled_ssd1331.c"
+   1:oled_ssd1331.c **** /* ========================================
+   2:oled_ssd1331.c ****  *
+   3:oled_ssd1331.c ****  * Copyright YOUR COMPANY, THE YEAR
+   4:oled_ssd1331.c ****  * All Rights Reserved
+   5:oled_ssd1331.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:oled_ssd1331.c ****  *
+   7:oled_ssd1331.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:oled_ssd1331.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:oled_ssd1331.c ****  *
+  10:oled_ssd1331.c ****  * ========================================
+  11:oled_ssd1331.c **** */
+  12:oled_ssd1331.c **** 
+  13:oled_ssd1331.c **** /* Includes ------------------------------------------------------------------*/
+  14:oled_ssd1331.c **** #include "oled_ssd1331.h"
+  15:oled_ssd1331.c **** #include "fonts.h"
+  16:oled_ssd1331.c **** #include "project.h"
+  17:oled_ssd1331.c **** 
+  18:oled_ssd1331.c **** 
+  19:oled_ssd1331.c **** /* Private typedef -----------------------------------------------------------*/
+  20:oled_ssd1331.c **** /* Private define ------------------------------------------------------------*/
+  21:oled_ssd1331.c **** #define SSD1331_CMD                     0
+  22:oled_ssd1331.c **** #define SSD1331_DATA                    1
+  23:oled_ssd1331.c ****                  
+  24:oled_ssd1331.c **** #define OLED_WIDTH                      96
+  25:oled_ssd1331.c **** #define OLED_HEIGHT                     64
+  26:oled_ssd1331.c **** 
+  27:oled_ssd1331.c **** /* Private macro -------------------------------------------------------------*/
+  28:oled_ssd1331.c **** #define DRAW_LINE                       0x21
+  29:oled_ssd1331.c **** #define DRAW_RECTANGLE                  0x22
+  30:oled_ssd1331.c **** #define COPY_WINDOW                     0x23
+  31:oled_ssd1331.c **** #define DIM_WINDOW                      0x24
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 2
+
+
+  32:oled_ssd1331.c **** #define CLEAR_WINDOW                    0x25
+  33:oled_ssd1331.c **** #define FILL_WINDOW                     0x26
+  34:oled_ssd1331.c **** #define DISABLE_FILL                    0x00
+  35:oled_ssd1331.c **** #define ENABLE_FILL                     0x01
+  36:oled_ssd1331.c **** #define CONTINUOUS_SCROLLING_SETUP      0x27
+  37:oled_ssd1331.c **** #define DEACTIVE_SCROLLING              0x2E
+  38:oled_ssd1331.c **** #define ACTIVE_SCROLLING                0x2F
+  39:oled_ssd1331.c **** 
+  40:oled_ssd1331.c **** #define SET_COLUMN_ADDRESS              0x15
+  41:oled_ssd1331.c **** #define SET_ROW_ADDRESS                 0x75
+  42:oled_ssd1331.c **** #define SET_CONTRAST_A                  0x81
+  43:oled_ssd1331.c **** #define SET_CONTRAST_B                  0x82
+  44:oled_ssd1331.c **** #define SET_CONTRAST_C                  0x83
+  45:oled_ssd1331.c **** #define MASTER_CURRENT_CONTROL          0x87
+  46:oled_ssd1331.c **** #define SET_PRECHARGE_SPEED_A           0x8A
+  47:oled_ssd1331.c **** #define SET_PRECHARGE_SPEED_B           0x8B
+  48:oled_ssd1331.c **** #define SET_PRECHARGE_SPEED_C           0x8C
+  49:oled_ssd1331.c **** #define SET_REMAP                       0xA0
+  50:oled_ssd1331.c **** #define SET_DISPLAY_START_LINE          0xA1
+  51:oled_ssd1331.c **** #define SET_DISPLAY_OFFSET              0xA2
+  52:oled_ssd1331.c **** #define NORMAL_DISPLAY                  0xA4
+  53:oled_ssd1331.c **** #define ENTIRE_DISPLAY_ON               0xA5
+  54:oled_ssd1331.c **** #define ENTIRE_DISPLAY_OFF              0xA6
+  55:oled_ssd1331.c **** #define INVERSE_DISPLAY                 0xA7
+  56:oled_ssd1331.c **** #define SET_MULTIPLEX_RATIO             0xA8
+  57:oled_ssd1331.c **** #define DIM_MODE_SETTING                0xAB
+  58:oled_ssd1331.c **** #define SET_MASTER_CONFIGURE            0xAD
+  59:oled_ssd1331.c **** #define DIM_MODE_DISPLAY_ON             0xAC
+  60:oled_ssd1331.c **** #define DISPLAY_OFF                     0xAE
+  61:oled_ssd1331.c **** #define NORMAL_BRIGHTNESS_DISPLAY_ON    0xAF
+  62:oled_ssd1331.c **** #define POWER_SAVE_MODE                 0xB0
+  63:oled_ssd1331.c **** #define PHASE_PERIOD_ADJUSTMENT         0xB1
+  64:oled_ssd1331.c **** #define DISPLAY_CLOCK_DIV               0xB3
+  65:oled_ssd1331.c **** #define SET_GRAy_SCALE_TABLE            0xB8
+  66:oled_ssd1331.c **** #define ENABLE_LINEAR_GRAY_SCALE_TABLE  0xB9
+  67:oled_ssd1331.c **** #define SET_PRECHARGE_VOLTAGE           0xBB
+  68:oled_ssd1331.c **** #define SET_V_VOLTAGE                   0xBE
+  69:oled_ssd1331.c **** 
+  70:oled_ssd1331.c **** 
+  71:oled_ssd1331.c **** #define MAX(a,b)  (((a) > (b)) ? (a) : (b))
+  72:oled_ssd1331.c **** #define MIN(a,b)  (((a) < (b)) ? (a) : (b))
+  73:oled_ssd1331.c **** 
+  74:oled_ssd1331.c **** 
+  75:oled_ssd1331.c **** 
+  76:oled_ssd1331.c **** /**
+  77:oled_ssd1331.c ****    * @brief  Writes an byte to the display data ram or the command register
+  78:oled_ssd1331.c ****    *		 
+  79:oled_ssd1331.c ****    * @param  chData: Data to be writen to the display data ram or the command register
+  80:oled_ssd1331.c ****    * @param chCmd:	
+  81:oled_ssd1331.c ****    *						   0: Writes to the command register
+  82:oled_ssd1331.c ****    *						   1: Writes to the display data ram
+  83:oled_ssd1331.c ****    * @retval None
+  84:oled_ssd1331.c ****  **/
+  85:oled_ssd1331.c **** static void ssd1331_write_byte(uint8_t chData, uint8_t chCmd) 
+  86:oled_ssd1331.c **** {
+  27              		.loc 1 86 0
+  28              		.cfi_startproc
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 3
+
+
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 82B0     		sub	sp, sp, #8
+  36              		.cfi_def_cfa_offset 16
+  37 0004 00AF     		add	r7, sp, #0
+  38              		.cfi_def_cfa_register 7
+  39 0006 0200     		movs	r2, r0
+  40 0008 FB1D     		adds	r3, r7, #7
+  41 000a 1A70     		strb	r2, [r3]
+  42 000c BB1D     		adds	r3, r7, #6
+  43 000e 0A1C     		adds	r2, r1, #0
+  44 0010 1A70     		strb	r2, [r3]
+  87:oled_ssd1331.c **** 
+  88:oled_ssd1331.c ****     
+  89:oled_ssd1331.c **** 	if (chCmd) 
+  45              		.loc 1 89 0
+  46 0012 BB1D     		adds	r3, r7, #6
+  47 0014 1B78     		ldrb	r3, [r3]
+  48 0016 002B     		cmp	r3, #0
+  49 0018 03D0     		beq	.L2
+  90:oled_ssd1331.c ****     {
+  91:oled_ssd1331.c ****         OLED_DC_Write(SSD1331_DATA);
+  50              		.loc 1 91 0
+  51 001a 0120     		movs	r0, #1
+  52 001c FFF7FEFF 		bl	OLED_DC_Write
+  53 0020 02E0     		b	.L3
+  54              	.L2:
+  92:oled_ssd1331.c **** 	} 
+  93:oled_ssd1331.c ****     else 
+  94:oled_ssd1331.c ****     {
+  95:oled_ssd1331.c **** 	 	OLED_DC_Write(SSD1331_CMD);
+  55              		.loc 1 95 0
+  56 0022 0020     		movs	r0, #0
+  57 0024 FFF7FEFF 		bl	OLED_DC_Write
+  58              	.L3:
+  96:oled_ssd1331.c **** 	}
+  97:oled_ssd1331.c ****         
+  98:oled_ssd1331.c ****     /* Set Slave Select Low & Transmit Data */
+  99:oled_ssd1331.c ****     SPI_Master_SpiUartWriteTxData(chData);
+  59              		.loc 1 99 0
+  60 0028 FB1D     		adds	r3, r7, #7
+  61 002a 1B78     		ldrb	r3, [r3]
+  62 002c 1800     		movs	r0, r3
+  63 002e FFF7FEFF 		bl	SPI_Master_SpiUartWriteTxData
+ 100:oled_ssd1331.c ****         
+ 101:oled_ssd1331.c ****     /* Wait for the end of the transfer. The number of transmitted data
+ 102:oled_ssd1331.c ****     * elements has to be equal to the number of received data elements.
+ 103:oled_ssd1331.c ****     */
+ 104:oled_ssd1331.c ****     while(1 != SPI_Master_SpiUartGetRxBufferSize())
+  64              		.loc 1 104 0
+  65 0032 C046     		nop
+  66              	.L4:
+  67              		.loc 1 104 0 is_stmt 0 discriminator 1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 4
+
+
+  68 0034 FFF7FEFF 		bl	SPI_Master_SpiUartGetRxBufferSize
+  69 0038 0300     		movs	r3, r0
+  70 003a 012B     		cmp	r3, #1
+  71 003c FAD1     		bne	.L4
+ 105:oled_ssd1331.c ****     {
+ 106:oled_ssd1331.c ****         /* Wait */
+ 107:oled_ssd1331.c ****     }
+ 108:oled_ssd1331.c **** 
+ 109:oled_ssd1331.c ****     /* Clear dummy bytes from RX buffer */
+ 110:oled_ssd1331.c ****     SPI_Master_SpiUartClearRxBuffer();
+  72              		.loc 1 110 0 is_stmt 1
+  73 003e FFF7FEFF 		bl	SPI_Master_SpiUartClearRxBuffer
+ 111:oled_ssd1331.c ****     
+ 112:oled_ssd1331.c ****     /* Set Data/Command High */
+ 113:oled_ssd1331.c ****     //OLED_DC_Write(SSD1331_DATA);
+ 114:oled_ssd1331.c **** }
+  74              		.loc 1 114 0
+  75 0042 C046     		nop
+  76 0044 BD46     		mov	sp, r7
+  77 0046 02B0     		add	sp, sp, #8
+  78              		@ sp needed
+  79 0048 80BD     		pop	{r7, pc}
+  80              		.cfi_endproc
+  81              	.LFE66:
+  82              		.size	ssd1331_write_byte, .-ssd1331_write_byte
+  83 004a C046     		.section	.text.ssd1331_draw_point,"ax",%progbits
+  84              		.align	2
+  85              		.global	ssd1331_draw_point
+  86              		.code	16
+  87              		.thumb_func
+  88              		.type	ssd1331_draw_point, %function
+  89              	ssd1331_draw_point:
+  90              	.LFB67:
+ 115:oled_ssd1331.c **** 
+ 116:oled_ssd1331.c **** void ssd1331_draw_point(uint8_t chXpos, uint8_t chYpos, uint16_t hwColor) 
+ 117:oled_ssd1331.c **** {
+  91              		.loc 1 117 0
+  92              		.cfi_startproc
+  93              		@ args = 0, pretend = 0, frame = 8
+  94              		@ frame_needed = 1, uses_anonymous_args = 0
+  95 0000 90B5     		push	{r4, r7, lr}
+  96              		.cfi_def_cfa_offset 12
+  97              		.cfi_offset 4, -12
+  98              		.cfi_offset 7, -8
+  99              		.cfi_offset 14, -4
+ 100 0002 83B0     		sub	sp, sp, #12
+ 101              		.cfi_def_cfa_offset 24
+ 102 0004 00AF     		add	r7, sp, #0
+ 103              		.cfi_def_cfa_register 7
+ 104 0006 0400     		movs	r4, r0
+ 105 0008 0800     		movs	r0, r1
+ 106 000a 1100     		movs	r1, r2
+ 107 000c FB1D     		adds	r3, r7, #7
+ 108 000e 221C     		adds	r2, r4, #0
+ 109 0010 1A70     		strb	r2, [r3]
+ 110 0012 BB1D     		adds	r3, r7, #6
+ 111 0014 021C     		adds	r2, r0, #0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 5
+
+
+ 112 0016 1A70     		strb	r2, [r3]
+ 113 0018 3B1D     		adds	r3, r7, #4
+ 114 001a 0A1C     		adds	r2, r1, #0
+ 115 001c 1A80     		strh	r2, [r3]
+ 118:oled_ssd1331.c **** 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
+ 116              		.loc 1 118 0
+ 117 001e FB1D     		adds	r3, r7, #7
+ 118 0020 1B78     		ldrb	r3, [r3]
+ 119 0022 5F2B     		cmp	r3, #95
+ 120 0024 30D8     		bhi	.L9
+ 121              		.loc 1 118 0 is_stmt 0 discriminator 1
+ 122 0026 BB1D     		adds	r3, r7, #6
+ 123 0028 1B78     		ldrb	r3, [r3]
+ 124 002a 3F2B     		cmp	r3, #63
+ 125 002c 2CD8     		bhi	.L9
+ 119:oled_ssd1331.c **** 		return;
+ 120:oled_ssd1331.c **** 	}
+ 121:oled_ssd1331.c **** 
+ 122:oled_ssd1331.c ****     //set column point
+ 123:oled_ssd1331.c ****     ssd1331_write_byte(SET_COLUMN_ADDRESS, SSD1331_CMD);
+ 126              		.loc 1 123 0 is_stmt 1
+ 127 002e 0021     		movs	r1, #0
+ 128 0030 1520     		movs	r0, #21
+ 129 0032 FFF7FEFF 		bl	ssd1331_write_byte
+ 124:oled_ssd1331.c ****     ssd1331_write_byte(chXpos, SSD1331_CMD);
+ 130              		.loc 1 124 0
+ 131 0036 FB1D     		adds	r3, r7, #7
+ 132 0038 1B78     		ldrb	r3, [r3]
+ 133 003a 0021     		movs	r1, #0
+ 134 003c 1800     		movs	r0, r3
+ 135 003e FFF7FEFF 		bl	ssd1331_write_byte
+ 125:oled_ssd1331.c ****     ssd1331_write_byte(OLED_WIDTH - 1, SSD1331_CMD);
+ 136              		.loc 1 125 0
+ 137 0042 0021     		movs	r1, #0
+ 138 0044 5F20     		movs	r0, #95
+ 139 0046 FFF7FEFF 		bl	ssd1331_write_byte
+ 126:oled_ssd1331.c ****     //set row point
+ 127:oled_ssd1331.c ****     ssd1331_write_byte(SET_ROW_ADDRESS, SSD1331_CMD);
+ 140              		.loc 1 127 0
+ 141 004a 0021     		movs	r1, #0
+ 142 004c 7520     		movs	r0, #117
+ 143 004e FFF7FEFF 		bl	ssd1331_write_byte
+ 128:oled_ssd1331.c ****     ssd1331_write_byte(chYpos, SSD1331_CMD);
+ 144              		.loc 1 128 0
+ 145 0052 BB1D     		adds	r3, r7, #6
+ 146 0054 1B78     		ldrb	r3, [r3]
+ 147 0056 0021     		movs	r1, #0
+ 148 0058 1800     		movs	r0, r3
+ 149 005a FFF7FEFF 		bl	ssd1331_write_byte
+ 129:oled_ssd1331.c ****     ssd1331_write_byte(OLED_HEIGHT - 1, SSD1331_CMD);
+ 150              		.loc 1 129 0
+ 151 005e 0021     		movs	r1, #0
+ 152 0060 3F20     		movs	r0, #63
+ 153 0062 FFF7FEFF 		bl	ssd1331_write_byte
+ 130:oled_ssd1331.c ****     
+ 131:oled_ssd1331.c ****     //fill 16bit colour
+ 132:oled_ssd1331.c **** 	ssd1331_write_byte(hwColor >> 8, SSD1331_DATA);
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 6
+
+
+ 154              		.loc 1 132 0
+ 155 0066 3B1D     		adds	r3, r7, #4
+ 156 0068 1B88     		ldrh	r3, [r3]
+ 157 006a 1B0A     		lsrs	r3, r3, #8
+ 158 006c 9BB2     		uxth	r3, r3
+ 159 006e DBB2     		uxtb	r3, r3
+ 160 0070 0121     		movs	r1, #1
+ 161 0072 1800     		movs	r0, r3
+ 162 0074 FFF7FEFF 		bl	ssd1331_write_byte
+ 133:oled_ssd1331.c **** 	ssd1331_write_byte(hwColor, SSD1331_DATA);   
+ 163              		.loc 1 133 0
+ 164 0078 3B1D     		adds	r3, r7, #4
+ 165 007a 1B88     		ldrh	r3, [r3]
+ 166 007c DBB2     		uxtb	r3, r3
+ 167 007e 0121     		movs	r1, #1
+ 168 0080 1800     		movs	r0, r3
+ 169 0082 FFF7FEFF 		bl	ssd1331_write_byte
+ 170 0086 00E0     		b	.L5
+ 171              	.L9:
+ 119:oled_ssd1331.c **** 	}
+ 172              		.loc 1 119 0
+ 173 0088 C046     		nop
+ 174              	.L5:
+ 134:oled_ssd1331.c **** }
+ 175              		.loc 1 134 0
+ 176 008a BD46     		mov	sp, r7
+ 177 008c 03B0     		add	sp, sp, #12
+ 178              		@ sp needed
+ 179 008e 90BD     		pop	{r4, r7, pc}
+ 180              		.cfi_endproc
+ 181              	.LFE67:
+ 182              		.size	ssd1331_draw_point, .-ssd1331_draw_point
+ 183              		.section	.text.ssd1331_draw_line,"ax",%progbits
+ 184              		.align	2
+ 185              		.global	ssd1331_draw_line
+ 186              		.code	16
+ 187              		.thumb_func
+ 188              		.type	ssd1331_draw_line, %function
+ 189              	ssd1331_draw_line:
+ 190              	.LFB68:
+ 135:oled_ssd1331.c **** 
+ 136:oled_ssd1331.c **** void ssd1331_draw_line(uint8_t chXpos0, uint8_t chYpos0, uint8_t chXpos1, uint8_t chYpos1, uint16_t
+ 137:oled_ssd1331.c **** {
+ 191              		.loc 1 137 0
+ 192              		.cfi_startproc
+ 193              		@ args = 4, pretend = 0, frame = 40
+ 194              		@ frame_needed = 1, uses_anonymous_args = 0
+ 195 0000 B0B5     		push	{r4, r5, r7, lr}
+ 196              		.cfi_def_cfa_offset 16
+ 197              		.cfi_offset 4, -16
+ 198              		.cfi_offset 5, -12
+ 199              		.cfi_offset 7, -8
+ 200              		.cfi_offset 14, -4
+ 201 0002 8AB0     		sub	sp, sp, #40
+ 202              		.cfi_def_cfa_offset 56
+ 203 0004 00AF     		add	r7, sp, #0
+ 204              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 7
+
+
+ 205 0006 0500     		movs	r5, r0
+ 206 0008 0C00     		movs	r4, r1
+ 207 000a 1000     		movs	r0, r2
+ 208 000c 1900     		movs	r1, r3
+ 209 000e FB1D     		adds	r3, r7, #7
+ 210 0010 2A1C     		adds	r2, r5, #0
+ 211 0012 1A70     		strb	r2, [r3]
+ 212 0014 BB1D     		adds	r3, r7, #6
+ 213 0016 221C     		adds	r2, r4, #0
+ 214 0018 1A70     		strb	r2, [r3]
+ 215 001a 7B1D     		adds	r3, r7, #5
+ 216 001c 021C     		adds	r2, r0, #0
+ 217 001e 1A70     		strb	r2, [r3]
+ 218 0020 3B1D     		adds	r3, r7, #4
+ 219 0022 0A1C     		adds	r2, r1, #0
+ 220 0024 1A70     		strb	r2, [r3]
+ 138:oled_ssd1331.c **** 	int x = chXpos1 - chXpos0;
+ 221              		.loc 1 138 0
+ 222 0026 7B1D     		adds	r3, r7, #5
+ 223 0028 1A78     		ldrb	r2, [r3]
+ 224 002a FB1D     		adds	r3, r7, #7
+ 225 002c 1B78     		ldrb	r3, [r3]
+ 226 002e D31A     		subs	r3, r2, r3
+ 227 0030 3B62     		str	r3, [r7, #32]
+ 139:oled_ssd1331.c ****     int y = chYpos1 - chYpos0;
+ 228              		.loc 1 139 0
+ 229 0032 3B1D     		adds	r3, r7, #4
+ 230 0034 1A78     		ldrb	r2, [r3]
+ 231 0036 BB1D     		adds	r3, r7, #6
+ 232 0038 1B78     		ldrb	r3, [r3]
+ 233 003a D31A     		subs	r3, r2, r3
+ 234 003c FB61     		str	r3, [r7, #28]
+ 140:oled_ssd1331.c ****     int dx = abs(x), sx = chXpos0 < chXpos1 ? 1 : -1;
+ 235              		.loc 1 140 0
+ 236 003e 3B6A     		ldr	r3, [r7, #32]
+ 237 0040 DA17     		asrs	r2, r3, #31
+ 238 0042 9B18     		adds	r3, r3, r2
+ 239 0044 5340     		eors	r3, r2
+ 240 0046 BB61     		str	r3, [r7, #24]
+ 241 0048 FA1D     		adds	r2, r7, #7
+ 242 004a 7B1D     		adds	r3, r7, #5
+ 243 004c 1278     		ldrb	r2, [r2]
+ 244 004e 1B78     		ldrb	r3, [r3]
+ 245 0050 9A42     		cmp	r2, r3
+ 246 0052 01D2     		bcs	.L11
+ 247              		.loc 1 140 0 is_stmt 0 discriminator 1
+ 248 0054 0123     		movs	r3, #1
+ 249 0056 01E0     		b	.L12
+ 250              	.L11:
+ 251              		.loc 1 140 0 discriminator 2
+ 252 0058 0123     		movs	r3, #1
+ 253 005a 5B42     		rsbs	r3, r3, #0
+ 254              	.L12:
+ 255              		.loc 1 140 0 discriminator 4
+ 256 005c 7B61     		str	r3, [r7, #20]
+ 141:oled_ssd1331.c ****     int dy = -abs(y), sy = chYpos0 < chYpos1 ? 1 : -1;
+ 257              		.loc 1 141 0 is_stmt 1 discriminator 4
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 8
+
+
+ 258 005e FB69     		ldr	r3, [r7, #28]
+ 259 0060 DA17     		asrs	r2, r3, #31
+ 260 0062 9B18     		adds	r3, r3, r2
+ 261 0064 5340     		eors	r3, r2
+ 262 0066 5B42     		rsbs	r3, r3, #0
+ 263 0068 3B61     		str	r3, [r7, #16]
+ 264 006a BA1D     		adds	r2, r7, #6
+ 265 006c 3B1D     		adds	r3, r7, #4
+ 266 006e 1278     		ldrb	r2, [r2]
+ 267 0070 1B78     		ldrb	r3, [r3]
+ 268 0072 9A42     		cmp	r2, r3
+ 269 0074 01D2     		bcs	.L13
+ 270              		.loc 1 141 0 is_stmt 0 discriminator 1
+ 271 0076 0123     		movs	r3, #1
+ 272 0078 01E0     		b	.L14
+ 273              	.L13:
+ 274              		.loc 1 141 0 discriminator 2
+ 275 007a 0123     		movs	r3, #1
+ 276 007c 5B42     		rsbs	r3, r3, #0
+ 277              	.L14:
+ 278              		.loc 1 141 0 discriminator 4
+ 279 007e FB60     		str	r3, [r7, #12]
+ 142:oled_ssd1331.c ****     int err = dx + dy, e2;
+ 280              		.loc 1 142 0 is_stmt 1 discriminator 4
+ 281 0080 BA69     		ldr	r2, [r7, #24]
+ 282 0082 3B69     		ldr	r3, [r7, #16]
+ 283 0084 D318     		adds	r3, r2, r3
+ 284 0086 7B62     		str	r3, [r7, #36]
+ 143:oled_ssd1331.c **** 
+ 144:oled_ssd1331.c **** 	if (chXpos0 >= OLED_WIDTH || chYpos0 >= OLED_HEIGHT || chXpos1 >= OLED_WIDTH || chYpos1 >= OLED_HE
+ 285              		.loc 1 144 0 discriminator 4
+ 286 0088 FB1D     		adds	r3, r7, #7
+ 287 008a 1B78     		ldrb	r3, [r3]
+ 288 008c 5F2B     		cmp	r3, #95
+ 289 008e 43D8     		bhi	.L22
+ 290              		.loc 1 144 0 is_stmt 0 discriminator 1
+ 291 0090 BB1D     		adds	r3, r7, #6
+ 292 0092 1B78     		ldrb	r3, [r3]
+ 293 0094 3F2B     		cmp	r3, #63
+ 294 0096 3FD8     		bhi	.L22
+ 295              		.loc 1 144 0 discriminator 2
+ 296 0098 7B1D     		adds	r3, r7, #5
+ 297 009a 1B78     		ldrb	r3, [r3]
+ 298 009c 5F2B     		cmp	r3, #95
+ 299 009e 3BD8     		bhi	.L22
+ 300              		.loc 1 144 0 discriminator 3
+ 301 00a0 3B1D     		adds	r3, r7, #4
+ 302 00a2 1B78     		ldrb	r3, [r3]
+ 303 00a4 3F2B     		cmp	r3, #63
+ 304 00a6 37D8     		bhi	.L22
+ 305              	.L16:
+ 145:oled_ssd1331.c **** 		return;
+ 146:oled_ssd1331.c **** 	}
+ 147:oled_ssd1331.c ****     
+ 148:oled_ssd1331.c ****     for (;;){
+ 149:oled_ssd1331.c ****         ssd1331_draw_point(chXpos0, chYpos0 , hwColor);
+ 306              		.loc 1 149 0 is_stmt 1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 9
+
+
+ 307 00a8 3823     		movs	r3, #56
+ 308 00aa FB18     		adds	r3, r7, r3
+ 309 00ac 1A88     		ldrh	r2, [r3]
+ 310 00ae BB1D     		adds	r3, r7, #6
+ 311 00b0 1978     		ldrb	r1, [r3]
+ 312 00b2 FB1D     		adds	r3, r7, #7
+ 313 00b4 1B78     		ldrb	r3, [r3]
+ 314 00b6 1800     		movs	r0, r3
+ 315 00b8 FFF7FEFF 		bl	ssd1331_draw_point
+ 150:oled_ssd1331.c ****         e2 = 2 * err;
+ 316              		.loc 1 150 0
+ 317 00bc 7B6A     		ldr	r3, [r7, #36]
+ 318 00be 5B00     		lsls	r3, r3, #1
+ 319 00c0 BB60     		str	r3, [r7, #8]
+ 151:oled_ssd1331.c ****         if (e2 >= dy) {     
+ 320              		.loc 1 151 0
+ 321 00c2 BA68     		ldr	r2, [r7, #8]
+ 322 00c4 3B69     		ldr	r3, [r7, #16]
+ 323 00c6 9A42     		cmp	r2, r3
+ 324 00c8 10DB     		blt	.L18
+ 152:oled_ssd1331.c ****             if (chXpos0 == chXpos1) break;
+ 325              		.loc 1 152 0
+ 326 00ca FA1D     		adds	r2, r7, #7
+ 327 00cc 7B1D     		adds	r3, r7, #5
+ 328 00ce 1278     		ldrb	r2, [r2]
+ 329 00d0 1B78     		ldrb	r3, [r3]
+ 330 00d2 9A42     		cmp	r2, r3
+ 331 00d4 22D0     		beq	.L23
+ 153:oled_ssd1331.c ****             err += dy; chXpos0 += sx;
+ 332              		.loc 1 153 0
+ 333 00d6 7A6A     		ldr	r2, [r7, #36]
+ 334 00d8 3B69     		ldr	r3, [r7, #16]
+ 335 00da D318     		adds	r3, r2, r3
+ 336 00dc 7B62     		str	r3, [r7, #36]
+ 337 00de 7B69     		ldr	r3, [r7, #20]
+ 338 00e0 D9B2     		uxtb	r1, r3
+ 339 00e2 FB1D     		adds	r3, r7, #7
+ 340 00e4 FA1D     		adds	r2, r7, #7
+ 341 00e6 1278     		ldrb	r2, [r2]
+ 342 00e8 8A18     		adds	r2, r1, r2
+ 343 00ea 1A70     		strb	r2, [r3]
+ 344              	.L18:
+ 154:oled_ssd1331.c ****         }
+ 155:oled_ssd1331.c ****         if (e2 <= dx) {
+ 345              		.loc 1 155 0
+ 346 00ec BA68     		ldr	r2, [r7, #8]
+ 347 00ee BB69     		ldr	r3, [r7, #24]
+ 348 00f0 9A42     		cmp	r2, r3
+ 349 00f2 D9DC     		bgt	.L16
+ 156:oled_ssd1331.c ****             if (chYpos0 == chYpos1) break;
+ 350              		.loc 1 156 0
+ 351 00f4 BA1D     		adds	r2, r7, #6
+ 352 00f6 3B1D     		adds	r3, r7, #4
+ 353 00f8 1278     		ldrb	r2, [r2]
+ 354 00fa 1B78     		ldrb	r3, [r3]
+ 355 00fc 9A42     		cmp	r2, r3
+ 356 00fe 0FD0     		beq	.L24
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 10
+
+
+ 157:oled_ssd1331.c ****             err += dx; chYpos0 += sy;
+ 357              		.loc 1 157 0
+ 358 0100 7A6A     		ldr	r2, [r7, #36]
+ 359 0102 BB69     		ldr	r3, [r7, #24]
+ 360 0104 D318     		adds	r3, r2, r3
+ 361 0106 7B62     		str	r3, [r7, #36]
+ 362 0108 FB68     		ldr	r3, [r7, #12]
+ 363 010a D9B2     		uxtb	r1, r3
+ 364 010c BB1D     		adds	r3, r7, #6
+ 365 010e BA1D     		adds	r2, r7, #6
+ 366 0110 1278     		ldrb	r2, [r2]
+ 367 0112 8A18     		adds	r2, r1, r2
+ 368 0114 1A70     		strb	r2, [r3]
+ 158:oled_ssd1331.c ****         }
+ 159:oled_ssd1331.c ****     }
+ 369              		.loc 1 159 0
+ 370 0116 C7E7     		b	.L16
+ 371              	.L22:
+ 145:oled_ssd1331.c **** 	}
+ 372              		.loc 1 145 0
+ 373 0118 C046     		nop
+ 374 011a 02E0     		b	.L10
+ 375              	.L23:
+ 152:oled_ssd1331.c ****             err += dy; chXpos0 += sx;
+ 376              		.loc 1 152 0
+ 377 011c C046     		nop
+ 378 011e 00E0     		b	.L10
+ 379              	.L24:
+ 156:oled_ssd1331.c ****             err += dx; chYpos0 += sy;
+ 380              		.loc 1 156 0
+ 381 0120 C046     		nop
+ 382              	.L10:
+ 160:oled_ssd1331.c **** }
+ 383              		.loc 1 160 0
+ 384 0122 BD46     		mov	sp, r7
+ 385 0124 0AB0     		add	sp, sp, #40
+ 386              		@ sp needed
+ 387 0126 B0BD     		pop	{r4, r5, r7, pc}
+ 388              		.cfi_endproc
+ 389              	.LFE68:
+ 390              		.size	ssd1331_draw_line, .-ssd1331_draw_line
+ 391              		.section	.text.ssd1331_draw_v_line,"ax",%progbits
+ 392              		.align	2
+ 393              		.global	ssd1331_draw_v_line
+ 394              		.code	16
+ 395              		.thumb_func
+ 396              		.type	ssd1331_draw_v_line, %function
+ 397              	ssd1331_draw_v_line:
+ 398              	.LFB69:
+ 161:oled_ssd1331.c **** 
+ 162:oled_ssd1331.c **** void ssd1331_draw_v_line(uint8_t chXpos, uint8_t chYpos, uint8_t chHeight, uint16_t hwColor)
+ 163:oled_ssd1331.c **** {	
+ 399              		.loc 1 163 0
+ 400              		.cfi_startproc
+ 401              		@ args = 0, pretend = 0, frame = 16
+ 402              		@ frame_needed = 1, uses_anonymous_args = 0
+ 403 0000 B0B5     		push	{r4, r5, r7, lr}
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 11
+
+
+ 404              		.cfi_def_cfa_offset 16
+ 405              		.cfi_offset 4, -16
+ 406              		.cfi_offset 5, -12
+ 407              		.cfi_offset 7, -8
+ 408              		.cfi_offset 14, -4
+ 409 0002 84B0     		sub	sp, sp, #16
+ 410              		.cfi_def_cfa_offset 32
+ 411 0004 00AF     		add	r7, sp, #0
+ 412              		.cfi_def_cfa_register 7
+ 413 0006 0500     		movs	r5, r0
+ 414 0008 0C00     		movs	r4, r1
+ 415 000a 1000     		movs	r0, r2
+ 416 000c 1900     		movs	r1, r3
+ 417 000e FB1D     		adds	r3, r7, #7
+ 418 0010 2A1C     		adds	r2, r5, #0
+ 419 0012 1A70     		strb	r2, [r3]
+ 420 0014 BB1D     		adds	r3, r7, #6
+ 421 0016 221C     		adds	r2, r4, #0
+ 422 0018 1A70     		strb	r2, [r3]
+ 423 001a 7B1D     		adds	r3, r7, #5
+ 424 001c 021C     		adds	r2, r0, #0
+ 425 001e 1A70     		strb	r2, [r3]
+ 426 0020 BB1C     		adds	r3, r7, #2
+ 427 0022 0A1C     		adds	r2, r1, #0
+ 428 0024 1A80     		strh	r2, [r3]
+ 164:oled_ssd1331.c **** 	uint16_t i, y1 = MIN(chYpos + chHeight, OLED_HEIGHT - 1);
+ 429              		.loc 1 164 0
+ 430 0026 BB1D     		adds	r3, r7, #6
+ 431 0028 1A78     		ldrb	r2, [r3]
+ 432 002a 7B1D     		adds	r3, r7, #5
+ 433 002c 1B78     		ldrb	r3, [r3]
+ 434 002e D318     		adds	r3, r2, r3
+ 435 0030 3F2B     		cmp	r3, #63
+ 436 0032 00DD     		ble	.L26
+ 437 0034 3F23     		movs	r3, #63
+ 438              	.L26:
+ 439 0036 0C22     		movs	r2, #12
+ 440 0038 BA18     		adds	r2, r7, r2
+ 441 003a 1380     		strh	r3, [r2]
+ 165:oled_ssd1331.c **** 
+ 166:oled_ssd1331.c **** 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
+ 442              		.loc 1 166 0
+ 443 003c FB1D     		adds	r3, r7, #7
+ 444 003e 1B78     		ldrb	r3, [r3]
+ 445 0040 5F2B     		cmp	r3, #95
+ 446 0042 24D8     		bhi	.L32
+ 447              		.loc 1 166 0 is_stmt 0 discriminator 1
+ 448 0044 BB1D     		adds	r3, r7, #6
+ 449 0046 1B78     		ldrb	r3, [r3]
+ 450 0048 3F2B     		cmp	r3, #63
+ 451 004a 20D8     		bhi	.L32
+ 167:oled_ssd1331.c **** 		return;
+ 168:oled_ssd1331.c **** 	}
+ 169:oled_ssd1331.c **** 	
+ 170:oled_ssd1331.c ****     for (i = chYpos; i < y1; i ++) {
+ 452              		.loc 1 170 0 is_stmt 1
+ 453 004c 0E23     		movs	r3, #14
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 12
+
+
+ 454 004e FB18     		adds	r3, r7, r3
+ 455 0050 BA1D     		adds	r2, r7, #6
+ 456 0052 1278     		ldrb	r2, [r2]
+ 457 0054 1A80     		strh	r2, [r3]
+ 458 0056 11E0     		b	.L30
+ 459              	.L31:
+ 171:oled_ssd1331.c ****         ssd1331_draw_point(chXpos, i, hwColor);
+ 460              		.loc 1 171 0 discriminator 3
+ 461 0058 0E23     		movs	r3, #14
+ 462 005a FB18     		adds	r3, r7, r3
+ 463 005c 1B88     		ldrh	r3, [r3]
+ 464 005e D9B2     		uxtb	r1, r3
+ 465 0060 BB1C     		adds	r3, r7, #2
+ 466 0062 1A88     		ldrh	r2, [r3]
+ 467 0064 FB1D     		adds	r3, r7, #7
+ 468 0066 1B78     		ldrb	r3, [r3]
+ 469 0068 1800     		movs	r0, r3
+ 470 006a FFF7FEFF 		bl	ssd1331_draw_point
+ 170:oled_ssd1331.c ****         ssd1331_draw_point(chXpos, i, hwColor);
+ 471              		.loc 1 170 0 discriminator 3
+ 472 006e 0E23     		movs	r3, #14
+ 473 0070 FB18     		adds	r3, r7, r3
+ 474 0072 1A88     		ldrh	r2, [r3]
+ 475 0074 0E23     		movs	r3, #14
+ 476 0076 FB18     		adds	r3, r7, r3
+ 477 0078 0132     		adds	r2, r2, #1
+ 478 007a 1A80     		strh	r2, [r3]
+ 479              	.L30:
+ 170:oled_ssd1331.c ****         ssd1331_draw_point(chXpos, i, hwColor);
+ 480              		.loc 1 170 0 is_stmt 0 discriminator 1
+ 481 007c 0E23     		movs	r3, #14
+ 482 007e FA18     		adds	r2, r7, r3
+ 483 0080 0C23     		movs	r3, #12
+ 484 0082 FB18     		adds	r3, r7, r3
+ 485 0084 1288     		ldrh	r2, [r2]
+ 486 0086 1B88     		ldrh	r3, [r3]
+ 487 0088 9A42     		cmp	r2, r3
+ 488 008a E5D3     		bcc	.L31
+ 489 008c 00E0     		b	.L25
+ 490              	.L32:
+ 167:oled_ssd1331.c **** 		return;
+ 491              		.loc 1 167 0 is_stmt 1
+ 492 008e C046     		nop
+ 493              	.L25:
+ 172:oled_ssd1331.c ****     }
+ 173:oled_ssd1331.c **** }
+ 494              		.loc 1 173 0
+ 495 0090 BD46     		mov	sp, r7
+ 496 0092 04B0     		add	sp, sp, #16
+ 497              		@ sp needed
+ 498 0094 B0BD     		pop	{r4, r5, r7, pc}
+ 499              		.cfi_endproc
+ 500              	.LFE69:
+ 501              		.size	ssd1331_draw_v_line, .-ssd1331_draw_v_line
+ 502 0096 C046     		.section	.text.ssd1331_draw_h_line,"ax",%progbits
+ 503              		.align	2
+ 504              		.global	ssd1331_draw_h_line
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 13
+
+
+ 505              		.code	16
+ 506              		.thumb_func
+ 507              		.type	ssd1331_draw_h_line, %function
+ 508              	ssd1331_draw_h_line:
+ 509              	.LFB70:
+ 174:oled_ssd1331.c **** 
+ 175:oled_ssd1331.c **** void ssd1331_draw_h_line(uint8_t chXpos, uint8_t chYpos, uint8_t chWidth, uint16_t hwColor)
+ 176:oled_ssd1331.c **** {	
+ 510              		.loc 1 176 0
+ 511              		.cfi_startproc
+ 512              		@ args = 0, pretend = 0, frame = 16
+ 513              		@ frame_needed = 1, uses_anonymous_args = 0
+ 514 0000 B0B5     		push	{r4, r5, r7, lr}
+ 515              		.cfi_def_cfa_offset 16
+ 516              		.cfi_offset 4, -16
+ 517              		.cfi_offset 5, -12
+ 518              		.cfi_offset 7, -8
+ 519              		.cfi_offset 14, -4
+ 520 0002 84B0     		sub	sp, sp, #16
+ 521              		.cfi_def_cfa_offset 32
+ 522 0004 00AF     		add	r7, sp, #0
+ 523              		.cfi_def_cfa_register 7
+ 524 0006 0500     		movs	r5, r0
+ 525 0008 0C00     		movs	r4, r1
+ 526 000a 1000     		movs	r0, r2
+ 527 000c 1900     		movs	r1, r3
+ 528 000e FB1D     		adds	r3, r7, #7
+ 529 0010 2A1C     		adds	r2, r5, #0
+ 530 0012 1A70     		strb	r2, [r3]
+ 531 0014 BB1D     		adds	r3, r7, #6
+ 532 0016 221C     		adds	r2, r4, #0
+ 533 0018 1A70     		strb	r2, [r3]
+ 534 001a 7B1D     		adds	r3, r7, #5
+ 535 001c 021C     		adds	r2, r0, #0
+ 536 001e 1A70     		strb	r2, [r3]
+ 537 0020 BB1C     		adds	r3, r7, #2
+ 538 0022 0A1C     		adds	r2, r1, #0
+ 539 0024 1A80     		strh	r2, [r3]
+ 177:oled_ssd1331.c **** 	uint16_t i, x1 = MIN(chXpos + chWidth, OLED_WIDTH- 1);
+ 540              		.loc 1 177 0
+ 541 0026 FB1D     		adds	r3, r7, #7
+ 542 0028 1A78     		ldrb	r2, [r3]
+ 543 002a 7B1D     		adds	r3, r7, #5
+ 544 002c 1B78     		ldrb	r3, [r3]
+ 545 002e D318     		adds	r3, r2, r3
+ 546 0030 5F2B     		cmp	r3, #95
+ 547 0032 00DD     		ble	.L34
+ 548 0034 5F23     		movs	r3, #95
+ 549              	.L34:
+ 550 0036 0C22     		movs	r2, #12
+ 551 0038 BA18     		adds	r2, r7, r2
+ 552 003a 1380     		strh	r3, [r2]
+ 178:oled_ssd1331.c **** 
+ 179:oled_ssd1331.c **** 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
+ 553              		.loc 1 179 0
+ 554 003c FB1D     		adds	r3, r7, #7
+ 555 003e 1B78     		ldrb	r3, [r3]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 14
+
+
+ 556 0040 5F2B     		cmp	r3, #95
+ 557 0042 24D8     		bhi	.L40
+ 558              		.loc 1 179 0 is_stmt 0 discriminator 1
+ 559 0044 BB1D     		adds	r3, r7, #6
+ 560 0046 1B78     		ldrb	r3, [r3]
+ 561 0048 3F2B     		cmp	r3, #63
+ 562 004a 20D8     		bhi	.L40
+ 180:oled_ssd1331.c **** 		return;
+ 181:oled_ssd1331.c **** 	}
+ 182:oled_ssd1331.c **** 	
+ 183:oled_ssd1331.c ****     for (i = chXpos; i < x1; i ++) {
+ 563              		.loc 1 183 0 is_stmt 1
+ 564 004c 0E23     		movs	r3, #14
+ 565 004e FB18     		adds	r3, r7, r3
+ 566 0050 FA1D     		adds	r2, r7, #7
+ 567 0052 1278     		ldrb	r2, [r2]
+ 568 0054 1A80     		strh	r2, [r3]
+ 569 0056 11E0     		b	.L38
+ 570              	.L39:
+ 184:oled_ssd1331.c ****         ssd1331_draw_point(i, chYpos, hwColor);
+ 571              		.loc 1 184 0 discriminator 3
+ 572 0058 0E23     		movs	r3, #14
+ 573 005a FB18     		adds	r3, r7, r3
+ 574 005c 1B88     		ldrh	r3, [r3]
+ 575 005e D8B2     		uxtb	r0, r3
+ 576 0060 BB1C     		adds	r3, r7, #2
+ 577 0062 1A88     		ldrh	r2, [r3]
+ 578 0064 BB1D     		adds	r3, r7, #6
+ 579 0066 1B78     		ldrb	r3, [r3]
+ 580 0068 1900     		movs	r1, r3
+ 581 006a FFF7FEFF 		bl	ssd1331_draw_point
+ 183:oled_ssd1331.c ****         ssd1331_draw_point(i, chYpos, hwColor);
+ 582              		.loc 1 183 0 discriminator 3
+ 583 006e 0E23     		movs	r3, #14
+ 584 0070 FB18     		adds	r3, r7, r3
+ 585 0072 1A88     		ldrh	r2, [r3]
+ 586 0074 0E23     		movs	r3, #14
+ 587 0076 FB18     		adds	r3, r7, r3
+ 588 0078 0132     		adds	r2, r2, #1
+ 589 007a 1A80     		strh	r2, [r3]
+ 590              	.L38:
+ 183:oled_ssd1331.c ****         ssd1331_draw_point(i, chYpos, hwColor);
+ 591              		.loc 1 183 0 is_stmt 0 discriminator 1
+ 592 007c 0E23     		movs	r3, #14
+ 593 007e FA18     		adds	r2, r7, r3
+ 594 0080 0C23     		movs	r3, #12
+ 595 0082 FB18     		adds	r3, r7, r3
+ 596 0084 1288     		ldrh	r2, [r2]
+ 597 0086 1B88     		ldrh	r3, [r3]
+ 598 0088 9A42     		cmp	r2, r3
+ 599 008a E5D3     		bcc	.L39
+ 600 008c 00E0     		b	.L33
+ 601              	.L40:
+ 180:oled_ssd1331.c **** 		return;
+ 602              		.loc 1 180 0 is_stmt 1
+ 603 008e C046     		nop
+ 604              	.L33:
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 15
+
+
+ 185:oled_ssd1331.c ****     }
+ 186:oled_ssd1331.c **** }
+ 605              		.loc 1 186 0
+ 606 0090 BD46     		mov	sp, r7
+ 607 0092 04B0     		add	sp, sp, #16
+ 608              		@ sp needed
+ 609 0094 B0BD     		pop	{r4, r5, r7, pc}
+ 610              		.cfi_endproc
+ 611              	.LFE70:
+ 612              		.size	ssd1331_draw_h_line, .-ssd1331_draw_h_line
+ 613 0096 C046     		.section	.text.ssd1331_draw_rect,"ax",%progbits
+ 614              		.align	2
+ 615              		.global	ssd1331_draw_rect
+ 616              		.code	16
+ 617              		.thumb_func
+ 618              		.type	ssd1331_draw_rect, %function
+ 619              	ssd1331_draw_rect:
+ 620              	.LFB71:
+ 187:oled_ssd1331.c **** 
+ 188:oled_ssd1331.c **** void ssd1331_draw_rect(uint8_t chXpos, uint8_t chYpos, uint8_t chWidth, uint8_t chHeight, uint16_t 
+ 189:oled_ssd1331.c **** {
+ 621              		.loc 1 189 0
+ 622              		.cfi_startproc
+ 623              		@ args = 4, pretend = 0, frame = 8
+ 624              		@ frame_needed = 1, uses_anonymous_args = 0
+ 625 0000 B0B5     		push	{r4, r5, r7, lr}
+ 626              		.cfi_def_cfa_offset 16
+ 627              		.cfi_offset 4, -16
+ 628              		.cfi_offset 5, -12
+ 629              		.cfi_offset 7, -8
+ 630              		.cfi_offset 14, -4
+ 631 0002 82B0     		sub	sp, sp, #8
+ 632              		.cfi_def_cfa_offset 24
+ 633 0004 00AF     		add	r7, sp, #0
+ 634              		.cfi_def_cfa_register 7
+ 635 0006 0500     		movs	r5, r0
+ 636 0008 0C00     		movs	r4, r1
+ 637 000a 1000     		movs	r0, r2
+ 638 000c 1900     		movs	r1, r3
+ 639 000e FB1D     		adds	r3, r7, #7
+ 640 0010 2A1C     		adds	r2, r5, #0
+ 641 0012 1A70     		strb	r2, [r3]
+ 642 0014 BB1D     		adds	r3, r7, #6
+ 643 0016 221C     		adds	r2, r4, #0
+ 644 0018 1A70     		strb	r2, [r3]
+ 645 001a 7B1D     		adds	r3, r7, #5
+ 646 001c 021C     		adds	r2, r0, #0
+ 647 001e 1A70     		strb	r2, [r3]
+ 648 0020 3B1D     		adds	r3, r7, #4
+ 649 0022 0A1C     		adds	r2, r1, #0
+ 650 0024 1A70     		strb	r2, [r3]
+ 190:oled_ssd1331.c **** 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
+ 651              		.loc 1 190 0
+ 652 0026 FB1D     		adds	r3, r7, #7
+ 653 0028 1B78     		ldrb	r3, [r3]
+ 654 002a 5F2B     		cmp	r3, #95
+ 655 002c 3ED8     		bhi	.L45
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 16
+
+
+ 656              		.loc 1 190 0 is_stmt 0 discriminator 1
+ 657 002e BB1D     		adds	r3, r7, #6
+ 658 0030 1B78     		ldrb	r3, [r3]
+ 659 0032 3F2B     		cmp	r3, #63
+ 660 0034 3AD8     		bhi	.L45
+ 191:oled_ssd1331.c **** 		return;
+ 192:oled_ssd1331.c **** 	}
+ 193:oled_ssd1331.c **** 
+ 194:oled_ssd1331.c **** 	ssd1331_draw_h_line(chXpos, chYpos, chWidth, hwColor);
+ 661              		.loc 1 194 0 is_stmt 1
+ 662 0036 1823     		movs	r3, #24
+ 663 0038 FB18     		adds	r3, r7, r3
+ 664 003a 1C88     		ldrh	r4, [r3]
+ 665 003c 7B1D     		adds	r3, r7, #5
+ 666 003e 1A78     		ldrb	r2, [r3]
+ 667 0040 BB1D     		adds	r3, r7, #6
+ 668 0042 1978     		ldrb	r1, [r3]
+ 669 0044 FB1D     		adds	r3, r7, #7
+ 670 0046 1878     		ldrb	r0, [r3]
+ 671 0048 2300     		movs	r3, r4
+ 672 004a FFF7FEFF 		bl	ssd1331_draw_h_line
+ 195:oled_ssd1331.c **** 	ssd1331_draw_h_line(chXpos, chYpos + chHeight, chWidth, hwColor);
+ 673              		.loc 1 195 0
+ 674 004e BA1D     		adds	r2, r7, #6
+ 675 0050 3B1D     		adds	r3, r7, #4
+ 676 0052 1278     		ldrb	r2, [r2]
+ 677 0054 1B78     		ldrb	r3, [r3]
+ 678 0056 D318     		adds	r3, r2, r3
+ 679 0058 D9B2     		uxtb	r1, r3
+ 680 005a 1823     		movs	r3, #24
+ 681 005c FB18     		adds	r3, r7, r3
+ 682 005e 1C88     		ldrh	r4, [r3]
+ 683 0060 7B1D     		adds	r3, r7, #5
+ 684 0062 1A78     		ldrb	r2, [r3]
+ 685 0064 FB1D     		adds	r3, r7, #7
+ 686 0066 1878     		ldrb	r0, [r3]
+ 687 0068 2300     		movs	r3, r4
+ 688 006a FFF7FEFF 		bl	ssd1331_draw_h_line
+ 196:oled_ssd1331.c **** 	ssd1331_draw_v_line(chXpos, chYpos, chHeight, hwColor);
+ 689              		.loc 1 196 0
+ 690 006e 1823     		movs	r3, #24
+ 691 0070 FB18     		adds	r3, r7, r3
+ 692 0072 1C88     		ldrh	r4, [r3]
+ 693 0074 3B1D     		adds	r3, r7, #4
+ 694 0076 1A78     		ldrb	r2, [r3]
+ 695 0078 BB1D     		adds	r3, r7, #6
+ 696 007a 1978     		ldrb	r1, [r3]
+ 697 007c FB1D     		adds	r3, r7, #7
+ 698 007e 1878     		ldrb	r0, [r3]
+ 699 0080 2300     		movs	r3, r4
+ 700 0082 FFF7FEFF 		bl	ssd1331_draw_v_line
+ 197:oled_ssd1331.c **** 	ssd1331_draw_v_line(chXpos + chWidth, chYpos, chHeight + 1, hwColor);
+ 701              		.loc 1 197 0
+ 702 0086 FA1D     		adds	r2, r7, #7
+ 703 0088 7B1D     		adds	r3, r7, #5
+ 704 008a 1278     		ldrb	r2, [r2]
+ 705 008c 1B78     		ldrb	r3, [r3]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 17
+
+
+ 706 008e D318     		adds	r3, r2, r3
+ 707 0090 D8B2     		uxtb	r0, r3
+ 708 0092 3B1D     		adds	r3, r7, #4
+ 709 0094 1B78     		ldrb	r3, [r3]
+ 710 0096 0133     		adds	r3, r3, #1
+ 711 0098 DAB2     		uxtb	r2, r3
+ 712 009a 1823     		movs	r3, #24
+ 713 009c FB18     		adds	r3, r7, r3
+ 714 009e 1C88     		ldrh	r4, [r3]
+ 715 00a0 BB1D     		adds	r3, r7, #6
+ 716 00a2 1978     		ldrb	r1, [r3]
+ 717 00a4 2300     		movs	r3, r4
+ 718 00a6 FFF7FEFF 		bl	ssd1331_draw_v_line
+ 719 00aa 00E0     		b	.L41
+ 720              	.L45:
+ 191:oled_ssd1331.c **** 	}
+ 721              		.loc 1 191 0
+ 722 00ac C046     		nop
+ 723              	.L41:
+ 198:oled_ssd1331.c **** }
+ 724              		.loc 1 198 0
+ 725 00ae BD46     		mov	sp, r7
+ 726 00b0 02B0     		add	sp, sp, #8
+ 727              		@ sp needed
+ 728 00b2 B0BD     		pop	{r4, r5, r7, pc}
+ 729              		.cfi_endproc
+ 730              	.LFE71:
+ 731              		.size	ssd1331_draw_rect, .-ssd1331_draw_rect
+ 732              		.section	.text.ssd1331_fill_rect,"ax",%progbits
+ 733              		.align	2
+ 734              		.global	ssd1331_fill_rect
+ 735              		.code	16
+ 736              		.thumb_func
+ 737              		.type	ssd1331_fill_rect, %function
+ 738              	ssd1331_fill_rect:
+ 739              	.LFB72:
+ 199:oled_ssd1331.c **** 
+ 200:oled_ssd1331.c **** void ssd1331_fill_rect(uint8_t chXpos, uint8_t chYpos, uint8_t chWidth, uint8_t chHeight, uint16_t 
+ 201:oled_ssd1331.c **** {
+ 740              		.loc 1 201 0
+ 741              		.cfi_startproc
+ 742              		@ args = 4, pretend = 0, frame = 16
+ 743              		@ frame_needed = 1, uses_anonymous_args = 0
+ 744 0000 B0B5     		push	{r4, r5, r7, lr}
+ 745              		.cfi_def_cfa_offset 16
+ 746              		.cfi_offset 4, -16
+ 747              		.cfi_offset 5, -12
+ 748              		.cfi_offset 7, -8
+ 749              		.cfi_offset 14, -4
+ 750 0002 84B0     		sub	sp, sp, #16
+ 751              		.cfi_def_cfa_offset 32
+ 752 0004 00AF     		add	r7, sp, #0
+ 753              		.cfi_def_cfa_register 7
+ 754 0006 0500     		movs	r5, r0
+ 755 0008 0C00     		movs	r4, r1
+ 756 000a 1000     		movs	r0, r2
+ 757 000c 1900     		movs	r1, r3
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 18
+
+
+ 758 000e FB1D     		adds	r3, r7, #7
+ 759 0010 2A1C     		adds	r2, r5, #0
+ 760 0012 1A70     		strb	r2, [r3]
+ 761 0014 BB1D     		adds	r3, r7, #6
+ 762 0016 221C     		adds	r2, r4, #0
+ 763 0018 1A70     		strb	r2, [r3]
+ 764 001a 7B1D     		adds	r3, r7, #5
+ 765 001c 021C     		adds	r2, r0, #0
+ 766 001e 1A70     		strb	r2, [r3]
+ 767 0020 3B1D     		adds	r3, r7, #4
+ 768 0022 0A1C     		adds	r2, r1, #0
+ 769 0024 1A70     		strb	r2, [r3]
+ 202:oled_ssd1331.c **** 	uint16_t i, j;
+ 203:oled_ssd1331.c **** 
+ 204:oled_ssd1331.c **** 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
+ 770              		.loc 1 204 0
+ 771 0026 FB1D     		adds	r3, r7, #7
+ 772 0028 1B78     		ldrb	r3, [r3]
+ 773 002a 5F2B     		cmp	r3, #95
+ 774 002c 42D8     		bhi	.L54
+ 775              		.loc 1 204 0 is_stmt 0 discriminator 1
+ 776 002e BB1D     		adds	r3, r7, #6
+ 777 0030 1B78     		ldrb	r3, [r3]
+ 778 0032 3F2B     		cmp	r3, #63
+ 779 0034 3ED8     		bhi	.L54
+ 205:oled_ssd1331.c **** 		return;
+ 206:oled_ssd1331.c **** 	}
+ 207:oled_ssd1331.c **** 	
+ 208:oled_ssd1331.c **** 	for(i = 0; i < chHeight; i ++){
+ 780              		.loc 1 208 0 is_stmt 1
+ 781 0036 0E23     		movs	r3, #14
+ 782 0038 FB18     		adds	r3, r7, r3
+ 783 003a 0022     		movs	r2, #0
+ 784 003c 1A80     		strh	r2, [r3]
+ 785 003e 30E0     		b	.L50
+ 786              	.L53:
+ 209:oled_ssd1331.c **** 		for(j = 0; j < chWidth; j ++){
+ 787              		.loc 1 209 0
+ 788 0040 0C23     		movs	r3, #12
+ 789 0042 FB18     		adds	r3, r7, r3
+ 790 0044 0022     		movs	r2, #0
+ 791 0046 1A80     		strh	r2, [r3]
+ 792 0048 1CE0     		b	.L51
+ 793              	.L52:
+ 210:oled_ssd1331.c **** 			ssd1331_draw_point(chXpos + j, chYpos + i, hwColor);
+ 794              		.loc 1 210 0 discriminator 3
+ 795 004a 0C23     		movs	r3, #12
+ 796 004c FB18     		adds	r3, r7, r3
+ 797 004e 1B88     		ldrh	r3, [r3]
+ 798 0050 DAB2     		uxtb	r2, r3
+ 799 0052 FB1D     		adds	r3, r7, #7
+ 800 0054 1B78     		ldrb	r3, [r3]
+ 801 0056 D318     		adds	r3, r2, r3
+ 802 0058 D8B2     		uxtb	r0, r3
+ 803 005a 0E23     		movs	r3, #14
+ 804 005c FB18     		adds	r3, r7, r3
+ 805 005e 1B88     		ldrh	r3, [r3]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 19
+
+
+ 806 0060 DAB2     		uxtb	r2, r3
+ 807 0062 BB1D     		adds	r3, r7, #6
+ 808 0064 1B78     		ldrb	r3, [r3]
+ 809 0066 D318     		adds	r3, r2, r3
+ 810 0068 DBB2     		uxtb	r3, r3
+ 811 006a 2022     		movs	r2, #32
+ 812 006c BA18     		adds	r2, r7, r2
+ 813 006e 1288     		ldrh	r2, [r2]
+ 814 0070 1900     		movs	r1, r3
+ 815 0072 FFF7FEFF 		bl	ssd1331_draw_point
+ 209:oled_ssd1331.c **** 		for(j = 0; j < chWidth; j ++){
+ 816              		.loc 1 209 0 discriminator 3
+ 817 0076 0C23     		movs	r3, #12
+ 818 0078 FB18     		adds	r3, r7, r3
+ 819 007a 1A88     		ldrh	r2, [r3]
+ 820 007c 0C23     		movs	r3, #12
+ 821 007e FB18     		adds	r3, r7, r3
+ 822 0080 0132     		adds	r2, r2, #1
+ 823 0082 1A80     		strh	r2, [r3]
+ 824              	.L51:
+ 209:oled_ssd1331.c **** 		for(j = 0; j < chWidth; j ++){
+ 825              		.loc 1 209 0 is_stmt 0 discriminator 1
+ 826 0084 7B1D     		adds	r3, r7, #5
+ 827 0086 1B78     		ldrb	r3, [r3]
+ 828 0088 9BB2     		uxth	r3, r3
+ 829 008a 0C22     		movs	r2, #12
+ 830 008c BA18     		adds	r2, r7, r2
+ 831 008e 1288     		ldrh	r2, [r2]
+ 832 0090 9A42     		cmp	r2, r3
+ 833 0092 DAD3     		bcc	.L52
+ 208:oled_ssd1331.c **** 		for(j = 0; j < chWidth; j ++){
+ 834              		.loc 1 208 0 is_stmt 1 discriminator 2
+ 835 0094 0E23     		movs	r3, #14
+ 836 0096 FB18     		adds	r3, r7, r3
+ 837 0098 1A88     		ldrh	r2, [r3]
+ 838 009a 0E23     		movs	r3, #14
+ 839 009c FB18     		adds	r3, r7, r3
+ 840 009e 0132     		adds	r2, r2, #1
+ 841 00a0 1A80     		strh	r2, [r3]
+ 842              	.L50:
+ 208:oled_ssd1331.c **** 		for(j = 0; j < chWidth; j ++){
+ 843              		.loc 1 208 0 is_stmt 0 discriminator 1
+ 844 00a2 3B1D     		adds	r3, r7, #4
+ 845 00a4 1B78     		ldrb	r3, [r3]
+ 846 00a6 9BB2     		uxth	r3, r3
+ 847 00a8 0E22     		movs	r2, #14
+ 848 00aa BA18     		adds	r2, r7, r2
+ 849 00ac 1288     		ldrh	r2, [r2]
+ 850 00ae 9A42     		cmp	r2, r3
+ 851 00b0 C6D3     		bcc	.L53
+ 852 00b2 00E0     		b	.L46
+ 853              	.L54:
+ 205:oled_ssd1331.c **** 	}
+ 854              		.loc 1 205 0 is_stmt 1
+ 855 00b4 C046     		nop
+ 856              	.L46:
+ 211:oled_ssd1331.c **** 		}
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 20
+
+
+ 212:oled_ssd1331.c **** 	}
+ 213:oled_ssd1331.c **** }
+ 857              		.loc 1 213 0
+ 858 00b6 BD46     		mov	sp, r7
+ 859 00b8 04B0     		add	sp, sp, #16
+ 860              		@ sp needed
+ 861 00ba B0BD     		pop	{r4, r5, r7, pc}
+ 862              		.cfi_endproc
+ 863              	.LFE72:
+ 864              		.size	ssd1331_fill_rect, .-ssd1331_fill_rect
+ 865              		.section	.text.ssd1331_draw_circle,"ax",%progbits
+ 866              		.align	2
+ 867              		.global	ssd1331_draw_circle
+ 868              		.code	16
+ 869              		.thumb_func
+ 870              		.type	ssd1331_draw_circle, %function
+ 871              	ssd1331_draw_circle:
+ 872              	.LFB73:
+ 214:oled_ssd1331.c **** 
+ 215:oled_ssd1331.c **** void ssd1331_draw_circle(uint8_t chXpos, uint8_t chYpos, uint8_t chRadius, uint16_t hwColor)
+ 216:oled_ssd1331.c **** {
+ 873              		.loc 1 216 0
+ 874              		.cfi_startproc
+ 875              		@ args = 0, pretend = 0, frame = 24
+ 876              		@ frame_needed = 1, uses_anonymous_args = 0
+ 877 0000 B0B5     		push	{r4, r5, r7, lr}
+ 878              		.cfi_def_cfa_offset 16
+ 879              		.cfi_offset 4, -16
+ 880              		.cfi_offset 5, -12
+ 881              		.cfi_offset 7, -8
+ 882              		.cfi_offset 14, -4
+ 883 0002 86B0     		sub	sp, sp, #24
+ 884              		.cfi_def_cfa_offset 40
+ 885 0004 00AF     		add	r7, sp, #0
+ 886              		.cfi_def_cfa_register 7
+ 887 0006 0500     		movs	r5, r0
+ 888 0008 0C00     		movs	r4, r1
+ 889 000a 1000     		movs	r0, r2
+ 890 000c 1900     		movs	r1, r3
+ 891 000e FB1D     		adds	r3, r7, #7
+ 892 0010 2A1C     		adds	r2, r5, #0
+ 893 0012 1A70     		strb	r2, [r3]
+ 894 0014 BB1D     		adds	r3, r7, #6
+ 895 0016 221C     		adds	r2, r4, #0
+ 896 0018 1A70     		strb	r2, [r3]
+ 897 001a 7B1D     		adds	r3, r7, #5
+ 898 001c 021C     		adds	r2, r0, #0
+ 899 001e 1A70     		strb	r2, [r3]
+ 900 0020 BB1C     		adds	r3, r7, #2
+ 901 0022 0A1C     		adds	r2, r1, #0
+ 902 0024 1A80     		strh	r2, [r3]
+ 217:oled_ssd1331.c **** 	int x = -chRadius, y = 0, err = 2 - 2 * chRadius, e2;
+ 903              		.loc 1 217 0
+ 904 0026 7B1D     		adds	r3, r7, #5
+ 905 0028 1B78     		ldrb	r3, [r3]
+ 906 002a 5B42     		rsbs	r3, r3, #0
+ 907 002c 7B61     		str	r3, [r7, #20]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 21
+
+
+ 908 002e 0023     		movs	r3, #0
+ 909 0030 3B61     		str	r3, [r7, #16]
+ 910 0032 7B1D     		adds	r3, r7, #5
+ 911 0034 1B78     		ldrb	r3, [r3]
+ 912 0036 0122     		movs	r2, #1
+ 913 0038 D31A     		subs	r3, r2, r3
+ 914 003a 5B00     		lsls	r3, r3, #1
+ 915 003c FB60     		str	r3, [r7, #12]
+ 218:oled_ssd1331.c **** 
+ 219:oled_ssd1331.c **** 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
+ 916              		.loc 1 219 0
+ 917 003e FB1D     		adds	r3, r7, #7
+ 918 0040 1B78     		ldrb	r3, [r3]
+ 919 0042 5F2B     		cmp	r3, #95
+ 920 0044 00D9     		bls	.LCB822
+ 921 0046 72E0     		b	.L61	@long jump
+ 922              	.LCB822:
+ 923              		.loc 1 219 0 is_stmt 0 discriminator 1
+ 924 0048 BB1D     		adds	r3, r7, #6
+ 925 004a 1B78     		ldrb	r3, [r3]
+ 926 004c 3F2B     		cmp	r3, #63
+ 927 004e 6ED8     		bhi	.L61
+ 928              	.L57:
+ 220:oled_ssd1331.c **** 		return;
+ 221:oled_ssd1331.c **** 	}
+ 222:oled_ssd1331.c **** 	
+ 223:oled_ssd1331.c ****     do {
+ 224:oled_ssd1331.c ****         ssd1331_draw_point(chXpos - x, chYpos + y, hwColor);
+ 929              		.loc 1 224 0 is_stmt 1
+ 930 0050 7B69     		ldr	r3, [r7, #20]
+ 931 0052 DBB2     		uxtb	r3, r3
+ 932 0054 FA1D     		adds	r2, r7, #7
+ 933 0056 1278     		ldrb	r2, [r2]
+ 934 0058 D31A     		subs	r3, r2, r3
+ 935 005a D8B2     		uxtb	r0, r3
+ 936 005c 3B69     		ldr	r3, [r7, #16]
+ 937 005e DAB2     		uxtb	r2, r3
+ 938 0060 BB1D     		adds	r3, r7, #6
+ 939 0062 1B78     		ldrb	r3, [r3]
+ 940 0064 D318     		adds	r3, r2, r3
+ 941 0066 D9B2     		uxtb	r1, r3
+ 942 0068 BB1C     		adds	r3, r7, #2
+ 943 006a 1B88     		ldrh	r3, [r3]
+ 944 006c 1A00     		movs	r2, r3
+ 945 006e FFF7FEFF 		bl	ssd1331_draw_point
+ 225:oled_ssd1331.c ****         ssd1331_draw_point(chXpos + x, chYpos + y, hwColor);
+ 946              		.loc 1 225 0
+ 947 0072 7B69     		ldr	r3, [r7, #20]
+ 948 0074 DAB2     		uxtb	r2, r3
+ 949 0076 FB1D     		adds	r3, r7, #7
+ 950 0078 1B78     		ldrb	r3, [r3]
+ 951 007a D318     		adds	r3, r2, r3
+ 952 007c D8B2     		uxtb	r0, r3
+ 953 007e 3B69     		ldr	r3, [r7, #16]
+ 954 0080 DAB2     		uxtb	r2, r3
+ 955 0082 BB1D     		adds	r3, r7, #6
+ 956 0084 1B78     		ldrb	r3, [r3]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 22
+
+
+ 957 0086 D318     		adds	r3, r2, r3
+ 958 0088 D9B2     		uxtb	r1, r3
+ 959 008a BB1C     		adds	r3, r7, #2
+ 960 008c 1B88     		ldrh	r3, [r3]
+ 961 008e 1A00     		movs	r2, r3
+ 962 0090 FFF7FEFF 		bl	ssd1331_draw_point
+ 226:oled_ssd1331.c ****         ssd1331_draw_point(chXpos + x, chYpos - y, hwColor);
+ 963              		.loc 1 226 0
+ 964 0094 7B69     		ldr	r3, [r7, #20]
+ 965 0096 DAB2     		uxtb	r2, r3
+ 966 0098 FB1D     		adds	r3, r7, #7
+ 967 009a 1B78     		ldrb	r3, [r3]
+ 968 009c D318     		adds	r3, r2, r3
+ 969 009e D8B2     		uxtb	r0, r3
+ 970 00a0 3B69     		ldr	r3, [r7, #16]
+ 971 00a2 DBB2     		uxtb	r3, r3
+ 972 00a4 BA1D     		adds	r2, r7, #6
+ 973 00a6 1278     		ldrb	r2, [r2]
+ 974 00a8 D31A     		subs	r3, r2, r3
+ 975 00aa D9B2     		uxtb	r1, r3
+ 976 00ac BB1C     		adds	r3, r7, #2
+ 977 00ae 1B88     		ldrh	r3, [r3]
+ 978 00b0 1A00     		movs	r2, r3
+ 979 00b2 FFF7FEFF 		bl	ssd1331_draw_point
+ 227:oled_ssd1331.c ****         ssd1331_draw_point(chXpos - x, chYpos - y, hwColor);
+ 980              		.loc 1 227 0
+ 981 00b6 7B69     		ldr	r3, [r7, #20]
+ 982 00b8 DBB2     		uxtb	r3, r3
+ 983 00ba FA1D     		adds	r2, r7, #7
+ 984 00bc 1278     		ldrb	r2, [r2]
+ 985 00be D31A     		subs	r3, r2, r3
+ 986 00c0 D8B2     		uxtb	r0, r3
+ 987 00c2 3B69     		ldr	r3, [r7, #16]
+ 988 00c4 DBB2     		uxtb	r3, r3
+ 989 00c6 BA1D     		adds	r2, r7, #6
+ 990 00c8 1278     		ldrb	r2, [r2]
+ 991 00ca D31A     		subs	r3, r2, r3
+ 992 00cc D9B2     		uxtb	r1, r3
+ 993 00ce BB1C     		adds	r3, r7, #2
+ 994 00d0 1B88     		ldrh	r3, [r3]
+ 995 00d2 1A00     		movs	r2, r3
+ 996 00d4 FFF7FEFF 		bl	ssd1331_draw_point
+ 228:oled_ssd1331.c ****         e2 = err;
+ 997              		.loc 1 228 0
+ 998 00d8 FB68     		ldr	r3, [r7, #12]
+ 999 00da BB60     		str	r3, [r7, #8]
+ 229:oled_ssd1331.c ****         if (e2 <= y) {
+ 1000              		.loc 1 229 0
+ 1001 00dc BA68     		ldr	r2, [r7, #8]
+ 1002 00de 3B69     		ldr	r3, [r7, #16]
+ 1003 00e0 9A42     		cmp	r2, r3
+ 1004 00e2 13DC     		bgt	.L59
+ 230:oled_ssd1331.c ****             err += ++ y * 2 + 1;
+ 1005              		.loc 1 230 0
+ 1006 00e4 3B69     		ldr	r3, [r7, #16]
+ 1007 00e6 0133     		adds	r3, r3, #1
+ 1008 00e8 3B61     		str	r3, [r7, #16]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 23
+
+
+ 1009 00ea 3B69     		ldr	r3, [r7, #16]
+ 1010 00ec 5B00     		lsls	r3, r3, #1
+ 1011 00ee 0133     		adds	r3, r3, #1
+ 1012 00f0 FA68     		ldr	r2, [r7, #12]
+ 1013 00f2 D318     		adds	r3, r2, r3
+ 1014 00f4 FB60     		str	r3, [r7, #12]
+ 231:oled_ssd1331.c ****             if(-x == y && e2 <= x) e2 = 0;
+ 1015              		.loc 1 231 0
+ 1016 00f6 7B69     		ldr	r3, [r7, #20]
+ 1017 00f8 5A42     		rsbs	r2, r3, #0
+ 1018 00fa 3B69     		ldr	r3, [r7, #16]
+ 1019 00fc 9A42     		cmp	r2, r3
+ 1020 00fe 05D1     		bne	.L59
+ 1021              		.loc 1 231 0 is_stmt 0 discriminator 1
+ 1022 0100 BA68     		ldr	r2, [r7, #8]
+ 1023 0102 7B69     		ldr	r3, [r7, #20]
+ 1024 0104 9A42     		cmp	r2, r3
+ 1025 0106 01DC     		bgt	.L59
+ 1026              		.loc 1 231 0 discriminator 2
+ 1027 0108 0023     		movs	r3, #0
+ 1028 010a BB60     		str	r3, [r7, #8]
+ 1029              	.L59:
+ 232:oled_ssd1331.c ****         }
+ 233:oled_ssd1331.c ****         if(e2 > x) err += ++ x * 2 + 1;
+ 1030              		.loc 1 233 0 is_stmt 1
+ 1031 010c BA68     		ldr	r2, [r7, #8]
+ 1032 010e 7B69     		ldr	r3, [r7, #20]
+ 1033 0110 9A42     		cmp	r2, r3
+ 1034 0112 08DD     		ble	.L60
+ 1035              		.loc 1 233 0 is_stmt 0 discriminator 1
+ 1036 0114 7B69     		ldr	r3, [r7, #20]
+ 1037 0116 0133     		adds	r3, r3, #1
+ 1038 0118 7B61     		str	r3, [r7, #20]
+ 1039 011a 7B69     		ldr	r3, [r7, #20]
+ 1040 011c 5B00     		lsls	r3, r3, #1
+ 1041 011e 0133     		adds	r3, r3, #1
+ 1042 0120 FA68     		ldr	r2, [r7, #12]
+ 1043 0122 D318     		adds	r3, r2, r3
+ 1044 0124 FB60     		str	r3, [r7, #12]
+ 1045              	.L60:
+ 234:oled_ssd1331.c ****     } while(x <= 0);
+ 1046              		.loc 1 234 0 is_stmt 1
+ 1047 0126 7B69     		ldr	r3, [r7, #20]
+ 1048 0128 002B     		cmp	r3, #0
+ 1049 012a 91DD     		ble	.L57
+ 1050 012c 00E0     		b	.L55
+ 1051              	.L61:
+ 220:oled_ssd1331.c **** 	}
+ 1052              		.loc 1 220 0
+ 1053 012e C046     		nop
+ 1054              	.L55:
+ 235:oled_ssd1331.c **** }
+ 1055              		.loc 1 235 0
+ 1056 0130 BD46     		mov	sp, r7
+ 1057 0132 06B0     		add	sp, sp, #24
+ 1058              		@ sp needed
+ 1059 0134 B0BD     		pop	{r4, r5, r7, pc}
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 24
+
+
+ 1060              		.cfi_endproc
+ 1061              	.LFE73:
+ 1062              		.size	ssd1331_draw_circle, .-ssd1331_draw_circle
+ 1063 0136 C046     		.section	.text.ssd1331_clear_screen,"ax",%progbits
+ 1064              		.align	2
+ 1065              		.global	ssd1331_clear_screen
+ 1066              		.code	16
+ 1067              		.thumb_func
+ 1068              		.type	ssd1331_clear_screen, %function
+ 1069              	ssd1331_clear_screen:
+ 1070              	.LFB74:
+ 236:oled_ssd1331.c **** 
+ 237:oled_ssd1331.c **** void ssd1331_clear_screen(uint16_t hwColor)  
+ 238:oled_ssd1331.c **** {
+ 1071              		.loc 1 238 0
+ 1072              		.cfi_startproc
+ 1073              		@ args = 0, pretend = 0, frame = 16
+ 1074              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1075 0000 80B5     		push	{r7, lr}
+ 1076              		.cfi_def_cfa_offset 8
+ 1077              		.cfi_offset 7, -8
+ 1078              		.cfi_offset 14, -4
+ 1079 0002 84B0     		sub	sp, sp, #16
+ 1080              		.cfi_def_cfa_offset 24
+ 1081 0004 00AF     		add	r7, sp, #0
+ 1082              		.cfi_def_cfa_register 7
+ 1083 0006 0200     		movs	r2, r0
+ 1084 0008 BB1D     		adds	r3, r7, #6
+ 1085 000a 1A80     		strh	r2, [r3]
+ 239:oled_ssd1331.c **** 	uint16_t i, j;
+ 240:oled_ssd1331.c **** 	
+ 241:oled_ssd1331.c **** 	for(i = 0; i < OLED_HEIGHT; i ++)
+ 1086              		.loc 1 241 0
+ 1087 000c 0E23     		movs	r3, #14
+ 1088 000e FB18     		adds	r3, r7, r3
+ 1089 0010 0022     		movs	r2, #0
+ 1090 0012 1A80     		strh	r2, [r3]
+ 1091 0014 24E0     		b	.L63
+ 1092              	.L66:
+ 242:oled_ssd1331.c ****     {
+ 243:oled_ssd1331.c **** 		for(j = 0; j < OLED_WIDTH; j ++)
+ 1093              		.loc 1 243 0
+ 1094 0016 0C23     		movs	r3, #12
+ 1095 0018 FB18     		adds	r3, r7, r3
+ 1096 001a 0022     		movs	r2, #0
+ 1097 001c 1A80     		strh	r2, [r3]
+ 1098 001e 13E0     		b	.L64
+ 1099              	.L65:
+ 244:oled_ssd1331.c ****         {
+ 245:oled_ssd1331.c **** 			ssd1331_draw_point(j, i, hwColor);
+ 1100              		.loc 1 245 0 discriminator 3
+ 1101 0020 0C23     		movs	r3, #12
+ 1102 0022 FB18     		adds	r3, r7, r3
+ 1103 0024 1B88     		ldrh	r3, [r3]
+ 1104 0026 D8B2     		uxtb	r0, r3
+ 1105 0028 0E23     		movs	r3, #14
+ 1106 002a FB18     		adds	r3, r7, r3
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 25
+
+
+ 1107 002c 1B88     		ldrh	r3, [r3]
+ 1108 002e D9B2     		uxtb	r1, r3
+ 1109 0030 BB1D     		adds	r3, r7, #6
+ 1110 0032 1B88     		ldrh	r3, [r3]
+ 1111 0034 1A00     		movs	r2, r3
+ 1112 0036 FFF7FEFF 		bl	ssd1331_draw_point
+ 243:oled_ssd1331.c ****         {
+ 1113              		.loc 1 243 0 discriminator 3
+ 1114 003a 0C23     		movs	r3, #12
+ 1115 003c FB18     		adds	r3, r7, r3
+ 1116 003e 1A88     		ldrh	r2, [r3]
+ 1117 0040 0C23     		movs	r3, #12
+ 1118 0042 FB18     		adds	r3, r7, r3
+ 1119 0044 0132     		adds	r2, r2, #1
+ 1120 0046 1A80     		strh	r2, [r3]
+ 1121              	.L64:
+ 243:oled_ssd1331.c ****         {
+ 1122              		.loc 1 243 0 is_stmt 0 discriminator 1
+ 1123 0048 0C23     		movs	r3, #12
+ 1124 004a FB18     		adds	r3, r7, r3
+ 1125 004c 1B88     		ldrh	r3, [r3]
+ 1126 004e 5F2B     		cmp	r3, #95
+ 1127 0050 E6D9     		bls	.L65
+ 241:oled_ssd1331.c ****     {
+ 1128              		.loc 1 241 0 is_stmt 1 discriminator 2
+ 1129 0052 0E23     		movs	r3, #14
+ 1130 0054 FB18     		adds	r3, r7, r3
+ 1131 0056 1A88     		ldrh	r2, [r3]
+ 1132 0058 0E23     		movs	r3, #14
+ 1133 005a FB18     		adds	r3, r7, r3
+ 1134 005c 0132     		adds	r2, r2, #1
+ 1135 005e 1A80     		strh	r2, [r3]
+ 1136              	.L63:
+ 241:oled_ssd1331.c ****     {
+ 1137              		.loc 1 241 0 is_stmt 0 discriminator 1
+ 1138 0060 0E23     		movs	r3, #14
+ 1139 0062 FB18     		adds	r3, r7, r3
+ 1140 0064 1B88     		ldrh	r3, [r3]
+ 1141 0066 3F2B     		cmp	r3, #63
+ 1142 0068 D5D9     		bls	.L66
+ 246:oled_ssd1331.c **** 		}
+ 247:oled_ssd1331.c **** 	}
+ 248:oled_ssd1331.c **** }
+ 1143              		.loc 1 248 0 is_stmt 1
+ 1144 006a C046     		nop
+ 1145 006c BD46     		mov	sp, r7
+ 1146 006e 04B0     		add	sp, sp, #16
+ 1147              		@ sp needed
+ 1148 0070 80BD     		pop	{r7, pc}
+ 1149              		.cfi_endproc
+ 1150              	.LFE74:
+ 1151              		.size	ssd1331_clear_screen, .-ssd1331_clear_screen
+ 1152 0072 C046     		.section	.text.ssd1331_display_char,"ax",%progbits
+ 1153              		.align	2
+ 1154              		.global	ssd1331_display_char
+ 1155              		.code	16
+ 1156              		.thumb_func
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 26
+
+
+ 1157              		.type	ssd1331_display_char, %function
+ 1158              	ssd1331_display_char:
+ 1159              	.LFB75:
+ 249:oled_ssd1331.c **** 
+ 250:oled_ssd1331.c **** /**
+ 251:oled_ssd1331.c ****   * @brief Displays one character at the specified position    
+ 252:oled_ssd1331.c ****   *         
+ 253:oled_ssd1331.c ****   * @param  chXpos: Specifies the X position
+ 254:oled_ssd1331.c ****   * @param  chYpos: Specifies the Y position
+ 255:oled_ssd1331.c ****   * @param  chSize: 
+ 256:oled_ssd1331.c ****   * @param  chMode
+ 257:oled_ssd1331.c ****   * @retval 
+ 258:oled_ssd1331.c **** **/
+ 259:oled_ssd1331.c **** void ssd1331_display_char(uint8_t chXpos, uint8_t chYpos, uint8_t chChr, uint8_t chSize, uint16_t h
+ 260:oled_ssd1331.c **** {      	
+ 1160              		.loc 1 260 0
+ 1161              		.cfi_startproc
+ 1162              		@ args = 4, pretend = 0, frame = 16
+ 1163              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1164 0000 B0B5     		push	{r4, r5, r7, lr}
+ 1165              		.cfi_def_cfa_offset 16
+ 1166              		.cfi_offset 4, -16
+ 1167              		.cfi_offset 5, -12
+ 1168              		.cfi_offset 7, -8
+ 1169              		.cfi_offset 14, -4
+ 1170 0002 84B0     		sub	sp, sp, #16
+ 1171              		.cfi_def_cfa_offset 32
+ 1172 0004 00AF     		add	r7, sp, #0
+ 1173              		.cfi_def_cfa_register 7
+ 1174 0006 0500     		movs	r5, r0
+ 1175 0008 0C00     		movs	r4, r1
+ 1176 000a 1000     		movs	r0, r2
+ 1177 000c 1900     		movs	r1, r3
+ 1178 000e FB1D     		adds	r3, r7, #7
+ 1179 0010 2A1C     		adds	r2, r5, #0
+ 1180 0012 1A70     		strb	r2, [r3]
+ 1181 0014 BB1D     		adds	r3, r7, #6
+ 1182 0016 221C     		adds	r2, r4, #0
+ 1183 0018 1A70     		strb	r2, [r3]
+ 1184 001a 7B1D     		adds	r3, r7, #5
+ 1185 001c 021C     		adds	r2, r0, #0
+ 1186 001e 1A70     		strb	r2, [r3]
+ 1187 0020 3B1D     		adds	r3, r7, #4
+ 1188 0022 0A1C     		adds	r2, r1, #0
+ 1189 0024 1A70     		strb	r2, [r3]
+ 261:oled_ssd1331.c **** 	uint8_t i, j; 
+ 262:oled_ssd1331.c ****     uint8_t chTemp = 0;
+ 1190              		.loc 1 262 0
+ 1191 0026 0D23     		movs	r3, #13
+ 1192 0028 FB18     		adds	r3, r7, r3
+ 1193 002a 0022     		movs	r2, #0
+ 1194 002c 1A70     		strb	r2, [r3]
+ 263:oled_ssd1331.c **** 	uint8_t chYpos0 = chYpos;
+ 1195              		.loc 1 263 0
+ 1196 002e 0C23     		movs	r3, #12
+ 1197 0030 FB18     		adds	r3, r7, r3
+ 1198 0032 BA1D     		adds	r2, r7, #6
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 27
+
+
+ 1199 0034 1278     		ldrb	r2, [r2]
+ 1200 0036 1A70     		strb	r2, [r3]
+ 264:oled_ssd1331.c **** 
+ 265:oled_ssd1331.c **** 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
+ 1201              		.loc 1 265 0
+ 1202 0038 FB1D     		adds	r3, r7, #7
+ 1203 003a 1B78     		ldrb	r3, [r3]
+ 1204 003c 5F2B     		cmp	r3, #95
+ 1205 003e 00D9     		bls	.LCB1079
+ 1206 0040 82E0     		b	.L80	@long jump
+ 1207              	.LCB1079:
+ 1208              		.loc 1 265 0 is_stmt 0 discriminator 1
+ 1209 0042 BB1D     		adds	r3, r7, #6
+ 1210 0044 1B78     		ldrb	r3, [r3]
+ 1211 0046 3F2B     		cmp	r3, #63
+ 1212 0048 00D9     		bls	.LCB1083
+ 1213 004a 7DE0     		b	.L80	@long jump
+ 1214              	.LCB1083:
+ 266:oled_ssd1331.c **** 		return;
+ 267:oled_ssd1331.c **** 	}
+ 268:oled_ssd1331.c **** 					   
+ 269:oled_ssd1331.c ****     for (i = 0; i < chSize; i ++) {   
+ 1215              		.loc 1 269 0 is_stmt 1
+ 1216 004c 0F23     		movs	r3, #15
+ 1217 004e FB18     		adds	r3, r7, r3
+ 1218 0050 0022     		movs	r2, #0
+ 1219 0052 1A70     		strb	r2, [r3]
+ 1220 0054 70E0     		b	.L71
+ 1221              	.L79:
+ 270:oled_ssd1331.c **** 		if (FONT_1206 == chSize) {
+ 1222              		.loc 1 270 0
+ 1223 0056 3B1D     		adds	r3, r7, #4
+ 1224 0058 1B78     		ldrb	r3, [r3]
+ 1225 005a 0C2B     		cmp	r3, #12
+ 1226 005c 11D1     		bne	.L72
+ 271:oled_ssd1331.c **** 			chTemp = c_chFont1206[chChr - 0x20][i];  
+ 1227              		.loc 1 271 0
+ 1228 005e 7B1D     		adds	r3, r7, #5
+ 1229 0060 1B78     		ldrb	r3, [r3]
+ 1230 0062 203B     		subs	r3, r3, #32
+ 1231 0064 1A00     		movs	r2, r3
+ 1232 0066 0F23     		movs	r3, #15
+ 1233 0068 FB18     		adds	r3, r7, r3
+ 1234 006a 1878     		ldrb	r0, [r3]
+ 1235 006c 0D23     		movs	r3, #13
+ 1236 006e F918     		adds	r1, r7, r3
+ 1237 0070 374C     		ldr	r4, .L81
+ 1238 0072 1300     		movs	r3, r2
+ 1239 0074 5B00     		lsls	r3, r3, #1
+ 1240 0076 9B18     		adds	r3, r3, r2
+ 1241 0078 9B00     		lsls	r3, r3, #2
+ 1242 007a E318     		adds	r3, r4, r3
+ 1243 007c 1B5C     		ldrb	r3, [r3, r0]
+ 1244 007e 0B70     		strb	r3, [r1]
+ 1245 0080 11E0     		b	.L73
+ 1246              	.L72:
+ 272:oled_ssd1331.c **** 		} else if (FONT_1608 == chSize) { 
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 28
+
+
+ 1247              		.loc 1 272 0
+ 1248 0082 3B1D     		adds	r3, r7, #4
+ 1249 0084 1B78     		ldrb	r3, [r3]
+ 1250 0086 102B     		cmp	r3, #16
+ 1251 0088 0DD1     		bne	.L73
+ 273:oled_ssd1331.c **** 			chTemp = c_chFont1608[chChr - 0x20][i];
+ 1252              		.loc 1 273 0
+ 1253 008a 7B1D     		adds	r3, r7, #5
+ 1254 008c 1B78     		ldrb	r3, [r3]
+ 1255 008e 203B     		subs	r3, r3, #32
+ 1256 0090 1900     		movs	r1, r3
+ 1257 0092 0F23     		movs	r3, #15
+ 1258 0094 FB18     		adds	r3, r7, r3
+ 1259 0096 1A78     		ldrb	r2, [r3]
+ 1260 0098 0D23     		movs	r3, #13
+ 1261 009a FB18     		adds	r3, r7, r3
+ 1262 009c 2D48     		ldr	r0, .L81+4
+ 1263 009e 0901     		lsls	r1, r1, #4
+ 1264 00a0 4118     		adds	r1, r0, r1
+ 1265 00a2 8A5C     		ldrb	r2, [r1, r2]
+ 1266 00a4 1A70     		strb	r2, [r3]
+ 1267              	.L73:
+ 274:oled_ssd1331.c **** 		}
+ 275:oled_ssd1331.c **** 		
+ 276:oled_ssd1331.c ****         for (j = 0; j < 8; j ++) {
+ 1268              		.loc 1 276 0
+ 1269 00a6 0E23     		movs	r3, #14
+ 1270 00a8 FB18     		adds	r3, r7, r3
+ 1271 00aa 0022     		movs	r2, #0
+ 1272 00ac 1A70     		strb	r2, [r3]
+ 1273 00ae 37E0     		b	.L74
+ 1274              	.L78:
+ 277:oled_ssd1331.c ****     		if (chTemp & 0x80) {
+ 1275              		.loc 1 277 0
+ 1276 00b0 0D23     		movs	r3, #13
+ 1277 00b2 FB18     		adds	r3, r7, r3
+ 1278 00b4 1B78     		ldrb	r3, [r3]
+ 1279 00b6 5BB2     		sxtb	r3, r3
+ 1280 00b8 002B     		cmp	r3, #0
+ 1281 00ba 09DA     		bge	.L75
+ 278:oled_ssd1331.c **** 				ssd1331_draw_point(chXpos, chYpos, hwColor);
+ 1282              		.loc 1 278 0
+ 1283 00bc 2023     		movs	r3, #32
+ 1284 00be FB18     		adds	r3, r7, r3
+ 1285 00c0 1A88     		ldrh	r2, [r3]
+ 1286 00c2 BB1D     		adds	r3, r7, #6
+ 1287 00c4 1978     		ldrb	r1, [r3]
+ 1288 00c6 FB1D     		adds	r3, r7, #7
+ 1289 00c8 1B78     		ldrb	r3, [r3]
+ 1290 00ca 1800     		movs	r0, r3
+ 1291 00cc FFF7FEFF 		bl	ssd1331_draw_point
+ 1292              	.L75:
+ 279:oled_ssd1331.c ****     		}			
+ 280:oled_ssd1331.c **** 			chTemp <<= 1;
+ 1293              		.loc 1 280 0
+ 1294 00d0 0D23     		movs	r3, #13
+ 1295 00d2 FA18     		adds	r2, r7, r3
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 29
+
+
+ 1296 00d4 0D23     		movs	r3, #13
+ 1297 00d6 FB18     		adds	r3, r7, r3
+ 1298 00d8 1B78     		ldrb	r3, [r3]
+ 1299 00da DB18     		adds	r3, r3, r3
+ 1300 00dc 1370     		strb	r3, [r2]
+ 281:oled_ssd1331.c **** 			chYpos ++;
+ 1301              		.loc 1 281 0
+ 1302 00de BB1D     		adds	r3, r7, #6
+ 1303 00e0 1A78     		ldrb	r2, [r3]
+ 1304 00e2 BB1D     		adds	r3, r7, #6
+ 1305 00e4 0132     		adds	r2, r2, #1
+ 1306 00e6 1A70     		strb	r2, [r3]
+ 282:oled_ssd1331.c **** 			if ((chYpos - chYpos0) == chSize) {
+ 1307              		.loc 1 282 0
+ 1308 00e8 BB1D     		adds	r3, r7, #6
+ 1309 00ea 1A78     		ldrb	r2, [r3]
+ 1310 00ec 0C23     		movs	r3, #12
+ 1311 00ee FB18     		adds	r3, r7, r3
+ 1312 00f0 1B78     		ldrb	r3, [r3]
+ 1313 00f2 D21A     		subs	r2, r2, r3
+ 1314 00f4 3B1D     		adds	r3, r7, #4
+ 1315 00f6 1B78     		ldrb	r3, [r3]
+ 1316 00f8 9A42     		cmp	r2, r3
+ 1317 00fa 0AD1     		bne	.L76
+ 283:oled_ssd1331.c **** 				chYpos = chYpos0;
+ 1318              		.loc 1 283 0
+ 1319 00fc BB1D     		adds	r3, r7, #6
+ 1320 00fe 0C22     		movs	r2, #12
+ 1321 0100 BA18     		adds	r2, r7, r2
+ 1322 0102 1278     		ldrb	r2, [r2]
+ 1323 0104 1A70     		strb	r2, [r3]
+ 284:oled_ssd1331.c **** 				chXpos ++;
+ 1324              		.loc 1 284 0
+ 1325 0106 FB1D     		adds	r3, r7, #7
+ 1326 0108 1A78     		ldrb	r2, [r3]
+ 1327 010a FB1D     		adds	r3, r7, #7
+ 1328 010c 0132     		adds	r2, r2, #1
+ 1329 010e 1A70     		strb	r2, [r3]
+ 285:oled_ssd1331.c **** 				break;
+ 1330              		.loc 1 285 0
+ 1331 0110 0BE0     		b	.L77
+ 1332              	.L76:
+ 276:oled_ssd1331.c ****     		if (chTemp & 0x80) {
+ 1333              		.loc 1 276 0 discriminator 2
+ 1334 0112 0E23     		movs	r3, #14
+ 1335 0114 FB18     		adds	r3, r7, r3
+ 1336 0116 1A78     		ldrb	r2, [r3]
+ 1337 0118 0E23     		movs	r3, #14
+ 1338 011a FB18     		adds	r3, r7, r3
+ 1339 011c 0132     		adds	r2, r2, #1
+ 1340 011e 1A70     		strb	r2, [r3]
+ 1341              	.L74:
+ 276:oled_ssd1331.c ****     		if (chTemp & 0x80) {
+ 1342              		.loc 1 276 0 is_stmt 0 discriminator 1
+ 1343 0120 0E23     		movs	r3, #14
+ 1344 0122 FB18     		adds	r3, r7, r3
+ 1345 0124 1B78     		ldrb	r3, [r3]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 30
+
+
+ 1346 0126 072B     		cmp	r3, #7
+ 1347 0128 C2D9     		bls	.L78
+ 1348              	.L77:
+ 269:oled_ssd1331.c **** 		if (FONT_1206 == chSize) {
+ 1349              		.loc 1 269 0 is_stmt 1 discriminator 2
+ 1350 012a 0F23     		movs	r3, #15
+ 1351 012c FB18     		adds	r3, r7, r3
+ 1352 012e 1A78     		ldrb	r2, [r3]
+ 1353 0130 0F23     		movs	r3, #15
+ 1354 0132 FB18     		adds	r3, r7, r3
+ 1355 0134 0132     		adds	r2, r2, #1
+ 1356 0136 1A70     		strb	r2, [r3]
+ 1357              	.L71:
+ 269:oled_ssd1331.c **** 		if (FONT_1206 == chSize) {
+ 1358              		.loc 1 269 0 is_stmt 0 discriminator 1
+ 1359 0138 0F23     		movs	r3, #15
+ 1360 013a FA18     		adds	r2, r7, r3
+ 1361 013c 3B1D     		adds	r3, r7, #4
+ 1362 013e 1278     		ldrb	r2, [r2]
+ 1363 0140 1B78     		ldrb	r3, [r3]
+ 1364 0142 9A42     		cmp	r2, r3
+ 1365 0144 87D3     		bcc	.L79
+ 1366 0146 00E0     		b	.L67
+ 1367              	.L80:
+ 266:oled_ssd1331.c **** 	}
+ 1368              		.loc 1 266 0 is_stmt 1
+ 1369 0148 C046     		nop
+ 1370              	.L67:
+ 286:oled_ssd1331.c **** 			}
+ 287:oled_ssd1331.c **** 		}  	 
+ 288:oled_ssd1331.c ****     } 
+ 289:oled_ssd1331.c **** }
+ 1371              		.loc 1 289 0
+ 1372 014a BD46     		mov	sp, r7
+ 1373 014c 04B0     		add	sp, sp, #16
+ 1374              		@ sp needed
+ 1375 014e B0BD     		pop	{r4, r5, r7, pc}
+ 1376              	.L82:
+ 1377              		.align	2
+ 1378              	.L81:
+ 1379 0150 00000000 		.word	c_chFont1206
+ 1380 0154 00000000 		.word	c_chFont1608
+ 1381              		.cfi_endproc
+ 1382              	.LFE75:
+ 1383              		.size	ssd1331_display_char, .-ssd1331_display_char
+ 1384              		.section	.text.ssd1331_display_string,"ax",%progbits
+ 1385              		.align	2
+ 1386              		.global	ssd1331_display_string
+ 1387              		.code	16
+ 1388              		.thumb_func
+ 1389              		.type	ssd1331_display_string, %function
+ 1390              	ssd1331_display_string:
+ 1391              	.LFB76:
+ 290:oled_ssd1331.c **** 
+ 291:oled_ssd1331.c **** /**
+ 292:oled_ssd1331.c ****   * @brief  Displays a string on the screen
+ 293:oled_ssd1331.c ****   *         
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 31
+
+
+ 294:oled_ssd1331.c ****   * @param  chXpos: Specifies the X position
+ 295:oled_ssd1331.c ****   * @param  chYpos: Specifies the Y position
+ 296:oled_ssd1331.c ****   * @param  pchString: Pointer to a string to display on the screen 
+ 297:oled_ssd1331.c ****   *         
+ 298:oled_ssd1331.c ****   * @retval  None
+ 299:oled_ssd1331.c **** **/
+ 300:oled_ssd1331.c **** void ssd1331_display_string(uint8_t chXpos, uint8_t chYpos, const uint8_t *pchString, uint8_t chSiz
+ 301:oled_ssd1331.c **** {
+ 1392              		.loc 1 301 0
+ 1393              		.cfi_startproc
+ 1394              		@ args = 4, pretend = 0, frame = 8
+ 1395              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1396 0000 90B5     		push	{r4, r7, lr}
+ 1397              		.cfi_def_cfa_offset 12
+ 1398              		.cfi_offset 4, -12
+ 1399              		.cfi_offset 7, -8
+ 1400              		.cfi_offset 14, -4
+ 1401 0002 85B0     		sub	sp, sp, #20
+ 1402              		.cfi_def_cfa_offset 32
+ 1403 0004 02AF     		add	r7, sp, #8
+ 1404              		.cfi_def_cfa 7, 24
+ 1405 0006 0400     		movs	r4, r0
+ 1406 0008 0800     		movs	r0, r1
+ 1407 000a 3A60     		str	r2, [r7]
+ 1408 000c 1900     		movs	r1, r3
+ 1409 000e FB1D     		adds	r3, r7, #7
+ 1410 0010 221C     		adds	r2, r4, #0
+ 1411 0012 1A70     		strb	r2, [r3]
+ 1412 0014 BB1D     		adds	r3, r7, #6
+ 1413 0016 021C     		adds	r2, r0, #0
+ 1414 0018 1A70     		strb	r2, [r3]
+ 1415 001a 7B1D     		adds	r3, r7, #5
+ 1416 001c 0A1C     		adds	r2, r1, #0
+ 1417 001e 1A70     		strb	r2, [r3]
+ 302:oled_ssd1331.c **** 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
+ 1418              		.loc 1 302 0
+ 1419 0020 FB1D     		adds	r3, r7, #7
+ 1420 0022 1B78     		ldrb	r3, [r3]
+ 1421 0024 5F2B     		cmp	r3, #95
+ 1422 0026 4BD8     		bhi	.L90
+ 1423              		.loc 1 302 0 is_stmt 0 discriminator 1
+ 1424 0028 BB1D     		adds	r3, r7, #6
+ 1425 002a 1B78     		ldrb	r3, [r3]
+ 1426 002c 3F2B     		cmp	r3, #63
+ 1427 002e 47D8     		bhi	.L90
+ 303:oled_ssd1331.c **** 		return;
+ 304:oled_ssd1331.c **** 	}
+ 305:oled_ssd1331.c **** 	
+ 306:oled_ssd1331.c ****     while (*pchString != '\0') {       
+ 1428              		.loc 1 306 0 is_stmt 1
+ 1429 0030 41E0     		b	.L87
+ 1430              	.L89:
+ 307:oled_ssd1331.c ****         if (chXpos > (OLED_WIDTH - chSize / 2)) {
+ 1431              		.loc 1 307 0
+ 1432 0032 FB1D     		adds	r3, r7, #7
+ 1433 0034 1A78     		ldrb	r2, [r3]
+ 1434 0036 7B1D     		adds	r3, r7, #5
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 32
+
+
+ 1435 0038 1B78     		ldrb	r3, [r3]
+ 1436 003a 5B08     		lsrs	r3, r3, #1
+ 1437 003c DBB2     		uxtb	r3, r3
+ 1438 003e 1900     		movs	r1, r3
+ 1439 0040 6023     		movs	r3, #96
+ 1440 0042 5B1A     		subs	r3, r3, r1
+ 1441 0044 9A42     		cmp	r2, r3
+ 1442 0046 1BDD     		ble	.L88
+ 308:oled_ssd1331.c **** 			chXpos = 0;
+ 1443              		.loc 1 308 0
+ 1444 0048 FB1D     		adds	r3, r7, #7
+ 1445 004a 0022     		movs	r2, #0
+ 1446 004c 1A70     		strb	r2, [r3]
+ 309:oled_ssd1331.c **** 			chYpos += chSize;
+ 1447              		.loc 1 309 0
+ 1448 004e BB1D     		adds	r3, r7, #6
+ 1449 0050 B91D     		adds	r1, r7, #6
+ 1450 0052 7A1D     		adds	r2, r7, #5
+ 1451 0054 0978     		ldrb	r1, [r1]
+ 1452 0056 1278     		ldrb	r2, [r2]
+ 1453 0058 8A18     		adds	r2, r1, r2
+ 1454 005a 1A70     		strb	r2, [r3]
+ 310:oled_ssd1331.c **** 			if (chYpos > (OLED_HEIGHT - chSize)) {
+ 1455              		.loc 1 310 0
+ 1456 005c BB1D     		adds	r3, r7, #6
+ 1457 005e 1A78     		ldrb	r2, [r3]
+ 1458 0060 7B1D     		adds	r3, r7, #5
+ 1459 0062 1B78     		ldrb	r3, [r3]
+ 1460 0064 4021     		movs	r1, #64
+ 1461 0066 CB1A     		subs	r3, r1, r3
+ 1462 0068 9A42     		cmp	r2, r3
+ 1463 006a 09DD     		ble	.L88
+ 311:oled_ssd1331.c **** 				chYpos = chXpos = 0;
+ 1464              		.loc 1 311 0
+ 1465 006c FB1D     		adds	r3, r7, #7
+ 1466 006e 0022     		movs	r2, #0
+ 1467 0070 1A70     		strb	r2, [r3]
+ 1468 0072 BB1D     		adds	r3, r7, #6
+ 1469 0074 FA1D     		adds	r2, r7, #7
+ 1470 0076 1278     		ldrb	r2, [r2]
+ 1471 0078 1A70     		strb	r2, [r3]
+ 312:oled_ssd1331.c **** 				ssd1331_clear_screen(0x00);
+ 1472              		.loc 1 312 0
+ 1473 007a 0020     		movs	r0, #0
+ 1474 007c FFF7FEFF 		bl	ssd1331_clear_screen
+ 1475              	.L88:
+ 313:oled_ssd1331.c **** 			}
+ 314:oled_ssd1331.c **** 		}
+ 315:oled_ssd1331.c **** 		
+ 316:oled_ssd1331.c ****         ssd1331_display_char(chXpos, chYpos, *pchString, chSize, hwColor);
+ 1476              		.loc 1 316 0
+ 1477 0080 3B68     		ldr	r3, [r7]
+ 1478 0082 1A78     		ldrb	r2, [r3]
+ 1479 0084 7B1D     		adds	r3, r7, #5
+ 1480 0086 1C78     		ldrb	r4, [r3]
+ 1481 0088 BB1D     		adds	r3, r7, #6
+ 1482 008a 1978     		ldrb	r1, [r3]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 33
+
+
+ 1483 008c FB1D     		adds	r3, r7, #7
+ 1484 008e 1878     		ldrb	r0, [r3]
+ 1485 0090 1823     		movs	r3, #24
+ 1486 0092 FB18     		adds	r3, r7, r3
+ 1487 0094 1B88     		ldrh	r3, [r3]
+ 1488 0096 0093     		str	r3, [sp]
+ 1489 0098 2300     		movs	r3, r4
+ 1490 009a FFF7FEFF 		bl	ssd1331_display_char
+ 317:oled_ssd1331.c ****         chXpos += chSize / 2;
+ 1491              		.loc 1 317 0
+ 1492 009e 7B1D     		adds	r3, r7, #5
+ 1493 00a0 1B78     		ldrb	r3, [r3]
+ 1494 00a2 5B08     		lsrs	r3, r3, #1
+ 1495 00a4 D9B2     		uxtb	r1, r3
+ 1496 00a6 FB1D     		adds	r3, r7, #7
+ 1497 00a8 FA1D     		adds	r2, r7, #7
+ 1498 00aa 1278     		ldrb	r2, [r2]
+ 1499 00ac 8A18     		adds	r2, r1, r2
+ 1500 00ae 1A70     		strb	r2, [r3]
+ 318:oled_ssd1331.c ****         pchString ++;
+ 1501              		.loc 1 318 0
+ 1502 00b0 3B68     		ldr	r3, [r7]
+ 1503 00b2 0133     		adds	r3, r3, #1
+ 1504 00b4 3B60     		str	r3, [r7]
+ 1505              	.L87:
+ 306:oled_ssd1331.c ****         if (chXpos > (OLED_WIDTH - chSize / 2)) {
+ 1506              		.loc 1 306 0
+ 1507 00b6 3B68     		ldr	r3, [r7]
+ 1508 00b8 1B78     		ldrb	r3, [r3]
+ 1509 00ba 002B     		cmp	r3, #0
+ 1510 00bc B9D1     		bne	.L89
+ 1511 00be 00E0     		b	.L83
+ 1512              	.L90:
+ 303:oled_ssd1331.c **** 	}
+ 1513              		.loc 1 303 0
+ 1514 00c0 C046     		nop
+ 1515              	.L83:
+ 319:oled_ssd1331.c ****     } 
+ 320:oled_ssd1331.c **** }
+ 1516              		.loc 1 320 0
+ 1517 00c2 BD46     		mov	sp, r7
+ 1518 00c4 03B0     		add	sp, sp, #12
+ 1519              		@ sp needed
+ 1520 00c6 90BD     		pop	{r4, r7, pc}
+ 1521              		.cfi_endproc
+ 1522              	.LFE76:
+ 1523              		.size	ssd1331_display_string, .-ssd1331_display_string
+ 1524              		.section	.text.ssd1331_draw_1616char,"ax",%progbits
+ 1525              		.align	2
+ 1526              		.global	ssd1331_draw_1616char
+ 1527              		.code	16
+ 1528              		.thumb_func
+ 1529              		.type	ssd1331_draw_1616char, %function
+ 1530              	ssd1331_draw_1616char:
+ 1531              	.LFB77:
+ 321:oled_ssd1331.c **** 
+ 322:oled_ssd1331.c **** void ssd1331_draw_1616char(uint8_t chXpos, uint8_t chYpos, uint8_t chChar, uint16_t hwColor)
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 34
+
+
+ 323:oled_ssd1331.c **** {
+ 1532              		.loc 1 323 0
+ 1533              		.cfi_startproc
+ 1534              		@ args = 0, pretend = 0, frame = 16
+ 1535              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1536 0000 B0B5     		push	{r4, r5, r7, lr}
+ 1537              		.cfi_def_cfa_offset 16
+ 1538              		.cfi_offset 4, -16
+ 1539              		.cfi_offset 5, -12
+ 1540              		.cfi_offset 7, -8
+ 1541              		.cfi_offset 14, -4
+ 1542 0002 84B0     		sub	sp, sp, #16
+ 1543              		.cfi_def_cfa_offset 32
+ 1544 0004 00AF     		add	r7, sp, #0
+ 1545              		.cfi_def_cfa_register 7
+ 1546 0006 0500     		movs	r5, r0
+ 1547 0008 0C00     		movs	r4, r1
+ 1548 000a 1000     		movs	r0, r2
+ 1549 000c 1900     		movs	r1, r3
+ 1550 000e FB1D     		adds	r3, r7, #7
+ 1551 0010 2A1C     		adds	r2, r5, #0
+ 1552 0012 1A70     		strb	r2, [r3]
+ 1553 0014 BB1D     		adds	r3, r7, #6
+ 1554 0016 221C     		adds	r2, r4, #0
+ 1555 0018 1A70     		strb	r2, [r3]
+ 1556 001a 7B1D     		adds	r3, r7, #5
+ 1557 001c 021C     		adds	r2, r0, #0
+ 1558 001e 1A70     		strb	r2, [r3]
+ 1559 0020 BB1C     		adds	r3, r7, #2
+ 1560 0022 0A1C     		adds	r2, r1, #0
+ 1561 0024 1A80     		strh	r2, [r3]
+ 324:oled_ssd1331.c **** 	uint8_t i, j;
+ 325:oled_ssd1331.c **** 	uint8_t chTemp = 0, chYpos0 = chYpos;
+ 1562              		.loc 1 325 0
+ 1563 0026 0D23     		movs	r3, #13
+ 1564 0028 FB18     		adds	r3, r7, r3
+ 1565 002a 0022     		movs	r2, #0
+ 1566 002c 1A70     		strb	r2, [r3]
+ 1567 002e 0C23     		movs	r3, #12
+ 1568 0030 FB18     		adds	r3, r7, r3
+ 1569 0032 BA1D     		adds	r2, r7, #6
+ 1570 0034 1278     		ldrb	r2, [r2]
+ 1571 0036 1A70     		strb	r2, [r3]
+ 326:oled_ssd1331.c **** 
+ 327:oled_ssd1331.c **** 	for (i = 0; i < 32; i ++) {
+ 1572              		.loc 1 327 0
+ 1573 0038 0F23     		movs	r3, #15
+ 1574 003a FB18     		adds	r3, r7, r3
+ 1575 003c 0022     		movs	r2, #0
+ 1576 003e 1A70     		strb	r2, [r3]
+ 1577 0040 53E0     		b	.L92
+ 1578              	.L98:
+ 328:oled_ssd1331.c **** 		chTemp = c_chFont1612[chChar - 0x30][i];
+ 1579              		.loc 1 328 0
+ 1580 0042 7B1D     		adds	r3, r7, #5
+ 1581 0044 1B78     		ldrb	r3, [r3]
+ 1582 0046 303B     		subs	r3, r3, #48
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 35
+
+
+ 1583 0048 1900     		movs	r1, r3
+ 1584 004a 0F23     		movs	r3, #15
+ 1585 004c FB18     		adds	r3, r7, r3
+ 1586 004e 1A78     		ldrb	r2, [r3]
+ 1587 0050 0D23     		movs	r3, #13
+ 1588 0052 FB18     		adds	r3, r7, r3
+ 1589 0054 2948     		ldr	r0, .L99
+ 1590 0056 4901     		lsls	r1, r1, #5
+ 1591 0058 4118     		adds	r1, r0, r1
+ 1592 005a 8A5C     		ldrb	r2, [r1, r2]
+ 1593 005c 1A70     		strb	r2, [r3]
+ 329:oled_ssd1331.c **** 		for (j = 0; j < 8; j ++) {
+ 1594              		.loc 1 329 0
+ 1595 005e 0E23     		movs	r3, #14
+ 1596 0060 FB18     		adds	r3, r7, r3
+ 1597 0062 0022     		movs	r2, #0
+ 1598 0064 1A70     		strb	r2, [r3]
+ 1599 0066 34E0     		b	.L93
+ 1600              	.L97:
+ 330:oled_ssd1331.c **** 			if (chTemp & 0x80) {
+ 1601              		.loc 1 330 0
+ 1602 0068 0D23     		movs	r3, #13
+ 1603 006a FB18     		adds	r3, r7, r3
+ 1604 006c 1B78     		ldrb	r3, [r3]
+ 1605 006e 5BB2     		sxtb	r3, r3
+ 1606 0070 002B     		cmp	r3, #0
+ 1607 0072 08DA     		bge	.L94
+ 331:oled_ssd1331.c **** 				ssd1331_draw_point(chXpos, chYpos, hwColor);
+ 1608              		.loc 1 331 0
+ 1609 0074 BB1C     		adds	r3, r7, #2
+ 1610 0076 1A88     		ldrh	r2, [r3]
+ 1611 0078 BB1D     		adds	r3, r7, #6
+ 1612 007a 1978     		ldrb	r1, [r3]
+ 1613 007c FB1D     		adds	r3, r7, #7
+ 1614 007e 1B78     		ldrb	r3, [r3]
+ 1615 0080 1800     		movs	r0, r3
+ 1616 0082 FFF7FEFF 		bl	ssd1331_draw_point
+ 1617              	.L94:
+ 332:oled_ssd1331.c ****     		}
+ 333:oled_ssd1331.c **** 			chTemp <<= 1;
+ 1618              		.loc 1 333 0
+ 1619 0086 0D23     		movs	r3, #13
+ 1620 0088 FA18     		adds	r2, r7, r3
+ 1621 008a 0D23     		movs	r3, #13
+ 1622 008c FB18     		adds	r3, r7, r3
+ 1623 008e 1B78     		ldrb	r3, [r3]
+ 1624 0090 DB18     		adds	r3, r3, r3
+ 1625 0092 1370     		strb	r3, [r2]
+ 334:oled_ssd1331.c **** 			chYpos ++;
+ 1626              		.loc 1 334 0
+ 1627 0094 BB1D     		adds	r3, r7, #6
+ 1628 0096 1A78     		ldrb	r2, [r3]
+ 1629 0098 BB1D     		adds	r3, r7, #6
+ 1630 009a 0132     		adds	r2, r2, #1
+ 1631 009c 1A70     		strb	r2, [r3]
+ 335:oled_ssd1331.c **** 			if ((chYpos - chYpos0) == 16) {
+ 1632              		.loc 1 335 0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 36
+
+
+ 1633 009e BB1D     		adds	r3, r7, #6
+ 1634 00a0 1A78     		ldrb	r2, [r3]
+ 1635 00a2 0C23     		movs	r3, #12
+ 1636 00a4 FB18     		adds	r3, r7, r3
+ 1637 00a6 1B78     		ldrb	r3, [r3]
+ 1638 00a8 D31A     		subs	r3, r2, r3
+ 1639 00aa 102B     		cmp	r3, #16
+ 1640 00ac 0AD1     		bne	.L95
+ 336:oled_ssd1331.c **** 				chYpos = chYpos0;
+ 1641              		.loc 1 336 0
+ 1642 00ae BB1D     		adds	r3, r7, #6
+ 1643 00b0 0C22     		movs	r2, #12
+ 1644 00b2 BA18     		adds	r2, r7, r2
+ 1645 00b4 1278     		ldrb	r2, [r2]
+ 1646 00b6 1A70     		strb	r2, [r3]
+ 337:oled_ssd1331.c **** 				chXpos ++;
+ 1647              		.loc 1 337 0
+ 1648 00b8 FB1D     		adds	r3, r7, #7
+ 1649 00ba 1A78     		ldrb	r2, [r3]
+ 1650 00bc FB1D     		adds	r3, r7, #7
+ 1651 00be 0132     		adds	r2, r2, #1
+ 1652 00c0 1A70     		strb	r2, [r3]
+ 338:oled_ssd1331.c **** 				break;
+ 1653              		.loc 1 338 0
+ 1654 00c2 0BE0     		b	.L96
+ 1655              	.L95:
+ 329:oled_ssd1331.c **** 			if (chTemp & 0x80) {
+ 1656              		.loc 1 329 0 discriminator 2
+ 1657 00c4 0E23     		movs	r3, #14
+ 1658 00c6 FB18     		adds	r3, r7, r3
+ 1659 00c8 1A78     		ldrb	r2, [r3]
+ 1660 00ca 0E23     		movs	r3, #14
+ 1661 00cc FB18     		adds	r3, r7, r3
+ 1662 00ce 0132     		adds	r2, r2, #1
+ 1663 00d0 1A70     		strb	r2, [r3]
+ 1664              	.L93:
+ 329:oled_ssd1331.c **** 			if (chTemp & 0x80) {
+ 1665              		.loc 1 329 0 is_stmt 0 discriminator 1
+ 1666 00d2 0E23     		movs	r3, #14
+ 1667 00d4 FB18     		adds	r3, r7, r3
+ 1668 00d6 1B78     		ldrb	r3, [r3]
+ 1669 00d8 072B     		cmp	r3, #7
+ 1670 00da C5D9     		bls	.L97
+ 1671              	.L96:
+ 327:oled_ssd1331.c **** 		chTemp = c_chFont1612[chChar - 0x30][i];
+ 1672              		.loc 1 327 0 is_stmt 1 discriminator 2
+ 1673 00dc 0F23     		movs	r3, #15
+ 1674 00de FB18     		adds	r3, r7, r3
+ 1675 00e0 1A78     		ldrb	r2, [r3]
+ 1676 00e2 0F23     		movs	r3, #15
+ 1677 00e4 FB18     		adds	r3, r7, r3
+ 1678 00e6 0132     		adds	r2, r2, #1
+ 1679 00e8 1A70     		strb	r2, [r3]
+ 1680              	.L92:
+ 327:oled_ssd1331.c **** 		chTemp = c_chFont1612[chChar - 0x30][i];
+ 1681              		.loc 1 327 0 is_stmt 0 discriminator 1
+ 1682 00ea 0F23     		movs	r3, #15
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 37
+
+
+ 1683 00ec FB18     		adds	r3, r7, r3
+ 1684 00ee 1B78     		ldrb	r3, [r3]
+ 1685 00f0 1F2B     		cmp	r3, #31
+ 1686 00f2 A6D9     		bls	.L98
+ 339:oled_ssd1331.c **** 			}
+ 340:oled_ssd1331.c **** 		}
+ 341:oled_ssd1331.c **** 	}
+ 342:oled_ssd1331.c **** }
+ 1687              		.loc 1 342 0 is_stmt 1
+ 1688 00f4 C046     		nop
+ 1689 00f6 BD46     		mov	sp, r7
+ 1690 00f8 04B0     		add	sp, sp, #16
+ 1691              		@ sp needed
+ 1692 00fa B0BD     		pop	{r4, r5, r7, pc}
+ 1693              	.L100:
+ 1694              		.align	2
+ 1695              	.L99:
+ 1696 00fc 00000000 		.word	c_chFont1612
+ 1697              		.cfi_endproc
+ 1698              	.LFE77:
+ 1699              		.size	ssd1331_draw_1616char, .-ssd1331_draw_1616char
+ 1700              		.section	.text.ssd1331_draw_3216char,"ax",%progbits
+ 1701              		.align	2
+ 1702              		.global	ssd1331_draw_3216char
+ 1703              		.code	16
+ 1704              		.thumb_func
+ 1705              		.type	ssd1331_draw_3216char, %function
+ 1706              	ssd1331_draw_3216char:
+ 1707              	.LFB78:
+ 343:oled_ssd1331.c **** 
+ 344:oled_ssd1331.c **** void ssd1331_draw_3216char(uint8_t chXpos, uint8_t chYpos, uint8_t chChar, uint16_t hwColor)
+ 345:oled_ssd1331.c **** {
+ 1708              		.loc 1 345 0
+ 1709              		.cfi_startproc
+ 1710              		@ args = 0, pretend = 0, frame = 16
+ 1711              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1712 0000 B0B5     		push	{r4, r5, r7, lr}
+ 1713              		.cfi_def_cfa_offset 16
+ 1714              		.cfi_offset 4, -16
+ 1715              		.cfi_offset 5, -12
+ 1716              		.cfi_offset 7, -8
+ 1717              		.cfi_offset 14, -4
+ 1718 0002 84B0     		sub	sp, sp, #16
+ 1719              		.cfi_def_cfa_offset 32
+ 1720 0004 00AF     		add	r7, sp, #0
+ 1721              		.cfi_def_cfa_register 7
+ 1722 0006 0500     		movs	r5, r0
+ 1723 0008 0C00     		movs	r4, r1
+ 1724 000a 1000     		movs	r0, r2
+ 1725 000c 1900     		movs	r1, r3
+ 1726 000e FB1D     		adds	r3, r7, #7
+ 1727 0010 2A1C     		adds	r2, r5, #0
+ 1728 0012 1A70     		strb	r2, [r3]
+ 1729 0014 BB1D     		adds	r3, r7, #6
+ 1730 0016 221C     		adds	r2, r4, #0
+ 1731 0018 1A70     		strb	r2, [r3]
+ 1732 001a 7B1D     		adds	r3, r7, #5
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 38
+
+
+ 1733 001c 021C     		adds	r2, r0, #0
+ 1734 001e 1A70     		strb	r2, [r3]
+ 1735 0020 BB1C     		adds	r3, r7, #2
+ 1736 0022 0A1C     		adds	r2, r1, #0
+ 1737 0024 1A80     		strh	r2, [r3]
+ 346:oled_ssd1331.c **** 	uint8_t i, j;
+ 347:oled_ssd1331.c **** 	uint8_t chTemp = 0, chYpos0 = chYpos;
+ 1738              		.loc 1 347 0
+ 1739 0026 0D23     		movs	r3, #13
+ 1740 0028 FB18     		adds	r3, r7, r3
+ 1741 002a 0022     		movs	r2, #0
+ 1742 002c 1A70     		strb	r2, [r3]
+ 1743 002e 0C23     		movs	r3, #12
+ 1744 0030 FB18     		adds	r3, r7, r3
+ 1745 0032 BA1D     		adds	r2, r7, #6
+ 1746 0034 1278     		ldrb	r2, [r2]
+ 1747 0036 1A70     		strb	r2, [r3]
+ 348:oled_ssd1331.c **** 
+ 349:oled_ssd1331.c **** 	for (i = 0; i < 64; i ++) {
+ 1748              		.loc 1 349 0
+ 1749 0038 0F23     		movs	r3, #15
+ 1750 003a FB18     		adds	r3, r7, r3
+ 1751 003c 0022     		movs	r2, #0
+ 1752 003e 1A70     		strb	r2, [r3]
+ 1753 0040 53E0     		b	.L102
+ 1754              	.L108:
+ 350:oled_ssd1331.c **** 		chTemp = c_chFont3216[chChar - 0x30][i];
+ 1755              		.loc 1 350 0
+ 1756 0042 7B1D     		adds	r3, r7, #5
+ 1757 0044 1B78     		ldrb	r3, [r3]
+ 1758 0046 303B     		subs	r3, r3, #48
+ 1759 0048 1900     		movs	r1, r3
+ 1760 004a 0F23     		movs	r3, #15
+ 1761 004c FB18     		adds	r3, r7, r3
+ 1762 004e 1A78     		ldrb	r2, [r3]
+ 1763 0050 0D23     		movs	r3, #13
+ 1764 0052 FB18     		adds	r3, r7, r3
+ 1765 0054 2948     		ldr	r0, .L109
+ 1766 0056 8901     		lsls	r1, r1, #6
+ 1767 0058 4118     		adds	r1, r0, r1
+ 1768 005a 8A5C     		ldrb	r2, [r1, r2]
+ 1769 005c 1A70     		strb	r2, [r3]
+ 351:oled_ssd1331.c **** 		for (j = 0; j < 8; j ++) {
+ 1770              		.loc 1 351 0
+ 1771 005e 0E23     		movs	r3, #14
+ 1772 0060 FB18     		adds	r3, r7, r3
+ 1773 0062 0022     		movs	r2, #0
+ 1774 0064 1A70     		strb	r2, [r3]
+ 1775 0066 34E0     		b	.L103
+ 1776              	.L107:
+ 352:oled_ssd1331.c **** 			if (chTemp & 0x80) {
+ 1777              		.loc 1 352 0
+ 1778 0068 0D23     		movs	r3, #13
+ 1779 006a FB18     		adds	r3, r7, r3
+ 1780 006c 1B78     		ldrb	r3, [r3]
+ 1781 006e 5BB2     		sxtb	r3, r3
+ 1782 0070 002B     		cmp	r3, #0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 39
+
+
+ 1783 0072 08DA     		bge	.L104
+ 353:oled_ssd1331.c **** 				ssd1331_draw_point(chXpos, chYpos, hwColor);
+ 1784              		.loc 1 353 0
+ 1785 0074 BB1C     		adds	r3, r7, #2
+ 1786 0076 1A88     		ldrh	r2, [r3]
+ 1787 0078 BB1D     		adds	r3, r7, #6
+ 1788 007a 1978     		ldrb	r1, [r3]
+ 1789 007c FB1D     		adds	r3, r7, #7
+ 1790 007e 1B78     		ldrb	r3, [r3]
+ 1791 0080 1800     		movs	r0, r3
+ 1792 0082 FFF7FEFF 		bl	ssd1331_draw_point
+ 1793              	.L104:
+ 354:oled_ssd1331.c ****     		}
+ 355:oled_ssd1331.c **** 			chTemp <<= 1;
+ 1794              		.loc 1 355 0
+ 1795 0086 0D23     		movs	r3, #13
+ 1796 0088 FA18     		adds	r2, r7, r3
+ 1797 008a 0D23     		movs	r3, #13
+ 1798 008c FB18     		adds	r3, r7, r3
+ 1799 008e 1B78     		ldrb	r3, [r3]
+ 1800 0090 DB18     		adds	r3, r3, r3
+ 1801 0092 1370     		strb	r3, [r2]
+ 356:oled_ssd1331.c **** 			chYpos ++;
+ 1802              		.loc 1 356 0
+ 1803 0094 BB1D     		adds	r3, r7, #6
+ 1804 0096 1A78     		ldrb	r2, [r3]
+ 1805 0098 BB1D     		adds	r3, r7, #6
+ 1806 009a 0132     		adds	r2, r2, #1
+ 1807 009c 1A70     		strb	r2, [r3]
+ 357:oled_ssd1331.c **** 			if ((chYpos - chYpos0) == 32) {
+ 1808              		.loc 1 357 0
+ 1809 009e BB1D     		adds	r3, r7, #6
+ 1810 00a0 1A78     		ldrb	r2, [r3]
+ 1811 00a2 0C23     		movs	r3, #12
+ 1812 00a4 FB18     		adds	r3, r7, r3
+ 1813 00a6 1B78     		ldrb	r3, [r3]
+ 1814 00a8 D31A     		subs	r3, r2, r3
+ 1815 00aa 202B     		cmp	r3, #32
+ 1816 00ac 0AD1     		bne	.L105
+ 358:oled_ssd1331.c **** 				chYpos = chYpos0;
+ 1817              		.loc 1 358 0
+ 1818 00ae BB1D     		adds	r3, r7, #6
+ 1819 00b0 0C22     		movs	r2, #12
+ 1820 00b2 BA18     		adds	r2, r7, r2
+ 1821 00b4 1278     		ldrb	r2, [r2]
+ 1822 00b6 1A70     		strb	r2, [r3]
+ 359:oled_ssd1331.c **** 				chXpos ++;
+ 1823              		.loc 1 359 0
+ 1824 00b8 FB1D     		adds	r3, r7, #7
+ 1825 00ba 1A78     		ldrb	r2, [r3]
+ 1826 00bc FB1D     		adds	r3, r7, #7
+ 1827 00be 0132     		adds	r2, r2, #1
+ 1828 00c0 1A70     		strb	r2, [r3]
+ 360:oled_ssd1331.c **** 				break;
+ 1829              		.loc 1 360 0
+ 1830 00c2 0BE0     		b	.L106
+ 1831              	.L105:
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 40
+
+
+ 351:oled_ssd1331.c **** 			if (chTemp & 0x80) {
+ 1832              		.loc 1 351 0 discriminator 2
+ 1833 00c4 0E23     		movs	r3, #14
+ 1834 00c6 FB18     		adds	r3, r7, r3
+ 1835 00c8 1A78     		ldrb	r2, [r3]
+ 1836 00ca 0E23     		movs	r3, #14
+ 1837 00cc FB18     		adds	r3, r7, r3
+ 1838 00ce 0132     		adds	r2, r2, #1
+ 1839 00d0 1A70     		strb	r2, [r3]
+ 1840              	.L103:
+ 351:oled_ssd1331.c **** 			if (chTemp & 0x80) {
+ 1841              		.loc 1 351 0 is_stmt 0 discriminator 1
+ 1842 00d2 0E23     		movs	r3, #14
+ 1843 00d4 FB18     		adds	r3, r7, r3
+ 1844 00d6 1B78     		ldrb	r3, [r3]
+ 1845 00d8 072B     		cmp	r3, #7
+ 1846 00da C5D9     		bls	.L107
+ 1847              	.L106:
+ 349:oled_ssd1331.c **** 		chTemp = c_chFont3216[chChar - 0x30][i];
+ 1848              		.loc 1 349 0 is_stmt 1 discriminator 2
+ 1849 00dc 0F23     		movs	r3, #15
+ 1850 00de FB18     		adds	r3, r7, r3
+ 1851 00e0 1A78     		ldrb	r2, [r3]
+ 1852 00e2 0F23     		movs	r3, #15
+ 1853 00e4 FB18     		adds	r3, r7, r3
+ 1854 00e6 0132     		adds	r2, r2, #1
+ 1855 00e8 1A70     		strb	r2, [r3]
+ 1856              	.L102:
+ 349:oled_ssd1331.c **** 		chTemp = c_chFont3216[chChar - 0x30][i];
+ 1857              		.loc 1 349 0 is_stmt 0 discriminator 1
+ 1858 00ea 0F23     		movs	r3, #15
+ 1859 00ec FB18     		adds	r3, r7, r3
+ 1860 00ee 1B78     		ldrb	r3, [r3]
+ 1861 00f0 3F2B     		cmp	r3, #63
+ 1862 00f2 A6D9     		bls	.L108
+ 361:oled_ssd1331.c **** 			}
+ 362:oled_ssd1331.c **** 		}
+ 363:oled_ssd1331.c **** 	}
+ 364:oled_ssd1331.c **** }
+ 1863              		.loc 1 364 0 is_stmt 1
+ 1864 00f4 C046     		nop
+ 1865 00f6 BD46     		mov	sp, r7
+ 1866 00f8 04B0     		add	sp, sp, #16
+ 1867              		@ sp needed
+ 1868 00fa B0BD     		pop	{r4, r5, r7, pc}
+ 1869              	.L110:
+ 1870              		.align	2
+ 1871              	.L109:
+ 1872 00fc 00000000 		.word	c_chFont3216
+ 1873              		.cfi_endproc
+ 1874              	.LFE78:
+ 1875              		.size	ssd1331_draw_3216char, .-ssd1331_draw_3216char
+ 1876              		.section	.text._pow,"ax",%progbits
+ 1877              		.align	2
+ 1878              		.code	16
+ 1879              		.thumb_func
+ 1880              		.type	_pow, %function
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 41
+
+
+ 1881              	_pow:
+ 1882              	.LFB79:
+ 365:oled_ssd1331.c **** 
+ 366:oled_ssd1331.c **** static uint32_t _pow(uint8_t m, uint8_t n)
+ 367:oled_ssd1331.c **** {
+ 1883              		.loc 1 367 0
+ 1884              		.cfi_startproc
+ 1885              		@ args = 0, pretend = 0, frame = 16
+ 1886              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1887 0000 80B5     		push	{r7, lr}
+ 1888              		.cfi_def_cfa_offset 8
+ 1889              		.cfi_offset 7, -8
+ 1890              		.cfi_offset 14, -4
+ 1891 0002 84B0     		sub	sp, sp, #16
+ 1892              		.cfi_def_cfa_offset 24
+ 1893 0004 00AF     		add	r7, sp, #0
+ 1894              		.cfi_def_cfa_register 7
+ 1895 0006 0200     		movs	r2, r0
+ 1896 0008 FB1D     		adds	r3, r7, #7
+ 1897 000a 1A70     		strb	r2, [r3]
+ 1898 000c BB1D     		adds	r3, r7, #6
+ 1899 000e 0A1C     		adds	r2, r1, #0
+ 1900 0010 1A70     		strb	r2, [r3]
+ 368:oled_ssd1331.c **** 	uint32_t result = 1;
+ 1901              		.loc 1 368 0
+ 1902 0012 0123     		movs	r3, #1
+ 1903 0014 FB60     		str	r3, [r7, #12]
+ 369:oled_ssd1331.c **** 	
+ 370:oled_ssd1331.c **** 	while(n --) result *= m;    
+ 1904              		.loc 1 370 0
+ 1905 0016 04E0     		b	.L112
+ 1906              	.L113:
+ 1907              		.loc 1 370 0 is_stmt 0 discriminator 2
+ 1908 0018 FB1D     		adds	r3, r7, #7
+ 1909 001a 1A78     		ldrb	r2, [r3]
+ 1910 001c FB68     		ldr	r3, [r7, #12]
+ 1911 001e 5343     		muls	r3, r2
+ 1912 0020 FB60     		str	r3, [r7, #12]
+ 1913              	.L112:
+ 1914              		.loc 1 370 0 discriminator 1
+ 1915 0022 BB1D     		adds	r3, r7, #6
+ 1916 0024 1B78     		ldrb	r3, [r3]
+ 1917 0026 BA1D     		adds	r2, r7, #6
+ 1918 0028 591E     		subs	r1, r3, #1
+ 1919 002a 1170     		strb	r1, [r2]
+ 1920 002c 002B     		cmp	r3, #0
+ 1921 002e F3D1     		bne	.L113
+ 371:oled_ssd1331.c **** 	return result;
+ 1922              		.loc 1 371 0 is_stmt 1
+ 1923 0030 FB68     		ldr	r3, [r7, #12]
+ 372:oled_ssd1331.c **** }
+ 1924              		.loc 1 372 0
+ 1925 0032 1800     		movs	r0, r3
+ 1926 0034 BD46     		mov	sp, r7
+ 1927 0036 04B0     		add	sp, sp, #16
+ 1928              		@ sp needed
+ 1929 0038 80BD     		pop	{r7, pc}
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 42
+
+
+ 1930              		.cfi_endproc
+ 1931              	.LFE79:
+ 1932              		.size	_pow, .-_pow
+ 1933              		.global	__aeabi_uidiv
+ 1934              		.global	__aeabi_uidivmod
+ 1935 003a C046     		.section	.text.ssd1331_display_num,"ax",%progbits
+ 1936              		.align	2
+ 1937              		.global	ssd1331_display_num
+ 1938              		.code	16
+ 1939              		.thumb_func
+ 1940              		.type	ssd1331_display_num, %function
+ 1941              	ssd1331_display_num:
+ 1942              	.LFB80:
+ 373:oled_ssd1331.c **** 
+ 374:oled_ssd1331.c **** 
+ 375:oled_ssd1331.c **** void ssd1331_display_num(uint8_t chXpos, uint8_t chYpos, uint32_t chNum, uint8_t chLen, uint8_t chS
+ 376:oled_ssd1331.c **** {         	
+ 1943              		.loc 1 376 0
+ 1944              		.cfi_startproc
+ 1945              		@ args = 8, pretend = 0, frame = 16
+ 1946              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1947 0000 90B5     		push	{r4, r7, lr}
+ 1948              		.cfi_def_cfa_offset 12
+ 1949              		.cfi_offset 4, -12
+ 1950              		.cfi_offset 7, -8
+ 1951              		.cfi_offset 14, -4
+ 1952 0002 87B0     		sub	sp, sp, #28
+ 1953              		.cfi_def_cfa_offset 40
+ 1954 0004 02AF     		add	r7, sp, #8
+ 1955              		.cfi_def_cfa 7, 32
+ 1956 0006 0400     		movs	r4, r0
+ 1957 0008 0800     		movs	r0, r1
+ 1958 000a 3A60     		str	r2, [r7]
+ 1959 000c 1900     		movs	r1, r3
+ 1960 000e FB1D     		adds	r3, r7, #7
+ 1961 0010 221C     		adds	r2, r4, #0
+ 1962 0012 1A70     		strb	r2, [r3]
+ 1963 0014 BB1D     		adds	r3, r7, #6
+ 1964 0016 021C     		adds	r2, r0, #0
+ 1965 0018 1A70     		strb	r2, [r3]
+ 1966 001a 7B1D     		adds	r3, r7, #5
+ 1967 001c 0A1C     		adds	r2, r1, #0
+ 1968 001e 1A70     		strb	r2, [r3]
+ 377:oled_ssd1331.c **** 	uint8_t i;
+ 378:oled_ssd1331.c **** 	uint8_t chTemp, chShow = 0;
+ 1969              		.loc 1 378 0
+ 1970 0020 0E23     		movs	r3, #14
+ 1971 0022 FB18     		adds	r3, r7, r3
+ 1972 0024 0022     		movs	r2, #0
+ 1973 0026 1A70     		strb	r2, [r3]
+ 379:oled_ssd1331.c **** 
+ 380:oled_ssd1331.c **** 	if (chXpos >= OLED_WIDTH || chYpos >= OLED_HEIGHT) {
+ 1974              		.loc 1 380 0
+ 1975 0028 FB1D     		adds	r3, r7, #7
+ 1976 002a 1B78     		ldrb	r3, [r3]
+ 1977 002c 5F2B     		cmp	r3, #95
+ 1978 002e 00D9     		bls	.LCB1797
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 43
+
+
+ 1979 0030 85E0     		b	.L124	@long jump
+ 1980              	.LCB1797:
+ 1981              		.loc 1 380 0 is_stmt 0 discriminator 1
+ 1982 0032 BB1D     		adds	r3, r7, #6
+ 1983 0034 1B78     		ldrb	r3, [r3]
+ 1984 0036 3F2B     		cmp	r3, #63
+ 1985 0038 00D9     		bls	.LCB1801
+ 1986 003a 80E0     		b	.L124	@long jump
+ 1987              	.LCB1801:
+ 381:oled_ssd1331.c **** 		return;
+ 382:oled_ssd1331.c **** 	}
+ 383:oled_ssd1331.c **** 	
+ 384:oled_ssd1331.c **** 	for(i = 0; i < chLen; i ++) {
+ 1988              		.loc 1 384 0 is_stmt 1
+ 1989 003c 0F23     		movs	r3, #15
+ 1990 003e FB18     		adds	r3, r7, r3
+ 1991 0040 0022     		movs	r2, #0
+ 1992 0042 1A70     		strb	r2, [r3]
+ 1993 0044 73E0     		b	.L119
+ 1994              	.L123:
+ 385:oled_ssd1331.c **** 		chTemp = (chNum / _pow(10, chLen - i - 1)) % 10;
+ 1995              		.loc 1 385 0
+ 1996 0046 7A1D     		adds	r2, r7, #5
+ 1997 0048 0F23     		movs	r3, #15
+ 1998 004a FB18     		adds	r3, r7, r3
+ 1999 004c 1278     		ldrb	r2, [r2]
+ 2000 004e 1B78     		ldrb	r3, [r3]
+ 2001 0050 D31A     		subs	r3, r2, r3
+ 2002 0052 DBB2     		uxtb	r3, r3
+ 2003 0054 013B     		subs	r3, r3, #1
+ 2004 0056 DBB2     		uxtb	r3, r3
+ 2005 0058 1900     		movs	r1, r3
+ 2006 005a 0A20     		movs	r0, #10
+ 2007 005c FFF7FEFF 		bl	_pow
+ 2008 0060 0300     		movs	r3, r0
+ 2009 0062 1900     		movs	r1, r3
+ 2010 0064 3868     		ldr	r0, [r7]
+ 2011 0066 FFF7FEFF 		bl	__aeabi_uidiv
+ 2012 006a 0300     		movs	r3, r0
+ 2013 006c 0A21     		movs	r1, #10
+ 2014 006e 1800     		movs	r0, r3
+ 2015 0070 FFF7FEFF 		bl	__aeabi_uidivmod
+ 2016 0074 0B00     		movs	r3, r1
+ 2017 0076 1A00     		movs	r2, r3
+ 2018 0078 0D23     		movs	r3, #13
+ 2019 007a FB18     		adds	r3, r7, r3
+ 2020 007c 1A70     		strb	r2, [r3]
+ 386:oled_ssd1331.c **** 		if(chShow == 0 && i < (chLen - 1)) {
+ 2021              		.loc 1 386 0
+ 2022 007e 0E23     		movs	r3, #14
+ 2023 0080 FB18     		adds	r3, r7, r3
+ 2024 0082 1B78     		ldrb	r3, [r3]
+ 2025 0084 002B     		cmp	r3, #0
+ 2026 0086 2CD1     		bne	.L120
+ 2027              		.loc 1 386 0 is_stmt 0 discriminator 1
+ 2028 0088 0F23     		movs	r3, #15
+ 2029 008a FB18     		adds	r3, r7, r3
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 44
+
+
+ 2030 008c 1A78     		ldrb	r2, [r3]
+ 2031 008e 7B1D     		adds	r3, r7, #5
+ 2032 0090 1B78     		ldrb	r3, [r3]
+ 2033 0092 013B     		subs	r3, r3, #1
+ 2034 0094 9A42     		cmp	r2, r3
+ 2035 0096 24DA     		bge	.L120
+ 387:oled_ssd1331.c **** 			if(chTemp == 0) {
+ 2036              		.loc 1 387 0 is_stmt 1
+ 2037 0098 0D23     		movs	r3, #13
+ 2038 009a FB18     		adds	r3, r7, r3
+ 2039 009c 1B78     		ldrb	r3, [r3]
+ 2040 009e 002B     		cmp	r3, #0
+ 2041 00a0 1BD1     		bne	.L121
+ 388:oled_ssd1331.c **** 				ssd1331_display_char(chXpos + (chSize / 2) * i, chYpos, ' ', chSize, hwColor);
+ 2042              		.loc 1 388 0
+ 2043 00a2 2023     		movs	r3, #32
+ 2044 00a4 FB18     		adds	r3, r7, r3
+ 2045 00a6 1B78     		ldrb	r3, [r3]
+ 2046 00a8 5B08     		lsrs	r3, r3, #1
+ 2047 00aa DBB2     		uxtb	r3, r3
+ 2048 00ac 0F22     		movs	r2, #15
+ 2049 00ae BA18     		adds	r2, r7, r2
+ 2050 00b0 1278     		ldrb	r2, [r2]
+ 2051 00b2 5343     		muls	r3, r2
+ 2052 00b4 DAB2     		uxtb	r2, r3
+ 2053 00b6 FB1D     		adds	r3, r7, #7
+ 2054 00b8 1B78     		ldrb	r3, [r3]
+ 2055 00ba D318     		adds	r3, r2, r3
+ 2056 00bc D8B2     		uxtb	r0, r3
+ 2057 00be 2023     		movs	r3, #32
+ 2058 00c0 FB18     		adds	r3, r7, r3
+ 2059 00c2 1A78     		ldrb	r2, [r3]
+ 2060 00c4 BB1D     		adds	r3, r7, #6
+ 2061 00c6 1978     		ldrb	r1, [r3]
+ 2062 00c8 2423     		movs	r3, #36
+ 2063 00ca FB18     		adds	r3, r7, r3
+ 2064 00cc 1B88     		ldrh	r3, [r3]
+ 2065 00ce 0093     		str	r3, [sp]
+ 2066 00d0 1300     		movs	r3, r2
+ 2067 00d2 2022     		movs	r2, #32
+ 2068 00d4 FFF7FEFF 		bl	ssd1331_display_char
+ 389:oled_ssd1331.c **** 				continue;
+ 2069              		.loc 1 389 0
+ 2070 00d8 22E0     		b	.L122
+ 2071              	.L121:
+ 390:oled_ssd1331.c **** 			} else {
+ 391:oled_ssd1331.c **** 				chShow = 1;
+ 2072              		.loc 1 391 0
+ 2073 00da 0E23     		movs	r3, #14
+ 2074 00dc FB18     		adds	r3, r7, r3
+ 2075 00de 0122     		movs	r2, #1
+ 2076 00e0 1A70     		strb	r2, [r3]
+ 2077              	.L120:
+ 392:oled_ssd1331.c **** 			}	 
+ 393:oled_ssd1331.c **** 		}
+ 394:oled_ssd1331.c **** 	 	ssd1331_display_char(chXpos + (chSize / 2) * i, chYpos, chTemp + '0', chSize, hwColor); 
+ 2078              		.loc 1 394 0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 45
+
+
+ 2079 00e2 2023     		movs	r3, #32
+ 2080 00e4 FB18     		adds	r3, r7, r3
+ 2081 00e6 1B78     		ldrb	r3, [r3]
+ 2082 00e8 5B08     		lsrs	r3, r3, #1
+ 2083 00ea DBB2     		uxtb	r3, r3
+ 2084 00ec 0F22     		movs	r2, #15
+ 2085 00ee BA18     		adds	r2, r7, r2
+ 2086 00f0 1278     		ldrb	r2, [r2]
+ 2087 00f2 5343     		muls	r3, r2
+ 2088 00f4 DAB2     		uxtb	r2, r3
+ 2089 00f6 FB1D     		adds	r3, r7, #7
+ 2090 00f8 1B78     		ldrb	r3, [r3]
+ 2091 00fa D318     		adds	r3, r2, r3
+ 2092 00fc D8B2     		uxtb	r0, r3
+ 2093 00fe 0D23     		movs	r3, #13
+ 2094 0100 FB18     		adds	r3, r7, r3
+ 2095 0102 1B78     		ldrb	r3, [r3]
+ 2096 0104 3033     		adds	r3, r3, #48
+ 2097 0106 DAB2     		uxtb	r2, r3
+ 2098 0108 2023     		movs	r3, #32
+ 2099 010a FB18     		adds	r3, r7, r3
+ 2100 010c 1C78     		ldrb	r4, [r3]
+ 2101 010e BB1D     		adds	r3, r7, #6
+ 2102 0110 1978     		ldrb	r1, [r3]
+ 2103 0112 2423     		movs	r3, #36
+ 2104 0114 FB18     		adds	r3, r7, r3
+ 2105 0116 1B88     		ldrh	r3, [r3]
+ 2106 0118 0093     		str	r3, [sp]
+ 2107 011a 2300     		movs	r3, r4
+ 2108 011c FFF7FEFF 		bl	ssd1331_display_char
+ 2109              	.L122:
+ 384:oled_ssd1331.c **** 		chTemp = (chNum / _pow(10, chLen - i - 1)) % 10;
+ 2110              		.loc 1 384 0 discriminator 2
+ 2111 0120 0F23     		movs	r3, #15
+ 2112 0122 FB18     		adds	r3, r7, r3
+ 2113 0124 1A78     		ldrb	r2, [r3]
+ 2114 0126 0F23     		movs	r3, #15
+ 2115 0128 FB18     		adds	r3, r7, r3
+ 2116 012a 0132     		adds	r2, r2, #1
+ 2117 012c 1A70     		strb	r2, [r3]
+ 2118              	.L119:
+ 384:oled_ssd1331.c **** 		chTemp = (chNum / _pow(10, chLen - i - 1)) % 10;
+ 2119              		.loc 1 384 0 is_stmt 0 discriminator 1
+ 2120 012e 0F23     		movs	r3, #15
+ 2121 0130 FA18     		adds	r2, r7, r3
+ 2122 0132 7B1D     		adds	r3, r7, #5
+ 2123 0134 1278     		ldrb	r2, [r2]
+ 2124 0136 1B78     		ldrb	r3, [r3]
+ 2125 0138 9A42     		cmp	r2, r3
+ 2126 013a 84D3     		bcc	.L123
+ 2127 013c 00E0     		b	.L115
+ 2128              	.L124:
+ 381:oled_ssd1331.c **** 	}
+ 2129              		.loc 1 381 0 is_stmt 1
+ 2130 013e C046     		nop
+ 2131              	.L115:
+ 395:oled_ssd1331.c **** 	}
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 46
+
+
+ 396:oled_ssd1331.c **** } 
+ 2132              		.loc 1 396 0
+ 2133 0140 BD46     		mov	sp, r7
+ 2134 0142 05B0     		add	sp, sp, #20
+ 2135              		@ sp needed
+ 2136 0144 90BD     		pop	{r4, r7, pc}
+ 2137              		.cfi_endproc
+ 2138              	.LFE80:
+ 2139              		.size	ssd1331_display_num, .-ssd1331_display_num
+ 2140 0146 C046     		.section	.text.ssd1331_draw_bitmap,"ax",%progbits
+ 2141              		.align	2
+ 2142              		.global	ssd1331_draw_bitmap
+ 2143              		.code	16
+ 2144              		.thumb_func
+ 2145              		.type	ssd1331_draw_bitmap, %function
+ 2146              	ssd1331_draw_bitmap:
+ 2147              	.LFB81:
+ 397:oled_ssd1331.c **** 
+ 398:oled_ssd1331.c **** /**
+ 399:oled_ssd1331.c ****   * @brief  Displays a string on the screen
+ 400:oled_ssd1331.c ****   *         
+ 401:oled_ssd1331.c ****   * @param  chXpos: Specifies the X position
+ 402:oled_ssd1331.c ****   * @param  chYpos: Specifies the Y position
+ 403:oled_ssd1331.c ****   * @param  pchBmp: Pointer to a image to display on the screen 
+ 404:oled_ssd1331.c ****   * @param  chWidth: Specifies the width of the image
+ 405:oled_ssd1331.c ****   * @param  chHeight: Specifies the height of the image
+ 406:oled_ssd1331.c ****   * @param  hwColor: Specifies the color of the image
+ 407:oled_ssd1331.c ****   *         
+ 408:oled_ssd1331.c ****   * @retval  None
+ 409:oled_ssd1331.c **** **/
+ 410:oled_ssd1331.c **** void ssd1331_draw_bitmap(uint8_t chXpos, uint8_t chYpos, const uint8_t *pchBmp, uint8_t chWidth, ui
+ 411:oled_ssd1331.c **** {
+ 2148              		.loc 1 411 0
+ 2149              		.cfi_startproc
+ 2150              		@ args = 8, pretend = 0, frame = 16
+ 2151              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2152 0000 90B5     		push	{r4, r7, lr}
+ 2153              		.cfi_def_cfa_offset 12
+ 2154              		.cfi_offset 4, -12
+ 2155              		.cfi_offset 7, -8
+ 2156              		.cfi_offset 14, -4
+ 2157 0002 85B0     		sub	sp, sp, #20
+ 2158              		.cfi_def_cfa_offset 32
+ 2159 0004 00AF     		add	r7, sp, #0
+ 2160              		.cfi_def_cfa_register 7
+ 2161 0006 0400     		movs	r4, r0
+ 2162 0008 0800     		movs	r0, r1
+ 2163 000a 3A60     		str	r2, [r7]
+ 2164 000c 1900     		movs	r1, r3
+ 2165 000e FB1D     		adds	r3, r7, #7
+ 2166 0010 221C     		adds	r2, r4, #0
+ 2167 0012 1A70     		strb	r2, [r3]
+ 2168 0014 BB1D     		adds	r3, r7, #6
+ 2169 0016 021C     		adds	r2, r0, #0
+ 2170 0018 1A70     		strb	r2, [r3]
+ 2171 001a 7B1D     		adds	r3, r7, #5
+ 2172 001c 0A1C     		adds	r2, r1, #0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 47
+
+
+ 2173 001e 1A70     		strb	r2, [r3]
+ 412:oled_ssd1331.c **** 	uint16_t i, j, byteWidth = (chWidth + 7) / 8;
+ 2174              		.loc 1 412 0
+ 2175 0020 7B1D     		adds	r3, r7, #5
+ 2176 0022 1B78     		ldrb	r3, [r3]
+ 2177 0024 0733     		adds	r3, r3, #7
+ 2178 0026 002B     		cmp	r3, #0
+ 2179 0028 00DA     		bge	.L126
+ 2180 002a 0733     		adds	r3, r3, #7
+ 2181              	.L126:
+ 2182 002c DB10     		asrs	r3, r3, #3
+ 2183 002e 1A00     		movs	r2, r3
+ 2184 0030 0A23     		movs	r3, #10
+ 2185 0032 FB18     		adds	r3, r7, r3
+ 2186 0034 1A80     		strh	r2, [r3]
+ 413:oled_ssd1331.c **** 	
+ 414:oled_ssd1331.c ****     for(j = 0; j < chHeight; j ++){
+ 2187              		.loc 1 414 0
+ 2188 0036 0C23     		movs	r3, #12
+ 2189 0038 FB18     		adds	r3, r7, r3
+ 2190 003a 0022     		movs	r2, #0
+ 2191 003c 1A80     		strh	r2, [r3]
+ 2192 003e 4CE0     		b	.L127
+ 2193              	.L131:
+ 415:oled_ssd1331.c ****         for(i = 0; i < chWidth; i ++ ) {
+ 2194              		.loc 1 415 0
+ 2195 0040 0E23     		movs	r3, #14
+ 2196 0042 FB18     		adds	r3, r7, r3
+ 2197 0044 0022     		movs	r2, #0
+ 2198 0046 1A80     		strh	r2, [r3]
+ 2199 0048 38E0     		b	.L128
+ 2200              	.L130:
+ 416:oled_ssd1331.c ****             if(*(pchBmp + j * byteWidth + i / 8) & (128 >> (i & 7))) {
+ 2201              		.loc 1 416 0
+ 2202 004a 0C23     		movs	r3, #12
+ 2203 004c FB18     		adds	r3, r7, r3
+ 2204 004e 1B88     		ldrh	r3, [r3]
+ 2205 0050 0A22     		movs	r2, #10
+ 2206 0052 BA18     		adds	r2, r7, r2
+ 2207 0054 1288     		ldrh	r2, [r2]
+ 2208 0056 5343     		muls	r3, r2
+ 2209 0058 1A00     		movs	r2, r3
+ 2210 005a 0E23     		movs	r3, #14
+ 2211 005c FB18     		adds	r3, r7, r3
+ 2212 005e 1B88     		ldrh	r3, [r3]
+ 2213 0060 DB08     		lsrs	r3, r3, #3
+ 2214 0062 9BB2     		uxth	r3, r3
+ 2215 0064 D318     		adds	r3, r2, r3
+ 2216 0066 3A68     		ldr	r2, [r7]
+ 2217 0068 D318     		adds	r3, r2, r3
+ 2218 006a 1B78     		ldrb	r3, [r3]
+ 2219 006c 1900     		movs	r1, r3
+ 2220 006e 0E23     		movs	r3, #14
+ 2221 0070 FB18     		adds	r3, r7, r3
+ 2222 0072 1B88     		ldrh	r3, [r3]
+ 2223 0074 0722     		movs	r2, #7
+ 2224 0076 1340     		ands	r3, r2
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 48
+
+
+ 2225 0078 8022     		movs	r2, #128
+ 2226 007a 1A41     		asrs	r2, r2, r3
+ 2227 007c 1300     		movs	r3, r2
+ 2228 007e 0B40     		ands	r3, r1
+ 2229 0080 15D0     		beq	.L129
+ 417:oled_ssd1331.c ****                 ssd1331_draw_point(chXpos + i, chYpos + j, hwColor);
+ 2230              		.loc 1 417 0
+ 2231 0082 0E23     		movs	r3, #14
+ 2232 0084 FB18     		adds	r3, r7, r3
+ 2233 0086 1B88     		ldrh	r3, [r3]
+ 2234 0088 DAB2     		uxtb	r2, r3
+ 2235 008a FB1D     		adds	r3, r7, #7
+ 2236 008c 1B78     		ldrb	r3, [r3]
+ 2237 008e D318     		adds	r3, r2, r3
+ 2238 0090 D8B2     		uxtb	r0, r3
+ 2239 0092 0C23     		movs	r3, #12
+ 2240 0094 FB18     		adds	r3, r7, r3
+ 2241 0096 1B88     		ldrh	r3, [r3]
+ 2242 0098 DAB2     		uxtb	r2, r3
+ 2243 009a BB1D     		adds	r3, r7, #6
+ 2244 009c 1B78     		ldrb	r3, [r3]
+ 2245 009e D318     		adds	r3, r2, r3
+ 2246 00a0 D9B2     		uxtb	r1, r3
+ 2247 00a2 2423     		movs	r3, #36
+ 2248 00a4 FB18     		adds	r3, r7, r3
+ 2249 00a6 1B88     		ldrh	r3, [r3]
+ 2250 00a8 1A00     		movs	r2, r3
+ 2251 00aa FFF7FEFF 		bl	ssd1331_draw_point
+ 2252              	.L129:
+ 415:oled_ssd1331.c ****         for(i = 0; i < chWidth; i ++ ) {
+ 2253              		.loc 1 415 0 discriminator 2
+ 2254 00ae 0E23     		movs	r3, #14
+ 2255 00b0 FB18     		adds	r3, r7, r3
+ 2256 00b2 1A88     		ldrh	r2, [r3]
+ 2257 00b4 0E23     		movs	r3, #14
+ 2258 00b6 FB18     		adds	r3, r7, r3
+ 2259 00b8 0132     		adds	r2, r2, #1
+ 2260 00ba 1A80     		strh	r2, [r3]
+ 2261              	.L128:
+ 415:oled_ssd1331.c ****         for(i = 0; i < chWidth; i ++ ) {
+ 2262              		.loc 1 415 0 is_stmt 0 discriminator 1
+ 2263 00bc 7B1D     		adds	r3, r7, #5
+ 2264 00be 1B78     		ldrb	r3, [r3]
+ 2265 00c0 9BB2     		uxth	r3, r3
+ 2266 00c2 0E22     		movs	r2, #14
+ 2267 00c4 BA18     		adds	r2, r7, r2
+ 2268 00c6 1288     		ldrh	r2, [r2]
+ 2269 00c8 9A42     		cmp	r2, r3
+ 2270 00ca BED3     		bcc	.L130
+ 414:oled_ssd1331.c ****         for(i = 0; i < chWidth; i ++ ) {
+ 2271              		.loc 1 414 0 is_stmt 1 discriminator 2
+ 2272 00cc 0C23     		movs	r3, #12
+ 2273 00ce FB18     		adds	r3, r7, r3
+ 2274 00d0 1A88     		ldrh	r2, [r3]
+ 2275 00d2 0C23     		movs	r3, #12
+ 2276 00d4 FB18     		adds	r3, r7, r3
+ 2277 00d6 0132     		adds	r2, r2, #1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 49
+
+
+ 2278 00d8 1A80     		strh	r2, [r3]
+ 2279              	.L127:
+ 414:oled_ssd1331.c ****         for(i = 0; i < chWidth; i ++ ) {
+ 2280              		.loc 1 414 0 is_stmt 0 discriminator 1
+ 2281 00da 2023     		movs	r3, #32
+ 2282 00dc FB18     		adds	r3, r7, r3
+ 2283 00de 1B78     		ldrb	r3, [r3]
+ 2284 00e0 9BB2     		uxth	r3, r3
+ 2285 00e2 0C22     		movs	r2, #12
+ 2286 00e4 BA18     		adds	r2, r7, r2
+ 2287 00e6 1288     		ldrh	r2, [r2]
+ 2288 00e8 9A42     		cmp	r2, r3
+ 2289 00ea A9D3     		bcc	.L131
+ 418:oled_ssd1331.c ****             }
+ 419:oled_ssd1331.c ****         }
+ 420:oled_ssd1331.c ****     }
+ 421:oled_ssd1331.c **** }
+ 2290              		.loc 1 421 0 is_stmt 1
+ 2291 00ec C046     		nop
+ 2292 00ee BD46     		mov	sp, r7
+ 2293 00f0 05B0     		add	sp, sp, #20
+ 2294              		@ sp needed
+ 2295 00f2 90BD     		pop	{r4, r7, pc}
+ 2296              		.cfi_endproc
+ 2297              	.LFE81:
+ 2298              		.size	ssd1331_draw_bitmap, .-ssd1331_draw_bitmap
+ 2299              		.section	.text.ssd1331_init,"ax",%progbits
+ 2300              		.align	2
+ 2301              		.global	ssd1331_init
+ 2302              		.code	16
+ 2303              		.thumb_func
+ 2304              		.type	ssd1331_init, %function
+ 2305              	ssd1331_init:
+ 2306              	.LFB82:
+ 422:oled_ssd1331.c **** 
+ 423:oled_ssd1331.c **** void ssd1331_init(void)
+ 424:oled_ssd1331.c **** {
+ 2307              		.loc 1 424 0
+ 2308              		.cfi_startproc
+ 2309              		@ args = 0, pretend = 0, frame = 0
+ 2310              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2311 0000 80B5     		push	{r7, lr}
+ 2312              		.cfi_def_cfa_offset 8
+ 2313              		.cfi_offset 7, -8
+ 2314              		.cfi_offset 14, -4
+ 2315 0002 00AF     		add	r7, sp, #0
+ 2316              		.cfi_def_cfa_register 7
+ 425:oled_ssd1331.c **** 
+ 426:oled_ssd1331.c ****     OLED_Reset_Write(1);
+ 2317              		.loc 1 426 0
+ 2318 0004 0120     		movs	r0, #1
+ 2319 0006 FFF7FEFF 		bl	OLED_Reset_Write
+ 427:oled_ssd1331.c ****     CyDelay(10);
+ 2320              		.loc 1 427 0
+ 2321 000a 0A20     		movs	r0, #10
+ 2322 000c FFF7FEFF 		bl	CyDelay
+ 428:oled_ssd1331.c ****     OLED_Reset_Write(0);
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 50
+
+
+ 2323              		.loc 1 428 0
+ 2324 0010 0020     		movs	r0, #0
+ 2325 0012 FFF7FEFF 		bl	OLED_Reset_Write
+ 429:oled_ssd1331.c ****     CyDelay(10);
+ 2326              		.loc 1 429 0
+ 2327 0016 0A20     		movs	r0, #10
+ 2328 0018 FFF7FEFF 		bl	CyDelay
+ 430:oled_ssd1331.c ****     OLED_Reset_Write(1);
+ 2329              		.loc 1 430 0
+ 2330 001c 0120     		movs	r0, #1
+ 2331 001e FFF7FEFF 		bl	OLED_Reset_Write
+ 431:oled_ssd1331.c **** 
+ 432:oled_ssd1331.c ****     
+ 433:oled_ssd1331.c **** 	
+ 434:oled_ssd1331.c **** 	ssd1331_write_byte(DISPLAY_OFF, SSD1331_CMD);          //Display Off
+ 2332              		.loc 1 434 0
+ 2333 0022 0021     		movs	r1, #0
+ 2334 0024 AE20     		movs	r0, #174
+ 2335 0026 FFF7FEFF 		bl	ssd1331_write_byte
+ 435:oled_ssd1331.c ****     ssd1331_write_byte(SET_REMAP, SSD1331_CMD);          
+ 2336              		.loc 1 435 0
+ 2337 002a 0021     		movs	r1, #0
+ 2338 002c A020     		movs	r0, #160
+ 2339 002e FFF7FEFF 		bl	ssd1331_write_byte
+ 436:oled_ssd1331.c ****     ssd1331_write_byte(0x72, SSD1331_CMD);             
+ 2340              		.loc 1 436 0
+ 2341 0032 0021     		movs	r1, #0
+ 2342 0034 7220     		movs	r0, #114
+ 2343 0036 FFF7FEFF 		bl	ssd1331_write_byte
+ 437:oled_ssd1331.c ****     ssd1331_write_byte(SET_DISPLAY_START_LINE, SSD1331_CMD);//Set display Start Line
+ 2344              		.loc 1 437 0
+ 2345 003a 0021     		movs	r1, #0
+ 2346 003c A120     		movs	r0, #161
+ 2347 003e FFF7FEFF 		bl	ssd1331_write_byte
+ 438:oled_ssd1331.c ****     ssd1331_write_byte(0x0, SSD1331_CMD);
+ 2348              		.loc 1 438 0
+ 2349 0042 0021     		movs	r1, #0
+ 2350 0044 0020     		movs	r0, #0
+ 2351 0046 FFF7FEFF 		bl	ssd1331_write_byte
+ 439:oled_ssd1331.c ****     ssd1331_write_byte(SET_DISPLAY_OFFSET, SSD1331_CMD);   //Set display offset
+ 2352              		.loc 1 439 0
+ 2353 004a 0021     		movs	r1, #0
+ 2354 004c A220     		movs	r0, #162
+ 2355 004e FFF7FEFF 		bl	ssd1331_write_byte
+ 440:oled_ssd1331.c ****     ssd1331_write_byte(0x0, SSD1331_CMD);
+ 2356              		.loc 1 440 0
+ 2357 0052 0021     		movs	r1, #0
+ 2358 0054 0020     		movs	r0, #0
+ 2359 0056 FFF7FEFF 		bl	ssd1331_write_byte
+ 441:oled_ssd1331.c ****     ssd1331_write_byte(NORMAL_DISPLAY, SSD1331_CMD);       //Set display mode
+ 2360              		.loc 1 441 0
+ 2361 005a 0021     		movs	r1, #0
+ 2362 005c A420     		movs	r0, #164
+ 2363 005e FFF7FEFF 		bl	ssd1331_write_byte
+ 442:oled_ssd1331.c ****     //ssd1331_write_byte(ENTIRE_DISPLAY_ON, SSD1331_CMD);
+ 443:oled_ssd1331.c ****     ssd1331_write_byte(SET_MULTIPLEX_RATIO, SSD1331_CMD);  //Set multiplex ratio
+ 2364              		.loc 1 443 0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 51
+
+
+ 2365 0062 0021     		movs	r1, #0
+ 2366 0064 A820     		movs	r0, #168
+ 2367 0066 FFF7FEFF 		bl	ssd1331_write_byte
+ 444:oled_ssd1331.c ****     ssd1331_write_byte(0x3F, SSD1331_CMD);     
+ 2368              		.loc 1 444 0
+ 2369 006a 0021     		movs	r1, #0
+ 2370 006c 3F20     		movs	r0, #63
+ 2371 006e FFF7FEFF 		bl	ssd1331_write_byte
+ 445:oled_ssd1331.c ****     ssd1331_write_byte(SET_MASTER_CONFIGURE, SSD1331_CMD); //Set master configuration
+ 2372              		.loc 1 445 0
+ 2373 0072 0021     		movs	r1, #0
+ 2374 0074 AD20     		movs	r0, #173
+ 2375 0076 FFF7FEFF 		bl	ssd1331_write_byte
+ 446:oled_ssd1331.c ****     ssd1331_write_byte(0x8E, SSD1331_CMD);
+ 2376              		.loc 1 446 0
+ 2377 007a 0021     		movs	r1, #0
+ 2378 007c 8E20     		movs	r0, #142
+ 2379 007e FFF7FEFF 		bl	ssd1331_write_byte
+ 447:oled_ssd1331.c ****     ssd1331_write_byte(POWER_SAVE_MODE, SSD1331_CMD);      //Set Power Save Mode
+ 2380              		.loc 1 447 0
+ 2381 0082 0021     		movs	r1, #0
+ 2382 0084 B020     		movs	r0, #176
+ 2383 0086 FFF7FEFF 		bl	ssd1331_write_byte
+ 448:oled_ssd1331.c ****     ssd1331_write_byte(0x00, SSD1331_CMD);                     //0x00
+ 2384              		.loc 1 448 0
+ 2385 008a 0021     		movs	r1, #0
+ 2386 008c 0020     		movs	r0, #0
+ 2387 008e FFF7FEFF 		bl	ssd1331_write_byte
+ 449:oled_ssd1331.c ****     ssd1331_write_byte(PHASE_PERIOD_ADJUSTMENT, SSD1331_CMD);//phase 1 and 2 period adjustment
+ 2388              		.loc 1 449 0
+ 2389 0092 0021     		movs	r1, #0
+ 2390 0094 B120     		movs	r0, #177
+ 2391 0096 FFF7FEFF 		bl	ssd1331_write_byte
+ 450:oled_ssd1331.c ****     ssd1331_write_byte(0x31, SSD1331_CMD);                     //0x31
+ 2392              		.loc 1 450 0
+ 2393 009a 0021     		movs	r1, #0
+ 2394 009c 3120     		movs	r0, #49
+ 2395 009e FFF7FEFF 		bl	ssd1331_write_byte
+ 451:oled_ssd1331.c ****     ssd1331_write_byte(DISPLAY_CLOCK_DIV, SSD1331_CMD);    //display clock divider/oscillator frequ
+ 2396              		.loc 1 451 0
+ 2397 00a2 0021     		movs	r1, #0
+ 2398 00a4 B320     		movs	r0, #179
+ 2399 00a6 FFF7FEFF 		bl	ssd1331_write_byte
+ 452:oled_ssd1331.c ****     ssd1331_write_byte(0xF0, SSD1331_CMD);
+ 2400              		.loc 1 452 0
+ 2401 00aa 0021     		movs	r1, #0
+ 2402 00ac F020     		movs	r0, #240
+ 2403 00ae FFF7FEFF 		bl	ssd1331_write_byte
+ 453:oled_ssd1331.c ****     ssd1331_write_byte(SET_PRECHARGE_SPEED_B, SSD1331_CMD);//Set Second Pre-change Speed For ColorB
+ 2404              		.loc 1 453 0
+ 2405 00b2 0021     		movs	r1, #0
+ 2406 00b4 8B20     		movs	r0, #139
+ 2407 00b6 FFF7FEFF 		bl	ssd1331_write_byte
+ 454:oled_ssd1331.c ****     ssd1331_write_byte(0x78, SSD1331_CMD);                     //120
+ 2408              		.loc 1 454 0
+ 2409 00ba 0021     		movs	r1, #0
+ 2410 00bc 7820     		movs	r0, #120
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 52
+
+
+ 2411 00be FFF7FEFF 		bl	ssd1331_write_byte
+ 455:oled_ssd1331.c ****     ssd1331_write_byte(SET_PRECHARGE_SPEED_C, SSD1331_CMD);//Set Second Pre-change Speed For ColorC
+ 2412              		.loc 1 455 0
+ 2413 00c2 0021     		movs	r1, #0
+ 2414 00c4 8C20     		movs	r0, #140
+ 2415 00c6 FFF7FEFF 		bl	ssd1331_write_byte
+ 456:oled_ssd1331.c ****     ssd1331_write_byte(0x64, SSD1331_CMD);                     //100
+ 2416              		.loc 1 456 0
+ 2417 00ca 0021     		movs	r1, #0
+ 2418 00cc 6420     		movs	r0, #100
+ 2419 00ce FFF7FEFF 		bl	ssd1331_write_byte
+ 457:oled_ssd1331.c ****     ssd1331_write_byte(SET_PRECHARGE_VOLTAGE, SSD1331_CMD);//Set Pre-Change Level
+ 2420              		.loc 1 457 0
+ 2421 00d2 0021     		movs	r1, #0
+ 2422 00d4 BB20     		movs	r0, #187
+ 2423 00d6 FFF7FEFF 		bl	ssd1331_write_byte
+ 458:oled_ssd1331.c ****     ssd1331_write_byte(0x3A, SSD1331_CMD);
+ 2424              		.loc 1 458 0
+ 2425 00da 0021     		movs	r1, #0
+ 2426 00dc 3A20     		movs	r0, #58
+ 2427 00de FFF7FEFF 		bl	ssd1331_write_byte
+ 459:oled_ssd1331.c ****     ssd1331_write_byte(SET_V_VOLTAGE, SSD1331_CMD);        //Set vcomH
+ 2428              		.loc 1 459 0
+ 2429 00e2 0021     		movs	r1, #0
+ 2430 00e4 BE20     		movs	r0, #190
+ 2431 00e6 FFF7FEFF 		bl	ssd1331_write_byte
+ 460:oled_ssd1331.c ****     ssd1331_write_byte(0x3E, SSD1331_CMD);
+ 2432              		.loc 1 460 0
+ 2433 00ea 0021     		movs	r1, #0
+ 2434 00ec 3E20     		movs	r0, #62
+ 2435 00ee FFF7FEFF 		bl	ssd1331_write_byte
+ 461:oled_ssd1331.c ****     ssd1331_write_byte(MASTER_CURRENT_CONTROL, SSD1331_CMD);//master current control
+ 2436              		.loc 1 461 0
+ 2437 00f2 0021     		movs	r1, #0
+ 2438 00f4 8720     		movs	r0, #135
+ 2439 00f6 FFF7FEFF 		bl	ssd1331_write_byte
+ 462:oled_ssd1331.c ****     ssd1331_write_byte(0x06, SSD1331_CMD);                     //6
+ 2440              		.loc 1 462 0
+ 2441 00fa 0021     		movs	r1, #0
+ 2442 00fc 0620     		movs	r0, #6
+ 2443 00fe FFF7FEFF 		bl	ssd1331_write_byte
+ 463:oled_ssd1331.c ****     
+ 464:oled_ssd1331.c ****     ssd1331_write_byte(SET_CONTRAST_A, SSD1331_CMD);       //Set contrast for color A
+ 2444              		.loc 1 464 0
+ 2445 0102 0021     		movs	r1, #0
+ 2446 0104 8120     		movs	r0, #129
+ 2447 0106 FFF7FEFF 		bl	ssd1331_write_byte
+ 465:oled_ssd1331.c ****     ssd1331_write_byte(0xFF, SSD1331_CMD);                     //145 0x91
+ 2448              		.loc 1 465 0
+ 2449 010a 0021     		movs	r1, #0
+ 2450 010c FF20     		movs	r0, #255
+ 2451 010e FFF7FEFF 		bl	ssd1331_write_byte
+ 466:oled_ssd1331.c ****     ssd1331_write_byte(SET_CONTRAST_B, SSD1331_CMD);       //Set contrast for color B
+ 2452              		.loc 1 466 0
+ 2453 0112 0021     		movs	r1, #0
+ 2454 0114 8220     		movs	r0, #130
+ 2455 0116 FFF7FEFF 		bl	ssd1331_write_byte
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 53
+
+
+ 467:oled_ssd1331.c ****     ssd1331_write_byte(0xFF, SSD1331_CMD);                     //80 0x50
+ 2456              		.loc 1 467 0
+ 2457 011a 0021     		movs	r1, #0
+ 2458 011c FF20     		movs	r0, #255
+ 2459 011e FFF7FEFF 		bl	ssd1331_write_byte
+ 468:oled_ssd1331.c ****     ssd1331_write_byte(SET_CONTRAST_C, SSD1331_CMD);       //Set contrast for color C
+ 2460              		.loc 1 468 0
+ 2461 0122 0021     		movs	r1, #0
+ 2462 0124 8320     		movs	r0, #131
+ 2463 0126 FFF7FEFF 		bl	ssd1331_write_byte
+ 469:oled_ssd1331.c ****     ssd1331_write_byte(0xFF, SSD1331_CMD);                     //125 0x7D              
+ 2464              		.loc 1 469 0
+ 2465 012a 0021     		movs	r1, #0
+ 2466 012c FF20     		movs	r0, #255
+ 2467 012e FFF7FEFF 		bl	ssd1331_write_byte
+ 470:oled_ssd1331.c **** 
+ 471:oled_ssd1331.c ****     ssd1331_write_byte(DEACTIVE_SCROLLING, SSD1331_CMD);   //disable scrolling
+ 2468              		.loc 1 471 0
+ 2469 0132 0021     		movs	r1, #0
+ 2470 0134 2E20     		movs	r0, #46
+ 2471 0136 FFF7FEFF 		bl	ssd1331_write_byte
+ 472:oled_ssd1331.c ****     ssd1331_write_byte(NORMAL_BRIGHTNESS_DISPLAY_ON, SSD1331_CMD);//set display on
+ 2472              		.loc 1 472 0
+ 2473 013a 0021     		movs	r1, #0
+ 2474 013c AF20     		movs	r0, #175
+ 2475 013e FFF7FEFF 		bl	ssd1331_write_byte
+ 473:oled_ssd1331.c **** 
+ 474:oled_ssd1331.c **** }
+ 2476              		.loc 1 474 0
+ 2477 0142 C046     		nop
+ 2478 0144 BD46     		mov	sp, r7
+ 2479              		@ sp needed
+ 2480 0146 80BD     		pop	{r7, pc}
+ 2481              		.cfi_endproc
+ 2482              	.LFE82:
+ 2483              		.size	ssd1331_init, .-ssd1331_init
+ 2484              		.text
+ 2485              	.Letext0:
+ 2486              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 2487              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.1\\psoc creator\\import\\gnu\\arm\\5.4.
+ 2488              		.file 4 "fonts.h"
+ 2489              		.section	.debug_info,"",%progbits
+ 2490              	.Ldebug_info0:
+ 2491 0000 9E080000 		.4byte	0x89e
+ 2492 0004 0400     		.2byte	0x4
+ 2493 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 2494 000a 04       		.byte	0x4
+ 2495 000b 01       		.uleb128 0x1
+ 2496 000c 4D010000 		.4byte	.LASF61
+ 2497 0010 0C       		.byte	0xc
+ 2498 0011 60030000 		.4byte	.LASF62
+ 2499 0015 8B020000 		.4byte	.LASF63
+ 2500 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 2501 001d 00000000 		.4byte	0
+ 2502 0021 00000000 		.4byte	.Ldebug_line0
+ 2503 0025 02       		.uleb128 0x2
+ 2504 0026 01       		.byte	0x1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 54
+
+
+ 2505 0027 06       		.byte	0x6
+ 2506 0028 21020000 		.4byte	.LASF0
+ 2507 002c 03       		.uleb128 0x3
+ 2508 002d 3A010000 		.4byte	.LASF3
+ 2509 0031 02       		.byte	0x2
+ 2510 0032 1D       		.byte	0x1d
+ 2511 0033 37000000 		.4byte	0x37
+ 2512 0037 02       		.uleb128 0x2
+ 2513 0038 01       		.byte	0x1
+ 2514 0039 08       		.byte	0x8
+ 2515 003a F5010000 		.4byte	.LASF1
+ 2516 003e 02       		.uleb128 0x2
+ 2517 003f 02       		.byte	0x2
+ 2518 0040 05       		.byte	0x5
+ 2519 0041 28000000 		.4byte	.LASF2
+ 2520 0045 03       		.uleb128 0x3
+ 2521 0046 74000000 		.4byte	.LASF4
+ 2522 004a 02       		.byte	0x2
+ 2523 004b 2B       		.byte	0x2b
+ 2524 004c 50000000 		.4byte	0x50
+ 2525 0050 02       		.uleb128 0x2
+ 2526 0051 02       		.byte	0x2
+ 2527 0052 07       		.byte	0x7
+ 2528 0053 4F020000 		.4byte	.LASF5
+ 2529 0057 02       		.uleb128 0x2
+ 2530 0058 04       		.byte	0x4
+ 2531 0059 05       		.byte	0x5
+ 2532 005a 0A010000 		.4byte	.LASF6
+ 2533 005e 03       		.uleb128 0x3
+ 2534 005f 63000000 		.4byte	.LASF7
+ 2535 0063 02       		.byte	0x2
+ 2536 0064 41       		.byte	0x41
+ 2537 0065 69000000 		.4byte	0x69
+ 2538 0069 02       		.uleb128 0x2
+ 2539 006a 04       		.byte	0x4
+ 2540 006b 07       		.byte	0x7
+ 2541 006c E0020000 		.4byte	.LASF8
+ 2542 0070 02       		.uleb128 0x2
+ 2543 0071 08       		.byte	0x8
+ 2544 0072 05       		.byte	0x5
+ 2545 0073 DF000000 		.4byte	.LASF9
+ 2546 0077 02       		.uleb128 0x2
+ 2547 0078 08       		.byte	0x8
+ 2548 0079 07       		.byte	0x7
+ 2549 007a ED000000 		.4byte	.LASF10
+ 2550 007e 04       		.uleb128 0x4
+ 2551 007f 04       		.byte	0x4
+ 2552 0080 05       		.byte	0x5
+ 2553 0081 696E7400 		.ascii	"int\000"
+ 2554 0085 02       		.uleb128 0x2
+ 2555 0086 04       		.byte	0x4
+ 2556 0087 07       		.byte	0x7
+ 2557 0088 89030000 		.4byte	.LASF11
+ 2558 008c 03       		.uleb128 0x3
+ 2559 008d AD000000 		.4byte	.LASF12
+ 2560 0091 03       		.byte	0x3
+ 2561 0092 18       		.byte	0x18
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 55
+
+
+ 2562 0093 2C000000 		.4byte	0x2c
+ 2563 0097 03       		.uleb128 0x3
+ 2564 0098 46020000 		.4byte	.LASF13
+ 2565 009c 03       		.byte	0x3
+ 2566 009d 24       		.byte	0x24
+ 2567 009e 45000000 		.4byte	0x45
+ 2568 00a2 03       		.uleb128 0x3
+ 2569 00a3 36020000 		.4byte	.LASF14
+ 2570 00a7 03       		.byte	0x3
+ 2571 00a8 30       		.byte	0x30
+ 2572 00a9 5E000000 		.4byte	0x5e
+ 2573 00ad 02       		.uleb128 0x2
+ 2574 00ae 08       		.byte	0x8
+ 2575 00af 04       		.byte	0x4
+ 2576 00b0 E9010000 		.4byte	.LASF15
+ 2577 00b4 02       		.uleb128 0x2
+ 2578 00b5 04       		.byte	0x4
+ 2579 00b6 07       		.byte	0x7
+ 2580 00b7 32000000 		.4byte	.LASF16
+ 2581 00bb 02       		.uleb128 0x2
+ 2582 00bc 01       		.byte	0x1
+ 2583 00bd 08       		.byte	0x8
+ 2584 00be 67020000 		.4byte	.LASF17
+ 2585 00c2 02       		.uleb128 0x2
+ 2586 00c3 04       		.byte	0x4
+ 2587 00c4 04       		.byte	0x4
+ 2588 00c5 07000000 		.4byte	.LASF18
+ 2589 00c9 02       		.uleb128 0x2
+ 2590 00ca 08       		.byte	0x8
+ 2591 00cb 04       		.byte	0x4
+ 2592 00cc 10030000 		.4byte	.LASF19
+ 2593 00d0 05       		.uleb128 0x5
+ 2594 00d1 15000000 		.4byte	.LASF64
+ 2595 00d5 01       		.byte	0x1
+ 2596 00d6 55       		.byte	0x55
+ 2597 00d7 00000000 		.4byte	.LFB66
+ 2598 00db 4A000000 		.4byte	.LFE66-.LFB66
+ 2599 00df 01       		.uleb128 0x1
+ 2600 00e0 9C       		.byte	0x9c
+ 2601 00e1 02010000 		.4byte	0x102
+ 2602 00e5 06       		.uleb128 0x6
+ 2603 00e6 F2020000 		.4byte	.LASF20
+ 2604 00ea 01       		.byte	0x1
+ 2605 00eb 55       		.byte	0x55
+ 2606 00ec 8C000000 		.4byte	0x8c
+ 2607 00f0 02       		.uleb128 0x2
+ 2608 00f1 91       		.byte	0x91
+ 2609 00f2 77       		.sleb128 -9
+ 2610 00f3 06       		.uleb128 0x6
+ 2611 00f4 DB010000 		.4byte	.LASF21
+ 2612 00f8 01       		.byte	0x1
+ 2613 00f9 55       		.byte	0x55
+ 2614 00fa 8C000000 		.4byte	0x8c
+ 2615 00fe 02       		.uleb128 0x2
+ 2616 00ff 91       		.byte	0x91
+ 2617 0100 76       		.sleb128 -10
+ 2618 0101 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 56
+
+
+ 2619 0102 07       		.uleb128 0x7
+ 2620 0103 86000000 		.4byte	.LASF25
+ 2621 0107 01       		.byte	0x1
+ 2622 0108 74       		.byte	0x74
+ 2623 0109 00000000 		.4byte	.LFB67
+ 2624 010d 90000000 		.4byte	.LFE67-.LFB67
+ 2625 0111 01       		.uleb128 0x1
+ 2626 0112 9C       		.byte	0x9c
+ 2627 0113 42010000 		.4byte	0x142
+ 2628 0117 06       		.uleb128 0x6
+ 2629 0118 3F020000 		.4byte	.LASF22
+ 2630 011c 01       		.byte	0x1
+ 2631 011d 74       		.byte	0x74
+ 2632 011e 8C000000 		.4byte	0x8c
+ 2633 0122 02       		.uleb128 0x2
+ 2634 0123 91       		.byte	0x91
+ 2635 0124 6F       		.sleb128 -17
+ 2636 0125 06       		.uleb128 0x6
+ 2637 0126 27030000 		.4byte	.LASF23
+ 2638 012a 01       		.byte	0x1
+ 2639 012b 74       		.byte	0x74
+ 2640 012c 8C000000 		.4byte	0x8c
+ 2641 0130 02       		.uleb128 0x2
+ 2642 0131 91       		.byte	0x91
+ 2643 0132 6E       		.sleb128 -18
+ 2644 0133 06       		.uleb128 0x6
+ 2645 0134 C5030000 		.4byte	.LASF24
+ 2646 0138 01       		.byte	0x1
+ 2647 0139 74       		.byte	0x74
+ 2648 013a 97000000 		.4byte	0x97
+ 2649 013e 02       		.uleb128 0x2
+ 2650 013f 91       		.byte	0x91
+ 2651 0140 6C       		.sleb128 -20
+ 2652 0141 00       		.byte	0
+ 2653 0142 07       		.uleb128 0x7
+ 2654 0143 6C020000 		.4byte	.LASF26
+ 2655 0147 01       		.byte	0x1
+ 2656 0148 88       		.byte	0x88
+ 2657 0149 00000000 		.4byte	.LFB68
+ 2658 014d 28010000 		.4byte	.LFE68-.LFB68
+ 2659 0151 01       		.uleb128 0x1
+ 2660 0152 9C       		.byte	0x9c
+ 2661 0153 05020000 		.4byte	0x205
+ 2662 0157 06       		.uleb128 0x6
+ 2663 0158 32010000 		.4byte	.LASF27
+ 2664 015c 01       		.byte	0x1
+ 2665 015d 88       		.byte	0x88
+ 2666 015e 8C000000 		.4byte	0x8c
+ 2667 0162 02       		.uleb128 0x2
+ 2668 0163 91       		.byte	0x91
+ 2669 0164 4F       		.sleb128 -49
+ 2670 0165 06       		.uleb128 0x6
+ 2671 0166 17030000 		.4byte	.LASF28
+ 2672 016a 01       		.byte	0x1
+ 2673 016b 88       		.byte	0x88
+ 2674 016c 8C000000 		.4byte	0x8c
+ 2675 0170 02       		.uleb128 0x2
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 57
+
+
+ 2676 0171 91       		.byte	0x91
+ 2677 0172 4E       		.sleb128 -50
+ 2678 0173 06       		.uleb128 0x6
+ 2679 0174 E1010000 		.4byte	.LASF29
+ 2680 0178 01       		.byte	0x1
+ 2681 0179 88       		.byte	0x88
+ 2682 017a 8C000000 		.4byte	0x8c
+ 2683 017e 02       		.uleb128 0x2
+ 2684 017f 91       		.byte	0x91
+ 2685 0180 4D       		.sleb128 -51
+ 2686 0181 06       		.uleb128 0x6
+ 2687 0182 1F030000 		.4byte	.LASF30
+ 2688 0186 01       		.byte	0x1
+ 2689 0187 88       		.byte	0x88
+ 2690 0188 8C000000 		.4byte	0x8c
+ 2691 018c 02       		.uleb128 0x2
+ 2692 018d 91       		.byte	0x91
+ 2693 018e 4C       		.sleb128 -52
+ 2694 018f 06       		.uleb128 0x6
+ 2695 0190 C5030000 		.4byte	.LASF24
+ 2696 0194 01       		.byte	0x1
+ 2697 0195 88       		.byte	0x88
+ 2698 0196 97000000 		.4byte	0x97
+ 2699 019a 02       		.uleb128 0x2
+ 2700 019b 91       		.byte	0x91
+ 2701 019c 00       		.sleb128 0
+ 2702 019d 08       		.uleb128 0x8
+ 2703 019e 7800     		.ascii	"x\000"
+ 2704 01a0 01       		.byte	0x1
+ 2705 01a1 8A       		.byte	0x8a
+ 2706 01a2 7E000000 		.4byte	0x7e
+ 2707 01a6 02       		.uleb128 0x2
+ 2708 01a7 91       		.byte	0x91
+ 2709 01a8 68       		.sleb128 -24
+ 2710 01a9 08       		.uleb128 0x8
+ 2711 01aa 7900     		.ascii	"y\000"
+ 2712 01ac 01       		.byte	0x1
+ 2713 01ad 8B       		.byte	0x8b
+ 2714 01ae 7E000000 		.4byte	0x7e
+ 2715 01b2 02       		.uleb128 0x2
+ 2716 01b3 91       		.byte	0x91
+ 2717 01b4 64       		.sleb128 -28
+ 2718 01b5 08       		.uleb128 0x8
+ 2719 01b6 647800   		.ascii	"dx\000"
+ 2720 01b9 01       		.byte	0x1
+ 2721 01ba 8C       		.byte	0x8c
+ 2722 01bb 7E000000 		.4byte	0x7e
+ 2723 01bf 02       		.uleb128 0x2
+ 2724 01c0 91       		.byte	0x91
+ 2725 01c1 60       		.sleb128 -32
+ 2726 01c2 08       		.uleb128 0x8
+ 2727 01c3 737800   		.ascii	"sx\000"
+ 2728 01c6 01       		.byte	0x1
+ 2729 01c7 8C       		.byte	0x8c
+ 2730 01c8 7E000000 		.4byte	0x7e
+ 2731 01cc 02       		.uleb128 0x2
+ 2732 01cd 91       		.byte	0x91
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 58
+
+
+ 2733 01ce 5C       		.sleb128 -36
+ 2734 01cf 08       		.uleb128 0x8
+ 2735 01d0 647900   		.ascii	"dy\000"
+ 2736 01d3 01       		.byte	0x1
+ 2737 01d4 8D       		.byte	0x8d
+ 2738 01d5 7E000000 		.4byte	0x7e
+ 2739 01d9 02       		.uleb128 0x2
+ 2740 01da 91       		.byte	0x91
+ 2741 01db 58       		.sleb128 -40
+ 2742 01dc 08       		.uleb128 0x8
+ 2743 01dd 737900   		.ascii	"sy\000"
+ 2744 01e0 01       		.byte	0x1
+ 2745 01e1 8D       		.byte	0x8d
+ 2746 01e2 7E000000 		.4byte	0x7e
+ 2747 01e6 02       		.uleb128 0x2
+ 2748 01e7 91       		.byte	0x91
+ 2749 01e8 54       		.sleb128 -44
+ 2750 01e9 08       		.uleb128 0x8
+ 2751 01ea 65727200 		.ascii	"err\000"
+ 2752 01ee 01       		.byte	0x1
+ 2753 01ef 8E       		.byte	0x8e
+ 2754 01f0 7E000000 		.4byte	0x7e
+ 2755 01f4 02       		.uleb128 0x2
+ 2756 01f5 91       		.byte	0x91
+ 2757 01f6 6C       		.sleb128 -20
+ 2758 01f7 08       		.uleb128 0x8
+ 2759 01f8 653200   		.ascii	"e2\000"
+ 2760 01fb 01       		.byte	0x1
+ 2761 01fc 8E       		.byte	0x8e
+ 2762 01fd 7E000000 		.4byte	0x7e
+ 2763 0201 02       		.uleb128 0x2
+ 2764 0202 91       		.byte	0x91
+ 2765 0203 50       		.sleb128 -48
+ 2766 0204 00       		.byte	0
+ 2767 0205 07       		.uleb128 0x7
+ 2768 0206 42000000 		.4byte	.LASF31
+ 2769 020a 01       		.byte	0x1
+ 2770 020b A2       		.byte	0xa2
+ 2771 020c 00000000 		.4byte	.LFB69
+ 2772 0210 96000000 		.4byte	.LFE69-.LFB69
+ 2773 0214 01       		.uleb128 0x1
+ 2774 0215 9C       		.byte	0x9c
+ 2775 0216 6C020000 		.4byte	0x26c
+ 2776 021a 06       		.uleb128 0x6
+ 2777 021b 3F020000 		.4byte	.LASF22
+ 2778 021f 01       		.byte	0x1
+ 2779 0220 A2       		.byte	0xa2
+ 2780 0221 8C000000 		.4byte	0x8c
+ 2781 0225 02       		.uleb128 0x2
+ 2782 0226 91       		.byte	0x91
+ 2783 0227 67       		.sleb128 -25
+ 2784 0228 06       		.uleb128 0x6
+ 2785 0229 27030000 		.4byte	.LASF23
+ 2786 022d 01       		.byte	0x1
+ 2787 022e A2       		.byte	0xa2
+ 2788 022f 8C000000 		.4byte	0x8c
+ 2789 0233 02       		.uleb128 0x2
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 59
+
+
+ 2790 0234 91       		.byte	0x91
+ 2791 0235 66       		.sleb128 -26
+ 2792 0236 06       		.uleb128 0x6
+ 2793 0237 44010000 		.4byte	.LASF32
+ 2794 023b 01       		.byte	0x1
+ 2795 023c A2       		.byte	0xa2
+ 2796 023d 8C000000 		.4byte	0x8c
+ 2797 0241 02       		.uleb128 0x2
+ 2798 0242 91       		.byte	0x91
+ 2799 0243 65       		.sleb128 -27
+ 2800 0244 06       		.uleb128 0x6
+ 2801 0245 C5030000 		.4byte	.LASF24
+ 2802 0249 01       		.byte	0x1
+ 2803 024a A2       		.byte	0xa2
+ 2804 024b 97000000 		.4byte	0x97
+ 2805 024f 02       		.uleb128 0x2
+ 2806 0250 91       		.byte	0x91
+ 2807 0251 62       		.sleb128 -30
+ 2808 0252 08       		.uleb128 0x8
+ 2809 0253 6900     		.ascii	"i\000"
+ 2810 0255 01       		.byte	0x1
+ 2811 0256 A4       		.byte	0xa4
+ 2812 0257 97000000 		.4byte	0x97
+ 2813 025b 02       		.uleb128 0x2
+ 2814 025c 91       		.byte	0x91
+ 2815 025d 6E       		.sleb128 -18
+ 2816 025e 08       		.uleb128 0x8
+ 2817 025f 793100   		.ascii	"y1\000"
+ 2818 0262 01       		.byte	0x1
+ 2819 0263 A4       		.byte	0xa4
+ 2820 0264 97000000 		.4byte	0x97
+ 2821 0268 02       		.uleb128 0x2
+ 2822 0269 91       		.byte	0x91
+ 2823 026a 6C       		.sleb128 -20
+ 2824 026b 00       		.byte	0
+ 2825 026c 07       		.uleb128 0x7
+ 2826 026d 99000000 		.4byte	.LASF33
+ 2827 0271 01       		.byte	0x1
+ 2828 0272 AF       		.byte	0xaf
+ 2829 0273 00000000 		.4byte	.LFB70
+ 2830 0277 96000000 		.4byte	.LFE70-.LFB70
+ 2831 027b 01       		.uleb128 0x1
+ 2832 027c 9C       		.byte	0x9c
+ 2833 027d D3020000 		.4byte	0x2d3
+ 2834 0281 06       		.uleb128 0x6
+ 2835 0282 3F020000 		.4byte	.LASF22
+ 2836 0286 01       		.byte	0x1
+ 2837 0287 AF       		.byte	0xaf
+ 2838 0288 8C000000 		.4byte	0x8c
+ 2839 028c 02       		.uleb128 0x2
+ 2840 028d 91       		.byte	0x91
+ 2841 028e 67       		.sleb128 -25
+ 2842 028f 06       		.uleb128 0x6
+ 2843 0290 27030000 		.4byte	.LASF23
+ 2844 0294 01       		.byte	0x1
+ 2845 0295 AF       		.byte	0xaf
+ 2846 0296 8C000000 		.4byte	0x8c
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 60
+
+
+ 2847 029a 02       		.uleb128 0x2
+ 2848 029b 91       		.byte	0x91
+ 2849 029c 66       		.sleb128 -26
+ 2850 029d 06       		.uleb128 0x6
+ 2851 029e 0D000000 		.4byte	.LASF34
+ 2852 02a2 01       		.byte	0x1
+ 2853 02a3 AF       		.byte	0xaf
+ 2854 02a4 8C000000 		.4byte	0x8c
+ 2855 02a8 02       		.uleb128 0x2
+ 2856 02a9 91       		.byte	0x91
+ 2857 02aa 65       		.sleb128 -27
+ 2858 02ab 06       		.uleb128 0x6
+ 2859 02ac C5030000 		.4byte	.LASF24
+ 2860 02b0 01       		.byte	0x1
+ 2861 02b1 AF       		.byte	0xaf
+ 2862 02b2 97000000 		.4byte	0x97
+ 2863 02b6 02       		.uleb128 0x2
+ 2864 02b7 91       		.byte	0x91
+ 2865 02b8 62       		.sleb128 -30
+ 2866 02b9 08       		.uleb128 0x8
+ 2867 02ba 6900     		.ascii	"i\000"
+ 2868 02bc 01       		.byte	0x1
+ 2869 02bd B1       		.byte	0xb1
+ 2870 02be 97000000 		.4byte	0x97
+ 2871 02c2 02       		.uleb128 0x2
+ 2872 02c3 91       		.byte	0x91
+ 2873 02c4 6E       		.sleb128 -18
+ 2874 02c5 08       		.uleb128 0x8
+ 2875 02c6 783100   		.ascii	"x1\000"
+ 2876 02c9 01       		.byte	0x1
+ 2877 02ca B1       		.byte	0xb1
+ 2878 02cb 97000000 		.4byte	0x97
+ 2879 02cf 02       		.uleb128 0x2
+ 2880 02d0 91       		.byte	0x91
+ 2881 02d1 6C       		.sleb128 -20
+ 2882 02d2 00       		.byte	0
+ 2883 02d3 07       		.uleb128 0x7
+ 2884 02d4 44030000 		.4byte	.LASF35
+ 2885 02d8 01       		.byte	0x1
+ 2886 02d9 BC       		.byte	0xbc
+ 2887 02da 00000000 		.4byte	.LFB71
+ 2888 02de B4000000 		.4byte	.LFE71-.LFB71
+ 2889 02e2 01       		.uleb128 0x1
+ 2890 02e3 9C       		.byte	0x9c
+ 2891 02e4 2F030000 		.4byte	0x32f
+ 2892 02e8 06       		.uleb128 0x6
+ 2893 02e9 3F020000 		.4byte	.LASF22
+ 2894 02ed 01       		.byte	0x1
+ 2895 02ee BC       		.byte	0xbc
+ 2896 02ef 8C000000 		.4byte	0x8c
+ 2897 02f3 02       		.uleb128 0x2
+ 2898 02f4 91       		.byte	0x91
+ 2899 02f5 6F       		.sleb128 -17
+ 2900 02f6 06       		.uleb128 0x6
+ 2901 02f7 27030000 		.4byte	.LASF23
+ 2902 02fb 01       		.byte	0x1
+ 2903 02fc BC       		.byte	0xbc
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 61
+
+
+ 2904 02fd 8C000000 		.4byte	0x8c
+ 2905 0301 02       		.uleb128 0x2
+ 2906 0302 91       		.byte	0x91
+ 2907 0303 6E       		.sleb128 -18
+ 2908 0304 06       		.uleb128 0x6
+ 2909 0305 0D000000 		.4byte	.LASF34
+ 2910 0309 01       		.byte	0x1
+ 2911 030a BC       		.byte	0xbc
+ 2912 030b 8C000000 		.4byte	0x8c
+ 2913 030f 02       		.uleb128 0x2
+ 2914 0310 91       		.byte	0x91
+ 2915 0311 6D       		.sleb128 -19
+ 2916 0312 06       		.uleb128 0x6
+ 2917 0313 44010000 		.4byte	.LASF32
+ 2918 0317 01       		.byte	0x1
+ 2919 0318 BC       		.byte	0xbc
+ 2920 0319 8C000000 		.4byte	0x8c
+ 2921 031d 02       		.uleb128 0x2
+ 2922 031e 91       		.byte	0x91
+ 2923 031f 6C       		.sleb128 -20
+ 2924 0320 06       		.uleb128 0x6
+ 2925 0321 C5030000 		.4byte	.LASF24
+ 2926 0325 01       		.byte	0x1
+ 2927 0326 BC       		.byte	0xbc
+ 2928 0327 97000000 		.4byte	0x97
+ 2929 032b 02       		.uleb128 0x2
+ 2930 032c 91       		.byte	0x91
+ 2931 032d 00       		.sleb128 0
+ 2932 032e 00       		.byte	0
+ 2933 032f 07       		.uleb128 0x7
+ 2934 0330 20010000 		.4byte	.LASF36
+ 2935 0334 01       		.byte	0x1
+ 2936 0335 C8       		.byte	0xc8
+ 2937 0336 00000000 		.4byte	.LFB72
+ 2938 033a BC000000 		.4byte	.LFE72-.LFB72
+ 2939 033e 01       		.uleb128 0x1
+ 2940 033f 9C       		.byte	0x9c
+ 2941 0340 A3030000 		.4byte	0x3a3
+ 2942 0344 06       		.uleb128 0x6
+ 2943 0345 3F020000 		.4byte	.LASF22
+ 2944 0349 01       		.byte	0x1
+ 2945 034a C8       		.byte	0xc8
+ 2946 034b 8C000000 		.4byte	0x8c
+ 2947 034f 02       		.uleb128 0x2
+ 2948 0350 91       		.byte	0x91
+ 2949 0351 67       		.sleb128 -25
+ 2950 0352 06       		.uleb128 0x6
+ 2951 0353 27030000 		.4byte	.LASF23
+ 2952 0357 01       		.byte	0x1
+ 2953 0358 C8       		.byte	0xc8
+ 2954 0359 8C000000 		.4byte	0x8c
+ 2955 035d 02       		.uleb128 0x2
+ 2956 035e 91       		.byte	0x91
+ 2957 035f 66       		.sleb128 -26
+ 2958 0360 06       		.uleb128 0x6
+ 2959 0361 0D000000 		.4byte	.LASF34
+ 2960 0365 01       		.byte	0x1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 62
+
+
+ 2961 0366 C8       		.byte	0xc8
+ 2962 0367 8C000000 		.4byte	0x8c
+ 2963 036b 02       		.uleb128 0x2
+ 2964 036c 91       		.byte	0x91
+ 2965 036d 65       		.sleb128 -27
+ 2966 036e 06       		.uleb128 0x6
+ 2967 036f 44010000 		.4byte	.LASF32
+ 2968 0373 01       		.byte	0x1
+ 2969 0374 C8       		.byte	0xc8
+ 2970 0375 8C000000 		.4byte	0x8c
+ 2971 0379 02       		.uleb128 0x2
+ 2972 037a 91       		.byte	0x91
+ 2973 037b 64       		.sleb128 -28
+ 2974 037c 06       		.uleb128 0x6
+ 2975 037d C5030000 		.4byte	.LASF24
+ 2976 0381 01       		.byte	0x1
+ 2977 0382 C8       		.byte	0xc8
+ 2978 0383 97000000 		.4byte	0x97
+ 2979 0387 02       		.uleb128 0x2
+ 2980 0388 91       		.byte	0x91
+ 2981 0389 00       		.sleb128 0
+ 2982 038a 08       		.uleb128 0x8
+ 2983 038b 6900     		.ascii	"i\000"
+ 2984 038d 01       		.byte	0x1
+ 2985 038e CA       		.byte	0xca
+ 2986 038f 97000000 		.4byte	0x97
+ 2987 0393 02       		.uleb128 0x2
+ 2988 0394 91       		.byte	0x91
+ 2989 0395 6E       		.sleb128 -18
+ 2990 0396 08       		.uleb128 0x8
+ 2991 0397 6A00     		.ascii	"j\000"
+ 2992 0399 01       		.byte	0x1
+ 2993 039a CA       		.byte	0xca
+ 2994 039b 97000000 		.4byte	0x97
+ 2995 039f 02       		.uleb128 0x2
+ 2996 03a0 91       		.byte	0x91
+ 2997 03a1 6C       		.sleb128 -20
+ 2998 03a2 00       		.byte	0
+ 2999 03a3 07       		.uleb128 0x7
+ 3000 03a4 B1030000 		.4byte	.LASF37
+ 3001 03a8 01       		.byte	0x1
+ 3002 03a9 D7       		.byte	0xd7
+ 3003 03aa 00000000 		.4byte	.LFB73
+ 3004 03ae 36010000 		.4byte	.LFE73-.LFB73
+ 3005 03b2 01       		.uleb128 0x1
+ 3006 03b3 9C       		.byte	0x9c
+ 3007 03b4 24040000 		.4byte	0x424
+ 3008 03b8 06       		.uleb128 0x6
+ 3009 03b9 3F020000 		.4byte	.LASF22
+ 3010 03bd 01       		.byte	0x1
+ 3011 03be D7       		.byte	0xd7
+ 3012 03bf 8C000000 		.4byte	0x8c
+ 3013 03c3 02       		.uleb128 0x2
+ 3014 03c4 91       		.byte	0x91
+ 3015 03c5 5F       		.sleb128 -33
+ 3016 03c6 06       		.uleb128 0x6
+ 3017 03c7 27030000 		.4byte	.LASF23
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 63
+
+
+ 3018 03cb 01       		.byte	0x1
+ 3019 03cc D7       		.byte	0xd7
+ 3020 03cd 8C000000 		.4byte	0x8c
+ 3021 03d1 02       		.uleb128 0x2
+ 3022 03d2 91       		.byte	0x91
+ 3023 03d3 5E       		.sleb128 -34
+ 3024 03d4 06       		.uleb128 0x6
+ 3025 03d5 2D020000 		.4byte	.LASF38
+ 3026 03d9 01       		.byte	0x1
+ 3027 03da D7       		.byte	0xd7
+ 3028 03db 8C000000 		.4byte	0x8c
+ 3029 03df 02       		.uleb128 0x2
+ 3030 03e0 91       		.byte	0x91
+ 3031 03e1 5D       		.sleb128 -35
+ 3032 03e2 06       		.uleb128 0x6
+ 3033 03e3 C5030000 		.4byte	.LASF24
+ 3034 03e7 01       		.byte	0x1
+ 3035 03e8 D7       		.byte	0xd7
+ 3036 03e9 97000000 		.4byte	0x97
+ 3037 03ed 02       		.uleb128 0x2
+ 3038 03ee 91       		.byte	0x91
+ 3039 03ef 5A       		.sleb128 -38
+ 3040 03f0 08       		.uleb128 0x8
+ 3041 03f1 7800     		.ascii	"x\000"
+ 3042 03f3 01       		.byte	0x1
+ 3043 03f4 D9       		.byte	0xd9
+ 3044 03f5 7E000000 		.4byte	0x7e
+ 3045 03f9 02       		.uleb128 0x2
+ 3046 03fa 91       		.byte	0x91
+ 3047 03fb 6C       		.sleb128 -20
+ 3048 03fc 08       		.uleb128 0x8
+ 3049 03fd 7900     		.ascii	"y\000"
+ 3050 03ff 01       		.byte	0x1
+ 3051 0400 D9       		.byte	0xd9
+ 3052 0401 7E000000 		.4byte	0x7e
+ 3053 0405 02       		.uleb128 0x2
+ 3054 0406 91       		.byte	0x91
+ 3055 0407 68       		.sleb128 -24
+ 3056 0408 08       		.uleb128 0x8
+ 3057 0409 65727200 		.ascii	"err\000"
+ 3058 040d 01       		.byte	0x1
+ 3059 040e D9       		.byte	0xd9
+ 3060 040f 7E000000 		.4byte	0x7e
+ 3061 0413 02       		.uleb128 0x2
+ 3062 0414 91       		.byte	0x91
+ 3063 0415 64       		.sleb128 -28
+ 3064 0416 08       		.uleb128 0x8
+ 3065 0417 653200   		.ascii	"e2\000"
+ 3066 041a 01       		.byte	0x1
+ 3067 041b D9       		.byte	0xd9
+ 3068 041c 7E000000 		.4byte	0x7e
+ 3069 0420 02       		.uleb128 0x2
+ 3070 0421 91       		.byte	0x91
+ 3071 0422 60       		.sleb128 -32
+ 3072 0423 00       		.byte	0
+ 3073 0424 07       		.uleb128 0x7
+ 3074 0425 CB020000 		.4byte	.LASF39
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 64
+
+
+ 3075 0429 01       		.byte	0x1
+ 3076 042a ED       		.byte	0xed
+ 3077 042b 00000000 		.4byte	.LFB74
+ 3078 042f 72000000 		.4byte	.LFE74-.LFB74
+ 3079 0433 01       		.uleb128 0x1
+ 3080 0434 9C       		.byte	0x9c
+ 3081 0435 60040000 		.4byte	0x460
+ 3082 0439 06       		.uleb128 0x6
+ 3083 043a C5030000 		.4byte	.LASF24
+ 3084 043e 01       		.byte	0x1
+ 3085 043f ED       		.byte	0xed
+ 3086 0440 97000000 		.4byte	0x97
+ 3087 0444 02       		.uleb128 0x2
+ 3088 0445 91       		.byte	0x91
+ 3089 0446 6E       		.sleb128 -18
+ 3090 0447 08       		.uleb128 0x8
+ 3091 0448 6900     		.ascii	"i\000"
+ 3092 044a 01       		.byte	0x1
+ 3093 044b EF       		.byte	0xef
+ 3094 044c 97000000 		.4byte	0x97
+ 3095 0450 02       		.uleb128 0x2
+ 3096 0451 91       		.byte	0x91
+ 3097 0452 76       		.sleb128 -10
+ 3098 0453 08       		.uleb128 0x8
+ 3099 0454 6A00     		.ascii	"j\000"
+ 3100 0456 01       		.byte	0x1
+ 3101 0457 EF       		.byte	0xef
+ 3102 0458 97000000 		.4byte	0x97
+ 3103 045c 02       		.uleb128 0x2
+ 3104 045d 91       		.byte	0x91
+ 3105 045e 74       		.sleb128 -12
+ 3106 045f 00       		.byte	0
+ 3107 0460 09       		.uleb128 0x9
+ 3108 0461 CD030000 		.4byte	.LASF40
+ 3109 0465 01       		.byte	0x1
+ 3110 0466 0301     		.2byte	0x103
+ 3111 0468 00000000 		.4byte	.LFB75
+ 3112 046c 58010000 		.4byte	.LFE75-.LFB75
+ 3113 0470 01       		.uleb128 0x1
+ 3114 0471 9C       		.byte	0x9c
+ 3115 0472 FA040000 		.4byte	0x4fa
+ 3116 0476 0A       		.uleb128 0xa
+ 3117 0477 3F020000 		.4byte	.LASF22
+ 3118 047b 01       		.byte	0x1
+ 3119 047c 0301     		.2byte	0x103
+ 3120 047e 8C000000 		.4byte	0x8c
+ 3121 0482 02       		.uleb128 0x2
+ 3122 0483 91       		.byte	0x91
+ 3123 0484 67       		.sleb128 -25
+ 3124 0485 0A       		.uleb128 0xa
+ 3125 0486 27030000 		.4byte	.LASF23
+ 3126 048a 01       		.byte	0x1
+ 3127 048b 0301     		.2byte	0x103
+ 3128 048d 8C000000 		.4byte	0x8c
+ 3129 0491 02       		.uleb128 0x2
+ 3130 0492 91       		.byte	0x91
+ 3131 0493 66       		.sleb128 -26
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 65
+
+
+ 3132 0494 0A       		.uleb128 0xa
+ 3133 0495 6E000000 		.4byte	.LASF41
+ 3134 0499 01       		.byte	0x1
+ 3135 049a 0301     		.2byte	0x103
+ 3136 049c 8C000000 		.4byte	0x8c
+ 3137 04a0 02       		.uleb128 0x2
+ 3138 04a1 91       		.byte	0x91
+ 3139 04a2 65       		.sleb128 -27
+ 3140 04a3 0A       		.uleb128 0xa
+ 3141 04a4 96030000 		.4byte	.LASF42
+ 3142 04a8 01       		.byte	0x1
+ 3143 04a9 0301     		.2byte	0x103
+ 3144 04ab 8C000000 		.4byte	0x8c
+ 3145 04af 02       		.uleb128 0x2
+ 3146 04b0 91       		.byte	0x91
+ 3147 04b1 64       		.sleb128 -28
+ 3148 04b2 0A       		.uleb128 0xa
+ 3149 04b3 C5030000 		.4byte	.LASF24
+ 3150 04b7 01       		.byte	0x1
+ 3151 04b8 0301     		.2byte	0x103
+ 3152 04ba 97000000 		.4byte	0x97
+ 3153 04be 02       		.uleb128 0x2
+ 3154 04bf 91       		.byte	0x91
+ 3155 04c0 00       		.sleb128 0
+ 3156 04c1 0B       		.uleb128 0xb
+ 3157 04c2 6900     		.ascii	"i\000"
+ 3158 04c4 01       		.byte	0x1
+ 3159 04c5 0501     		.2byte	0x105
+ 3160 04c7 8C000000 		.4byte	0x8c
+ 3161 04cb 02       		.uleb128 0x2
+ 3162 04cc 91       		.byte	0x91
+ 3163 04cd 6F       		.sleb128 -17
+ 3164 04ce 0B       		.uleb128 0xb
+ 3165 04cf 6A00     		.ascii	"j\000"
+ 3166 04d1 01       		.byte	0x1
+ 3167 04d2 0501     		.2byte	0x105
+ 3168 04d4 8C000000 		.4byte	0x8c
+ 3169 04d8 02       		.uleb128 0x2
+ 3170 04d9 91       		.byte	0x91
+ 3171 04da 6E       		.sleb128 -18
+ 3172 04db 0C       		.uleb128 0xc
+ 3173 04dc B5000000 		.4byte	.LASF43
+ 3174 04e0 01       		.byte	0x1
+ 3175 04e1 0601     		.2byte	0x106
+ 3176 04e3 8C000000 		.4byte	0x8c
+ 3177 04e7 02       		.uleb128 0x2
+ 3178 04e8 91       		.byte	0x91
+ 3179 04e9 6D       		.sleb128 -19
+ 3180 04ea 0C       		.uleb128 0xc
+ 3181 04eb 17030000 		.4byte	.LASF28
+ 3182 04ef 01       		.byte	0x1
+ 3183 04f0 0701     		.2byte	0x107
+ 3184 04f2 8C000000 		.4byte	0x8c
+ 3185 04f6 02       		.uleb128 0x2
+ 3186 04f7 91       		.byte	0x91
+ 3187 04f8 6C       		.sleb128 -20
+ 3188 04f9 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 66
+
+
+ 3189 04fa 09       		.uleb128 0x9
+ 3190 04fb F9020000 		.4byte	.LASF44
+ 3191 04ff 01       		.byte	0x1
+ 3192 0500 2C01     		.2byte	0x12c
+ 3193 0502 00000000 		.4byte	.LFB76
+ 3194 0506 C8000000 		.4byte	.LFE76-.LFB76
+ 3195 050a 01       		.uleb128 0x1
+ 3196 050b 9C       		.byte	0x9c
+ 3197 050c 5C050000 		.4byte	0x55c
+ 3198 0510 0A       		.uleb128 0xa
+ 3199 0511 3F020000 		.4byte	.LASF22
+ 3200 0515 01       		.byte	0x1
+ 3201 0516 2C01     		.2byte	0x12c
+ 3202 0518 8C000000 		.4byte	0x8c
+ 3203 051c 02       		.uleb128 0x2
+ 3204 051d 91       		.byte	0x91
+ 3205 051e 6F       		.sleb128 -17
+ 3206 051f 0A       		.uleb128 0xa
+ 3207 0520 27030000 		.4byte	.LASF23
+ 3208 0524 01       		.byte	0x1
+ 3209 0525 2C01     		.2byte	0x12c
+ 3210 0527 8C000000 		.4byte	0x8c
+ 3211 052b 02       		.uleb128 0x2
+ 3212 052c 91       		.byte	0x91
+ 3213 052d 6E       		.sleb128 -18
+ 3214 052e 0A       		.uleb128 0xa
+ 3215 052f 56030000 		.4byte	.LASF45
+ 3216 0533 01       		.byte	0x1
+ 3217 0534 2C01     		.2byte	0x12c
+ 3218 0536 5C050000 		.4byte	0x55c
+ 3219 053a 02       		.uleb128 0x2
+ 3220 053b 91       		.byte	0x91
+ 3221 053c 68       		.sleb128 -24
+ 3222 053d 0A       		.uleb128 0xa
+ 3223 053e 96030000 		.4byte	.LASF42
+ 3224 0542 01       		.byte	0x1
+ 3225 0543 2C01     		.2byte	0x12c
+ 3226 0545 8C000000 		.4byte	0x8c
+ 3227 0549 02       		.uleb128 0x2
+ 3228 054a 91       		.byte	0x91
+ 3229 054b 6D       		.sleb128 -19
+ 3230 054c 0A       		.uleb128 0xa
+ 3231 054d C5030000 		.4byte	.LASF24
+ 3232 0551 01       		.byte	0x1
+ 3233 0552 2C01     		.2byte	0x12c
+ 3234 0554 97000000 		.4byte	0x97
+ 3235 0558 02       		.uleb128 0x2
+ 3236 0559 91       		.byte	0x91
+ 3237 055a 00       		.sleb128 0
+ 3238 055b 00       		.byte	0
+ 3239 055c 0D       		.uleb128 0xd
+ 3240 055d 04       		.byte	0x4
+ 3241 055e 62050000 		.4byte	0x562
+ 3242 0562 0E       		.uleb128 0xe
+ 3243 0563 8C000000 		.4byte	0x8c
+ 3244 0567 09       		.uleb128 0x9
+ 3245 0568 C3000000 		.4byte	.LASF46
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 67
+
+
+ 3246 056c 01       		.byte	0x1
+ 3247 056d 4201     		.2byte	0x142
+ 3248 056f 00000000 		.4byte	.LFB77
+ 3249 0573 00010000 		.4byte	.LFE77-.LFB77
+ 3250 0577 01       		.uleb128 0x1
+ 3251 0578 9C       		.byte	0x9c
+ 3252 0579 F2050000 		.4byte	0x5f2
+ 3253 057d 0A       		.uleb128 0xa
+ 3254 057e 3F020000 		.4byte	.LASF22
+ 3255 0582 01       		.byte	0x1
+ 3256 0583 4201     		.2byte	0x142
+ 3257 0585 8C000000 		.4byte	0x8c
+ 3258 0589 02       		.uleb128 0x2
+ 3259 058a 91       		.byte	0x91
+ 3260 058b 67       		.sleb128 -25
+ 3261 058c 0A       		.uleb128 0xa
+ 3262 058d 27030000 		.4byte	.LASF23
+ 3263 0591 01       		.byte	0x1
+ 3264 0592 4201     		.2byte	0x142
+ 3265 0594 8C000000 		.4byte	0x8c
+ 3266 0598 02       		.uleb128 0x2
+ 3267 0599 91       		.byte	0x91
+ 3268 059a 66       		.sleb128 -26
+ 3269 059b 0A       		.uleb128 0xa
+ 3270 059c BC000000 		.4byte	.LASF47
+ 3271 05a0 01       		.byte	0x1
+ 3272 05a1 4201     		.2byte	0x142
+ 3273 05a3 8C000000 		.4byte	0x8c
+ 3274 05a7 02       		.uleb128 0x2
+ 3275 05a8 91       		.byte	0x91
+ 3276 05a9 65       		.sleb128 -27
+ 3277 05aa 0A       		.uleb128 0xa
+ 3278 05ab C5030000 		.4byte	.LASF24
+ 3279 05af 01       		.byte	0x1
+ 3280 05b0 4201     		.2byte	0x142
+ 3281 05b2 97000000 		.4byte	0x97
+ 3282 05b6 02       		.uleb128 0x2
+ 3283 05b7 91       		.byte	0x91
+ 3284 05b8 62       		.sleb128 -30
+ 3285 05b9 0B       		.uleb128 0xb
+ 3286 05ba 6900     		.ascii	"i\000"
+ 3287 05bc 01       		.byte	0x1
+ 3288 05bd 4401     		.2byte	0x144
+ 3289 05bf 8C000000 		.4byte	0x8c
+ 3290 05c3 02       		.uleb128 0x2
+ 3291 05c4 91       		.byte	0x91
+ 3292 05c5 6F       		.sleb128 -17
+ 3293 05c6 0B       		.uleb128 0xb
+ 3294 05c7 6A00     		.ascii	"j\000"
+ 3295 05c9 01       		.byte	0x1
+ 3296 05ca 4401     		.2byte	0x144
+ 3297 05cc 8C000000 		.4byte	0x8c
+ 3298 05d0 02       		.uleb128 0x2
+ 3299 05d1 91       		.byte	0x91
+ 3300 05d2 6E       		.sleb128 -18
+ 3301 05d3 0C       		.uleb128 0xc
+ 3302 05d4 B5000000 		.4byte	.LASF43
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 68
+
+
+ 3303 05d8 01       		.byte	0x1
+ 3304 05d9 4501     		.2byte	0x145
+ 3305 05db 8C000000 		.4byte	0x8c
+ 3306 05df 02       		.uleb128 0x2
+ 3307 05e0 91       		.byte	0x91
+ 3308 05e1 6D       		.sleb128 -19
+ 3309 05e2 0C       		.uleb128 0xc
+ 3310 05e3 17030000 		.4byte	.LASF28
+ 3311 05e7 01       		.byte	0x1
+ 3312 05e8 4501     		.2byte	0x145
+ 3313 05ea 8C000000 		.4byte	0x8c
+ 3314 05ee 02       		.uleb128 0x2
+ 3315 05ef 91       		.byte	0x91
+ 3316 05f0 6C       		.sleb128 -20
+ 3317 05f1 00       		.byte	0
+ 3318 05f2 09       		.uleb128 0x9
+ 3319 05f3 2E030000 		.4byte	.LASF48
+ 3320 05f7 01       		.byte	0x1
+ 3321 05f8 5801     		.2byte	0x158
+ 3322 05fa 00000000 		.4byte	.LFB78
+ 3323 05fe 00010000 		.4byte	.LFE78-.LFB78
+ 3324 0602 01       		.uleb128 0x1
+ 3325 0603 9C       		.byte	0x9c
+ 3326 0604 7D060000 		.4byte	0x67d
+ 3327 0608 0A       		.uleb128 0xa
+ 3328 0609 3F020000 		.4byte	.LASF22
+ 3329 060d 01       		.byte	0x1
+ 3330 060e 5801     		.2byte	0x158
+ 3331 0610 8C000000 		.4byte	0x8c
+ 3332 0614 02       		.uleb128 0x2
+ 3333 0615 91       		.byte	0x91
+ 3334 0616 67       		.sleb128 -25
+ 3335 0617 0A       		.uleb128 0xa
+ 3336 0618 27030000 		.4byte	.LASF23
+ 3337 061c 01       		.byte	0x1
+ 3338 061d 5801     		.2byte	0x158
+ 3339 061f 8C000000 		.4byte	0x8c
+ 3340 0623 02       		.uleb128 0x2
+ 3341 0624 91       		.byte	0x91
+ 3342 0625 66       		.sleb128 -26
+ 3343 0626 0A       		.uleb128 0xa
+ 3344 0627 BC000000 		.4byte	.LASF47
+ 3345 062b 01       		.byte	0x1
+ 3346 062c 5801     		.2byte	0x158
+ 3347 062e 8C000000 		.4byte	0x8c
+ 3348 0632 02       		.uleb128 0x2
+ 3349 0633 91       		.byte	0x91
+ 3350 0634 65       		.sleb128 -27
+ 3351 0635 0A       		.uleb128 0xa
+ 3352 0636 C5030000 		.4byte	.LASF24
+ 3353 063a 01       		.byte	0x1
+ 3354 063b 5801     		.2byte	0x158
+ 3355 063d 97000000 		.4byte	0x97
+ 3356 0641 02       		.uleb128 0x2
+ 3357 0642 91       		.byte	0x91
+ 3358 0643 62       		.sleb128 -30
+ 3359 0644 0B       		.uleb128 0xb
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 69
+
+
+ 3360 0645 6900     		.ascii	"i\000"
+ 3361 0647 01       		.byte	0x1
+ 3362 0648 5A01     		.2byte	0x15a
+ 3363 064a 8C000000 		.4byte	0x8c
+ 3364 064e 02       		.uleb128 0x2
+ 3365 064f 91       		.byte	0x91
+ 3366 0650 6F       		.sleb128 -17
+ 3367 0651 0B       		.uleb128 0xb
+ 3368 0652 6A00     		.ascii	"j\000"
+ 3369 0654 01       		.byte	0x1
+ 3370 0655 5A01     		.2byte	0x15a
+ 3371 0657 8C000000 		.4byte	0x8c
+ 3372 065b 02       		.uleb128 0x2
+ 3373 065c 91       		.byte	0x91
+ 3374 065d 6E       		.sleb128 -18
+ 3375 065e 0C       		.uleb128 0xc
+ 3376 065f B5000000 		.4byte	.LASF43
+ 3377 0663 01       		.byte	0x1
+ 3378 0664 5B01     		.2byte	0x15b
+ 3379 0666 8C000000 		.4byte	0x8c
+ 3380 066a 02       		.uleb128 0x2
+ 3381 066b 91       		.byte	0x91
+ 3382 066c 6D       		.sleb128 -19
+ 3383 066d 0C       		.uleb128 0xc
+ 3384 066e 17030000 		.4byte	.LASF28
+ 3385 0672 01       		.byte	0x1
+ 3386 0673 5B01     		.2byte	0x15b
+ 3387 0675 8C000000 		.4byte	0x8c
+ 3388 0679 02       		.uleb128 0x2
+ 3389 067a 91       		.byte	0x91
+ 3390 067b 6C       		.sleb128 -20
+ 3391 067c 00       		.byte	0
+ 3392 067d 0F       		.uleb128 0xf
+ 3393 067e 62020000 		.4byte	.LASF65
+ 3394 0682 01       		.byte	0x1
+ 3395 0683 6E01     		.2byte	0x16e
+ 3396 0685 A2000000 		.4byte	0xa2
+ 3397 0689 00000000 		.4byte	.LFB79
+ 3398 068d 3A000000 		.4byte	.LFE79-.LFB79
+ 3399 0691 01       		.uleb128 0x1
+ 3400 0692 9C       		.byte	0x9c
+ 3401 0693 C1060000 		.4byte	0x6c1
+ 3402 0697 10       		.uleb128 0x10
+ 3403 0698 6D00     		.ascii	"m\000"
+ 3404 069a 01       		.byte	0x1
+ 3405 069b 6E01     		.2byte	0x16e
+ 3406 069d 8C000000 		.4byte	0x8c
+ 3407 06a1 02       		.uleb128 0x2
+ 3408 06a2 91       		.byte	0x91
+ 3409 06a3 6F       		.sleb128 -17
+ 3410 06a4 10       		.uleb128 0x10
+ 3411 06a5 6E00     		.ascii	"n\000"
+ 3412 06a7 01       		.byte	0x1
+ 3413 06a8 6E01     		.2byte	0x16e
+ 3414 06aa 8C000000 		.4byte	0x8c
+ 3415 06ae 02       		.uleb128 0x2
+ 3416 06af 91       		.byte	0x91
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 70
+
+
+ 3417 06b0 6E       		.sleb128 -18
+ 3418 06b1 0C       		.uleb128 0xc
+ 3419 06b2 00000000 		.4byte	.LASF49
+ 3420 06b6 01       		.byte	0x1
+ 3421 06b7 7001     		.2byte	0x170
+ 3422 06b9 A2000000 		.4byte	0xa2
+ 3423 06bd 02       		.uleb128 0x2
+ 3424 06be 91       		.byte	0x91
+ 3425 06bf 74       		.sleb128 -12
+ 3426 06c0 00       		.byte	0
+ 3427 06c1 09       		.uleb128 0x9
+ 3428 06c2 0D020000 		.4byte	.LASF50
+ 3429 06c6 01       		.byte	0x1
+ 3430 06c7 7701     		.2byte	0x177
+ 3431 06c9 00000000 		.4byte	.LFB80
+ 3432 06cd 46010000 		.4byte	.LFE80-.LFB80
+ 3433 06d1 01       		.uleb128 0x1
+ 3434 06d2 9C       		.byte	0x9c
+ 3435 06d3 5D070000 		.4byte	0x75d
+ 3436 06d7 0A       		.uleb128 0xa
+ 3437 06d8 3F020000 		.4byte	.LASF22
+ 3438 06dc 01       		.byte	0x1
+ 3439 06dd 7701     		.2byte	0x177
+ 3440 06df 8C000000 		.4byte	0x8c
+ 3441 06e3 02       		.uleb128 0x2
+ 3442 06e4 91       		.byte	0x91
+ 3443 06e5 67       		.sleb128 -25
+ 3444 06e6 0A       		.uleb128 0xa
+ 3445 06e7 27030000 		.4byte	.LASF23
+ 3446 06eb 01       		.byte	0x1
+ 3447 06ec 7701     		.2byte	0x177
+ 3448 06ee 8C000000 		.4byte	0x8c
+ 3449 06f2 02       		.uleb128 0x2
+ 3450 06f3 91       		.byte	0x91
+ 3451 06f4 66       		.sleb128 -26
+ 3452 06f5 0A       		.uleb128 0xa
+ 3453 06f6 04010000 		.4byte	.LASF51
+ 3454 06fa 01       		.byte	0x1
+ 3455 06fb 7701     		.2byte	0x177
+ 3456 06fd A2000000 		.4byte	0xa2
+ 3457 0701 02       		.uleb128 0x2
+ 3458 0702 91       		.byte	0x91
+ 3459 0703 60       		.sleb128 -32
+ 3460 0704 0A       		.uleb128 0xa
+ 3461 0705 D9000000 		.4byte	.LASF52
+ 3462 0709 01       		.byte	0x1
+ 3463 070a 7701     		.2byte	0x177
+ 3464 070c 8C000000 		.4byte	0x8c
+ 3465 0710 02       		.uleb128 0x2
+ 3466 0711 91       		.byte	0x91
+ 3467 0712 65       		.sleb128 -27
+ 3468 0713 0A       		.uleb128 0xa
+ 3469 0714 96030000 		.4byte	.LASF42
+ 3470 0718 01       		.byte	0x1
+ 3471 0719 7701     		.2byte	0x177
+ 3472 071b 8C000000 		.4byte	0x8c
+ 3473 071f 02       		.uleb128 0x2
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 71
+
+
+ 3474 0720 91       		.byte	0x91
+ 3475 0721 00       		.sleb128 0
+ 3476 0722 0A       		.uleb128 0xa
+ 3477 0723 C5030000 		.4byte	.LASF24
+ 3478 0727 01       		.byte	0x1
+ 3479 0728 7701     		.2byte	0x177
+ 3480 072a 97000000 		.4byte	0x97
+ 3481 072e 02       		.uleb128 0x2
+ 3482 072f 91       		.byte	0x91
+ 3483 0730 04       		.sleb128 4
+ 3484 0731 0B       		.uleb128 0xb
+ 3485 0732 6900     		.ascii	"i\000"
+ 3486 0734 01       		.byte	0x1
+ 3487 0735 7901     		.2byte	0x179
+ 3488 0737 8C000000 		.4byte	0x8c
+ 3489 073b 02       		.uleb128 0x2
+ 3490 073c 91       		.byte	0x91
+ 3491 073d 6F       		.sleb128 -17
+ 3492 073e 0C       		.uleb128 0xc
+ 3493 073f B5000000 		.4byte	.LASF43
+ 3494 0743 01       		.byte	0x1
+ 3495 0744 7A01     		.2byte	0x17a
+ 3496 0746 8C000000 		.4byte	0x8c
+ 3497 074a 02       		.uleb128 0x2
+ 3498 074b 91       		.byte	0x91
+ 3499 074c 6D       		.sleb128 -19
+ 3500 074d 0C       		.uleb128 0xc
+ 3501 074e 7F000000 		.4byte	.LASF53
+ 3502 0752 01       		.byte	0x1
+ 3503 0753 7A01     		.2byte	0x17a
+ 3504 0755 8C000000 		.4byte	0x8c
+ 3505 0759 02       		.uleb128 0x2
+ 3506 075a 91       		.byte	0x91
+ 3507 075b 6E       		.sleb128 -18
+ 3508 075c 00       		.byte	0
+ 3509 075d 09       		.uleb128 0x9
+ 3510 075e 9D030000 		.4byte	.LASF54
+ 3511 0762 01       		.byte	0x1
+ 3512 0763 9A01     		.2byte	0x19a
+ 3513 0765 00000000 		.4byte	.LFB81
+ 3514 0769 F4000000 		.4byte	.LFE81-.LFB81
+ 3515 076d 01       		.uleb128 0x1
+ 3516 076e 9C       		.byte	0x9c
+ 3517 076f F7070000 		.4byte	0x7f7
+ 3518 0773 0A       		.uleb128 0xa
+ 3519 0774 3F020000 		.4byte	.LASF22
+ 3520 0778 01       		.byte	0x1
+ 3521 0779 9A01     		.2byte	0x19a
+ 3522 077b 8C000000 		.4byte	0x8c
+ 3523 077f 02       		.uleb128 0x2
+ 3524 0780 91       		.byte	0x91
+ 3525 0781 67       		.sleb128 -25
+ 3526 0782 0A       		.uleb128 0xa
+ 3527 0783 27030000 		.4byte	.LASF23
+ 3528 0787 01       		.byte	0x1
+ 3529 0788 9A01     		.2byte	0x19a
+ 3530 078a 8C000000 		.4byte	0x8c
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 72
+
+
+ 3531 078e 02       		.uleb128 0x2
+ 3532 078f 91       		.byte	0x91
+ 3533 0790 66       		.sleb128 -26
+ 3534 0791 0A       		.uleb128 0xa
+ 3535 0792 3B000000 		.4byte	.LASF55
+ 3536 0796 01       		.byte	0x1
+ 3537 0797 9A01     		.2byte	0x19a
+ 3538 0799 5C050000 		.4byte	0x55c
+ 3539 079d 02       		.uleb128 0x2
+ 3540 079e 91       		.byte	0x91
+ 3541 079f 60       		.sleb128 -32
+ 3542 07a0 0A       		.uleb128 0xa
+ 3543 07a1 0D000000 		.4byte	.LASF34
+ 3544 07a5 01       		.byte	0x1
+ 3545 07a6 9A01     		.2byte	0x19a
+ 3546 07a8 8C000000 		.4byte	0x8c
+ 3547 07ac 02       		.uleb128 0x2
+ 3548 07ad 91       		.byte	0x91
+ 3549 07ae 65       		.sleb128 -27
+ 3550 07af 0A       		.uleb128 0xa
+ 3551 07b0 44010000 		.4byte	.LASF32
+ 3552 07b4 01       		.byte	0x1
+ 3553 07b5 9A01     		.2byte	0x19a
+ 3554 07b7 8C000000 		.4byte	0x8c
+ 3555 07bb 02       		.uleb128 0x2
+ 3556 07bc 91       		.byte	0x91
+ 3557 07bd 00       		.sleb128 0
+ 3558 07be 0A       		.uleb128 0xa
+ 3559 07bf C5030000 		.4byte	.LASF24
+ 3560 07c3 01       		.byte	0x1
+ 3561 07c4 9A01     		.2byte	0x19a
+ 3562 07c6 97000000 		.4byte	0x97
+ 3563 07ca 02       		.uleb128 0x2
+ 3564 07cb 91       		.byte	0x91
+ 3565 07cc 04       		.sleb128 4
+ 3566 07cd 0B       		.uleb128 0xb
+ 3567 07ce 6900     		.ascii	"i\000"
+ 3568 07d0 01       		.byte	0x1
+ 3569 07d1 9C01     		.2byte	0x19c
+ 3570 07d3 97000000 		.4byte	0x97
+ 3571 07d7 02       		.uleb128 0x2
+ 3572 07d8 91       		.byte	0x91
+ 3573 07d9 6E       		.sleb128 -18
+ 3574 07da 0B       		.uleb128 0xb
+ 3575 07db 6A00     		.ascii	"j\000"
+ 3576 07dd 01       		.byte	0x1
+ 3577 07de 9C01     		.2byte	0x19c
+ 3578 07e0 97000000 		.4byte	0x97
+ 3579 07e4 02       		.uleb128 0x2
+ 3580 07e5 91       		.byte	0x91
+ 3581 07e6 6C       		.sleb128 -20
+ 3582 07e7 0C       		.uleb128 0xc
+ 3583 07e8 03020000 		.4byte	.LASF56
+ 3584 07ec 01       		.byte	0x1
+ 3585 07ed 9C01     		.2byte	0x19c
+ 3586 07ef 97000000 		.4byte	0x97
+ 3587 07f3 02       		.uleb128 0x2
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 73
+
+
+ 3588 07f4 91       		.byte	0x91
+ 3589 07f5 6A       		.sleb128 -22
+ 3590 07f6 00       		.byte	0
+ 3591 07f7 11       		.uleb128 0x11
+ 3592 07f8 13010000 		.4byte	.LASF66
+ 3593 07fc 01       		.byte	0x1
+ 3594 07fd A701     		.2byte	0x1a7
+ 3595 07ff 00000000 		.4byte	.LFB82
+ 3596 0803 48010000 		.4byte	.LFE82-.LFB82
+ 3597 0807 01       		.uleb128 0x1
+ 3598 0808 9C       		.byte	0x9c
+ 3599 0809 12       		.uleb128 0x12
+ 3600 080a 62050000 		.4byte	0x562
+ 3601 080e 1F080000 		.4byte	0x81f
+ 3602 0812 13       		.uleb128 0x13
+ 3603 0813 B4000000 		.4byte	0xb4
+ 3604 0817 5E       		.byte	0x5e
+ 3605 0818 13       		.uleb128 0x13
+ 3606 0819 B4000000 		.4byte	0xb4
+ 3607 081d 0B       		.byte	0xb
+ 3608 081e 00       		.byte	0
+ 3609 081f 14       		.uleb128 0x14
+ 3610 0820 56000000 		.4byte	.LASF57
+ 3611 0824 04       		.byte	0x4
+ 3612 0825 19       		.byte	0x19
+ 3613 0826 2A080000 		.4byte	0x82a
+ 3614 082a 0E       		.uleb128 0xe
+ 3615 082b 09080000 		.4byte	0x809
+ 3616 082f 12       		.uleb128 0x12
+ 3617 0830 62050000 		.4byte	0x562
+ 3618 0834 45080000 		.4byte	0x845
+ 3619 0838 13       		.uleb128 0x13
+ 3620 0839 B4000000 		.4byte	0xb4
+ 3621 083d 5E       		.byte	0x5e
+ 3622 083e 13       		.uleb128 0x13
+ 3623 083f B4000000 		.4byte	0xb4
+ 3624 0843 0F       		.byte	0xf
+ 3625 0844 00       		.byte	0
+ 3626 0845 14       		.uleb128 0x14
+ 3627 0846 7E020000 		.4byte	.LASF58
+ 3628 084a 04       		.byte	0x4
+ 3629 084b 1A       		.byte	0x1a
+ 3630 084c 50080000 		.4byte	0x850
+ 3631 0850 0E       		.uleb128 0xe
+ 3632 0851 2F080000 		.4byte	0x82f
+ 3633 0855 12       		.uleb128 0x12
+ 3634 0856 62050000 		.4byte	0x562
+ 3635 085a 6B080000 		.4byte	0x86b
+ 3636 085e 13       		.uleb128 0x13
+ 3637 085f B4000000 		.4byte	0xb4
+ 3638 0863 0A       		.byte	0xa
+ 3639 0864 13       		.uleb128 0x13
+ 3640 0865 B4000000 		.4byte	0xb4
+ 3641 0869 1F       		.byte	0x1f
+ 3642 086a 00       		.byte	0
+ 3643 086b 14       		.uleb128 0x14
+ 3644 086c 7C030000 		.4byte	.LASF59
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 74
+
+
+ 3645 0870 04       		.byte	0x4
+ 3646 0871 1B       		.byte	0x1b
+ 3647 0872 76080000 		.4byte	0x876
+ 3648 0876 0E       		.uleb128 0xe
+ 3649 0877 55080000 		.4byte	0x855
+ 3650 087b 12       		.uleb128 0x12
+ 3651 087c 62050000 		.4byte	0x562
+ 3652 0880 91080000 		.4byte	0x891
+ 3653 0884 13       		.uleb128 0x13
+ 3654 0885 B4000000 		.4byte	0xb4
+ 3655 0889 0A       		.byte	0xa
+ 3656 088a 13       		.uleb128 0x13
+ 3657 088b B4000000 		.4byte	0xb4
+ 3658 088f 3F       		.byte	0x3f
+ 3659 0890 00       		.byte	0
+ 3660 0891 14       		.uleb128 0x14
+ 3661 0892 6F030000 		.4byte	.LASF60
+ 3662 0896 04       		.byte	0x4
+ 3663 0897 1C       		.byte	0x1c
+ 3664 0898 9C080000 		.4byte	0x89c
+ 3665 089c 0E       		.uleb128 0xe
+ 3666 089d 7B080000 		.4byte	0x87b
+ 3667 08a1 00       		.byte	0
+ 3668              		.section	.debug_abbrev,"",%progbits
+ 3669              	.Ldebug_abbrev0:
+ 3670 0000 01       		.uleb128 0x1
+ 3671 0001 11       		.uleb128 0x11
+ 3672 0002 01       		.byte	0x1
+ 3673 0003 25       		.uleb128 0x25
+ 3674 0004 0E       		.uleb128 0xe
+ 3675 0005 13       		.uleb128 0x13
+ 3676 0006 0B       		.uleb128 0xb
+ 3677 0007 03       		.uleb128 0x3
+ 3678 0008 0E       		.uleb128 0xe
+ 3679 0009 1B       		.uleb128 0x1b
+ 3680 000a 0E       		.uleb128 0xe
+ 3681 000b 55       		.uleb128 0x55
+ 3682 000c 17       		.uleb128 0x17
+ 3683 000d 11       		.uleb128 0x11
+ 3684 000e 01       		.uleb128 0x1
+ 3685 000f 10       		.uleb128 0x10
+ 3686 0010 17       		.uleb128 0x17
+ 3687 0011 00       		.byte	0
+ 3688 0012 00       		.byte	0
+ 3689 0013 02       		.uleb128 0x2
+ 3690 0014 24       		.uleb128 0x24
+ 3691 0015 00       		.byte	0
+ 3692 0016 0B       		.uleb128 0xb
+ 3693 0017 0B       		.uleb128 0xb
+ 3694 0018 3E       		.uleb128 0x3e
+ 3695 0019 0B       		.uleb128 0xb
+ 3696 001a 03       		.uleb128 0x3
+ 3697 001b 0E       		.uleb128 0xe
+ 3698 001c 00       		.byte	0
+ 3699 001d 00       		.byte	0
+ 3700 001e 03       		.uleb128 0x3
+ 3701 001f 16       		.uleb128 0x16
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 75
+
+
+ 3702 0020 00       		.byte	0
+ 3703 0021 03       		.uleb128 0x3
+ 3704 0022 0E       		.uleb128 0xe
+ 3705 0023 3A       		.uleb128 0x3a
+ 3706 0024 0B       		.uleb128 0xb
+ 3707 0025 3B       		.uleb128 0x3b
+ 3708 0026 0B       		.uleb128 0xb
+ 3709 0027 49       		.uleb128 0x49
+ 3710 0028 13       		.uleb128 0x13
+ 3711 0029 00       		.byte	0
+ 3712 002a 00       		.byte	0
+ 3713 002b 04       		.uleb128 0x4
+ 3714 002c 24       		.uleb128 0x24
+ 3715 002d 00       		.byte	0
+ 3716 002e 0B       		.uleb128 0xb
+ 3717 002f 0B       		.uleb128 0xb
+ 3718 0030 3E       		.uleb128 0x3e
+ 3719 0031 0B       		.uleb128 0xb
+ 3720 0032 03       		.uleb128 0x3
+ 3721 0033 08       		.uleb128 0x8
+ 3722 0034 00       		.byte	0
+ 3723 0035 00       		.byte	0
+ 3724 0036 05       		.uleb128 0x5
+ 3725 0037 2E       		.uleb128 0x2e
+ 3726 0038 01       		.byte	0x1
+ 3727 0039 03       		.uleb128 0x3
+ 3728 003a 0E       		.uleb128 0xe
+ 3729 003b 3A       		.uleb128 0x3a
+ 3730 003c 0B       		.uleb128 0xb
+ 3731 003d 3B       		.uleb128 0x3b
+ 3732 003e 0B       		.uleb128 0xb
+ 3733 003f 27       		.uleb128 0x27
+ 3734 0040 19       		.uleb128 0x19
+ 3735 0041 11       		.uleb128 0x11
+ 3736 0042 01       		.uleb128 0x1
+ 3737 0043 12       		.uleb128 0x12
+ 3738 0044 06       		.uleb128 0x6
+ 3739 0045 40       		.uleb128 0x40
+ 3740 0046 18       		.uleb128 0x18
+ 3741 0047 9642     		.uleb128 0x2116
+ 3742 0049 19       		.uleb128 0x19
+ 3743 004a 01       		.uleb128 0x1
+ 3744 004b 13       		.uleb128 0x13
+ 3745 004c 00       		.byte	0
+ 3746 004d 00       		.byte	0
+ 3747 004e 06       		.uleb128 0x6
+ 3748 004f 05       		.uleb128 0x5
+ 3749 0050 00       		.byte	0
+ 3750 0051 03       		.uleb128 0x3
+ 3751 0052 0E       		.uleb128 0xe
+ 3752 0053 3A       		.uleb128 0x3a
+ 3753 0054 0B       		.uleb128 0xb
+ 3754 0055 3B       		.uleb128 0x3b
+ 3755 0056 0B       		.uleb128 0xb
+ 3756 0057 49       		.uleb128 0x49
+ 3757 0058 13       		.uleb128 0x13
+ 3758 0059 02       		.uleb128 0x2
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 76
+
+
+ 3759 005a 18       		.uleb128 0x18
+ 3760 005b 00       		.byte	0
+ 3761 005c 00       		.byte	0
+ 3762 005d 07       		.uleb128 0x7
+ 3763 005e 2E       		.uleb128 0x2e
+ 3764 005f 01       		.byte	0x1
+ 3765 0060 3F       		.uleb128 0x3f
+ 3766 0061 19       		.uleb128 0x19
+ 3767 0062 03       		.uleb128 0x3
+ 3768 0063 0E       		.uleb128 0xe
+ 3769 0064 3A       		.uleb128 0x3a
+ 3770 0065 0B       		.uleb128 0xb
+ 3771 0066 3B       		.uleb128 0x3b
+ 3772 0067 0B       		.uleb128 0xb
+ 3773 0068 27       		.uleb128 0x27
+ 3774 0069 19       		.uleb128 0x19
+ 3775 006a 11       		.uleb128 0x11
+ 3776 006b 01       		.uleb128 0x1
+ 3777 006c 12       		.uleb128 0x12
+ 3778 006d 06       		.uleb128 0x6
+ 3779 006e 40       		.uleb128 0x40
+ 3780 006f 18       		.uleb128 0x18
+ 3781 0070 9642     		.uleb128 0x2116
+ 3782 0072 19       		.uleb128 0x19
+ 3783 0073 01       		.uleb128 0x1
+ 3784 0074 13       		.uleb128 0x13
+ 3785 0075 00       		.byte	0
+ 3786 0076 00       		.byte	0
+ 3787 0077 08       		.uleb128 0x8
+ 3788 0078 34       		.uleb128 0x34
+ 3789 0079 00       		.byte	0
+ 3790 007a 03       		.uleb128 0x3
+ 3791 007b 08       		.uleb128 0x8
+ 3792 007c 3A       		.uleb128 0x3a
+ 3793 007d 0B       		.uleb128 0xb
+ 3794 007e 3B       		.uleb128 0x3b
+ 3795 007f 0B       		.uleb128 0xb
+ 3796 0080 49       		.uleb128 0x49
+ 3797 0081 13       		.uleb128 0x13
+ 3798 0082 02       		.uleb128 0x2
+ 3799 0083 18       		.uleb128 0x18
+ 3800 0084 00       		.byte	0
+ 3801 0085 00       		.byte	0
+ 3802 0086 09       		.uleb128 0x9
+ 3803 0087 2E       		.uleb128 0x2e
+ 3804 0088 01       		.byte	0x1
+ 3805 0089 3F       		.uleb128 0x3f
+ 3806 008a 19       		.uleb128 0x19
+ 3807 008b 03       		.uleb128 0x3
+ 3808 008c 0E       		.uleb128 0xe
+ 3809 008d 3A       		.uleb128 0x3a
+ 3810 008e 0B       		.uleb128 0xb
+ 3811 008f 3B       		.uleb128 0x3b
+ 3812 0090 05       		.uleb128 0x5
+ 3813 0091 27       		.uleb128 0x27
+ 3814 0092 19       		.uleb128 0x19
+ 3815 0093 11       		.uleb128 0x11
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 77
+
+
+ 3816 0094 01       		.uleb128 0x1
+ 3817 0095 12       		.uleb128 0x12
+ 3818 0096 06       		.uleb128 0x6
+ 3819 0097 40       		.uleb128 0x40
+ 3820 0098 18       		.uleb128 0x18
+ 3821 0099 9642     		.uleb128 0x2116
+ 3822 009b 19       		.uleb128 0x19
+ 3823 009c 01       		.uleb128 0x1
+ 3824 009d 13       		.uleb128 0x13
+ 3825 009e 00       		.byte	0
+ 3826 009f 00       		.byte	0
+ 3827 00a0 0A       		.uleb128 0xa
+ 3828 00a1 05       		.uleb128 0x5
+ 3829 00a2 00       		.byte	0
+ 3830 00a3 03       		.uleb128 0x3
+ 3831 00a4 0E       		.uleb128 0xe
+ 3832 00a5 3A       		.uleb128 0x3a
+ 3833 00a6 0B       		.uleb128 0xb
+ 3834 00a7 3B       		.uleb128 0x3b
+ 3835 00a8 05       		.uleb128 0x5
+ 3836 00a9 49       		.uleb128 0x49
+ 3837 00aa 13       		.uleb128 0x13
+ 3838 00ab 02       		.uleb128 0x2
+ 3839 00ac 18       		.uleb128 0x18
+ 3840 00ad 00       		.byte	0
+ 3841 00ae 00       		.byte	0
+ 3842 00af 0B       		.uleb128 0xb
+ 3843 00b0 34       		.uleb128 0x34
+ 3844 00b1 00       		.byte	0
+ 3845 00b2 03       		.uleb128 0x3
+ 3846 00b3 08       		.uleb128 0x8
+ 3847 00b4 3A       		.uleb128 0x3a
+ 3848 00b5 0B       		.uleb128 0xb
+ 3849 00b6 3B       		.uleb128 0x3b
+ 3850 00b7 05       		.uleb128 0x5
+ 3851 00b8 49       		.uleb128 0x49
+ 3852 00b9 13       		.uleb128 0x13
+ 3853 00ba 02       		.uleb128 0x2
+ 3854 00bb 18       		.uleb128 0x18
+ 3855 00bc 00       		.byte	0
+ 3856 00bd 00       		.byte	0
+ 3857 00be 0C       		.uleb128 0xc
+ 3858 00bf 34       		.uleb128 0x34
+ 3859 00c0 00       		.byte	0
+ 3860 00c1 03       		.uleb128 0x3
+ 3861 00c2 0E       		.uleb128 0xe
+ 3862 00c3 3A       		.uleb128 0x3a
+ 3863 00c4 0B       		.uleb128 0xb
+ 3864 00c5 3B       		.uleb128 0x3b
+ 3865 00c6 05       		.uleb128 0x5
+ 3866 00c7 49       		.uleb128 0x49
+ 3867 00c8 13       		.uleb128 0x13
+ 3868 00c9 02       		.uleb128 0x2
+ 3869 00ca 18       		.uleb128 0x18
+ 3870 00cb 00       		.byte	0
+ 3871 00cc 00       		.byte	0
+ 3872 00cd 0D       		.uleb128 0xd
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 78
+
+
+ 3873 00ce 0F       		.uleb128 0xf
+ 3874 00cf 00       		.byte	0
+ 3875 00d0 0B       		.uleb128 0xb
+ 3876 00d1 0B       		.uleb128 0xb
+ 3877 00d2 49       		.uleb128 0x49
+ 3878 00d3 13       		.uleb128 0x13
+ 3879 00d4 00       		.byte	0
+ 3880 00d5 00       		.byte	0
+ 3881 00d6 0E       		.uleb128 0xe
+ 3882 00d7 26       		.uleb128 0x26
+ 3883 00d8 00       		.byte	0
+ 3884 00d9 49       		.uleb128 0x49
+ 3885 00da 13       		.uleb128 0x13
+ 3886 00db 00       		.byte	0
+ 3887 00dc 00       		.byte	0
+ 3888 00dd 0F       		.uleb128 0xf
+ 3889 00de 2E       		.uleb128 0x2e
+ 3890 00df 01       		.byte	0x1
+ 3891 00e0 03       		.uleb128 0x3
+ 3892 00e1 0E       		.uleb128 0xe
+ 3893 00e2 3A       		.uleb128 0x3a
+ 3894 00e3 0B       		.uleb128 0xb
+ 3895 00e4 3B       		.uleb128 0x3b
+ 3896 00e5 05       		.uleb128 0x5
+ 3897 00e6 27       		.uleb128 0x27
+ 3898 00e7 19       		.uleb128 0x19
+ 3899 00e8 49       		.uleb128 0x49
+ 3900 00e9 13       		.uleb128 0x13
+ 3901 00ea 11       		.uleb128 0x11
+ 3902 00eb 01       		.uleb128 0x1
+ 3903 00ec 12       		.uleb128 0x12
+ 3904 00ed 06       		.uleb128 0x6
+ 3905 00ee 40       		.uleb128 0x40
+ 3906 00ef 18       		.uleb128 0x18
+ 3907 00f0 9742     		.uleb128 0x2117
+ 3908 00f2 19       		.uleb128 0x19
+ 3909 00f3 01       		.uleb128 0x1
+ 3910 00f4 13       		.uleb128 0x13
+ 3911 00f5 00       		.byte	0
+ 3912 00f6 00       		.byte	0
+ 3913 00f7 10       		.uleb128 0x10
+ 3914 00f8 05       		.uleb128 0x5
+ 3915 00f9 00       		.byte	0
+ 3916 00fa 03       		.uleb128 0x3
+ 3917 00fb 08       		.uleb128 0x8
+ 3918 00fc 3A       		.uleb128 0x3a
+ 3919 00fd 0B       		.uleb128 0xb
+ 3920 00fe 3B       		.uleb128 0x3b
+ 3921 00ff 05       		.uleb128 0x5
+ 3922 0100 49       		.uleb128 0x49
+ 3923 0101 13       		.uleb128 0x13
+ 3924 0102 02       		.uleb128 0x2
+ 3925 0103 18       		.uleb128 0x18
+ 3926 0104 00       		.byte	0
+ 3927 0105 00       		.byte	0
+ 3928 0106 11       		.uleb128 0x11
+ 3929 0107 2E       		.uleb128 0x2e
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 79
+
+
+ 3930 0108 00       		.byte	0
+ 3931 0109 3F       		.uleb128 0x3f
+ 3932 010a 19       		.uleb128 0x19
+ 3933 010b 03       		.uleb128 0x3
+ 3934 010c 0E       		.uleb128 0xe
+ 3935 010d 3A       		.uleb128 0x3a
+ 3936 010e 0B       		.uleb128 0xb
+ 3937 010f 3B       		.uleb128 0x3b
+ 3938 0110 05       		.uleb128 0x5
+ 3939 0111 27       		.uleb128 0x27
+ 3940 0112 19       		.uleb128 0x19
+ 3941 0113 11       		.uleb128 0x11
+ 3942 0114 01       		.uleb128 0x1
+ 3943 0115 12       		.uleb128 0x12
+ 3944 0116 06       		.uleb128 0x6
+ 3945 0117 40       		.uleb128 0x40
+ 3946 0118 18       		.uleb128 0x18
+ 3947 0119 9642     		.uleb128 0x2116
+ 3948 011b 19       		.uleb128 0x19
+ 3949 011c 00       		.byte	0
+ 3950 011d 00       		.byte	0
+ 3951 011e 12       		.uleb128 0x12
+ 3952 011f 01       		.uleb128 0x1
+ 3953 0120 01       		.byte	0x1
+ 3954 0121 49       		.uleb128 0x49
+ 3955 0122 13       		.uleb128 0x13
+ 3956 0123 01       		.uleb128 0x1
+ 3957 0124 13       		.uleb128 0x13
+ 3958 0125 00       		.byte	0
+ 3959 0126 00       		.byte	0
+ 3960 0127 13       		.uleb128 0x13
+ 3961 0128 21       		.uleb128 0x21
+ 3962 0129 00       		.byte	0
+ 3963 012a 49       		.uleb128 0x49
+ 3964 012b 13       		.uleb128 0x13
+ 3965 012c 2F       		.uleb128 0x2f
+ 3966 012d 0B       		.uleb128 0xb
+ 3967 012e 00       		.byte	0
+ 3968 012f 00       		.byte	0
+ 3969 0130 14       		.uleb128 0x14
+ 3970 0131 34       		.uleb128 0x34
+ 3971 0132 00       		.byte	0
+ 3972 0133 03       		.uleb128 0x3
+ 3973 0134 0E       		.uleb128 0xe
+ 3974 0135 3A       		.uleb128 0x3a
+ 3975 0136 0B       		.uleb128 0xb
+ 3976 0137 3B       		.uleb128 0x3b
+ 3977 0138 0B       		.uleb128 0xb
+ 3978 0139 49       		.uleb128 0x49
+ 3979 013a 13       		.uleb128 0x13
+ 3980 013b 3F       		.uleb128 0x3f
+ 3981 013c 19       		.uleb128 0x19
+ 3982 013d 3C       		.uleb128 0x3c
+ 3983 013e 19       		.uleb128 0x19
+ 3984 013f 00       		.byte	0
+ 3985 0140 00       		.byte	0
+ 3986 0141 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 80
+
+
+ 3987              		.section	.debug_aranges,"",%progbits
+ 3988 0000 9C000000 		.4byte	0x9c
+ 3989 0004 0200     		.2byte	0x2
+ 3990 0006 00000000 		.4byte	.Ldebug_info0
+ 3991 000a 04       		.byte	0x4
+ 3992 000b 00       		.byte	0
+ 3993 000c 0000     		.2byte	0
+ 3994 000e 0000     		.2byte	0
+ 3995 0010 00000000 		.4byte	.LFB66
+ 3996 0014 4A000000 		.4byte	.LFE66-.LFB66
+ 3997 0018 00000000 		.4byte	.LFB67
+ 3998 001c 90000000 		.4byte	.LFE67-.LFB67
+ 3999 0020 00000000 		.4byte	.LFB68
+ 4000 0024 28010000 		.4byte	.LFE68-.LFB68
+ 4001 0028 00000000 		.4byte	.LFB69
+ 4002 002c 96000000 		.4byte	.LFE69-.LFB69
+ 4003 0030 00000000 		.4byte	.LFB70
+ 4004 0034 96000000 		.4byte	.LFE70-.LFB70
+ 4005 0038 00000000 		.4byte	.LFB71
+ 4006 003c B4000000 		.4byte	.LFE71-.LFB71
+ 4007 0040 00000000 		.4byte	.LFB72
+ 4008 0044 BC000000 		.4byte	.LFE72-.LFB72
+ 4009 0048 00000000 		.4byte	.LFB73
+ 4010 004c 36010000 		.4byte	.LFE73-.LFB73
+ 4011 0050 00000000 		.4byte	.LFB74
+ 4012 0054 72000000 		.4byte	.LFE74-.LFB74
+ 4013 0058 00000000 		.4byte	.LFB75
+ 4014 005c 58010000 		.4byte	.LFE75-.LFB75
+ 4015 0060 00000000 		.4byte	.LFB76
+ 4016 0064 C8000000 		.4byte	.LFE76-.LFB76
+ 4017 0068 00000000 		.4byte	.LFB77
+ 4018 006c 00010000 		.4byte	.LFE77-.LFB77
+ 4019 0070 00000000 		.4byte	.LFB78
+ 4020 0074 00010000 		.4byte	.LFE78-.LFB78
+ 4021 0078 00000000 		.4byte	.LFB79
+ 4022 007c 3A000000 		.4byte	.LFE79-.LFB79
+ 4023 0080 00000000 		.4byte	.LFB80
+ 4024 0084 46010000 		.4byte	.LFE80-.LFB80
+ 4025 0088 00000000 		.4byte	.LFB81
+ 4026 008c F4000000 		.4byte	.LFE81-.LFB81
+ 4027 0090 00000000 		.4byte	.LFB82
+ 4028 0094 48010000 		.4byte	.LFE82-.LFB82
+ 4029 0098 00000000 		.4byte	0
+ 4030 009c 00000000 		.4byte	0
+ 4031              		.section	.debug_ranges,"",%progbits
+ 4032              	.Ldebug_ranges0:
+ 4033 0000 00000000 		.4byte	.LFB66
+ 4034 0004 4A000000 		.4byte	.LFE66
+ 4035 0008 00000000 		.4byte	.LFB67
+ 4036 000c 90000000 		.4byte	.LFE67
+ 4037 0010 00000000 		.4byte	.LFB68
+ 4038 0014 28010000 		.4byte	.LFE68
+ 4039 0018 00000000 		.4byte	.LFB69
+ 4040 001c 96000000 		.4byte	.LFE69
+ 4041 0020 00000000 		.4byte	.LFB70
+ 4042 0024 96000000 		.4byte	.LFE70
+ 4043 0028 00000000 		.4byte	.LFB71
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 81
+
+
+ 4044 002c B4000000 		.4byte	.LFE71
+ 4045 0030 00000000 		.4byte	.LFB72
+ 4046 0034 BC000000 		.4byte	.LFE72
+ 4047 0038 00000000 		.4byte	.LFB73
+ 4048 003c 36010000 		.4byte	.LFE73
+ 4049 0040 00000000 		.4byte	.LFB74
+ 4050 0044 72000000 		.4byte	.LFE74
+ 4051 0048 00000000 		.4byte	.LFB75
+ 4052 004c 58010000 		.4byte	.LFE75
+ 4053 0050 00000000 		.4byte	.LFB76
+ 4054 0054 C8000000 		.4byte	.LFE76
+ 4055 0058 00000000 		.4byte	.LFB77
+ 4056 005c 00010000 		.4byte	.LFE77
+ 4057 0060 00000000 		.4byte	.LFB78
+ 4058 0064 00010000 		.4byte	.LFE78
+ 4059 0068 00000000 		.4byte	.LFB79
+ 4060 006c 3A000000 		.4byte	.LFE79
+ 4061 0070 00000000 		.4byte	.LFB80
+ 4062 0074 46010000 		.4byte	.LFE80
+ 4063 0078 00000000 		.4byte	.LFB81
+ 4064 007c F4000000 		.4byte	.LFE81
+ 4065 0080 00000000 		.4byte	.LFB82
+ 4066 0084 48010000 		.4byte	.LFE82
+ 4067 0088 00000000 		.4byte	0
+ 4068 008c 00000000 		.4byte	0
+ 4069              		.section	.debug_line,"",%progbits
+ 4070              	.Ldebug_line0:
+ 4071 0000 B4040000 		.section	.debug_str,"MS",%progbits,1
+ 4071      02002D01 
+ 4071      00000201 
+ 4071      FB0E0D00 
+ 4071      01010101 
+ 4072              	.LASF49:
+ 4073 0000 72657375 		.ascii	"result\000"
+ 4073      6C7400
+ 4074              	.LASF18:
+ 4075 0007 666C6F61 		.ascii	"float\000"
+ 4075      7400
+ 4076              	.LASF34:
+ 4077 000d 63685769 		.ascii	"chWidth\000"
+ 4077      64746800 
+ 4078              	.LASF64:
+ 4079 0015 73736431 		.ascii	"ssd1331_write_byte\000"
+ 4079      3333315F 
+ 4079      77726974 
+ 4079      655F6279 
+ 4079      746500
+ 4080              	.LASF2:
+ 4081 0028 73686F72 		.ascii	"short int\000"
+ 4081      7420696E 
+ 4081      7400
+ 4082              	.LASF16:
+ 4083 0032 73697A65 		.ascii	"sizetype\000"
+ 4083      74797065 
+ 4083      00
+ 4084              	.LASF55:
+ 4085 003b 70636842 		.ascii	"pchBmp\000"
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 82
+
+
+ 4085      6D7000
+ 4086              	.LASF31:
+ 4087 0042 73736431 		.ascii	"ssd1331_draw_v_line\000"
+ 4087      3333315F 
+ 4087      64726177 
+ 4087      5F765F6C 
+ 4087      696E6500 
+ 4088              	.LASF57:
+ 4089 0056 635F6368 		.ascii	"c_chFont1206\000"
+ 4089      466F6E74 
+ 4089      31323036 
+ 4089      00
+ 4090              	.LASF7:
+ 4091 0063 5F5F7569 		.ascii	"__uint32_t\000"
+ 4091      6E743332 
+ 4091      5F7400
+ 4092              	.LASF41:
+ 4093 006e 63684368 		.ascii	"chChr\000"
+ 4093      7200
+ 4094              	.LASF4:
+ 4095 0074 5F5F7569 		.ascii	"__uint16_t\000"
+ 4095      6E743136 
+ 4095      5F7400
+ 4096              	.LASF53:
+ 4097 007f 63685368 		.ascii	"chShow\000"
+ 4097      6F7700
+ 4098              	.LASF25:
+ 4099 0086 73736431 		.ascii	"ssd1331_draw_point\000"
+ 4099      3333315F 
+ 4099      64726177 
+ 4099      5F706F69 
+ 4099      6E7400
+ 4100              	.LASF33:
+ 4101 0099 73736431 		.ascii	"ssd1331_draw_h_line\000"
+ 4101      3333315F 
+ 4101      64726177 
+ 4101      5F685F6C 
+ 4101      696E6500 
+ 4102              	.LASF12:
+ 4103 00ad 75696E74 		.ascii	"uint8_t\000"
+ 4103      385F7400 
+ 4104              	.LASF43:
+ 4105 00b5 63685465 		.ascii	"chTemp\000"
+ 4105      6D7000
+ 4106              	.LASF47:
+ 4107 00bc 63684368 		.ascii	"chChar\000"
+ 4107      617200
+ 4108              	.LASF46:
+ 4109 00c3 73736431 		.ascii	"ssd1331_draw_1616char\000"
+ 4109      3333315F 
+ 4109      64726177 
+ 4109      5F313631 
+ 4109      36636861 
+ 4110              	.LASF52:
+ 4111 00d9 63684C65 		.ascii	"chLen\000"
+ 4111      6E00
+ 4112              	.LASF9:
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 83
+
+
+ 4113 00df 6C6F6E67 		.ascii	"long long int\000"
+ 4113      206C6F6E 
+ 4113      6720696E 
+ 4113      7400
+ 4114              	.LASF10:
+ 4115 00ed 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 4115      206C6F6E 
+ 4115      6720756E 
+ 4115      7369676E 
+ 4115      65642069 
+ 4116              	.LASF51:
+ 4117 0104 63684E75 		.ascii	"chNum\000"
+ 4117      6D00
+ 4118              	.LASF6:
+ 4119 010a 6C6F6E67 		.ascii	"long int\000"
+ 4119      20696E74 
+ 4119      00
+ 4120              	.LASF66:
+ 4121 0113 73736431 		.ascii	"ssd1331_init\000"
+ 4121      3333315F 
+ 4121      696E6974 
+ 4121      00
+ 4122              	.LASF36:
+ 4123 0120 73736431 		.ascii	"ssd1331_fill_rect\000"
+ 4123      3333315F 
+ 4123      66696C6C 
+ 4123      5F726563 
+ 4123      7400
+ 4124              	.LASF27:
+ 4125 0132 63685870 		.ascii	"chXpos0\000"
+ 4125      6F733000 
+ 4126              	.LASF3:
+ 4127 013a 5F5F7569 		.ascii	"__uint8_t\000"
+ 4127      6E74385F 
+ 4127      7400
+ 4128              	.LASF32:
+ 4129 0144 63684865 		.ascii	"chHeight\000"
+ 4129      69676874 
+ 4129      00
+ 4130              	.LASF61:
+ 4131 014d 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 4131      43313120 
+ 4131      352E342E 
+ 4131      31203230 
+ 4131      31363036 
+ 4132 0180 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 4132      20726576 
+ 4132      6973696F 
+ 4132      6E203233 
+ 4132      37373135 
+ 4133 01b3 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 4133      66756E63 
+ 4133      74696F6E 
+ 4133      2D736563 
+ 4133      74696F6E 
+ 4134              	.LASF21:
+ 4135 01db 6368436D 		.ascii	"chCmd\000"
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 84
+
+
+ 4135      6400
+ 4136              	.LASF29:
+ 4137 01e1 63685870 		.ascii	"chXpos1\000"
+ 4137      6F733100 
+ 4138              	.LASF15:
+ 4139 01e9 6C6F6E67 		.ascii	"long double\000"
+ 4139      20646F75 
+ 4139      626C6500 
+ 4140              	.LASF1:
+ 4141 01f5 756E7369 		.ascii	"unsigned char\000"
+ 4141      676E6564 
+ 4141      20636861 
+ 4141      7200
+ 4142              	.LASF56:
+ 4143 0203 62797465 		.ascii	"byteWidth\000"
+ 4143      57696474 
+ 4143      6800
+ 4144              	.LASF50:
+ 4145 020d 73736431 		.ascii	"ssd1331_display_num\000"
+ 4145      3333315F 
+ 4145      64697370 
+ 4145      6C61795F 
+ 4145      6E756D00 
+ 4146              	.LASF0:
+ 4147 0221 7369676E 		.ascii	"signed char\000"
+ 4147      65642063 
+ 4147      68617200 
+ 4148              	.LASF38:
+ 4149 022d 63685261 		.ascii	"chRadius\000"
+ 4149      64697573 
+ 4149      00
+ 4150              	.LASF14:
+ 4151 0236 75696E74 		.ascii	"uint32_t\000"
+ 4151      33325F74 
+ 4151      00
+ 4152              	.LASF22:
+ 4153 023f 63685870 		.ascii	"chXpos\000"
+ 4153      6F7300
+ 4154              	.LASF13:
+ 4155 0246 75696E74 		.ascii	"uint16_t\000"
+ 4155      31365F74 
+ 4155      00
+ 4156              	.LASF5:
+ 4157 024f 73686F72 		.ascii	"short unsigned int\000"
+ 4157      7420756E 
+ 4157      7369676E 
+ 4157      65642069 
+ 4157      6E7400
+ 4158              	.LASF65:
+ 4159 0262 5F706F77 		.ascii	"_pow\000"
+ 4159      00
+ 4160              	.LASF17:
+ 4161 0267 63686172 		.ascii	"char\000"
+ 4161      00
+ 4162              	.LASF26:
+ 4163 026c 73736431 		.ascii	"ssd1331_draw_line\000"
+ 4163      3333315F 
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 85
+
+
+ 4163      64726177 
+ 4163      5F6C696E 
+ 4163      6500
+ 4164              	.LASF58:
+ 4165 027e 635F6368 		.ascii	"c_chFont1608\000"
+ 4165      466F6E74 
+ 4165      31363038 
+ 4165      00
+ 4166              	.LASF63:
+ 4167 028b 433A5C55 		.ascii	"C:\\Users\\ROUSSMA\\Documents\\PSoC Creator\\RGB_OL"
+ 4167      73657273 
+ 4167      5C524F55 
+ 4167      53534D41 
+ 4167      5C446F63 
+ 4168 02b9 45445C52 		.ascii	"ED\\RGB_OLED.cydsn\000"
+ 4168      47425F4F 
+ 4168      4C45442E 
+ 4168      63796473 
+ 4168      6E00
+ 4169              	.LASF39:
+ 4170 02cb 73736431 		.ascii	"ssd1331_clear_screen\000"
+ 4170      3333315F 
+ 4170      636C6561 
+ 4170      725F7363 
+ 4170      7265656E 
+ 4171              	.LASF8:
+ 4172 02e0 6C6F6E67 		.ascii	"long unsigned int\000"
+ 4172      20756E73 
+ 4172      69676E65 
+ 4172      6420696E 
+ 4172      7400
+ 4173              	.LASF20:
+ 4174 02f2 63684461 		.ascii	"chData\000"
+ 4174      746100
+ 4175              	.LASF44:
+ 4176 02f9 73736431 		.ascii	"ssd1331_display_string\000"
+ 4176      3333315F 
+ 4176      64697370 
+ 4176      6C61795F 
+ 4176      73747269 
+ 4177              	.LASF19:
+ 4178 0310 646F7562 		.ascii	"double\000"
+ 4178      6C6500
+ 4179              	.LASF28:
+ 4180 0317 63685970 		.ascii	"chYpos0\000"
+ 4180      6F733000 
+ 4181              	.LASF30:
+ 4182 031f 63685970 		.ascii	"chYpos1\000"
+ 4182      6F733100 
+ 4183              	.LASF23:
+ 4184 0327 63685970 		.ascii	"chYpos\000"
+ 4184      6F7300
+ 4185              	.LASF48:
+ 4186 032e 73736431 		.ascii	"ssd1331_draw_3216char\000"
+ 4186      3333315F 
+ 4186      64726177 
+ 4186      5F333231 
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\cckXhTKH.s 			page 86
+
+
+ 4186      36636861 
+ 4187              	.LASF35:
+ 4188 0344 73736431 		.ascii	"ssd1331_draw_rect\000"
+ 4188      3333315F 
+ 4188      64726177 
+ 4188      5F726563 
+ 4188      7400
+ 4189              	.LASF45:
+ 4190 0356 70636853 		.ascii	"pchString\000"
+ 4190      7472696E 
+ 4190      6700
+ 4191              	.LASF62:
+ 4192 0360 6F6C6564 		.ascii	"oled_ssd1331.c\000"
+ 4192      5F737364 
+ 4192      31333331 
+ 4192      2E6300
+ 4193              	.LASF60:
+ 4194 036f 635F6368 		.ascii	"c_chFont3216\000"
+ 4194      466F6E74 
+ 4194      33323136 
+ 4194      00
+ 4195              	.LASF59:
+ 4196 037c 635F6368 		.ascii	"c_chFont1612\000"
+ 4196      466F6E74 
+ 4196      31363132 
+ 4196      00
+ 4197              	.LASF11:
+ 4198 0389 756E7369 		.ascii	"unsigned int\000"
+ 4198      676E6564 
+ 4198      20696E74 
+ 4198      00
+ 4199              	.LASF42:
+ 4200 0396 63685369 		.ascii	"chSize\000"
+ 4200      7A6500
+ 4201              	.LASF54:
+ 4202 039d 73736431 		.ascii	"ssd1331_draw_bitmap\000"
+ 4202      3333315F 
+ 4202      64726177 
+ 4202      5F626974 
+ 4202      6D617000 
+ 4203              	.LASF37:
+ 4204 03b1 73736431 		.ascii	"ssd1331_draw_circle\000"
+ 4204      3333315F 
+ 4204      64726177 
+ 4204      5F636972 
+ 4204      636C6500 
+ 4205              	.LASF24:
+ 4206 03c5 6877436F 		.ascii	"hwColor\000"
+ 4206      6C6F7200 
+ 4207              	.LASF40:
+ 4208 03cd 73736431 		.ascii	"ssd1331_display_char\000"
+ 4208      3333315F 
+ 4208      64697370 
+ 4208      6C61795F 
+ 4208      63686172 
+ 4209              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

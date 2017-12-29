@@ -1,0 +1,8 @@
+C:/Users/micha_000/Documents/GitHub/CypressBLEBadge/RGB_OLED/RGB_LCD.cydsn/CortexM0/ARM_GCC_541/Debug/CyBootAsmGnu.o : C:/Users/micha_000/Documents/GitHub/CypressBLEBadge/RGB_OLED/RGB_LCD.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s C:/Users/micha_000/Documents/GitHub/CypressBLEBadge/RGB_OLED/RGB_LCD.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc C:/Users/micha_000/Documents/GitHub/CypressBLEBadge/RGB_OLED/RGB_LCD.cydsn/Generated_Source/PSoC4/cyfittergnu.inc 
+
+C:/Users/micha_000/Documents/GitHub/CypressBLEBadge/RGB_OLED/RGB_LCD.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s : 
+
+C:/Users/micha_000/Documents/GitHub/CypressBLEBadge/RGB_OLED/RGB_LCD.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc : 
+
+C:/Users/micha_000/Documents/GitHub/CypressBLEBadge/RGB_OLED/RGB_LCD.cydsn/Generated_Source/PSoC4/cyfittergnu.inc : 
+

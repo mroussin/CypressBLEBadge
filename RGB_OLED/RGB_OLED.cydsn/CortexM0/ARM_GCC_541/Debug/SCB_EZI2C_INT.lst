@@ -1,0 +1,1965 @@
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m0
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 0
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"SCB_EZI2C_INT.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.section	.text.SCB_EZI2C_STRETCH_ISR,"ax",%progbits
+  20              		.align	2
+  21              		.global	SCB_EZI2C_STRETCH_ISR
+  22              		.code	16
+  23              		.thumb_func
+  24              		.type	SCB_EZI2C_STRETCH_ISR, %function
+  25              	SCB_EZI2C_STRETCH_ISR:
+  26              	.LFB2:
+  27              		.file 1 "Generated_Source\\PSoC4\\SCB_EZI2C_INT.c"
+   1:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** /***************************************************************************//**
+   2:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** * \file SCB_EZI2C_INT.c
+   3:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** * \version 3.20
+   4:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** *
+   5:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** * \brief
+   6:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** *  This file provides the source code to the Interrupt Service Routine for
+   7:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** *  the SCB Component in EZI2C mode.
+   8:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** *
+   9:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** * Note:
+  10:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** *
+  11:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** ********************************************************************************
+  12:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** * \copyright
+  13:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** * Copyright 2013-2016, Cypress Semiconductor Corporation.  All rights reserved.
+  14:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** * You may use this file only in accordance with the license, terms, conditions,
+  15:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  16:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** * the software package with which this file was provided.
+  17:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** *******************************************************************************/
+  18:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  19:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** #include "SCB_PVT.h"
+  20:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** #include "SCB_EZI2C_PVT.h"
+  21:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** #include "cyapicallbacks.h"
+  22:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  23:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** #if(SCB_EZI2C_SCL_STRETCH_ENABLE_CONST)
+  24:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     /*******************************************************************************
+  25:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     * Function Name: SCB_EZI2C_STRETCH_ISR
+  26:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     ****************************************************************************//**
+  27:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     *
+  28:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     *  Handles the Interrupt Service Routine for the SCB EZI2C mode.
+  29:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     *  The clock stretching is used during operation.
+  30:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     *
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 2
+
+
+  31:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     *******************************************************************************/
+  32:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     CY_ISR_PROTO(SCB_EZI2C_STRETCH_ISR)
+  33:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     {
+  28              		.loc 1 33 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 32
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 80B5     		push	{r7, lr}
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 7, -8
+  35              		.cfi_offset 14, -4
+  36 0002 88B0     		sub	sp, sp, #32
+  37              		.cfi_def_cfa_offset 40
+  38 0004 00AF     		add	r7, sp, #0
+  39              		.cfi_def_cfa_register 7
+  34:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         static uint16 locBufSize;
+  35:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         uint32 locIndex;
+  36:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         uint32 locStatus;
+  37:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  38:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         uint32 endTransfer;
+  39:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         uint32 fifoIndex;
+  40:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         uint32 locByte;
+  41:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  42:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         uint32 locIntrCause;
+  43:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         uint32 locIntrSlave;
+  44:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  45:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     #ifdef SCB_EZI2C_STRETCH_ISR_ENTRY_CALLBACK
+  46:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         SCB_EZI2C_STRETCH_ISR_EntryCallback();
+  47:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     #endif /* SCB_EZI2C_STRETCH_ISR_ENTRY_CALLBACK */
+  48:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  49:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     #if(SCB_SECONDARY_ADDRESS_ENABLE_CONST)
+  50:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         /* Variable intended to be used with either buffer */
+  51:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         static volatile uint8 * SCB_dataBuffer; /* Pointer to data buffer              */
+  52:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         static uint16 SCB_bufSizeBuf;           /* Size of buffer in bytes             */
+  53:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         static uint16 SCB_protectBuf;           /* Start index of write protected area */
+  54:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  55:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         static uint8 activeAddress;
+  56:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         uint32 ackResponse;
+  57:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  58:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         ackResponse = SCB_EZI2C_ACK_RECEIVED_ADDRESS;
+  59:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     #endif /* (SCB_SECONDARY_ADDRESS_ENABLE_CONST) */
+  60:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  61:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     #if !defined (CY_REMOVE_SCB_CUSTOM_INTR_HANDLER)
+  62:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         if(NULL != SCB_customIntrHandler)
+  40              		.loc 1 62 0
+  41 0006 924B     		ldr	r3, .L41
+  42 0008 1B68     		ldr	r3, [r3]
+  43 000a 002B     		cmp	r3, #0
+  44 000c 02D0     		beq	.L2
+  63:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         {
+  64:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             SCB_customIntrHandler();
+  45              		.loc 1 64 0
+  46 000e 904B     		ldr	r3, .L41
+  47 0010 1B68     		ldr	r3, [r3]
+  48 0012 9847     		blx	r3
+  49              	.L2:
+  65:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         }
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 3
+
+
+  66:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     #else
+  67:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         CY_SCB_CUSTOM_INTR_HANDLER();
+  68:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     #endif /* !defined (CY_REMOVE_SCB_CUSTOM_INTR_HANDLER) */
+  69:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  70:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         /* Make local copy of global variable */
+  71:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         locIndex = SCB_EZI2C_GET_INDEX(activeAddress);
+  50              		.loc 1 71 0
+  51 0014 8F4B     		ldr	r3, .L41+4
+  52 0016 1B88     		ldrh	r3, [r3]
+  53 0018 FB61     		str	r3, [r7, #28]
+  72:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  73:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         /* Get interrupt sources */
+  74:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         locIntrSlave = SCB_GetSlaveInterruptSource();
+  54              		.loc 1 74 0
+  55 001a 8F4B     		ldr	r3, .L41+8
+  56 001c 1B68     		ldr	r3, [r3]
+  57 001e FB60     		str	r3, [r7, #12]
+  75:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         locIntrCause = SCB_GetInterruptCause();
+  58              		.loc 1 75 0
+  59 0020 8E4B     		ldr	r3, .L41+12
+  60 0022 1B68     		ldr	r3, [r3]
+  61 0024 BB60     		str	r3, [r7, #8]
+  76:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  77:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         /* INTR_SLAVE.I2C_ARB_LOST and INTR_SLAVE_I2C.BUS_ERROR */
+  78:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         /* Handles errors on the bus. There are cases when both bits are set.
+  79:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         * The error recovery is common: re-enable the scb IP. The content of the RX FIFO is lost.
+  80:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         */
+  81:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         if(0u != (locIntrSlave & (SCB_INTR_SLAVE_I2C_ARB_LOST |
+  62              		.loc 1 81 0
+  63 0026 FA68     		ldr	r2, [r7, #12]
+  64 0028 0223     		movs	r3, #2
+  65 002a FF33     		adds	r3, r3, #255
+  66 002c 1340     		ands	r3, r2
+  67 002e 48D0     		beq	.L3
+  82:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                   SCB_INTR_SLAVE_I2C_BUS_ERROR)))
+  83:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         {
+  84:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             SCB_CTRL_REG &= (uint32) ~SCB_CTRL_ENABLED; /* Disable SCB block */
+  68              		.loc 1 84 0
+  69 0030 8B4B     		ldr	r3, .L41+16
+  70 0032 8B4A     		ldr	r2, .L41+16
+  71 0034 1268     		ldr	r2, [r2]
+  72 0036 5200     		lsls	r2, r2, #1
+  73 0038 5208     		lsrs	r2, r2, #1
+  74 003a 1A60     		str	r2, [r3]
+  85:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  86:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         #if(SCB_CY_SCBIP_V0)
+  87:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             if(0u != ((uint8) SCB_EZI2C_STATUS_BUSY & SCB_curStatus))
+  88:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         #endif /* (SCB_CY_SCBIP_V0) */
+  89:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             {
+  90:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 SCB_curStatus &= (uint8) ~SCB_EZI2C_STATUS_BUSY;
+  75              		.loc 1 90 0
+  76 003c 894B     		ldr	r3, .L41+20
+  77 003e 1B78     		ldrb	r3, [r3]
+  78 0040 DBB2     		uxtb	r3, r3
+  79 0042 2022     		movs	r2, #32
+  80 0044 9343     		bics	r3, r2
+  81 0046 DAB2     		uxtb	r2, r3
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 4
+
+
+  82 0048 864B     		ldr	r3, .L41+20
+  83 004a 1A70     		strb	r2, [r3]
+  91:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 SCB_curStatus |= (uint8)  SCB_EZI2C_STATUS_ERR;
+  84              		.loc 1 91 0
+  85 004c 854B     		ldr	r3, .L41+20
+  86 004e 1B78     		ldrb	r3, [r3]
+  87 0050 DBB2     		uxtb	r3, r3
+  88 0052 1022     		movs	r2, #16
+  89 0054 1343     		orrs	r3, r2
+  90 0056 DAB2     		uxtb	r2, r3
+  91 0058 824B     		ldr	r3, .L41+20
+  92 005a 1A70     		strb	r2, [r3]
+  92:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+  93:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* INTR_TX_EMPTY is enabled in the address phase to receive data */
+  94:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 if(0u == (SCB_GetTxInterruptMode() & SCB_INTR_TX_EMPTY))
+  93              		.loc 1 94 0
+  94 005c 824B     		ldr	r3, .L41+24
+  95 005e 1B68     		ldr	r3, [r3]
+  96 0060 1022     		movs	r2, #16
+  97 0062 1340     		ands	r3, r2
+  98 0064 0ED1     		bne	.L4
+  95:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 {
+  96:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Write complete */
+  97:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     if(SCB_indexBuf1 != SCB_offsetBuf1)
+  99              		.loc 1 97 0
+ 100 0066 7B4B     		ldr	r3, .L41+4
+ 101 0068 1A88     		ldrh	r2, [r3]
+ 102 006a 804B     		ldr	r3, .L41+28
+ 103 006c 1B88     		ldrh	r3, [r3]
+ 104 006e 9A42     		cmp	r2, r3
+ 105 0070 10D0     		beq	.L6
+  98:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+  99:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_curStatus |= (uint8) SCB_INTR_SLAVE_I2C_WRITE_STOP;
+ 106              		.loc 1 99 0
+ 107 0072 7C4B     		ldr	r3, .L41+20
+ 108 0074 1B78     		ldrb	r3, [r3]
+ 109 0076 DBB2     		uxtb	r3, r3
+ 110 0078 0822     		movs	r2, #8
+ 111 007a 1343     		orrs	r3, r2
+ 112 007c DAB2     		uxtb	r2, r3
+ 113 007e 794B     		ldr	r3, .L41+20
+ 114 0080 1A70     		strb	r2, [r3]
+ 115 0082 07E0     		b	.L6
+ 116              	.L4:
+ 100:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 101:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 }
+ 102:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 else
+ 103:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 {
+ 104:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Read complete */
+ 105:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     SCB_curStatus |= (uint8) SCB_INTR_SLAVE_I2C_NACK;
+ 117              		.loc 1 105 0
+ 118 0084 774B     		ldr	r3, .L41+20
+ 119 0086 1B78     		ldrb	r3, [r3]
+ 120 0088 DBB2     		uxtb	r3, r3
+ 121 008a 0222     		movs	r2, #2
+ 122 008c 1343     		orrs	r3, r2
+ 123 008e DAB2     		uxtb	r2, r3
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 5
+
+
+ 124 0090 744B     		ldr	r3, .L41+20
+ 125 0092 1A70     		strb	r2, [r3]
+ 126              	.L6:
+ 106:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 }
+ 107:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             }
+ 108:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 109:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             SCB_DISABLE_SLAVE_AUTO_DATA;
+ 127              		.loc 1 109 0
+ 128 0094 764B     		ldr	r3, .L41+32
+ 129 0096 764A     		ldr	r2, .L41+32
+ 130 0098 1268     		ldr	r2, [r2]
+ 131 009a 7649     		ldr	r1, .L41+36
+ 132 009c 0A40     		ands	r2, r1
+ 133 009e 1A60     		str	r2, [r3]
+ 110:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 111:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             /* Disable TX and RX interrupt sources */
+ 112:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             SCB_SetRxInterruptMode(SCB_NO_INTR_SOURCES);
+ 134              		.loc 1 112 0
+ 135 00a0 754B     		ldr	r3, .L41+40
+ 136 00a2 0022     		movs	r2, #0
+ 137 00a4 1A60     		str	r2, [r3]
+ 113:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             SCB_SetTxInterruptMode(SCB_NO_INTR_SOURCES);
+ 138              		.loc 1 113 0
+ 139 00a6 704B     		ldr	r3, .L41+24
+ 140 00a8 0022     		movs	r2, #0
+ 141 00aa 1A60     		str	r2, [r3]
+ 114:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 115:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         #if(SCB_CY_SCBIP_V0)
+ 116:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             /* Clear interrupt sources as they are not automatically cleared after SCB is disabled 
+ 117:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             SCB_ClearRxInterruptSource(SCB_INTR_RX_ALL);
+ 118:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             SCB_ClearSlaveInterruptSource(SCB_INTR_SLAVE_ALL);
+ 119:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         #endif /* (SCB_CY_SCBIP_V0) */
+ 120:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 121:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             SCB_fsmState = SCB_EZI2C_FSM_IDLE;
+ 142              		.loc 1 121 0
+ 143 00ac 734B     		ldr	r3, .L41+44
+ 144 00ae 0222     		movs	r2, #2
+ 145 00b0 1A70     		strb	r2, [r3]
+ 122:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 123:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             SCB_CTRL_REG |= (uint32) SCB_CTRL_ENABLED;  /* Enable SCB block */
+ 146              		.loc 1 123 0
+ 147 00b2 6B4B     		ldr	r3, .L41+16
+ 148 00b4 6A4A     		ldr	r2, .L41+16
+ 149 00b6 1268     		ldr	r2, [r2]
+ 150 00b8 8021     		movs	r1, #128
+ 151 00ba 0906     		lsls	r1, r1, #24
+ 152 00bc 0A43     		orrs	r2, r1
+ 153 00be 1A60     		str	r2, [r3]
+ 154 00c0 ACE1     		b	.L7
+ 155              	.L3:
+ 124:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         }
+ 125:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         else
+ 126:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         {
+ 127:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             /* INTR_I2C_EC_WAKE_UP */
+ 128:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             /* Wakes up device from deep sleep */
+ 129:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             if(0u != (locIntrCause & SCB_INTR_CAUSE_I2C_EC))
+ 156              		.loc 1 129 0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 6
+
+
+ 157 00c2 BB68     		ldr	r3, [r7, #8]
+ 158 00c4 1022     		movs	r2, #16
+ 159 00c6 1340     		ands	r3, r2
+ 160 00c8 02D0     		beq	.L8
+ 130:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             {
+ 131:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* Disables wakeup interrupt source but does not clear it. It is cleared in INTR_SL
+ 132:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 SCB_SetI2CExtClkInterruptMode(SCB_NO_INTR_SOURCES);
+ 161              		.loc 1 132 0
+ 162 00ca 6D4B     		ldr	r3, .L41+48
+ 163 00cc 0022     		movs	r2, #0
+ 164 00ce 1A60     		str	r2, [r3]
+ 165              	.L8:
+ 133:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             }
+ 134:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 135:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             if(0u != (locIntrCause & (SCB_INTR_CAUSE_RX | SCB_INTR_CAUSE_SLAVE)))
+ 166              		.loc 1 135 0
+ 167 00d0 BB68     		ldr	r3, [r7, #8]
+ 168 00d2 0A22     		movs	r2, #10
+ 169 00d4 1340     		ands	r3, r2
+ 170 00d6 00D1     		bne	.LCB132
+ 171 00d8 07E1     		b	.L9	@long jump
+ 172              	.LCB132:
+ 136:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             {
+ 137:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* INTR_RX.NOT_EMPTY */
+ 138:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* Receives data byte-by-byte. Does not use RX FIFO capabilities */
+ 139:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 if (0u != (SCB_GetRxInterruptSourceMasked() & SCB_INTR_RX_NOT_EMPTY))
+ 173              		.loc 1 139 0
+ 174 00da 6A4B     		ldr	r3, .L41+52
+ 175 00dc 1B68     		ldr	r3, [r3]
+ 176 00de 0422     		movs	r2, #4
+ 177 00e0 1340     		ands	r3, r2
+ 178 00e2 00D1     		bne	.LCB138
+ 179 00e4 86E0     		b	.L10	@long jump
+ 180              	.LCB138:
+ 140:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 {
+ 141:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 #if(SCB_SECONDARY_ADDRESS_ENABLE_CONST)
+ 142:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* If I2C_STOP service is delayed to I2C_ADDR_MATCH the address byte is in the 
+ 143:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     * RX_NOT_EMPTY is enabled. The address byte has to stay into RX FIFO therefore
+ 144:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     * RX.NOT_EMPTY service has to be skipped. The address byte has to be read by I2
+ 145:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     */
+ 146:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     if (0u == (locIntrCause & SCB_INTR_CAUSE_SLAVE))
+ 147:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 #endif /* (SCB_SECONDARY_ADDRESS_ENABLE_CONST) */
+ 148:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 149:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         locByte = SCB_RX_FIFO_RD_REG;
+ 181              		.loc 1 149 0
+ 182 00e6 684B     		ldr	r3, .L41+56
+ 183 00e8 1B68     		ldr	r3, [r3]
+ 184 00ea 7B60     		str	r3, [r7, #4]
+ 150:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 151:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         switch(SCB_fsmState)
+ 185              		.loc 1 151 0
+ 186 00ec 634B     		ldr	r3, .L41+44
+ 187 00ee 1B78     		ldrb	r3, [r3]
+ 188 00f0 012B     		cmp	r3, #1
+ 189 00f2 04D0     		beq	.L12
+ 190 00f4 022B     		cmp	r3, #2
+ 191 00f6 1ED0     		beq	.L13
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 7
+
+
+ 192 00f8 002B     		cmp	r3, #0
+ 193 00fa 28D0     		beq	.L14
+ 194 00fc 72E0     		b	.L40
+ 195              	.L12:
+ 152:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         {
+ 153:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         case SCB_EZI2C_FSM_BYTE_WRITE:
+ 154:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             if(0u != locBufSize)
+ 196              		.loc 1 154 0
+ 197 00fe 634B     		ldr	r3, .L41+60
+ 198 0100 1B88     		ldrh	r3, [r3]
+ 199 0102 002B     		cmp	r3, #0
+ 200 0104 13D0     		beq	.L15
+ 155:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             {
+ 156:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 /* Store data byte and ACK */
+ 157:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 SCB_I2C_SLAVE_GENERATE_ACK;
+ 201              		.loc 1 157 0
+ 202 0106 624B     		ldr	r3, .L41+64
+ 203 0108 0122     		movs	r2, #1
+ 204 010a 1A60     		str	r2, [r3]
+ 158:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 159:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 SCB_dataBuffer1[locIndex] = (uint8) locByte;
+ 205              		.loc 1 159 0
+ 206 010c 614B     		ldr	r3, .L41+68
+ 207 010e 1A68     		ldr	r2, [r3]
+ 208 0110 FB69     		ldr	r3, [r7, #28]
+ 209 0112 D318     		adds	r3, r2, r3
+ 210 0114 7A68     		ldr	r2, [r7, #4]
+ 211 0116 D2B2     		uxtb	r2, r2
+ 212 0118 1A70     		strb	r2, [r3]
+ 160:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 locIndex++;
+ 213              		.loc 1 160 0
+ 214 011a FB69     		ldr	r3, [r7, #28]
+ 215 011c 0133     		adds	r3, r3, #1
+ 216 011e FB61     		str	r3, [r7, #28]
+ 161:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 locBufSize--;
+ 217              		.loc 1 161 0
+ 218 0120 5A4B     		ldr	r3, .L41+60
+ 219 0122 1B88     		ldrh	r3, [r3]
+ 220 0124 013B     		subs	r3, r3, #1
+ 221 0126 9AB2     		uxth	r2, r3
+ 222 0128 584B     		ldr	r3, .L41+60
+ 223 012a 1A80     		strh	r2, [r3]
+ 162:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             }
+ 163:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             else
+ 164:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             {
+ 165:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 /* Discard data byte and NACK */
+ 166:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 SCB_I2C_SLAVE_GENERATE_NACK;
+ 167:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             }
+ 168:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             break;
+ 224              		.loc 1 168 0
+ 225 012c 5EE0     		b	.L17
+ 226              	.L15:
+ 166:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             }
+ 227              		.loc 1 166 0
+ 228 012e 584B     		ldr	r3, .L41+64
+ 229 0130 0222     		movs	r2, #2
+ 230 0132 1A60     		str	r2, [r3]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 8
+
+
+ 231              		.loc 1 168 0
+ 232 0134 5AE0     		b	.L17
+ 233              	.L13:
+ 169:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 170:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #if(SCB_SUB_ADDRESS_SIZE16_CONST)
+ 171:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         case SCB_EZI2C_FSM_OFFSET_HI8:
+ 172:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 173:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_I2C_SLAVE_GENERATE_ACK;
+ 234              		.loc 1 173 0
+ 235 0136 564B     		ldr	r3, .L41+64
+ 236 0138 0122     		movs	r2, #1
+ 237 013a 1A60     		str	r2, [r3]
+ 174:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 175:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Store offset most significant byre */
+ 176:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             locBufSize = (uint16) ((uint8) locByte);
+ 238              		.loc 1 176 0
+ 239 013c 7B68     		ldr	r3, [r7, #4]
+ 240 013e DBB2     		uxtb	r3, r3
+ 241 0140 9AB2     		uxth	r2, r3
+ 242 0142 524B     		ldr	r3, .L41+60
+ 243 0144 1A80     		strh	r2, [r3]
+ 177:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 178:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_fsmState = SCB_EZI2C_FSM_OFFSET_LO8;
+ 244              		.loc 1 178 0
+ 245 0146 4D4B     		ldr	r3, .L41+44
+ 246 0148 0022     		movs	r2, #0
+ 247 014a 1A70     		strb	r2, [r3]
+ 179:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 180:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             break;
+ 248              		.loc 1 180 0
+ 249 014c 4EE0     		b	.L17
+ 250              	.L14:
+ 181:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #endif /* (SCB_SUB_ADDRESS_SIZE16_CONST) */
+ 182:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 183:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         case SCB_EZI2C_FSM_OFFSET_LO8:
+ 184:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 185:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             #if (SCB_SUB_ADDRESS_SIZE16)
+ 186:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             {
+ 187:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 /* Collect 2 bytes offset */
+ 188:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 locByte = ((uint32) ((uint32) locBufSize << 8u)) | locByte;
+ 251              		.loc 1 188 0
+ 252 014e 4F4B     		ldr	r3, .L41+60
+ 253 0150 1B88     		ldrh	r3, [r3]
+ 254 0152 1B02     		lsls	r3, r3, #8
+ 255 0154 7A68     		ldr	r2, [r7, #4]
+ 256 0156 1343     		orrs	r3, r2
+ 257 0158 7B60     		str	r3, [r7, #4]
+ 189:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             }
+ 190:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             #endif
+ 191:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 192:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Check offset against buffer size */
+ 193:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             if(locByte < (uint32) SCB_bufSizeBuf1)
+ 258              		.loc 1 193 0
+ 259 015a 4F4B     		ldr	r3, .L41+72
+ 260 015c 1B88     		ldrh	r3, [r3]
+ 261 015e 1A00     		movs	r2, r3
+ 262 0160 7B68     		ldr	r3, [r7, #4]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 9
+
+
+ 263 0162 9A42     		cmp	r2, r3
+ 264 0164 3AD9     		bls	.L18
+ 194:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             {
+ 195:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 SCB_I2C_SLAVE_GENERATE_ACK;
+ 265              		.loc 1 195 0
+ 266 0166 4A4B     		ldr	r3, .L41+64
+ 267 0168 0122     		movs	r2, #1
+ 268 016a 1A60     		str	r2, [r3]
+ 196:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 197:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 /* Update local buffer index with new offset */
+ 198:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 locIndex = locByte;
+ 269              		.loc 1 198 0
+ 270 016c 7B68     		ldr	r3, [r7, #4]
+ 271 016e FB61     		str	r3, [r7, #28]
+ 199:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 200:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 /* Get available buffer size to write */
+ 201:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 locBufSize = (uint16) ((locByte < SCB_protectBuf1) ?
+ 272              		.loc 1 201 0
+ 273 0170 4A4B     		ldr	r3, .L41+76
+ 274 0172 1B88     		ldrh	r3, [r3]
+ 275 0174 1A00     		movs	r2, r3
+ 276 0176 7B68     		ldr	r3, [r7, #4]
+ 277 0178 9A42     		cmp	r2, r3
+ 278 017a 06D9     		bls	.L19
+ 279              		.loc 1 201 0 is_stmt 0 discriminator 1
+ 280 017c 474B     		ldr	r3, .L41+76
+ 281 017e 1A88     		ldrh	r2, [r3]
+ 282 0180 7B68     		ldr	r3, [r7, #4]
+ 283 0182 9BB2     		uxth	r3, r3
+ 284 0184 D31A     		subs	r3, r2, r3
+ 285 0186 9AB2     		uxth	r2, r3
+ 286 0188 00E0     		b	.L20
+ 287              	.L19:
+ 288              		.loc 1 201 0 discriminator 2
+ 289 018a 0022     		movs	r2, #0
+ 290              	.L20:
+ 291              		.loc 1 201 0 discriminator 4
+ 292 018c 3F4B     		ldr	r3, .L41+60
+ 293 018e 1A80     		strh	r2, [r3]
+ 202:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                                        (SCB_protectBuf1 - locByte) : (0u));
+ 203:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 204:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             #if(SCB_CY_SCBIP_V0)
+ 205:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 206:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 if(locBufSize < SCB_EZI2C_FIFO_SIZE)
+ 207:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 {
+ 208:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     /* Set FSM state to receive byte by byte */
+ 209:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     SCB_fsmState = SCB_EZI2C_FSM_BYTE_WRITE;
+ 210:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 }
+ 211:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 /* Receive RX FIFO chunks */
+ 212:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 else if(locBufSize == SCB_EZI2C_FIFO_SIZE)
+ 213:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 {
+ 214:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     SCB_ENABLE_SLAVE_AUTO_DATA; /* NACK when RX FIFO is full */
+ 215:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     SCB_SetRxInterruptMode(SCB_NO_INTR_SOURCES);
+ 216:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 }
+ 217:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 else
+ 218:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 {
+ 219:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     SCB_ENABLE_SLAVE_AUTO_DATA_ACK; /* Stretch when RX FIFO is full
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 10
+
+
+ 220:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     SCB_SetRxInterruptMode(SCB_INTR_RX_FULL);
+ 221:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 }
+ 222:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 223:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             #else
+ 224:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 225:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 #if(SCB_SECONDARY_ADDRESS_ENABLE)
+ 226:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 {
+ 227:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     /* Set FSM state to receive byte by byte.
+ 228:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     * The byte by byte receive is always chosen for two addresses. 
+ 229:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     */
+ 230:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     SCB_fsmState = SCB_EZI2C_FSM_BYTE_WRITE;
+ 231:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 }
+ 232:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 #else
+ 233:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 {
+ 234:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     if (locBufSize < SCB_EZI2C_FIFO_SIZE)
+ 294              		.loc 1 234 0 is_stmt 1 discriminator 4
+ 295 0190 3E4B     		ldr	r3, .L41+60
+ 296 0192 1B88     		ldrh	r3, [r3]
+ 297 0194 072B     		cmp	r3, #7
+ 298 0196 03D8     		bhi	.L21
+ 235:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     {
+ 236:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                         /* Set FSM state to receive byte by byte */
+ 237:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                         SCB_fsmState = SCB_EZI2C_FSM_BYTE_WRITE;
+ 299              		.loc 1 237 0
+ 300 0198 384B     		ldr	r3, .L41+44
+ 301 019a 0122     		movs	r2, #1
+ 302 019c 1A70     		strb	r2, [r3]
+ 303 019e 18E0     		b	.L22
+ 304              	.L21:
+ 238:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     }
+ 239:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     /* Receive RX FIFO chunks */
+ 240:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     else if (locBufSize == SCB_EZI2C_FIFO_SIZE)
+ 305              		.loc 1 240 0
+ 306 01a0 3A4B     		ldr	r3, .L41+60
+ 307 01a2 1B88     		ldrh	r3, [r3]
+ 308 01a4 082B     		cmp	r3, #8
+ 309 01a6 0AD1     		bne	.L23
+ 241:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     {
+ 242:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                         SCB_ENABLE_SLAVE_AUTO_DATA; /* NACK when RX FIFO is full */
+ 310              		.loc 1 242 0
+ 311 01a8 314B     		ldr	r3, .L41+32
+ 312 01aa 314A     		ldr	r2, .L41+32
+ 313 01ac 1268     		ldr	r2, [r2]
+ 314 01ae A021     		movs	r1, #160
+ 315 01b0 0902     		lsls	r1, r1, #8
+ 316 01b2 0A43     		orrs	r2, r1
+ 317 01b4 1A60     		str	r2, [r3]
+ 243:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                         SCB_SetRxInterruptMode(SCB_NO_INTR_SOURCES);
+ 318              		.loc 1 243 0
+ 319 01b6 304B     		ldr	r3, .L41+40
+ 320 01b8 0022     		movs	r2, #0
+ 321 01ba 1A60     		str	r2, [r3]
+ 322 01bc 09E0     		b	.L22
+ 323              	.L23:
+ 244:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     }
+ 245:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     else
+ 246:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     {
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 11
+
+
+ 247:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                         SCB_ENABLE_SLAVE_AUTO_DATA_ACK; /* Stretch when RX FIFO is 
+ 324              		.loc 1 247 0
+ 325 01be 2C4B     		ldr	r3, .L41+32
+ 326 01c0 2B4A     		ldr	r2, .L41+32
+ 327 01c2 1268     		ldr	r2, [r2]
+ 328 01c4 8021     		movs	r1, #128
+ 329 01c6 8901     		lsls	r1, r1, #6
+ 330 01c8 0A43     		orrs	r2, r1
+ 331 01ca 1A60     		str	r2, [r3]
+ 248:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                         SCB_SetRxInterruptMode(SCB_INTR_RX_FULL);
+ 332              		.loc 1 248 0
+ 333 01cc 2A4B     		ldr	r3, .L41+40
+ 334 01ce 0822     		movs	r2, #8
+ 335 01d0 1A60     		str	r2, [r3]
+ 336              	.L22:
+ 249:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                     }
+ 250:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 }
+ 251:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 #endif
+ 252:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 253:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             #endif /* (SCB_CY_SCBIP_V0) */
+ 254:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 255:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 /* Store local offset into global variable */
+ 256:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 SCB_EZI2C_SET_OFFSET(activeAddress, locIndex);
+ 337              		.loc 1 256 0
+ 338 01d2 FB69     		ldr	r3, [r7, #28]
+ 339 01d4 9AB2     		uxth	r2, r3
+ 340 01d6 254B     		ldr	r3, .L41+28
+ 341 01d8 1A80     		strh	r2, [r3]
+ 257:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             }
+ 258:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             else
+ 259:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             {
+ 260:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 /* Discard offset byte and NACK */
+ 261:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 SCB_I2C_SLAVE_GENERATE_NACK;
+ 262:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             }
+ 263:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             break;
+ 342              		.loc 1 263 0
+ 343 01da 07E0     		b	.L17
+ 344              	.L18:
+ 261:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             }
+ 345              		.loc 1 261 0
+ 346 01dc 2C4B     		ldr	r3, .L41+64
+ 347 01de 0222     		movs	r2, #2
+ 348 01e0 1A60     		str	r2, [r3]
+ 349              		.loc 1 263 0
+ 350 01e2 03E0     		b	.L17
+ 351              	.L40:
+ 264:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 265:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         default:
+ 266:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             CYASSERT(0u != 0u); /* Should never get there */
+ 352              		.loc 1 266 0
+ 353 01e4 0020     		movs	r0, #0
+ 354 01e6 FFF7FEFF 		bl	CyHalt
+ 267:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             break;
+ 355              		.loc 1 267 0
+ 356 01ea C046     		nop
+ 357              	.L17:
+ 268:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         }
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 12
+
+
+ 269:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 270:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_ClearRxInterruptSource(SCB_INTR_RX_NOT_EMPTY);
+ 358              		.loc 1 270 0
+ 359 01ec 2C4B     		ldr	r3, .L41+80
+ 360 01ee 0422     		movs	r2, #4
+ 361 01f0 1A60     		str	r2, [r3]
+ 362 01f2 7AE0     		b	.L9
+ 363              	.L10:
+ 271:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 272:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 }
+ 273:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* INTR_RX.FULL, INTR_SLAVE.I2C_STOP */
+ 274:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* Receive FIFO chunks: auto data ACK is enabled */
+ 275:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 else if (0u != (SCB_I2C_CTRL_REG & SCB_I2C_CTRL_S_READY_DATA_ACK))
+ 364              		.loc 1 275 0
+ 365 01f4 1E4B     		ldr	r3, .L41+32
+ 366 01f6 1A68     		ldr	r2, [r3]
+ 367 01f8 8023     		movs	r3, #128
+ 368 01fa 9B01     		lsls	r3, r3, #6
+ 369 01fc 1340     		ands	r3, r2
+ 370 01fe 00D1     		bne	.LCB315
+ 371 0200 73E0     		b	.L9	@long jump
+ 372              	.LCB315:
+ 276:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 {
+ 277:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Slave interrupt (I2C_STOP or I2C_ADDR_MATCH) leads to completion of read.
+ 278:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     * A completion event has a higher priority than the FIFO full.
+ 279:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     * Read remaining data from RX FIFO.
+ 280:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     */
+ 281:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     if(0u != (locIntrCause & SCB_INTR_CAUSE_SLAVE))
+ 373              		.loc 1 281 0
+ 374 0202 BB68     		ldr	r3, [r7, #8]
+ 375 0204 0222     		movs	r2, #2
+ 376 0206 1340     		ands	r3, r2
+ 377 0208 0DD0     		beq	.L25
+ 282:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 283:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Read remaining bytes from RX FIFO */
+ 284:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         fifoIndex = SCB_GET_RX_FIFO_ENTRIES;
+ 378              		.loc 1 284 0
+ 379 020a 264B     		ldr	r3, .L41+84
+ 380 020c 1B68     		ldr	r3, [r3]
+ 381 020e 1F22     		movs	r2, #31
+ 382 0210 1340     		ands	r3, r2
+ 383 0212 3B61     		str	r3, [r7, #16]
+ 285:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 286:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         #if(SCB_SECONDARY_ADDRESS_ENABLE)
+ 287:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         {
+ 288:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Update with current address match */
+ 289:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             if(SCB_CHECK_INTR_SLAVE_MASKED(SCB_INTR_SLAVE_I2C_ADDR_MATCH))
+ 290:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             {
+ 291:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 /* Update RX FIFO entries as address byte is there now */
+ 292:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 fifoIndex = SCB_GET_RX_FIFO_ENTRIES;
+ 293:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 294:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 /* If SR is valid, RX FIFO is full and address is in SHIFTER:
+ 295:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 * read 8 entries and leave address in RX FIFO for further processin
+ 296:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 * If SR is invalid, address is already in RX FIFO: read (entries-1)
+ 297:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 */
+ 298:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                 fifoIndex -= ((0u != SCB_GET_RX_FIFO_SR_VALID) ? (0u) : (1u));
+ 299:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             }
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 13
+
+
+ 300:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         }
+ 301:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         #endif
+ 302:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 303:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_DISABLE_SLAVE_AUTO_DATA;
+ 384              		.loc 1 303 0
+ 385 0214 164B     		ldr	r3, .L41+32
+ 386 0216 164A     		ldr	r2, .L41+32
+ 387 0218 1268     		ldr	r2, [r2]
+ 388 021a 1649     		ldr	r1, .L41+36
+ 389 021c 0A40     		ands	r2, r1
+ 390 021e 1A60     		str	r2, [r3]
+ 304:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         endTransfer = SCB_EZI2C_CONTINUE_TRANSFER;
+ 391              		.loc 1 304 0
+ 392 0220 0123     		movs	r3, #1
+ 393 0222 7B61     		str	r3, [r7, #20]
+ 394 0224 4EE0     		b	.L28
+ 395              	.L25:
+ 305:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 306:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     else
+ 307:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* INTR_RX_FULL */
+ 308:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Continue transfer or disable INTR_RX_FULL to catch completion event. */
+ 309:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 310:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Calculate buffer size available to write data into */
+ 311:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         locBufSize -= (uint16) SCB_EZI2C_FIFO_SIZE;
+ 396              		.loc 1 311 0
+ 397 0226 194B     		ldr	r3, .L41+60
+ 398 0228 1B88     		ldrh	r3, [r3]
+ 399 022a 083B     		subs	r3, r3, #8
+ 400 022c 9AB2     		uxth	r2, r3
+ 401 022e 174B     		ldr	r3, .L41+60
+ 402 0230 1A80     		strh	r2, [r3]
+ 312:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 313:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         if(locBufSize <= SCB_EZI2C_FIFO_SIZE)
+ 403              		.loc 1 313 0
+ 404 0232 164B     		ldr	r3, .L41+60
+ 405 0234 1B88     		ldrh	r3, [r3]
+ 406 0236 082B     		cmp	r3, #8
+ 407 0238 05D8     		bhi	.L27
+ 314:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         {
+ 315:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Send NACK when RX FIFO overflow */
+ 316:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             fifoIndex   = locBufSize;
+ 408              		.loc 1 316 0
+ 409 023a 144B     		ldr	r3, .L41+60
+ 410 023c 1B88     		ldrh	r3, [r3]
+ 411 023e 3B61     		str	r3, [r7, #16]
+ 317:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             endTransfer = SCB_EZI2C_COMPLETE_TRANSFER;
+ 412              		.loc 1 317 0
+ 413 0240 0023     		movs	r3, #0
+ 414 0242 7B61     		str	r3, [r7, #20]
+ 415 0244 3EE0     		b	.L28
+ 416              	.L27:
+ 318:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         }
+ 319:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         else
+ 320:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         {
+ 321:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Continue  transaction */
+ 322:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             fifoIndex   = SCB_EZI2C_FIFO_SIZE;
+ 417              		.loc 1 322 0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 14
+
+
+ 418 0246 0823     		movs	r3, #8
+ 419 0248 3B61     		str	r3, [r7, #16]
+ 323:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             endTransfer = SCB_EZI2C_CONTINUE_TRANSFER;
+ 420              		.loc 1 323 0
+ 421 024a 0123     		movs	r3, #1
+ 422 024c 7B61     		str	r3, [r7, #20]
+ 324:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         }
+ 325:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 326:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 327:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     for(; (0u != fifoIndex); fifoIndex--)
+ 423              		.loc 1 327 0
+ 424 024e 39E0     		b	.L28
+ 425              	.L42:
+ 426              		.align	2
+ 427              	.L41:
+ 428 0250 00000000 		.word	SCB_customIntrHandler
+ 429 0254 00000000 		.word	SCB_indexBuf1
+ 430 0258 400F2540 		.word	1076170560
+ 431 025c 000E2540 		.word	1076170240
+ 432 0260 00002540 		.word	1076166656
+ 433 0264 00000000 		.word	SCB_curStatus
+ 434 0268 880F2540 		.word	1076170632
+ 435 026c 00000000 		.word	SCB_offsetBuf1
+ 436 0270 60002540 		.word	1076166752
+ 437 0274 FF5FFFFF 		.word	-40961
+ 438 0278 C80F2540 		.word	1076170696
+ 439 027c 00000000 		.word	SCB_fsmState
+ 440 0280 880E2540 		.word	1076170376
+ 441 0284 CC0F2540 		.word	1076170700
+ 442 0288 40032540 		.word	1076167488
+ 443 028c 00000000 		.word	locBufSize.4967
+ 444 0290 6C002540 		.word	1076166764
+ 445 0294 00000000 		.word	SCB_dataBuffer1
+ 446 0298 00000000 		.word	SCB_bufSizeBuf1
+ 447 029c 00000000 		.word	SCB_protectBuf1
+ 448 02a0 C00F2540 		.word	1076170688
+ 449 02a4 08032540 		.word	1076167432
+ 450              	.L29:
+ 328:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 329:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Store data in buffer */
+ 330:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_dataBuffer1[locIndex] = (uint8) SCB_RX_FIFO_RD_REG;
+ 451              		.loc 1 330 0 discriminator 2
+ 452 02a8 604B     		ldr	r3, .L43
+ 453 02aa 1A68     		ldr	r2, [r3]
+ 454 02ac FB69     		ldr	r3, [r7, #28]
+ 455 02ae D218     		adds	r2, r2, r3
+ 456 02b0 5F4B     		ldr	r3, .L43+4
+ 457 02b2 1B68     		ldr	r3, [r3]
+ 458 02b4 DBB2     		uxtb	r3, r3
+ 459 02b6 1370     		strb	r3, [r2]
+ 331:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         locIndex++;
+ 460              		.loc 1 331 0 discriminator 2
+ 461 02b8 FB69     		ldr	r3, [r7, #28]
+ 462 02ba 0133     		adds	r3, r3, #1
+ 463 02bc FB61     		str	r3, [r7, #28]
+ 327:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 464              		.loc 1 327 0 discriminator 2
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 15
+
+
+ 465 02be 3B69     		ldr	r3, [r7, #16]
+ 466 02c0 013B     		subs	r3, r3, #1
+ 467 02c2 3B61     		str	r3, [r7, #16]
+ 468              	.L28:
+ 327:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 469              		.loc 1 327 0 is_stmt 0 discriminator 1
+ 470 02c4 3B69     		ldr	r3, [r7, #16]
+ 471 02c6 002B     		cmp	r3, #0
+ 472 02c8 EED1     		bne	.L29
+ 332:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 333:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 334:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Complete transfer sending NACK when RX FIFO overflow */
+ 335:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     if(SCB_EZI2C_COMPLETE_TRANSFER == endTransfer)
+ 473              		.loc 1 335 0 is_stmt 1
+ 474 02ca 7B69     		ldr	r3, [r7, #20]
+ 475 02cc 002B     		cmp	r3, #0
+ 476 02ce 09D1     		bne	.L30
+ 336:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 337:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_ENABLE_SLAVE_AUTO_DATA_NACK;
+ 477              		.loc 1 337 0
+ 478 02d0 584B     		ldr	r3, .L43+8
+ 479 02d2 584A     		ldr	r2, .L43+8
+ 480 02d4 1268     		ldr	r2, [r2]
+ 481 02d6 8021     		movs	r1, #128
+ 482 02d8 0902     		lsls	r1, r1, #8
+ 483 02da 0A43     		orrs	r2, r1
+ 484 02dc 1A60     		str	r2, [r3]
+ 338:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 339:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Disable INTR_RX_FULL during last RX FIFO chunk reception */
+ 340:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_SetRxInterruptMode(SCB_NO_INTR_SOURCES);
+ 485              		.loc 1 340 0
+ 486 02de 564B     		ldr	r3, .L43+12
+ 487 02e0 0022     		movs	r2, #0
+ 488 02e2 1A60     		str	r2, [r3]
+ 489              	.L30:
+ 341:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 342:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 343:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     SCB_ClearRxInterruptSource(SCB_INTR_RX_FULL |
+ 490              		.loc 1 343 0
+ 491 02e4 554B     		ldr	r3, .L43+16
+ 492 02e6 0C22     		movs	r2, #12
+ 493 02e8 1A60     		str	r2, [r3]
+ 494              	.L9:
+ 344:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                                                             SCB_INTR_RX_NOT_EMPTY);
+ 345:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 }
+ 346:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 else
+ 347:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 {
+ 348:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Exit for slave interrupts which are not active for RX direction:
+ 349:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     * INTR_SLAVE.I2C_ADDR_MATCH and INTR_SLAVE.I2C_STOP while byte-by-byte receptio
+ 350:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     */
+ 351:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 }
+ 352:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             }
+ 353:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 354:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             if(0u != (locIntrCause & SCB_INTR_CAUSE_SLAVE))
+ 495              		.loc 1 354 0
+ 496 02ea BB68     		ldr	r3, [r7, #8]
+ 497 02ec 0222     		movs	r2, #2
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 16
+
+
+ 498 02ee 1340     		ands	r3, r2
+ 499 02f0 6DD0     		beq	.L31
+ 355:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             {
+ 356:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* INTR_SLAVE.I2C_STOP */
+ 357:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* Catch Stop condition: completion of write or read transfer */
+ 358:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             #if(!SCB_SECONDARY_ADDRESS_ENABLE_CONST)
+ 359:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 if(0u != (locIntrSlave & SCB_INTR_SLAVE_I2C_STOP))
+ 500              		.loc 1 359 0
+ 501 02f2 FB68     		ldr	r3, [r7, #12]
+ 502 02f4 1022     		movs	r2, #16
+ 503 02f6 1340     		ands	r3, r2
+ 504 02f8 27D0     		beq	.L32
+ 360:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             #else
+ 361:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* Prevent triggering when matched address was NACKed */
+ 362:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 if((0u != (locIntrSlave & SCB_INTR_SLAVE_I2C_STOP)) &&
+ 363:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                    (0u != ((uint8) SCB_EZI2C_STATUS_BUSY & SCB_curStatus)))
+ 364:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             #endif
+ 365:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 {
+ 366:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Disable TX and RX interrupt sources */
+ 367:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     SCB_SetRxInterruptMode(SCB_NO_INTR_SOURCES);
+ 505              		.loc 1 367 0
+ 506 02fa 4F4B     		ldr	r3, .L43+12
+ 507 02fc 0022     		movs	r2, #0
+ 508 02fe 1A60     		str	r2, [r3]
+ 368:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     SCB_SetTxInterruptMode(SCB_NO_INTR_SOURCES);
+ 509              		.loc 1 368 0
+ 510 0300 4F4B     		ldr	r3, .L43+20
+ 511 0302 0022     		movs	r2, #0
+ 512 0304 1A60     		str	r2, [r3]
+ 369:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 370:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Set read completion mask */
+ 371:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     locStatus = SCB_INTR_SLAVE_I2C_NACK;
+ 513              		.loc 1 371 0
+ 514 0306 0223     		movs	r3, #2
+ 515 0308 BB61     		str	r3, [r7, #24]
+ 372:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 373:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Check if buffer content was modified: the address phase resets the locIndex 
+ 374:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     if(locIndex != SCB_EZI2C_GET_OFFSET(activeAddress))
+ 516              		.loc 1 374 0
+ 517 030a 4E4B     		ldr	r3, .L43+24
+ 518 030c 1B88     		ldrh	r3, [r3]
+ 519 030e 1A00     		movs	r2, r3
+ 520 0310 FB69     		ldr	r3, [r7, #28]
+ 521 0312 9A42     		cmp	r2, r3
+ 522 0314 03D0     		beq	.L33
+ 375:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 376:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         locStatus |= SCB_INTR_SLAVE_I2C_WRITE_STOP;
+ 523              		.loc 1 376 0
+ 524 0316 BB69     		ldr	r3, [r7, #24]
+ 525 0318 0822     		movs	r2, #8
+ 526 031a 1343     		orrs	r3, r2
+ 527 031c BB61     		str	r3, [r7, #24]
+ 528              	.L33:
+ 377:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 378:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 379:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Complete read or write transaction */
+ 380:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     locStatus &= locIntrSlave;
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 17
+
+
+ 529              		.loc 1 380 0
+ 530 031e BB69     		ldr	r3, [r7, #24]
+ 531 0320 FA68     		ldr	r2, [r7, #12]
+ 532 0322 1340     		ands	r3, r2
+ 533 0324 BB61     		str	r3, [r7, #24]
+ 381:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     SCB_EZI2C_UPDATE_LOC_STATUS(activeAddress, locStatus);
+ 382:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     locStatus |= (uint32)  SCB_curStatus;
+ 534              		.loc 1 382 0
+ 535 0326 484B     		ldr	r3, .L43+28
+ 536 0328 1B78     		ldrb	r3, [r3]
+ 537 032a DBB2     		uxtb	r3, r3
+ 538 032c 1A00     		movs	r2, r3
+ 539 032e BB69     		ldr	r3, [r7, #24]
+ 540 0330 1343     		orrs	r3, r2
+ 541 0332 BB61     		str	r3, [r7, #24]
+ 383:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     locStatus &= (uint32) ~SCB_EZI2C_STATUS_BUSY;
+ 542              		.loc 1 383 0
+ 543 0334 BB69     		ldr	r3, [r7, #24]
+ 544 0336 2022     		movs	r2, #32
+ 545 0338 9343     		bics	r3, r2
+ 546 033a BB61     		str	r3, [r7, #24]
+ 384:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     SCB_curStatus = (uint8) locStatus;
+ 547              		.loc 1 384 0
+ 548 033c BB69     		ldr	r3, [r7, #24]
+ 549 033e DAB2     		uxtb	r2, r3
+ 550 0340 414B     		ldr	r3, .L43+28
+ 551 0342 1A70     		strb	r2, [r3]
+ 385:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 386:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     SCB_fsmState = SCB_EZI2C_FSM_IDLE;
+ 552              		.loc 1 386 0
+ 553 0344 414B     		ldr	r3, .L43+32
+ 554 0346 0222     		movs	r2, #2
+ 555 0348 1A70     		strb	r2, [r3]
+ 556              	.L32:
+ 387:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 388:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #if(SCB_SECONDARY_ADDRESS_ENABLE)
+ 389:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 390:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Store local index into global variable, before address phase */
+ 391:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_EZI2C_SET_INDEX(activeAddress, locIndex);
+ 392:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 393:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #endif
+ 394:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 }
+ 395:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 396:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* INTR_SLAVE.I2C_ADDR_MATCH */
+ 397:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* The matched address is received: the slave starts its operation.
+ 398:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 * INTR_SLAVE_I2C_STOP updates the buffer index before the address phase for two add
+ 399:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 * This is done to update buffer index correctly before the address phase changes it
+ 400:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 */
+ 401:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 if(0u != (locIntrSlave & SCB_INTR_SLAVE_I2C_ADDR_MATCH))
+ 557              		.loc 1 401 0
+ 558 034a FB68     		ldr	r3, [r7, #12]
+ 559 034c 4022     		movs	r2, #64
+ 560 034e 1340     		ands	r3, r2
+ 561 0350 3AD0     		beq	.L34
+ 402:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 {
+ 403:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #if(SCB_SECONDARY_ADDRESS_ENABLE)
+ 404:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 18
+
+
+ 405:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Read address byte from RX FIFO */
+ 406:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         locByte = SCB_GET_I2C_7BIT_ADDRESS(SCB_RX_FIFO_RD_REG);
+ 407:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 408:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_ClearRxInterruptSource(SCB_INTR_RX_NOT_EMPTY);
+ 409:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 410:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Check received address against device addresses */
+ 411:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         if(SCB_addrBuf1 == locByte)
+ 412:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         {
+ 413:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Set buffer exposed to primary slave address */
+ 414:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_dataBuffer = SCB_dataBuffer1;
+ 415:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_bufSizeBuf = SCB_bufSizeBuf1;
+ 416:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_protectBuf = SCB_protectBuf1;
+ 417:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 418:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             activeAddress = SCB_EZI2C_ACTIVE_ADDRESS1;
+ 419:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         }
+ 420:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         else if(SCB_addrBuf2 == locByte)
+ 421:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         {
+ 422:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Set buffer exposed to secondary slave address */
+ 423:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_dataBuffer = SCB_dataBuffer2;
+ 424:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_bufSizeBuf = SCB_bufSizeBuf2;
+ 425:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_protectBuf = SCB_protectBuf2;
+ 426:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 427:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             activeAddress = SCB_EZI2C_ACTIVE_ADDRESS2;
+ 428:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         }
+ 429:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         else
+ 430:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         {
+ 431:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Address does not match */
+ 432:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             ackResponse = SCB_EZI2C_NACK_RECEIVED_ADDRESS;
+ 433:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         }
+ 434:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 435:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #endif
+ 436:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 437:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 #if(SCB_SECONDARY_ADDRESS_ENABLE_CONST)
+ 438:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     if(SCB_EZI2C_NACK_RECEIVED_ADDRESS == ackResponse)
+ 439:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 440:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Clear interrupt sources before NACK address */
+ 441:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_ClearI2CExtClkInterruptSource(SCB_INTR_I2C_EC_WAKE_UP);
+ 442:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_ClearSlaveInterruptSource(SCB_INTR_SLAVE_ALL);
+ 443:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 444:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #if(!SCB_CY_SCBIP_V0)
+ 445:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Disable INTR_I2C_STOP to not trigger after matched address is NACKed. Ti
+ 446:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_DISABLE_INTR_SLAVE(SCB_INTR_SLAVE_I2C_STOP);
+ 447:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #endif /* (!SCB_CY_SCBIP_V0) */
+ 448:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 449:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* NACK address byte: it does not match neither primary nor secondary */
+ 450:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_I2C_SLAVE_GENERATE_NACK;
+ 451:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 452:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     else
+ 453:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 #endif /* (SCB_SECONDARY_ADDRESS_ENABLE_CONST) */
+ 454:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 455:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 456:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #if(SCB_SCB_MODE_UNCONFIG_CONST_CFG)
+ 457:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         if(!SCB_SECONDARY_ADDRESS_ENABLE)
+ 458:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         {
+ 459:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Set buffer exposed to primary slave address */
+ 460:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_dataBuffer = SCB_dataBuffer1;
+ 461:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_bufSizeBuf = SCB_bufSizeBuf1;
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 19
+
+
+ 462:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_protectBuf = SCB_protectBuf1;
+ 463:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 464:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             activeAddress = SCB_EZI2C_ACTIVE_ADDRESS1;
+ 465:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         }
+ 466:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #endif /* (SCB_SCB_MODE_UNCONFIG_CONST_CFG) */
+ 467:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 468:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Bus becomes busy after address is received */
+ 469:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_curStatus |= (uint8) SCB_EZI2C_STATUS_BUSY;
+ 562              		.loc 1 469 0
+ 563 0352 3D4B     		ldr	r3, .L43+28
+ 564 0354 1B78     		ldrb	r3, [r3]
+ 565 0356 DBB2     		uxtb	r3, r3
+ 566 0358 2022     		movs	r2, #32
+ 567 035a 1343     		orrs	r3, r2
+ 568 035c DAB2     		uxtb	r2, r3
+ 569 035e 3A4B     		ldr	r3, .L43+28
+ 570 0360 1A70     		strb	r2, [r3]
+ 470:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 471:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Slave is read or written: set current offset */
+ 472:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         locIndex = SCB_EZI2C_GET_OFFSET(activeAddress);
+ 571              		.loc 1 472 0
+ 572 0362 384B     		ldr	r3, .L43+24
+ 573 0364 1B88     		ldrh	r3, [r3]
+ 574 0366 FB61     		str	r3, [r7, #28]
+ 473:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 474:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Check transaction direction */
+ 475:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         if(SCB_CHECK_I2C_STATUS(SCB_I2C_STATUS_S_READ))
+ 575              		.loc 1 475 0
+ 576 0368 394B     		ldr	r3, .L43+36
+ 577 036a 1B68     		ldr	r3, [r3]
+ 578 036c 1022     		movs	r2, #16
+ 579 036e 1340     		ands	r3, r2
+ 580 0370 18D0     		beq	.L35
+ 476:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         {
+ 477:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Calculate slave buffer size */
+ 478:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             locBufSize = SCB_bufSizeBuf1 - (uint16) locIndex;
+ 581              		.loc 1 478 0
+ 582 0372 384B     		ldr	r3, .L43+40
+ 583 0374 1A88     		ldrh	r2, [r3]
+ 584 0376 FB69     		ldr	r3, [r7, #28]
+ 585 0378 9BB2     		uxth	r3, r3
+ 586 037a D31A     		subs	r3, r2, r3
+ 587 037c 9AB2     		uxth	r2, r3
+ 588 037e 364B     		ldr	r3, .L43+44
+ 589 0380 1A80     		strh	r2, [r3]
+ 479:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 480:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Clear TX FIFO to start fill from offset */
+ 481:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_CLEAR_TX_FIFO;
+ 590              		.loc 1 481 0
+ 591 0382 364B     		ldr	r3, .L43+48
+ 592 0384 354A     		ldr	r2, .L43+48
+ 593 0386 1268     		ldr	r2, [r2]
+ 594 0388 8021     		movs	r1, #128
+ 595 038a 4902     		lsls	r1, r1, #9
+ 596 038c 0A43     		orrs	r2, r1
+ 597 038e 1A60     		str	r2, [r3]
+ 598 0390 324B     		ldr	r3, .L43+48
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 20
+
+
+ 599 0392 324A     		ldr	r2, .L43+48
+ 600 0394 1268     		ldr	r2, [r2]
+ 601 0396 3249     		ldr	r1, .L43+52
+ 602 0398 0A40     		ands	r2, r1
+ 603 039a 1A60     		str	r2, [r3]
+ 482:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_SetTxInterruptMode(SCB_INTR_TX_EMPTY);
+ 604              		.loc 1 482 0
+ 605 039c 284B     		ldr	r3, .L43+20
+ 606 039e 1022     		movs	r2, #16
+ 607 03a0 1A60     		str	r2, [r3]
+ 608 03a2 02E0     		b	.L36
+ 609              	.L35:
+ 483:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         }
+ 484:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         else
+ 485:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         {
+ 486:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             /* Master writes: enable reception interrupt. The FSM state was set in 
+ 487:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                             SCB_SetRxInterruptMode(SCB_INTR_RX_NOT_EMPTY);
+ 610              		.loc 1 487 0
+ 611 03a4 244B     		ldr	r3, .L43+12
+ 612 03a6 0422     		movs	r2, #4
+ 613 03a8 1A60     		str	r2, [r3]
+ 614              	.L36:
+ 488:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         }
+ 489:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 490:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Clear interrupt sources before ACK address */
+ 491:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_ClearI2CExtClkInterruptSource(SCB_INTR_I2C_EC_WAKE_UP);
+ 615              		.loc 1 491 0
+ 616 03aa 2E4B     		ldr	r3, .L43+56
+ 617 03ac 0122     		movs	r2, #1
+ 618 03ae 1A60     		str	r2, [r3]
+ 492:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_ClearSlaveInterruptSource(SCB_INTR_SLAVE_ALL);
+ 619              		.loc 1 492 0
+ 620 03b0 2D4B     		ldr	r3, .L43+60
+ 621 03b2 2E4A     		ldr	r2, .L43+64
+ 622 03b4 1A60     		str	r2, [r3]
+ 493:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 494:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #if (!SCB_CY_SCBIP_V0)
+ 495:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* Enable STOP to trigger after address match is ACKed. Ticket ID#156094 */
+ 496:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_ENABLE_INTR_SLAVE(SCB_INTR_SLAVE_I2C_STOP);
+ 623              		.loc 1 496 0
+ 624 03b6 2E4B     		ldr	r3, .L43+68
+ 625 03b8 2D4A     		ldr	r2, .L43+68
+ 626 03ba 1268     		ldr	r2, [r2]
+ 627 03bc 1021     		movs	r1, #16
+ 628 03be 0A43     		orrs	r2, r1
+ 629 03c0 1A60     		str	r2, [r3]
+ 497:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     #endif /* (!SCB_CY_SCBIP_V0) */
+ 498:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 499:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         /* ACK the address byte */
+ 500:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_I2C_SLAVE_GENERATE_ACK;
+ 630              		.loc 1 500 0
+ 631 03c2 2C4B     		ldr	r3, .L43+72
+ 632 03c4 0122     		movs	r2, #1
+ 633 03c6 1A60     		str	r2, [r3]
+ 634              	.L34:
+ 501:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 502:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 }
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 21
+
+
+ 503:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 504:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* Clear slave interrupt sources */
+ 505:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 SCB_ClearSlaveInterruptSource(locIntrSlave);
+ 635              		.loc 1 505 0
+ 636 03c8 274B     		ldr	r3, .L43+60
+ 637 03ca FA68     		ldr	r2, [r7, #12]
+ 638 03cc 1A60     		str	r2, [r3]
+ 639              	.L31:
+ 506:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             }
+ 507:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 508:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             /* INTR_TX.EMPTY */
+ 509:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             /* Transmits data to the master: loads data into the TX FIFO. The 0xFF sends out if the
+ 510:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             * out the buffer. The address reception with a read flag clears the TX FIFO to be loade
+ 511:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             */
+ 512:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             if(0u != (SCB_GetInterruptCause() & SCB_INTR_CAUSE_TX))
+ 640              		.loc 1 512 0
+ 641 03ce 2A4B     		ldr	r3, .L43+76
+ 642 03d0 1B68     		ldr	r3, [r3]
+ 643 03d2 0422     		movs	r2, #4
+ 644 03d4 1340     		ands	r3, r2
+ 645 03d6 21D0     		beq	.L7
+ 646              	.L39:
+ 513:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             {
+ 514:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 /* Put data into TX FIFO until there is a room */
+ 515:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 do
+ 516:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 {
+ 517:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     /* Check transmit buffer range: locBufSize calculates after address reception *
+ 518:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     if(0u != locBufSize)
+ 647              		.loc 1 518 0
+ 648 03d8 1F4B     		ldr	r3, .L43+44
+ 649 03da 1B88     		ldrh	r3, [r3]
+ 650 03dc 002B     		cmp	r3, #0
+ 651 03de 11D0     		beq	.L37
+ 519:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 520:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_TX_FIFO_WR_REG = (uint32) SCB_dataBuffer1[locIndex];
+ 652              		.loc 1 520 0
+ 653 03e0 264A     		ldr	r2, .L43+80
+ 654 03e2 124B     		ldr	r3, .L43
+ 655 03e4 1968     		ldr	r1, [r3]
+ 656 03e6 FB69     		ldr	r3, [r7, #28]
+ 657 03e8 CB18     		adds	r3, r1, r3
+ 658 03ea 1B78     		ldrb	r3, [r3]
+ 659 03ec DBB2     		uxtb	r3, r3
+ 660 03ee 1360     		str	r3, [r2]
+ 521:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         locIndex++;
+ 661              		.loc 1 521 0
+ 662 03f0 FB69     		ldr	r3, [r7, #28]
+ 663 03f2 0133     		adds	r3, r3, #1
+ 664 03f4 FB61     		str	r3, [r7, #28]
+ 522:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         locBufSize--;
+ 665              		.loc 1 522 0
+ 666 03f6 184B     		ldr	r3, .L43+44
+ 667 03f8 1B88     		ldrh	r3, [r3]
+ 668 03fa 013B     		subs	r3, r3, #1
+ 669 03fc 9AB2     		uxth	r2, r3
+ 670 03fe 164B     		ldr	r3, .L43+44
+ 671 0400 1A80     		strh	r2, [r3]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 22
+
+
+ 672 0402 02E0     		b	.L38
+ 673              	.L37:
+ 523:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 524:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     else
+ 525:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     {
+ 526:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                         SCB_TX_FIFO_WR_REG = SCB_EZI2C_OVFL_RETURN;
+ 674              		.loc 1 526 0
+ 675 0404 1D4B     		ldr	r3, .L43+80
+ 676 0406 FF22     		movs	r2, #255
+ 677 0408 1A60     		str	r2, [r3]
+ 678              	.L38:
+ 527:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                     }
+ 528:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 }
+ 529:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 while(SCB_EZI2C_FIFO_SIZE != SCB_GET_TX_FIFO_ENTRIES);
+ 679              		.loc 1 529 0
+ 680 040a 1D4B     		ldr	r3, .L43+84
+ 681 040c 1B68     		ldr	r3, [r3]
+ 682 040e 1F22     		movs	r2, #31
+ 683 0410 1340     		ands	r3, r2
+ 684 0412 082B     		cmp	r3, #8
+ 685 0414 E0D1     		bne	.L39
+ 530:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 531:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****                 SCB_ClearTxInterruptSource(SCB_INTR_TX_EMPTY);
+ 686              		.loc 1 531 0
+ 687 0416 1B4B     		ldr	r3, .L43+88
+ 688 0418 1022     		movs	r2, #16
+ 689 041a 1A60     		str	r2, [r3]
+ 690              	.L7:
+ 532:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****             }
+ 533:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         }
+ 534:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 535:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         /* Store local index copy into global variable */
+ 536:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         SCB_EZI2C_SET_INDEX(activeAddress, locIndex);
+ 691              		.loc 1 536 0
+ 692 041c FB69     		ldr	r3, [r7, #28]
+ 693 041e 9AB2     		uxth	r2, r3
+ 694 0420 194B     		ldr	r3, .L43+92
+ 695 0422 1A80     		strh	r2, [r3]
+ 537:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 538:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     #ifdef SCB_EZI2C_STRETCH_ISR_EXIT_CALLBACK
+ 539:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****         SCB_EZI2C_STRETCH_ISR_ExitCallback();
+ 540:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     #endif /* SCB_EZI2C_STRETCH_ISR_EXIT_CALLBACK */
+ 541:Generated_Source\PSoC4/SCB_EZI2C_INT.c **** 
+ 542:Generated_Source\PSoC4/SCB_EZI2C_INT.c ****     }
+ 696              		.loc 1 542 0
+ 697 0424 C046     		nop
+ 698 0426 BD46     		mov	sp, r7
+ 699 0428 08B0     		add	sp, sp, #32
+ 700              		@ sp needed
+ 701 042a 80BD     		pop	{r7, pc}
+ 702              	.L44:
+ 703              		.align	2
+ 704              	.L43:
+ 705 042c 00000000 		.word	SCB_dataBuffer1
+ 706 0430 40032540 		.word	1076167488
+ 707 0434 60002540 		.word	1076166752
+ 708 0438 C80F2540 		.word	1076170696
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 23
+
+
+ 709 043c C00F2540 		.word	1076170688
+ 710 0440 880F2540 		.word	1076170632
+ 711 0444 00000000 		.word	SCB_offsetBuf1
+ 712 0448 00000000 		.word	SCB_curStatus
+ 713 044c 00000000 		.word	SCB_fsmState
+ 714 0450 64002540 		.word	1076166756
+ 715 0454 00000000 		.word	SCB_bufSizeBuf1
+ 716 0458 00000000 		.word	locBufSize.4967
+ 717 045c 04022540 		.word	1076167172
+ 718 0460 FFFFFEFF 		.word	-65537
+ 719 0464 800E2540 		.word	1076170368
+ 720 0468 400F2540 		.word	1076170560
+ 721 046c FF0F0000 		.word	4095
+ 722 0470 480F2540 		.word	1076170568
+ 723 0474 6C002540 		.word	1076166764
+ 724 0478 000E2540 		.word	1076170240
+ 725 047c 40022540 		.word	1076167232
+ 726 0480 08022540 		.word	1076167176
+ 727 0484 800F2540 		.word	1076170624
+ 728 0488 00000000 		.word	SCB_indexBuf1
+ 729              		.cfi_endproc
+ 730              	.LFE2:
+ 731              		.size	SCB_EZI2C_STRETCH_ISR, .-SCB_EZI2C_STRETCH_ISR
+ 732              		.bss
+ 733              		.align	1
+ 734              	locBufSize.4967:
+ 735 0000 0000     		.space	2
+ 736              		.text
+ 737              	.Letext0:
+ 738              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 739              		.file 3 "Generated_Source\\PSoC4\\SCB_PVT.h"
+ 740              		.file 4 "Generated_Source\\PSoC4\\SCB_EZI2C_PVT.h"
+ 741              		.section	.debug_info,"",%progbits
+ 742              	.Ldebug_info0:
+ 743 0000 BF010000 		.4byte	0x1bf
+ 744 0004 0400     		.2byte	0x4
+ 745 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 746 000a 04       		.byte	0x4
+ 747 000b 01       		.uleb128 0x1
+ 748 000c A9000000 		.4byte	.LASF35
+ 749 0010 0C       		.byte	0xc
+ 750 0011 60000000 		.4byte	.LASF36
+ 751 0015 71010000 		.4byte	.LASF37
+ 752 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 753 001d 00000000 		.4byte	0
+ 754 0021 00000000 		.4byte	.Ldebug_line0
+ 755 0025 02       		.uleb128 0x2
+ 756 0026 01       		.byte	0x1
+ 757 0027 06       		.byte	0x6
+ 758 0028 9D020000 		.4byte	.LASF0
+ 759 002c 02       		.uleb128 0x2
+ 760 002d 01       		.byte	0x1
+ 761 002e 08       		.byte	0x8
+ 762 002f 52000000 		.4byte	.LASF1
+ 763 0033 02       		.uleb128 0x2
+ 764 0034 02       		.byte	0x2
+ 765 0035 05       		.byte	0x5
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 24
+
+
+ 766 0036 4B020000 		.4byte	.LASF2
+ 767 003a 02       		.uleb128 0x2
+ 768 003b 02       		.byte	0x2
+ 769 003c 07       		.byte	0x7
+ 770 003d 16000000 		.4byte	.LASF3
+ 771 0041 02       		.uleb128 0x2
+ 772 0042 04       		.byte	0x4
+ 773 0043 05       		.byte	0x5
+ 774 0044 72020000 		.4byte	.LASF4
+ 775 0048 02       		.uleb128 0x2
+ 776 0049 04       		.byte	0x4
+ 777 004a 07       		.byte	0x7
+ 778 004b 91000000 		.4byte	.LASF5
+ 779 004f 02       		.uleb128 0x2
+ 780 0050 08       		.byte	0x8
+ 781 0051 05       		.byte	0x5
+ 782 0052 1B020000 		.4byte	.LASF6
+ 783 0056 02       		.uleb128 0x2
+ 784 0057 08       		.byte	0x8
+ 785 0058 07       		.byte	0x7
+ 786 0059 D3010000 		.4byte	.LASF7
+ 787 005d 03       		.uleb128 0x3
+ 788 005e 04       		.byte	0x4
+ 789 005f 05       		.byte	0x5
+ 790 0060 696E7400 		.ascii	"int\000"
+ 791 0064 02       		.uleb128 0x2
+ 792 0065 04       		.byte	0x4
+ 793 0066 07       		.byte	0x7
+ 794 0067 B1010000 		.4byte	.LASF8
+ 795 006b 04       		.uleb128 0x4
+ 796 006c A3000000 		.4byte	.LASF9
+ 797 0070 02       		.byte	0x2
+ 798 0071 B901     		.2byte	0x1b9
+ 799 0073 2C000000 		.4byte	0x2c
+ 800 0077 04       		.uleb128 0x4
+ 801 0078 63010000 		.4byte	.LASF10
+ 802 007c 02       		.byte	0x2
+ 803 007d BA01     		.2byte	0x1ba
+ 804 007f 3A000000 		.4byte	0x3a
+ 805 0083 04       		.uleb128 0x4
+ 806 0084 6A010000 		.4byte	.LASF11
+ 807 0088 02       		.byte	0x2
+ 808 0089 BB01     		.2byte	0x1bb
+ 809 008b 48000000 		.4byte	0x48
+ 810 008f 02       		.uleb128 0x2
+ 811 0090 04       		.byte	0x4
+ 812 0091 04       		.byte	0x4
+ 813 0092 43000000 		.4byte	.LASF12
+ 814 0096 02       		.uleb128 0x2
+ 815 0097 08       		.byte	0x8
+ 816 0098 04       		.byte	0x4
+ 817 0099 4D010000 		.4byte	.LASF13
+ 818 009d 02       		.uleb128 0x2
+ 819 009e 01       		.byte	0x1
+ 820 009f 08       		.byte	0x8
+ 821 00a0 29020000 		.4byte	.LASF14
+ 822 00a4 05       		.uleb128 0x5
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 25
+
+
+ 823 00a5 6B000000 		.4byte	0x6b
+ 824 00a9 04       		.uleb128 0x4
+ 825 00aa 00000000 		.4byte	.LASF15
+ 826 00ae 02       		.byte	0x2
+ 827 00af 6502     		.2byte	0x265
+ 828 00b1 B5000000 		.4byte	0xb5
+ 829 00b5 05       		.uleb128 0x5
+ 830 00b6 83000000 		.4byte	0x83
+ 831 00ba 04       		.uleb128 0x4
+ 832 00bb F8010000 		.4byte	.LASF16
+ 833 00bf 02       		.byte	0x2
+ 834 00c0 7502     		.2byte	0x275
+ 835 00c2 C6000000 		.4byte	0xc6
+ 836 00c6 06       		.uleb128 0x6
+ 837 00c7 04       		.byte	0x4
+ 838 00c8 CC000000 		.4byte	0xcc
+ 839 00cc 07       		.uleb128 0x7
+ 840 00cd 02       		.uleb128 0x2
+ 841 00ce 08       		.byte	0x8
+ 842 00cf 04       		.byte	0x4
+ 843 00d0 91020000 		.4byte	.LASF17
+ 844 00d4 02       		.uleb128 0x2
+ 845 00d5 04       		.byte	0x4
+ 846 00d6 07       		.byte	0x7
+ 847 00d7 05020000 		.4byte	.LASF18
+ 848 00db 08       		.uleb128 0x8
+ 849 00dc 7B020000 		.4byte	.LASF38
+ 850 00e0 01       		.byte	0x1
+ 851 00e1 20       		.byte	0x20
+ 852 00e2 00000000 		.4byte	.LFB2
+ 853 00e6 8C040000 		.4byte	.LFE2-.LFB2
+ 854 00ea 01       		.uleb128 0x1
+ 855 00eb 9C       		.byte	0x9c
+ 856 00ec 64010000 		.4byte	0x164
+ 857 00f0 09       		.uleb128 0x9
+ 858 00f1 BE010000 		.4byte	.LASF19
+ 859 00f5 01       		.byte	0x1
+ 860 00f6 22       		.byte	0x22
+ 861 00f7 77000000 		.4byte	0x77
+ 862 00fb 05       		.uleb128 0x5
+ 863 00fc 03       		.byte	0x3
+ 864 00fd 00000000 		.4byte	locBufSize.4967
+ 865 0101 09       		.uleb128 0x9
+ 866 0102 49000000 		.4byte	.LASF20
+ 867 0106 01       		.byte	0x1
+ 868 0107 23       		.byte	0x23
+ 869 0108 83000000 		.4byte	0x83
+ 870 010c 02       		.uleb128 0x2
+ 871 010d 91       		.byte	0x91
+ 872 010e 74       		.sleb128 -12
+ 873 010f 09       		.uleb128 0x9
+ 874 0110 87000000 		.4byte	.LASF21
+ 875 0114 01       		.byte	0x1
+ 876 0115 24       		.byte	0x24
+ 877 0116 83000000 		.4byte	0x83
+ 878 011a 02       		.uleb128 0x2
+ 879 011b 91       		.byte	0x91
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 26
+
+
+ 880 011c 70       		.sleb128 -16
+ 881 011d 09       		.uleb128 0x9
+ 882 011e 29000000 		.4byte	.LASF22
+ 883 0122 01       		.byte	0x1
+ 884 0123 26       		.byte	0x26
+ 885 0124 83000000 		.4byte	0x83
+ 886 0128 02       		.uleb128 0x2
+ 887 0129 91       		.byte	0x91
+ 888 012a 6C       		.sleb128 -20
+ 889 012b 09       		.uleb128 0x9
+ 890 012c C9010000 		.4byte	.LASF23
+ 891 0130 01       		.byte	0x1
+ 892 0131 27       		.byte	0x27
+ 893 0132 83000000 		.4byte	0x83
+ 894 0136 02       		.uleb128 0x2
+ 895 0137 91       		.byte	0x91
+ 896 0138 68       		.sleb128 -24
+ 897 0139 09       		.uleb128 0x9
+ 898 013a A9020000 		.4byte	.LASF24
+ 899 013e 01       		.byte	0x1
+ 900 013f 28       		.byte	0x28
+ 901 0140 83000000 		.4byte	0x83
+ 902 0144 02       		.uleb128 0x2
+ 903 0145 91       		.byte	0x91
+ 904 0146 5C       		.sleb128 -36
+ 905 0147 09       		.uleb128 0x9
+ 906 0148 65020000 		.4byte	.LASF25
+ 907 014c 01       		.byte	0x1
+ 908 014d 2A       		.byte	0x2a
+ 909 014e 83000000 		.4byte	0x83
+ 910 0152 02       		.uleb128 0x2
+ 911 0153 91       		.byte	0x91
+ 912 0154 60       		.sleb128 -32
+ 913 0155 09       		.uleb128 0x9
+ 914 0156 2E020000 		.4byte	.LASF26
+ 915 015a 01       		.byte	0x1
+ 916 015b 2B       		.byte	0x2b
+ 917 015c 83000000 		.4byte	0x83
+ 918 0160 02       		.uleb128 0x2
+ 919 0161 91       		.byte	0x91
+ 920 0162 64       		.sleb128 -28
+ 921 0163 00       		.byte	0
+ 922 0164 0A       		.uleb128 0xa
+ 923 0165 37010000 		.4byte	.LASF27
+ 924 0169 03       		.byte	0x3
+ 925 016a 3B       		.byte	0x3b
+ 926 016b BA000000 		.4byte	0xba
+ 927 016f 0A       		.uleb128 0xa
+ 928 0170 35000000 		.4byte	.LASF28
+ 929 0174 04       		.byte	0x4
+ 930 0175 1E       		.byte	0x1e
+ 931 0176 A4000000 		.4byte	0xa4
+ 932 017a 0A       		.uleb128 0xa
+ 933 017b 0E020000 		.4byte	.LASF29
+ 934 017f 04       		.byte	0x4
+ 935 0180 1F       		.byte	0x1f
+ 936 0181 6B000000 		.4byte	0x6b
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 27
+
+
+ 937 0185 0A       		.uleb128 0xa
+ 938 0186 3B020000 		.4byte	.LASF30
+ 939 018a 04       		.byte	0x4
+ 940 018b 22       		.byte	0x22
+ 941 018c 90010000 		.4byte	0x190
+ 942 0190 06       		.uleb128 0x6
+ 943 0191 04       		.byte	0x4
+ 944 0192 A4000000 		.4byte	0xa4
+ 945 0196 0A       		.uleb128 0xa
+ 946 0197 06000000 		.4byte	.LASF31
+ 947 019b 04       		.byte	0x4
+ 948 019c 23       		.byte	0x23
+ 949 019d 77000000 		.4byte	0x77
+ 950 01a1 0A       		.uleb128 0xa
+ 951 01a2 55020000 		.4byte	.LASF32
+ 952 01a6 04       		.byte	0x4
+ 953 01a7 24       		.byte	0x24
+ 954 01a8 77000000 		.4byte	0x77
+ 955 01ac 0A       		.uleb128 0xa
+ 956 01ad 54010000 		.4byte	.LASF33
+ 957 01b1 04       		.byte	0x4
+ 958 01b2 25       		.byte	0x25
+ 959 01b3 77000000 		.4byte	0x77
+ 960 01b7 0A       		.uleb128 0xa
+ 961 01b8 EA010000 		.4byte	.LASF34
+ 962 01bc 04       		.byte	0x4
+ 963 01bd 26       		.byte	0x26
+ 964 01be 77000000 		.4byte	0x77
+ 965 01c2 00       		.byte	0
+ 966              		.section	.debug_abbrev,"",%progbits
+ 967              	.Ldebug_abbrev0:
+ 968 0000 01       		.uleb128 0x1
+ 969 0001 11       		.uleb128 0x11
+ 970 0002 01       		.byte	0x1
+ 971 0003 25       		.uleb128 0x25
+ 972 0004 0E       		.uleb128 0xe
+ 973 0005 13       		.uleb128 0x13
+ 974 0006 0B       		.uleb128 0xb
+ 975 0007 03       		.uleb128 0x3
+ 976 0008 0E       		.uleb128 0xe
+ 977 0009 1B       		.uleb128 0x1b
+ 978 000a 0E       		.uleb128 0xe
+ 979 000b 55       		.uleb128 0x55
+ 980 000c 17       		.uleb128 0x17
+ 981 000d 11       		.uleb128 0x11
+ 982 000e 01       		.uleb128 0x1
+ 983 000f 10       		.uleb128 0x10
+ 984 0010 17       		.uleb128 0x17
+ 985 0011 00       		.byte	0
+ 986 0012 00       		.byte	0
+ 987 0013 02       		.uleb128 0x2
+ 988 0014 24       		.uleb128 0x24
+ 989 0015 00       		.byte	0
+ 990 0016 0B       		.uleb128 0xb
+ 991 0017 0B       		.uleb128 0xb
+ 992 0018 3E       		.uleb128 0x3e
+ 993 0019 0B       		.uleb128 0xb
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 28
+
+
+ 994 001a 03       		.uleb128 0x3
+ 995 001b 0E       		.uleb128 0xe
+ 996 001c 00       		.byte	0
+ 997 001d 00       		.byte	0
+ 998 001e 03       		.uleb128 0x3
+ 999 001f 24       		.uleb128 0x24
+ 1000 0020 00       		.byte	0
+ 1001 0021 0B       		.uleb128 0xb
+ 1002 0022 0B       		.uleb128 0xb
+ 1003 0023 3E       		.uleb128 0x3e
+ 1004 0024 0B       		.uleb128 0xb
+ 1005 0025 03       		.uleb128 0x3
+ 1006 0026 08       		.uleb128 0x8
+ 1007 0027 00       		.byte	0
+ 1008 0028 00       		.byte	0
+ 1009 0029 04       		.uleb128 0x4
+ 1010 002a 16       		.uleb128 0x16
+ 1011 002b 00       		.byte	0
+ 1012 002c 03       		.uleb128 0x3
+ 1013 002d 0E       		.uleb128 0xe
+ 1014 002e 3A       		.uleb128 0x3a
+ 1015 002f 0B       		.uleb128 0xb
+ 1016 0030 3B       		.uleb128 0x3b
+ 1017 0031 05       		.uleb128 0x5
+ 1018 0032 49       		.uleb128 0x49
+ 1019 0033 13       		.uleb128 0x13
+ 1020 0034 00       		.byte	0
+ 1021 0035 00       		.byte	0
+ 1022 0036 05       		.uleb128 0x5
+ 1023 0037 35       		.uleb128 0x35
+ 1024 0038 00       		.byte	0
+ 1025 0039 49       		.uleb128 0x49
+ 1026 003a 13       		.uleb128 0x13
+ 1027 003b 00       		.byte	0
+ 1028 003c 00       		.byte	0
+ 1029 003d 06       		.uleb128 0x6
+ 1030 003e 0F       		.uleb128 0xf
+ 1031 003f 00       		.byte	0
+ 1032 0040 0B       		.uleb128 0xb
+ 1033 0041 0B       		.uleb128 0xb
+ 1034 0042 49       		.uleb128 0x49
+ 1035 0043 13       		.uleb128 0x13
+ 1036 0044 00       		.byte	0
+ 1037 0045 00       		.byte	0
+ 1038 0046 07       		.uleb128 0x7
+ 1039 0047 15       		.uleb128 0x15
+ 1040 0048 00       		.byte	0
+ 1041 0049 27       		.uleb128 0x27
+ 1042 004a 19       		.uleb128 0x19
+ 1043 004b 00       		.byte	0
+ 1044 004c 00       		.byte	0
+ 1045 004d 08       		.uleb128 0x8
+ 1046 004e 2E       		.uleb128 0x2e
+ 1047 004f 01       		.byte	0x1
+ 1048 0050 3F       		.uleb128 0x3f
+ 1049 0051 19       		.uleb128 0x19
+ 1050 0052 03       		.uleb128 0x3
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 29
+
+
+ 1051 0053 0E       		.uleb128 0xe
+ 1052 0054 3A       		.uleb128 0x3a
+ 1053 0055 0B       		.uleb128 0xb
+ 1054 0056 3B       		.uleb128 0x3b
+ 1055 0057 0B       		.uleb128 0xb
+ 1056 0058 27       		.uleb128 0x27
+ 1057 0059 19       		.uleb128 0x19
+ 1058 005a 11       		.uleb128 0x11
+ 1059 005b 01       		.uleb128 0x1
+ 1060 005c 12       		.uleb128 0x12
+ 1061 005d 06       		.uleb128 0x6
+ 1062 005e 40       		.uleb128 0x40
+ 1063 005f 18       		.uleb128 0x18
+ 1064 0060 9642     		.uleb128 0x2116
+ 1065 0062 19       		.uleb128 0x19
+ 1066 0063 01       		.uleb128 0x1
+ 1067 0064 13       		.uleb128 0x13
+ 1068 0065 00       		.byte	0
+ 1069 0066 00       		.byte	0
+ 1070 0067 09       		.uleb128 0x9
+ 1071 0068 34       		.uleb128 0x34
+ 1072 0069 00       		.byte	0
+ 1073 006a 03       		.uleb128 0x3
+ 1074 006b 0E       		.uleb128 0xe
+ 1075 006c 3A       		.uleb128 0x3a
+ 1076 006d 0B       		.uleb128 0xb
+ 1077 006e 3B       		.uleb128 0x3b
+ 1078 006f 0B       		.uleb128 0xb
+ 1079 0070 49       		.uleb128 0x49
+ 1080 0071 13       		.uleb128 0x13
+ 1081 0072 02       		.uleb128 0x2
+ 1082 0073 18       		.uleb128 0x18
+ 1083 0074 00       		.byte	0
+ 1084 0075 00       		.byte	0
+ 1085 0076 0A       		.uleb128 0xa
+ 1086 0077 34       		.uleb128 0x34
+ 1087 0078 00       		.byte	0
+ 1088 0079 03       		.uleb128 0x3
+ 1089 007a 0E       		.uleb128 0xe
+ 1090 007b 3A       		.uleb128 0x3a
+ 1091 007c 0B       		.uleb128 0xb
+ 1092 007d 3B       		.uleb128 0x3b
+ 1093 007e 0B       		.uleb128 0xb
+ 1094 007f 49       		.uleb128 0x49
+ 1095 0080 13       		.uleb128 0x13
+ 1096 0081 3F       		.uleb128 0x3f
+ 1097 0082 19       		.uleb128 0x19
+ 1098 0083 3C       		.uleb128 0x3c
+ 1099 0084 19       		.uleb128 0x19
+ 1100 0085 00       		.byte	0
+ 1101 0086 00       		.byte	0
+ 1102 0087 00       		.byte	0
+ 1103              		.section	.debug_aranges,"",%progbits
+ 1104 0000 1C000000 		.4byte	0x1c
+ 1105 0004 0200     		.2byte	0x2
+ 1106 0006 00000000 		.4byte	.Ldebug_info0
+ 1107 000a 04       		.byte	0x4
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 30
+
+
+ 1108 000b 00       		.byte	0
+ 1109 000c 0000     		.2byte	0
+ 1110 000e 0000     		.2byte	0
+ 1111 0010 00000000 		.4byte	.LFB2
+ 1112 0014 8C040000 		.4byte	.LFE2-.LFB2
+ 1113 0018 00000000 		.4byte	0
+ 1114 001c 00000000 		.4byte	0
+ 1115              		.section	.debug_ranges,"",%progbits
+ 1116              	.Ldebug_ranges0:
+ 1117 0000 00000000 		.4byte	.LFB2
+ 1118 0004 8C040000 		.4byte	.LFE2
+ 1119 0008 00000000 		.4byte	0
+ 1120 000c 00000000 		.4byte	0
+ 1121              		.section	.debug_line,"",%progbits
+ 1122              	.Ldebug_line0:
+ 1123 0000 25010000 		.section	.debug_str,"MS",%progbits,1
+ 1123      02006A00 
+ 1123      00000201 
+ 1123      FB0E0D00 
+ 1123      01010101 
+ 1124              	.LASF15:
+ 1125 0000 72656733 		.ascii	"reg32\000"
+ 1125      3200
+ 1126              	.LASF31:
+ 1127 0006 5343425F 		.ascii	"SCB_bufSizeBuf1\000"
+ 1127      62756653 
+ 1127      697A6542 
+ 1127      75663100 
+ 1128              	.LASF3:
+ 1129 0016 73686F72 		.ascii	"short unsigned int\000"
+ 1129      7420756E 
+ 1129      7369676E 
+ 1129      65642069 
+ 1129      6E7400
+ 1130              	.LASF22:
+ 1131 0029 656E6454 		.ascii	"endTransfer\000"
+ 1131      72616E73 
+ 1131      66657200 
+ 1132              	.LASF28:
+ 1133 0035 5343425F 		.ascii	"SCB_curStatus\000"
+ 1133      63757253 
+ 1133      74617475 
+ 1133      7300
+ 1134              	.LASF12:
+ 1135 0043 666C6F61 		.ascii	"float\000"
+ 1135      7400
+ 1136              	.LASF20:
+ 1137 0049 6C6F6349 		.ascii	"locIndex\000"
+ 1137      6E646578 
+ 1137      00
+ 1138              	.LASF1:
+ 1139 0052 756E7369 		.ascii	"unsigned char\000"
+ 1139      676E6564 
+ 1139      20636861 
+ 1139      7200
+ 1140              	.LASF36:
+ 1141 0060 47656E65 		.ascii	"Generated_Source\\PSoC4\\SCB_EZI2C_INT.c\000"
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 31
+
+
+ 1141      72617465 
+ 1141      645F536F 
+ 1141      75726365 
+ 1141      5C50536F 
+ 1142              	.LASF21:
+ 1143 0087 6C6F6353 		.ascii	"locStatus\000"
+ 1143      74617475 
+ 1143      7300
+ 1144              	.LASF5:
+ 1145 0091 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1145      20756E73 
+ 1145      69676E65 
+ 1145      6420696E 
+ 1145      7400
+ 1146              	.LASF9:
+ 1147 00a3 75696E74 		.ascii	"uint8\000"
+ 1147      3800
+ 1148              	.LASF35:
+ 1149 00a9 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 1149      43313120 
+ 1149      352E342E 
+ 1149      31203230 
+ 1149      31363036 
+ 1150 00dc 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m0 -mthumb -g -O"
+ 1150      20726576 
+ 1150      6973696F 
+ 1150      6E203233 
+ 1150      37373135 
+ 1151 010f 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 1151      66756E63 
+ 1151      74696F6E 
+ 1151      2D736563 
+ 1151      74696F6E 
+ 1152              	.LASF27:
+ 1153 0137 5343425F 		.ascii	"SCB_customIntrHandler\000"
+ 1153      63757374 
+ 1153      6F6D496E 
+ 1153      74724861 
+ 1153      6E646C65 
+ 1154              	.LASF13:
+ 1155 014d 646F7562 		.ascii	"double\000"
+ 1155      6C6500
+ 1156              	.LASF33:
+ 1157 0154 5343425F 		.ascii	"SCB_offsetBuf1\000"
+ 1157      6F666673 
+ 1157      65744275 
+ 1157      663100
+ 1158              	.LASF10:
+ 1159 0163 75696E74 		.ascii	"uint16\000"
+ 1159      313600
+ 1160              	.LASF11:
+ 1161 016a 75696E74 		.ascii	"uint32\000"
+ 1161      333200
+ 1162              	.LASF37:
+ 1163 0171 433A5C55 		.ascii	"C:\\Users\\ROUSSMA\\Documents\\PSoC Creator\\RGB_OL"
+ 1163      73657273 
+ 1163      5C524F55 
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 32
+
+
+ 1163      53534D41 
+ 1163      5C446F63 
+ 1164 019f 45445C52 		.ascii	"ED\\RGB_OLED.cydsn\000"
+ 1164      47425F4F 
+ 1164      4C45442E 
+ 1164      63796473 
+ 1164      6E00
+ 1165              	.LASF8:
+ 1166 01b1 756E7369 		.ascii	"unsigned int\000"
+ 1166      676E6564 
+ 1166      20696E74 
+ 1166      00
+ 1167              	.LASF19:
+ 1168 01be 6C6F6342 		.ascii	"locBufSize\000"
+ 1168      75665369 
+ 1168      7A6500
+ 1169              	.LASF23:
+ 1170 01c9 6669666F 		.ascii	"fifoIndex\000"
+ 1170      496E6465 
+ 1170      7800
+ 1171              	.LASF7:
+ 1172 01d3 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1172      206C6F6E 
+ 1172      6720756E 
+ 1172      7369676E 
+ 1172      65642069 
+ 1173              	.LASF34:
+ 1174 01ea 5343425F 		.ascii	"SCB_indexBuf1\000"
+ 1174      696E6465 
+ 1174      78427566 
+ 1174      3100
+ 1175              	.LASF16:
+ 1176 01f8 63796973 		.ascii	"cyisraddress\000"
+ 1176      72616464 
+ 1176      72657373 
+ 1176      00
+ 1177              	.LASF18:
+ 1178 0205 73697A65 		.ascii	"sizetype\000"
+ 1178      74797065 
+ 1178      00
+ 1179              	.LASF29:
+ 1180 020e 5343425F 		.ascii	"SCB_fsmState\000"
+ 1180      66736D53 
+ 1180      74617465 
+ 1180      00
+ 1181              	.LASF6:
+ 1182 021b 6C6F6E67 		.ascii	"long long int\000"
+ 1182      206C6F6E 
+ 1182      6720696E 
+ 1182      7400
+ 1183              	.LASF14:
+ 1184 0229 63686172 		.ascii	"char\000"
+ 1184      00
+ 1185              	.LASF26:
+ 1186 022e 6C6F6349 		.ascii	"locIntrSlave\000"
+ 1186      6E747253 
+ 1186      6C617665 
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccnZG4qe.s 			page 33
+
+
+ 1186      00
+ 1187              	.LASF30:
+ 1188 023b 5343425F 		.ascii	"SCB_dataBuffer1\000"
+ 1188      64617461 
+ 1188      42756666 
+ 1188      65723100 
+ 1189              	.LASF2:
+ 1190 024b 73686F72 		.ascii	"short int\000"
+ 1190      7420696E 
+ 1190      7400
+ 1191              	.LASF32:
+ 1192 0255 5343425F 		.ascii	"SCB_protectBuf1\000"
+ 1192      70726F74 
+ 1192      65637442 
+ 1192      75663100 
+ 1193              	.LASF25:
+ 1194 0265 6C6F6349 		.ascii	"locIntrCause\000"
+ 1194      6E747243 
+ 1194      61757365 
+ 1194      00
+ 1195              	.LASF4:
+ 1196 0272 6C6F6E67 		.ascii	"long int\000"
+ 1196      20696E74 
+ 1196      00
+ 1197              	.LASF38:
+ 1198 027b 5343425F 		.ascii	"SCB_EZI2C_STRETCH_ISR\000"
+ 1198      455A4932 
+ 1198      435F5354 
+ 1198      52455443 
+ 1198      485F4953 
+ 1199              	.LASF17:
+ 1200 0291 6C6F6E67 		.ascii	"long double\000"
+ 1200      20646F75 
+ 1200      626C6500 
+ 1201              	.LASF0:
+ 1202 029d 7369676E 		.ascii	"signed char\000"
+ 1202      65642063 
+ 1202      68617200 
+ 1203              	.LASF24:
+ 1204 02a9 6C6F6342 		.ascii	"locByte\000"
+ 1204      79746500 
+ 1205              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

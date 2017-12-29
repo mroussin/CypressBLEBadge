@@ -1,0 +1,9 @@
+C:\Users\ROUSSMA\Documents\PSoC Creator\RGB_OLED\RGB_LCD.cydsn\RGB_LCD.cyprj|fe0da5e9-002b-4c79-abc5-598529c25819
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|76131377-0128-4e07-90ac-07b21bbe2c51
+C:\Users\ROUSSMA\Documents\PSoC Creator\4.1\Downloads ( 4.1).cylib\Downloads ( 4.1).cyprj|9cb24dd6-8a44-4373-9e93-120add1d394e
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|fdb1b430-5a03-4e8d-b2dc-c9d889b909c8
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|59400f3b-dc77-4ccf-b1ae-10696ca6c06e
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|ce257141-1b40-4713-8c8a-366e806fbfa0
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\dev\psoc4\PSoC4AnalogDevice\psoc4arch.cydsn\psoc4arch.cyprj|f08625e9-6782-4fbf-80c0-834aaa3aef50
+C:\Program Files (x86)\Cypress\PSoC Creator\4.1\PSoC Creator\psoc\content\default\CyReferenceLibrary\CyReferenceLibrary.cylib\CyReferenceLibrary.cyprj|470bc33f-ff52-4eb4-a2e0-3116802adece
+C:\Users\ROUSSMA\Documents\PSoC Creator\RGB_OLED\RGB_OLED.cydsn\RGB_OLED.cyprj|e7ca3f98-939c-4fae-9f26-5427852b4815

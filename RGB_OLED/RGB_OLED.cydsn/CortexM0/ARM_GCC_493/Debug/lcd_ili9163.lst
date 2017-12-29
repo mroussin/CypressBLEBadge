@@ -1,0 +1,5618 @@
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 1
+
+
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"lcd_ili9163.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.lcd_Reset,"ax",%progbits
+  18              		.align	2
+  19              		.global	lcd_Reset
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	lcd_Reset, %function
+  23              	lcd_Reset:
+  24              	.LFB37:
+  25              		.file 1 "lcd_ili9163.c"
+   1:lcd_ili9163.c **** /* ========================================
+   2:lcd_ili9163.c ****  *
+   3:lcd_ili9163.c ****  * Copyright YOUR COMPANY, THE YEAR
+   4:lcd_ili9163.c ****  * All Rights Reserved
+   5:lcd_ili9163.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:lcd_ili9163.c ****  *
+   7:lcd_ili9163.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:lcd_ili9163.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:lcd_ili9163.c ****  *
+  10:lcd_ili9163.c ****  * ========================================
+  11:lcd_ili9163.c **** */
+  12:lcd_ili9163.c **** 
+  13:lcd_ili9163.c **** 
+  14:lcd_ili9163.c **** #include "lcd_ili9163.h"
+  15:lcd_ili9163.c **** #include "project.h"
+  16:lcd_ili9163.c **** 
+  17:lcd_ili9163.c **** /* Private typedef -----------------------------------------------------------*/
+  18:lcd_ili9163.c **** /* Private define ------------------------------------------------------------*/
+  19:lcd_ili9163.c **** #define SSD1331_CMD                     0
+  20:lcd_ili9163.c **** #define SSD1331_DATA                    1
+  21:lcd_ili9163.c **** 
+  22:lcd_ili9163.c **** 
+  23:lcd_ili9163.c **** 
+  24:lcd_ili9163.c **** void lcd_Reset(void);
+  25:lcd_ili9163.c **** void lcd_writeCommand(uint8_t data);
+  26:lcd_ili9163.c **** void lcd_writeData(uint8_t data);
+  27:lcd_ili9163.c **** void lcd_writeData16(uint16_t data);
+  28:lcd_ili9163.c **** void lcd_SetAddr(uint8_t X1, uint8_t Y1, uint8_t X2, uint8_t Y2);
+  29:lcd_ili9163.c **** 
+  30:lcd_ili9163.c **** 
+  31:lcd_ili9163.c **** 
+  32:lcd_ili9163.c **** /**
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 2
+
+
+  33:lcd_ili9163.c ****  * \brief Resets display using external reset pint
+  34:lcd_ili9163.c ****  *
+  35:lcd_ili9163.c ****  * This functions toggles the reset pin to perform a hard reset
+  36:lcd_ili9163.c ****  *
+  37:lcd_ili9163.c ****  * \param none
+  38:lcd_ili9163.c ****  */
+  39:lcd_ili9163.c **** void lcd_Reset(void)
+  40:lcd_ili9163.c **** {
+  26              		.loc 1 40 0
+  27              		.cfi_startproc
+  28 0000 08B5     		push	{r3, lr}
+  29              		.cfi_def_cfa_offset 8
+  30              		.cfi_offset 3, -8
+  31              		.cfi_offset 14, -4
+  41:lcd_ili9163.c **** 	
+  42:lcd_ili9163.c **** 	OLED_Reset_Write(1);
+  32              		.loc 1 42 0
+  33 0002 0120     		mov	r0, #1
+  34 0004 FFF7FEFF 		bl	OLED_Reset_Write
+  35              	.LVL0:
+  43:lcd_ili9163.c **** 	CyDelay(1);
+  36              		.loc 1 43 0
+  37 0008 0120     		mov	r0, #1
+  38 000a FFF7FEFF 		bl	CyDelay
+  39              	.LVL1:
+  44:lcd_ili9163.c **** 	
+  45:lcd_ili9163.c **** 	OLED_Reset_Write(0);
+  40              		.loc 1 45 0
+  41 000e 0020     		mov	r0, #0
+  42 0010 FFF7FEFF 		bl	OLED_Reset_Write
+  43              	.LVL2:
+  46:lcd_ili9163.c **** 	CyDelay(50);
+  44              		.loc 1 46 0
+  45 0014 3220     		mov	r0, #50
+  46 0016 FFF7FEFF 		bl	CyDelay
+  47              	.LVL3:
+  47:lcd_ili9163.c **** 	
+  48:lcd_ili9163.c **** 	OLED_Reset_Write(1);
+  48              		.loc 1 48 0
+  49 001a 0120     		mov	r0, #1
+  50 001c FFF7FEFF 		bl	OLED_Reset_Write
+  51              	.LVL4:
+  49:lcd_ili9163.c **** 	CyDelay(120);
+  52              		.loc 1 49 0
+  53 0020 7820     		mov	r0, #120
+  54 0022 FFF7FEFF 		bl	CyDelay
+  55              	.LVL5:
+  50:lcd_ili9163.c **** 	
+  51:lcd_ili9163.c **** }
+  56              		.loc 1 51 0
+  57              		@ sp needed
+  58 0026 08BD     		pop	{r3, pc}
+  59              		.cfi_endproc
+  60              	.LFE37:
+  61              		.size	lcd_Reset, .-lcd_Reset
+  62              		.section	.text.lcd_writeData,"ax",%progbits
+  63              		.align	2
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 3
+
+
+  64              		.global	lcd_writeData
+  65              		.code	16
+  66              		.thumb_func
+  67              		.type	lcd_writeData, %function
+  68              	lcd_writeData:
+  69              	.LFB38:
+  52:lcd_ili9163.c **** 
+  53:lcd_ili9163.c **** /**
+  54:lcd_ili9163.c ****  * \brief Write data to the display controller
+  55:lcd_ili9163.c ****  *
+  56:lcd_ili9163.c ****  * This functions sets the pin D/C# before writing to the controller. Different
+  57:lcd_ili9163.c ****  * data write function is called based on the selected interface.
+  58:lcd_ili9163.c ****  *
+  59:lcd_ili9163.c ****  * \param data the data to write
+  60:lcd_ili9163.c ****  */
+  61:lcd_ili9163.c **** void lcd_writeData(uint8_t data)
+  62:lcd_ili9163.c **** {
+  70              		.loc 1 62 0
+  71              		.cfi_startproc
+  72              	.LVL6:
+  73 0000 10B5     		push	{r4, lr}
+  74              		.cfi_def_cfa_offset 8
+  75              		.cfi_offset 4, -8
+  76              		.cfi_offset 14, -4
+  77 0002 041C     		mov	r4, r0
+  63:lcd_ili9163.c **** 
+  64:lcd_ili9163.c ****         OLED_DC_Write(SSD1331_DATA);
+  78              		.loc 1 64 0
+  79 0004 0120     		mov	r0, #1
+  80              	.LVL7:
+  81 0006 FFF7FEFF 		bl	OLED_DC_Write
+  82              	.LVL8:
+  65:lcd_ili9163.c ****         SPI_Master_SpiUartWriteTxData(data);
+  83              		.loc 1 65 0
+  84 000a 201C     		mov	r0, r4
+  85 000c FFF7FEFF 		bl	SPI_Master_SpiUartWriteTxData
+  86              	.LVL9:
+  87              	.L3:
+  66:lcd_ili9163.c ****         
+  67:lcd_ili9163.c ****         /* Wait for the end of the transfer. The number of transmitted data
+  68:lcd_ili9163.c ****         * elements has to be equal to the number of received data elements.
+  69:lcd_ili9163.c ****         */
+  70:lcd_ili9163.c ****         while(1 != SPI_Master_SpiUartGetRxBufferSize())
+  88              		.loc 1 70 0 discriminator 1
+  89 0010 FFF7FEFF 		bl	SPI_Master_SpiUartGetRxBufferSize
+  90              	.LVL10:
+  91 0014 0128     		cmp	r0, #1
+  92 0016 FBD1     		bne	.L3
+  71:lcd_ili9163.c ****         {
+  72:lcd_ili9163.c ****             /* Wait */
+  73:lcd_ili9163.c ****         }
+  74:lcd_ili9163.c **** 
+  75:lcd_ili9163.c ****         /* Clear dummy bytes from RX buffer */
+  76:lcd_ili9163.c ****         SPI_Master_SpiUartClearRxBuffer();
+  93              		.loc 1 76 0
+  94 0018 FFF7FEFF 		bl	SPI_Master_SpiUartClearRxBuffer
+  95              	.LVL11:
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 4
+
+
+  77:lcd_ili9163.c **** }
+  96              		.loc 1 77 0
+  97              		@ sp needed
+  98 001c 10BD     		pop	{r4, pc}
+  99              		.cfi_endproc
+ 100              	.LFE38:
+ 101              		.size	lcd_writeData, .-lcd_writeData
+ 102 001e C046     		.section	.text.lcd_writeData16,"ax",%progbits
+ 103              		.align	2
+ 104              		.global	lcd_writeData16
+ 105              		.code	16
+ 106              		.thumb_func
+ 107              		.type	lcd_writeData16, %function
+ 108              	lcd_writeData16:
+ 109              	.LFB39:
+  78:lcd_ili9163.c **** 
+  79:lcd_ili9163.c **** /**
+  80:lcd_ili9163.c ****  * \brief Write 16-bit data to the display controller
+  81:lcd_ili9163.c ****  *
+  82:lcd_ili9163.c ****  * This functions sets the pin D/C# before writing to the controller. Different
+  83:lcd_ili9163.c ****  * data write function is called based on the selected interface.
+  84:lcd_ili9163.c ****  *
+  85:lcd_ili9163.c ****  * \param data = the data to write
+  86:lcd_ili9163.c ****  */
+  87:lcd_ili9163.c **** void lcd_writeData16(uint16_t data)
+  88:lcd_ili9163.c **** {
+ 110              		.loc 1 88 0
+ 111              		.cfi_startproc
+ 112              	.LVL12:
+ 113 0000 38B5     		push	{r3, r4, r5, lr}
+ 114              		.cfi_def_cfa_offset 16
+ 115              		.cfi_offset 3, -16
+ 116              		.cfi_offset 4, -12
+ 117              		.cfi_offset 5, -8
+ 118              		.cfi_offset 14, -4
+  89:lcd_ili9163.c **** 		uint8_t data1, data2;
+  90:lcd_ili9163.c **** 		
+  91:lcd_ili9163.c **** 		data1 = data >> 8;
+ 119              		.loc 1 91 0
+ 120 0002 050A     		lsr	r5, r0, #8
+ 121              	.LVL13:
+  92:lcd_ili9163.c **** 		data2 = data & 0xFF;
+ 122              		.loc 1 92 0
+ 123 0004 C4B2     		uxtb	r4, r0
+ 124              	.LVL14:
+  93:lcd_ili9163.c **** 		
+  94:lcd_ili9163.c **** 
+  95:lcd_ili9163.c **** 		OLED_DC_Write(SSD1331_DATA);
+ 125              		.loc 1 95 0
+ 126 0006 0120     		mov	r0, #1
+ 127              	.LVL15:
+ 128 0008 FFF7FEFF 		bl	OLED_DC_Write
+ 129              	.LVL16:
+  96:lcd_ili9163.c **** 		SPI_Master_SpiUartWriteTxData(data1);
+ 130              		.loc 1 96 0
+ 131 000c 281C     		mov	r0, r5
+ 132 000e FFF7FEFF 		bl	SPI_Master_SpiUartWriteTxData
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 5
+
+
+ 133              	.LVL17:
+ 134              	.L5:
+  97:lcd_ili9163.c ****         /* Wait for the end of the transfer. The number of transmitted data
+  98:lcd_ili9163.c ****         * elements has to be equal to the number of received data elements.
+  99:lcd_ili9163.c ****         */
+ 100:lcd_ili9163.c ****         while(1 != SPI_Master_SpiUartGetRxBufferSize())
+ 135              		.loc 1 100 0 discriminator 1
+ 136 0012 FFF7FEFF 		bl	SPI_Master_SpiUartGetRxBufferSize
+ 137              	.LVL18:
+ 138 0016 0128     		cmp	r0, #1
+ 139 0018 FBD1     		bne	.L5
+ 101:lcd_ili9163.c ****         {
+ 102:lcd_ili9163.c ****             /* Wait */
+ 103:lcd_ili9163.c ****         }
+ 104:lcd_ili9163.c **** 
+ 105:lcd_ili9163.c ****         /* Clear dummy bytes from RX buffer */    
+ 106:lcd_ili9163.c ****         SPI_Master_SpiUartClearRxBuffer();
+ 140              		.loc 1 106 0
+ 141 001a FFF7FEFF 		bl	SPI_Master_SpiUartClearRxBuffer
+ 142              	.LVL19:
+ 107:lcd_ili9163.c **** 		
+ 108:lcd_ili9163.c ****         SPI_Master_SpiUartWriteTxData(data2);
+ 143              		.loc 1 108 0
+ 144 001e 201C     		mov	r0, r4
+ 145 0020 FFF7FEFF 		bl	SPI_Master_SpiUartWriteTxData
+ 146              	.LVL20:
+ 147              	.L6:
+ 109:lcd_ili9163.c **** 		/* Wait for the end of the transfer. The number of transmitted data
+ 110:lcd_ili9163.c ****         * elements has to be equal to the number of received data elements.
+ 111:lcd_ili9163.c ****         */
+ 112:lcd_ili9163.c ****         while(1 != SPI_Master_SpiUartGetRxBufferSize())
+ 148              		.loc 1 112 0 discriminator 1
+ 149 0024 FFF7FEFF 		bl	SPI_Master_SpiUartGetRxBufferSize
+ 150              	.LVL21:
+ 151 0028 0128     		cmp	r0, #1
+ 152 002a FBD1     		bne	.L6
+ 113:lcd_ili9163.c ****         {
+ 114:lcd_ili9163.c ****             /* Wait */
+ 115:lcd_ili9163.c ****         }
+ 116:lcd_ili9163.c **** 
+ 117:lcd_ili9163.c ****         /* Clear dummy bytes from RX buffer */
+ 118:lcd_ili9163.c ****         SPI_Master_SpiUartClearRxBuffer();
+ 153              		.loc 1 118 0
+ 154 002c FFF7FEFF 		bl	SPI_Master_SpiUartClearRxBuffer
+ 155              	.LVL22:
+ 119:lcd_ili9163.c **** }
+ 156              		.loc 1 119 0
+ 157              		@ sp needed
+ 158              	.LVL23:
+ 159              	.LVL24:
+ 160 0030 38BD     		pop	{r3, r4, r5, pc}
+ 161              		.cfi_endproc
+ 162              	.LFE39:
+ 163              		.size	lcd_writeData16, .-lcd_writeData16
+ 164 0032 C046     		.section	.text.lcd_writeCommand,"ax",%progbits
+ 165              		.align	2
+ 166              		.global	lcd_writeCommand
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 6
+
+
+ 167              		.code	16
+ 168              		.thumb_func
+ 169              		.type	lcd_writeCommand, %function
+ 170              	lcd_writeCommand:
+ 171              	.LFB40:
+ 120:lcd_ili9163.c **** 
+ 121:lcd_ili9163.c **** 
+ 122:lcd_ili9163.c ****  /**
+ 123:lcd_ili9163.c ****  * \brief Writes a command to the display controller
+ 124:lcd_ili9163.c ****  *
+ 125:lcd_ili9163.c ****  * This functions pull pin D/C# low before writing to the controller. Different
+ 126:lcd_ili9163.c ****  * data write function is called based on the selected interface.
+ 127:lcd_ili9163.c ****  *
+ 128:lcd_ili9163.c ****  * \param command the command to write
+ 129:lcd_ili9163.c ****  */
+ 130:lcd_ili9163.c **** void lcd_writeCommand(uint8_t command)
+ 131:lcd_ili9163.c **** {
+ 172              		.loc 1 131 0
+ 173              		.cfi_startproc
+ 174              	.LVL25:
+ 175 0000 10B5     		push	{r4, lr}
+ 176              		.cfi_def_cfa_offset 8
+ 177              		.cfi_offset 4, -8
+ 178              		.cfi_offset 14, -4
+ 179 0002 041C     		mov	r4, r0
+ 132:lcd_ili9163.c **** 
+ 133:lcd_ili9163.c **** 	OLED_DC_Write(SSD1331_CMD);
+ 180              		.loc 1 133 0
+ 181 0004 0020     		mov	r0, #0
+ 182              	.LVL26:
+ 183 0006 FFF7FEFF 		bl	OLED_DC_Write
+ 184              	.LVL27:
+ 134:lcd_ili9163.c ****     SPI_Master_SpiUartWriteTxData(command);
+ 185              		.loc 1 134 0
+ 186 000a 201C     		mov	r0, r4
+ 187 000c FFF7FEFF 		bl	SPI_Master_SpiUartWriteTxData
+ 188              	.LVL28:
+ 189              	.L8:
+ 135:lcd_ili9163.c **** 		
+ 136:lcd_ili9163.c ****     /* Wait for the end of the transfer. The number of transmitted data
+ 137:lcd_ili9163.c ****     * elements has to be equal to the number of received data elements.
+ 138:lcd_ili9163.c ****     */
+ 139:lcd_ili9163.c ****     while(1 != SPI_Master_SpiUartGetRxBufferSize())
+ 190              		.loc 1 139 0 discriminator 1
+ 191 0010 FFF7FEFF 		bl	SPI_Master_SpiUartGetRxBufferSize
+ 192              	.LVL29:
+ 193 0014 0128     		cmp	r0, #1
+ 194 0016 FBD1     		bne	.L8
+ 140:lcd_ili9163.c ****     {
+ 141:lcd_ili9163.c ****         /* Wait */
+ 142:lcd_ili9163.c ****     }
+ 143:lcd_ili9163.c **** 
+ 144:lcd_ili9163.c ****     /* Clear dummy bytes from RX buffer */
+ 145:lcd_ili9163.c ****     SPI_Master_SpiUartClearRxBuffer();    
+ 195              		.loc 1 145 0
+ 196 0018 FFF7FEFF 		bl	SPI_Master_SpiUartClearRxBuffer
+ 197              	.LVL30:
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 7
+
+
+ 146:lcd_ili9163.c ****     
+ 147:lcd_ili9163.c ****     
+ 148:lcd_ili9163.c **** }
+ 198              		.loc 1 148 0
+ 199              		@ sp needed
+ 200 001c 10BD     		pop	{r4, pc}
+ 201              		.cfi_endproc
+ 202              	.LFE40:
+ 203              		.size	lcd_writeCommand, .-lcd_writeCommand
+ 204 001e C046     		.section	.text.lcd_SetAddr,"ax",%progbits
+ 205              		.align	2
+ 206              		.global	lcd_SetAddr
+ 207              		.code	16
+ 208              		.thumb_func
+ 209              		.type	lcd_SetAddr, %function
+ 210              	lcd_SetAddr:
+ 211              	.LFB41:
+ 149:lcd_ili9163.c **** 
+ 150:lcd_ili9163.c **** /**
+ 151:lcd_ili9163.c ****  * \brief Set area to write data to the display controller
+ 152:lcd_ili9163.c ****  *
+ 153:lcd_ili9163.c ****  * This functions sets the area in pixels to write data to
+ 154:lcd_ili9163.c ****  * 
+ 155:lcd_ili9163.c ****  *
+ 156:lcd_ili9163.c ****  * \param X1 = Start Column, X2= End Column, Y1 = Start Row
+ 157:lcd_ili9163.c ****  *  Y2 = End Row
+ 158:lcd_ili9163.c ****  */
+ 159:lcd_ili9163.c **** void lcd_SetAddr(uint8_t X1, uint8_t Y1, uint8_t X2, uint8_t Y2)
+ 160:lcd_ili9163.c **** {
+ 212              		.loc 1 160 0
+ 213              		.cfi_startproc
+ 214              	.LVL31:
+ 215 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 216              		.cfi_def_cfa_offset 24
+ 217              		.cfi_offset 3, -24
+ 218              		.cfi_offset 4, -20
+ 219              		.cfi_offset 5, -16
+ 220              		.cfi_offset 6, -12
+ 221              		.cfi_offset 7, -8
+ 222              		.cfi_offset 14, -4
+ 223 0002 071C     		mov	r7, r0
+ 224 0004 0D1C     		mov	r5, r1
+ 225 0006 161C     		mov	r6, r2
+ 226 0008 1C1C     		mov	r4, r3
+ 161:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_COL_ADDRESS);
+ 227              		.loc 1 161 0
+ 228 000a 2A20     		mov	r0, #42
+ 229              	.LVL32:
+ 230 000c FFF7FEFF 		bl	lcd_writeCommand
+ 231              	.LVL33:
+ 162:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 232              		.loc 1 162 0
+ 233 0010 0020     		mov	r0, #0
+ 234 0012 FFF7FEFF 		bl	lcd_writeData
+ 235              	.LVL34:
+ 163:lcd_ili9163.c **** 	lcd_writeData(X1);
+ 236              		.loc 1 163 0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 8
+
+
+ 237 0016 381C     		mov	r0, r7
+ 238 0018 FFF7FEFF 		bl	lcd_writeData
+ 239              	.LVL35:
+ 164:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 240              		.loc 1 164 0
+ 241 001c 0020     		mov	r0, #0
+ 242 001e FFF7FEFF 		bl	lcd_writeData
+ 243              	.LVL36:
+ 165:lcd_ili9163.c **** 	lcd_writeData(X2);
+ 244              		.loc 1 165 0
+ 245 0022 301C     		mov	r0, r6
+ 246 0024 FFF7FEFF 		bl	lcd_writeData
+ 247              	.LVL37:
+ 166:lcd_ili9163.c **** 	
+ 167:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_PAGE_ADDRESS);
+ 248              		.loc 1 167 0
+ 249 0028 2B20     		mov	r0, #43
+ 250 002a FFF7FEFF 		bl	lcd_writeCommand
+ 251              	.LVL38:
+ 168:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 252              		.loc 1 168 0
+ 253 002e 0020     		mov	r0, #0
+ 254 0030 FFF7FEFF 		bl	lcd_writeData
+ 255              	.LVL39:
+ 169:lcd_ili9163.c **** 	lcd_writeData(Y1);  // Value was 32+Y1
+ 256              		.loc 1 169 0
+ 257 0034 281C     		mov	r0, r5
+ 258 0036 FFF7FEFF 		bl	lcd_writeData
+ 259              	.LVL40:
+ 170:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 260              		.loc 1 170 0
+ 261 003a 0020     		mov	r0, #0
+ 262 003c FFF7FEFF 		bl	lcd_writeData
+ 263              	.LVL41:
+ 171:lcd_ili9163.c **** 	lcd_writeData(Y2);  // Value was 32+Y2
+ 264              		.loc 1 171 0
+ 265 0040 201C     		mov	r0, r4
+ 266 0042 FFF7FEFF 		bl	lcd_writeData
+ 267              	.LVL42:
+ 172:lcd_ili9163.c **** 
+ 173:lcd_ili9163.c **** 	lcd_writeCommand(LCD_WRITE_MEM_START);
+ 268              		.loc 1 173 0
+ 269 0046 2C20     		mov	r0, #44
+ 270 0048 FFF7FEFF 		bl	lcd_writeCommand
+ 271              	.LVL43:
+ 174:lcd_ili9163.c **** 
+ 175:lcd_ili9163.c **** }
+ 272              		.loc 1 175 0
+ 273              		@ sp needed
+ 274 004c F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 275              		.cfi_endproc
+ 276              	.LFE41:
+ 277              		.size	lcd_SetAddr, .-lcd_SetAddr
+ 278              		.section	.text.lcd_drawPixel,"ax",%progbits
+ 279              		.align	2
+ 280              		.global	lcd_drawPixel
+ 281              		.code	16
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 9
+
+
+ 282              		.thumb_func
+ 283              		.type	lcd_drawPixel, %function
+ 284              	lcd_drawPixel:
+ 285              	.LFB42:
+ 176:lcd_ili9163.c **** 
+ 177:lcd_ili9163.c **** void lcd_drawPixel(uint16_t x, uint16_t y, uint16_t color)
+ 178:lcd_ili9163.c **** {
+ 286              		.loc 1 178 0
+ 287              		.cfi_startproc
+ 288              	.LVL44:
+ 289 0000 10B5     		push	{r4, lr}
+ 290              		.cfi_def_cfa_offset 8
+ 291              		.cfi_offset 4, -8
+ 292              		.cfi_offset 14, -4
+ 293 0002 141C     		mov	r4, r2
+ 179:lcd_ili9163.c **** 	lcd_SetAddr(x, y, x, y);
+ 294              		.loc 1 179 0
+ 295 0004 C2B2     		uxtb	r2, r0
+ 296              	.LVL45:
+ 297 0006 CBB2     		uxtb	r3, r1
+ 298 0008 101C     		mov	r0, r2
+ 299              	.LVL46:
+ 300 000a 191C     		mov	r1, r3
+ 301              	.LVL47:
+ 302 000c FFF7FEFF 		bl	lcd_SetAddr
+ 303              	.LVL48:
+ 180:lcd_ili9163.c **** 
+ 181:lcd_ili9163.c **** 	lcd_writeCommand(LCD_WRITE_MEM_START);
+ 304              		.loc 1 181 0
+ 305 0010 2C20     		mov	r0, #44
+ 306 0012 FFF7FEFF 		bl	lcd_writeCommand
+ 307              	.LVL49:
+ 182:lcd_ili9163.c **** 	lcd_writeData(color >> 8);
+ 308              		.loc 1 182 0
+ 309 0016 200A     		lsr	r0, r4, #8
+ 310 0018 FFF7FEFF 		bl	lcd_writeData
+ 311              	.LVL50:
+ 183:lcd_ili9163.c **** 	lcd_writeData(color & 0xFF);
+ 312              		.loc 1 183 0
+ 313 001c E0B2     		uxtb	r0, r4
+ 314 001e FFF7FEFF 		bl	lcd_writeData
+ 315              	.LVL51:
+ 184:lcd_ili9163.c **** }
+ 316              		.loc 1 184 0
+ 317              		@ sp needed
+ 318 0022 10BD     		pop	{r4, pc}
+ 319              		.cfi_endproc
+ 320              	.LFE42:
+ 321              		.size	lcd_drawPixel, .-lcd_drawPixel
+ 322              		.section	.text.lcd_setScreen,"ax",%progbits
+ 323              		.align	2
+ 324              		.global	lcd_setScreen
+ 325              		.code	16
+ 326              		.thumb_func
+ 327              		.type	lcd_setScreen, %function
+ 328              	lcd_setScreen:
+ 329              	.LFB43:
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 10
+
+
+ 185:lcd_ili9163.c **** 
+ 186:lcd_ili9163.c **** /**
+ 187:lcd_ili9163.c ****  * \brief Set background color
+ 188:lcd_ili9163.c ****  *
+ 189:lcd_ili9163.c ****  * This function sets the background to defined color
+ 190:lcd_ili9163.c ****  * 
+ 191:lcd_ili9163.c ****  *
+ 192:lcd_ili9163.c ****  * \param Color = Color background is set to
+ 193:lcd_ili9163.c ****  */
+ 194:lcd_ili9163.c **** void lcd_setScreen(uint16_t Color)
+ 195:lcd_ili9163.c **** {
+ 330              		.loc 1 195 0
+ 331              		.cfi_startproc
+ 332              	.LVL52:
+ 333 0000 10B5     		push	{r4, lr}
+ 334              		.cfi_def_cfa_offset 8
+ 335              		.cfi_offset 4, -8
+ 336              		.cfi_offset 14, -4
+ 337 0002 82B0     		sub	sp, sp, #8
+ 338              		.cfi_def_cfa_offset 16
+ 339 0004 041C     		mov	r4, r0
+ 196:lcd_ili9163.c **** 	volatile uint16_t XCnt, YCnt;
+ 197:lcd_ili9163.c **** 
+ 198:lcd_ili9163.c **** 	lcd_SetAddr(0, 0, MAX_HORIZ-1, MAX_VERT-1);
+ 340              		.loc 1 198 0
+ 341 0006 0020     		mov	r0, #0
+ 342              	.LVL53:
+ 343 0008 0021     		mov	r1, #0
+ 344 000a 7F22     		mov	r2, #127
+ 345 000c 7F23     		mov	r3, #127
+ 346 000e FFF7FEFF 		bl	lcd_SetAddr
+ 347              	.LVL54:
+ 199:lcd_ili9163.c **** 
+ 200:lcd_ili9163.c **** 	for(XCnt = 0; XCnt<MAX_HORIZ; XCnt++)
+ 348              		.loc 1 200 0
+ 349 0012 0022     		mov	r2, #0
+ 350 0014 6B46     		mov	r3, sp
+ 351 0016 DA80     		strh	r2, [r3, #6]
+ 352 0018 16E0     		b	.L12
+ 353              	.L15:
+ 201:lcd_ili9163.c **** 	{
+ 202:lcd_ili9163.c **** 		for(YCnt = 0; YCnt<MAX_VERT; YCnt++)
+ 354              		.loc 1 202 0
+ 355 001a 0022     		mov	r2, #0
+ 356 001c 01AB     		add	r3, sp, #4
+ 357 001e 1A80     		strh	r2, [r3]
+ 358 0020 07E0     		b	.L13
+ 359              	.L14:
+ 203:lcd_ili9163.c **** 		{
+ 204:lcd_ili9163.c **** 			lcd_writeData16(Color);
+ 360              		.loc 1 204 0 discriminator 3
+ 361 0022 201C     		mov	r0, r4
+ 362 0024 FFF7FEFF 		bl	lcd_writeData16
+ 363              	.LVL55:
+ 202:lcd_ili9163.c **** 		{
+ 364              		.loc 1 202 0 discriminator 3
+ 365 0028 01AA     		add	r2, sp, #4
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 11
+
+
+ 366 002a 1388     		ldrh	r3, [r2]
+ 367 002c 0133     		add	r3, r3, #1
+ 368 002e 9BB2     		uxth	r3, r3
+ 369 0030 1380     		strh	r3, [r2]
+ 370              	.L13:
+ 202:lcd_ili9163.c **** 		{
+ 371              		.loc 1 202 0 is_stmt 0 discriminator 1
+ 372 0032 01AB     		add	r3, sp, #4
+ 373 0034 1B88     		ldrh	r3, [r3]
+ 374 0036 9BB2     		uxth	r3, r3
+ 375 0038 7F2B     		cmp	r3, #127
+ 376 003a F2D9     		bls	.L14
+ 200:lcd_ili9163.c **** 	{
+ 377              		.loc 1 200 0 is_stmt 1 discriminator 2
+ 378 003c 6B46     		mov	r3, sp
+ 379 003e 9A1D     		add	r2, r3, #6
+ 380 0040 DB88     		ldrh	r3, [r3, #6]
+ 381 0042 0133     		add	r3, r3, #1
+ 382 0044 9BB2     		uxth	r3, r3
+ 383 0046 1380     		strh	r3, [r2]
+ 384              	.L12:
+ 200:lcd_ili9163.c **** 	{
+ 385              		.loc 1 200 0 is_stmt 0 discriminator 1
+ 386 0048 6B46     		mov	r3, sp
+ 387 004a 0633     		add	r3, r3, #6
+ 388 004c 1B88     		ldrh	r3, [r3]
+ 389 004e 9BB2     		uxth	r3, r3
+ 390 0050 7F2B     		cmp	r3, #127
+ 391 0052 E2D9     		bls	.L15
+ 205:lcd_ili9163.c **** 		}
+ 206:lcd_ili9163.c **** 	}
+ 207:lcd_ili9163.c **** }
+ 392              		.loc 1 207 0 is_stmt 1
+ 393 0054 02B0     		add	sp, sp, #8
+ 394              		@ sp needed
+ 395 0056 10BD     		pop	{r4, pc}
+ 396              		.cfi_endproc
+ 397              	.LFE43:
+ 398              		.size	lcd_setScreen, .-lcd_setScreen
+ 399              		.section	.text.lcd_displayImage,"ax",%progbits
+ 400              		.align	2
+ 401              		.global	lcd_displayImage
+ 402              		.code	16
+ 403              		.thumb_func
+ 404              		.type	lcd_displayImage, %function
+ 405              	lcd_displayImage:
+ 406              	.LFB44:
+ 208:lcd_ili9163.c **** 
+ 209:lcd_ili9163.c **** 
+ 210:lcd_ili9163.c **** /**
+ 211:lcd_ili9163.c ****  * \brief Display image
+ 212:lcd_ili9163.c ****  *
+ 213:lcd_ili9163.c ****  * This function sets the image on the display
+ 214:lcd_ili9163.c ****  * 
+ 215:lcd_ili9163.c ****  *
+ 216:lcd_ili9163.c ****  * \param Image - Pointer
+ 217:lcd_ili9163.c ****  */
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 12
+
+
+ 218:lcd_ili9163.c **** void lcd_displayImage(const uint8_t *Image, uint32_t size)
+ 219:lcd_ili9163.c **** {
+ 407              		.loc 1 219 0
+ 408              		.cfi_startproc
+ 409              	.LVL56:
+ 410 0000 38B5     		push	{r3, r4, r5, lr}
+ 411              		.cfi_def_cfa_offset 16
+ 412              		.cfi_offset 3, -16
+ 413              		.cfi_offset 4, -12
+ 414              		.cfi_offset 5, -8
+ 415              		.cfi_offset 14, -4
+ 416 0002 051C     		mov	r5, r0
+ 417 0004 0C1C     		mov	r4, r1
+ 220:lcd_ili9163.c ****     
+ 221:lcd_ili9163.c **** 	lcd_SetAddr(0, 0, MAX_HORIZ-1, MAX_VERT-1);
+ 418              		.loc 1 221 0
+ 419 0006 0020     		mov	r0, #0
+ 420              	.LVL57:
+ 421 0008 0021     		mov	r1, #0
+ 422              	.LVL58:
+ 423 000a 7F22     		mov	r2, #127
+ 424 000c 7F23     		mov	r3, #127
+ 425 000e FFF7FEFF 		bl	lcd_SetAddr
+ 426              	.LVL59:
+ 222:lcd_ili9163.c ****     lcd_writeCommand(LCD_WRITE_MEM_START);
+ 427              		.loc 1 222 0
+ 428 0012 2C20     		mov	r0, #44
+ 429 0014 FFF7FEFF 		bl	lcd_writeCommand
+ 430              	.LVL60:
+ 223:lcd_ili9163.c **** 
+ 224:lcd_ili9163.c ****     OLED_DC_Write(SSD1331_DATA);
+ 431              		.loc 1 224 0
+ 432 0018 0120     		mov	r0, #1
+ 433 001a FFF7FEFF 		bl	OLED_DC_Write
+ 434              	.LVL61:
+ 225:lcd_ili9163.c ****     
+ 226:lcd_ili9163.c ****      /* Start transfer */
+ 227:lcd_ili9163.c ****     SPI_Master_SpiUartPutArray(Image, size);
+ 435              		.loc 1 227 0
+ 436 001e 281C     		mov	r0, r5
+ 437 0020 211C     		mov	r1, r4
+ 438 0022 FFF7FEFF 		bl	SPI_Master_SpiUartPutArray
+ 439              	.LVL62:
+ 440              	.L17:
+ 228:lcd_ili9163.c **** 
+ 229:lcd_ili9163.c ****     /* Wait for the end of the transfer. The number of transmitted data
+ 230:lcd_ili9163.c ****     * elements has to be equal to the number of received data elements.
+ 231:lcd_ili9163.c ****     */
+ 232:lcd_ili9163.c ****     while(8 != SPI_Master_SpiUartGetRxBufferSize())
+ 441              		.loc 1 232 0 discriminator 1
+ 442 0026 FFF7FEFF 		bl	SPI_Master_SpiUartGetRxBufferSize
+ 443              	.LVL63:
+ 444 002a 0828     		cmp	r0, #8
+ 445 002c FBD1     		bne	.L17
+ 233:lcd_ili9163.c ****     {
+ 234:lcd_ili9163.c ****     }
+ 235:lcd_ili9163.c **** 
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 13
+
+
+ 236:lcd_ili9163.c ****     /* Clear dummy bytes from RX buffer */
+ 237:lcd_ili9163.c ****     SPI_Master_SpiUartClearRxBuffer();
+ 446              		.loc 1 237 0
+ 447 002e FFF7FEFF 		bl	SPI_Master_SpiUartClearRxBuffer
+ 448              	.LVL64:
+ 238:lcd_ili9163.c **** 
+ 239:lcd_ili9163.c **** }
+ 449              		.loc 1 239 0
+ 450              		@ sp needed
+ 451              	.LVL65:
+ 452              	.LVL66:
+ 453 0032 38BD     		pop	{r3, r4, r5, pc}
+ 454              		.cfi_endproc
+ 455              	.LFE44:
+ 456              		.size	lcd_displayImage, .-lcd_displayImage
+ 457              		.section	.text.lcd_putChar8x16,"ax",%progbits
+ 458              		.align	2
+ 459              		.global	lcd_putChar8x16
+ 460              		.code	16
+ 461              		.thumb_func
+ 462              		.type	lcd_putChar8x16, %function
+ 463              	lcd_putChar8x16:
+ 464              	.LFB45:
+ 240:lcd_ili9163.c **** 
+ 241:lcd_ili9163.c **** 
+ 242:lcd_ili9163.c **** void lcd_putChar8x16(uint8_t x, uint8_t y, char c, uint16_t fColor, uint16_t bColor)
+ 243:lcd_ili9163.c **** {     
+ 465              		.loc 1 243 0
+ 466              		.cfi_startproc
+ 467              	.LVL67:
+ 468 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 469              		.cfi_def_cfa_offset 20
+ 470              		.cfi_offset 4, -20
+ 471              		.cfi_offset 5, -16
+ 472              		.cfi_offset 6, -12
+ 473              		.cfi_offset 7, -8
+ 474              		.cfi_offset 14, -4
+ 475 0002 4F46     		mov	r7, r9
+ 476 0004 80B4     		push	{r7}
+ 477              		.cfi_def_cfa_offset 24
+ 478              		.cfi_offset 9, -24
+ 479 0006 82B0     		sub	sp, sp, #8
+ 480              		.cfi_def_cfa_offset 32
+ 481 0008 9146     		mov	r9, r2
+ 482 000a 0193     		str	r3, [sp, #4]
+ 483 000c 08AB     		add	r3, sp, #32
+ 484              	.LVL68:
+ 485 000e 1D88     		ldrh	r5, [r3]
+ 244:lcd_ili9163.c **** 	unsigned int i, j;
+ 245:lcd_ili9163.c **** 
+ 246:lcd_ili9163.c **** 	lcd_SetAddr(x, y, x + 8 - 1, y + 16 - 1);
+ 486              		.loc 1 246 0
+ 487 0010 C21D     		add	r2, r0, #7
+ 488              	.LVL69:
+ 489 0012 D2B2     		uxtb	r2, r2
+ 490 0014 0B1C     		mov	r3, r1
+ 491              	.LVL70:
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 14
+
+
+ 492 0016 0F33     		add	r3, r3, #15
+ 493 0018 DBB2     		uxtb	r3, r3
+ 494 001a FFF7FEFF 		bl	lcd_SetAddr
+ 495              	.LVL71:
+ 247:lcd_ili9163.c **** 	lcd_writeCommand(LCD_WRITE_MEM_START);
+ 496              		.loc 1 247 0
+ 497 001e 2C20     		mov	r0, #44
+ 498 0020 FFF7FEFF 		bl	lcd_writeCommand
+ 499              	.LVL72:
+ 248:lcd_ili9163.c **** 
+ 249:lcd_ili9163.c **** 	for(i = 0; i < 16; i++)      
+ 500              		.loc 1 249 0
+ 501 0024 0026     		mov	r6, #0
+ 502 0026 17E0     		b	.L19
+ 503              	.LVL73:
+ 504              	.L24:
+ 505              	.LBB2:
+ 250:lcd_ili9163.c **** 	{         
+ 251:lcd_ili9163.c **** 		unsigned char m = Font8x16[(c - 0x20) * 16 + i];
+ 506              		.loc 1 251 0
+ 507 0028 4B46     		mov	r3, r9
+ 508 002a 203B     		sub	r3, r3, #32
+ 509 002c 1B01     		lsl	r3, r3, #4
+ 510 002e 9B19     		add	r3, r3, r6
+ 511 0030 0C4A     		ldr	r2, .L25
+ 512 0032 D45C     		ldrb	r4, [r2, r3]
+ 513              	.LVL74:
+ 252:lcd_ili9163.c ****         for(j = 0; j < 8; j++) 
+ 514              		.loc 1 252 0
+ 515 0034 0027     		mov	r7, #0
+ 516 0036 0CE0     		b	.L20
+ 517              	.LVL75:
+ 518              	.L23:
+ 253:lcd_ili9163.c ****         {
+ 254:lcd_ili9163.c ****              
+ 255:lcd_ili9163.c ****         	if((m & 0x80) == 0x80)    //if((m & 0x80) == 0x80)
+ 519              		.loc 1 255 0
+ 520 0038 63B2     		sxtb	r3, r4
+ 521 003a 002B     		cmp	r3, #0
+ 522 003c 03DA     		bge	.L21
+ 256:lcd_ili9163.c ****             {
+ 257:lcd_ili9163.c ****         		lcd_writeData16(fColor);
+ 523              		.loc 1 257 0
+ 524 003e 0198     		ldr	r0, [sp, #4]
+ 525 0040 FFF7FEFF 		bl	lcd_writeData16
+ 526              	.LVL76:
+ 527 0044 02E0     		b	.L22
+ 528              	.L21:
+ 258:lcd_ili9163.c ****             }
+ 259:lcd_ili9163.c ****             else 
+ 260:lcd_ili9163.c ****             {
+ 261:lcd_ili9163.c ****             	lcd_writeData16(bColor);
+ 529              		.loc 1 261 0
+ 530 0046 281C     		mov	r0, r5
+ 531 0048 FFF7FEFF 		bl	lcd_writeData16
+ 532              	.LVL77:
+ 533              	.L22:
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 15
+
+
+ 262:lcd_ili9163.c ****             }             
+ 263:lcd_ili9163.c ****         	m <<= 1;         
+ 534              		.loc 1 263 0 discriminator 2
+ 535 004c 6400     		lsl	r4, r4, #1
+ 536              	.LVL78:
+ 537 004e E4B2     		uxtb	r4, r4
+ 538              	.LVL79:
+ 252:lcd_ili9163.c ****         {
+ 539              		.loc 1 252 0 discriminator 2
+ 540 0050 0137     		add	r7, r7, #1
+ 541              	.LVL80:
+ 542              	.L20:
+ 252:lcd_ili9163.c ****         {
+ 543              		.loc 1 252 0 is_stmt 0 discriminator 1
+ 544 0052 072F     		cmp	r7, #7
+ 545 0054 F0D9     		bls	.L23
+ 546              	.LBE2:
+ 249:lcd_ili9163.c **** 	{         
+ 547              		.loc 1 249 0 is_stmt 1 discriminator 2
+ 548 0056 0136     		add	r6, r6, #1
+ 549              	.LVL81:
+ 550              	.L19:
+ 249:lcd_ili9163.c **** 	{         
+ 551              		.loc 1 249 0 is_stmt 0 discriminator 1
+ 552 0058 0F2E     		cmp	r6, #15
+ 553 005a E5D9     		bls	.L24
+ 264:lcd_ili9163.c ****         }     
+ 265:lcd_ili9163.c **** 	}
+ 266:lcd_ili9163.c **** }
+ 554              		.loc 1 266 0 is_stmt 1
+ 555 005c 02B0     		add	sp, sp, #8
+ 556              		@ sp needed
+ 557              	.LVL82:
+ 558 005e 04BC     		pop	{r2}
+ 559 0060 9146     		mov	r9, r2
+ 560 0062 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 561              	.L26:
+ 562              		.align	2
+ 563              	.L25:
+ 564 0064 00000000 		.word	.LANCHOR0
+ 565              		.cfi_endproc
+ 566              	.LFE45:
+ 567              		.size	lcd_putChar8x16, .-lcd_putChar8x16
+ 568              		.section	.text.lcd_displayString,"ax",%progbits
+ 569              		.align	2
+ 570              		.global	lcd_displayString
+ 571              		.code	16
+ 572              		.thumb_func
+ 573              		.type	lcd_displayString, %function
+ 574              	lcd_displayString:
+ 575              	.LFB46:
+ 267:lcd_ili9163.c **** 
+ 268:lcd_ili9163.c **** 
+ 269:lcd_ili9163.c **** /**
+ 270:lcd_ili9163.c ****   * @brief Displays one character at the specified position    
+ 271:lcd_ili9163.c ****   *         
+ 272:lcd_ili9163.c ****   * @param  chXpos: Specifies the X position
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 16
+
+
+ 273:lcd_ili9163.c ****   * @param  chYpos: Specifies the Y position
+ 274:lcd_ili9163.c ****   * @param  chSize: 
+ 275:lcd_ili9163.c ****   * @param  chMode
+ 276:lcd_ili9163.c ****   * @retval 
+ 277:lcd_ili9163.c **** **/
+ 278:lcd_ili9163.c **** /*
+ 279:lcd_ili9163.c **** void display_char(uint8_t chXpos, uint8_t chYpos, uint8_t chChr, uint8_t chSize, uint16_t hwColor)
+ 280:lcd_ili9163.c **** {      	
+ 281:lcd_ili9163.c **** 	uint8_t i, j; 
+ 282:lcd_ili9163.c ****     uint8_t chTemp = 0;
+ 283:lcd_ili9163.c **** 	uint8_t chYpos0 = chYpos;
+ 284:lcd_ili9163.c **** 
+ 285:lcd_ili9163.c **** 	if (chXpos >= MAX_HORIZ || chYpos >= MAX_VERT) {
+ 286:lcd_ili9163.c **** 		return;
+ 287:lcd_ili9163.c **** 	}
+ 288:lcd_ili9163.c **** 					   
+ 289:lcd_ili9163.c ****     for (i = 0; i < chSize; i ++) {   
+ 290:lcd_ili9163.c **** 		if (FONT_1206 == chSize) {
+ 291:lcd_ili9163.c **** 			chTemp = c_chFont1206[chChr - 0x20][i];  
+ 292:lcd_ili9163.c **** 		} else if (FONT_1608 == chSize) { 
+ 293:lcd_ili9163.c **** 			chTemp = c_chFont1608[chChr - 0x20][i];
+ 294:lcd_ili9163.c **** 		}
+ 295:lcd_ili9163.c **** 		
+ 296:lcd_ili9163.c ****         for (j = 0; j < 8; j ++) {
+ 297:lcd_ili9163.c ****     		if (chTemp & 0x80) {
+ 298:lcd_ili9163.c **** 				lcd_drawPixel(chXpos, chYpos, hwColor);
+ 299:lcd_ili9163.c ****     		}			
+ 300:lcd_ili9163.c **** 			chTemp <<= 1;
+ 301:lcd_ili9163.c **** 			chYpos ++;
+ 302:lcd_ili9163.c **** 			if ((chYpos - chYpos0) == chSize) {
+ 303:lcd_ili9163.c **** 				chYpos = chYpos0;
+ 304:lcd_ili9163.c **** 				chXpos ++;
+ 305:lcd_ili9163.c **** 				break;
+ 306:lcd_ili9163.c **** 			}
+ 307:lcd_ili9163.c **** 		}  	 
+ 308:lcd_ili9163.c ****     } 
+ 309:lcd_ili9163.c **** }
+ 310:lcd_ili9163.c **** */
+ 311:lcd_ili9163.c **** 
+ 312:lcd_ili9163.c **** /**
+ 313:lcd_ili9163.c ****   * @brief  Displays a string on the screen
+ 314:lcd_ili9163.c ****   *         
+ 315:lcd_ili9163.c ****   * @param  chXpos: Specifies the X position
+ 316:lcd_ili9163.c ****   * @param  chYpos: Specifies the Y position
+ 317:lcd_ili9163.c ****   * @param  pchString: Pointer to a string to display on the screen 
+ 318:lcd_ili9163.c ****   *         
+ 319:lcd_ili9163.c ****   * @retval  None
+ 320:lcd_ili9163.c **** **/
+ 321:lcd_ili9163.c **** 
+ 322:lcd_ili9163.c **** /*
+ 323:lcd_ili9163.c **** void display_string(uint8_t chXpos, uint8_t chYpos, const uint8_t *pchString, uint8_t chSize, uint1
+ 324:lcd_ili9163.c **** {
+ 325:lcd_ili9163.c **** 	if (chXpos >= MAX_HORIZ || chYpos >= MAX_VERT) {
+ 326:lcd_ili9163.c **** 		return;
+ 327:lcd_ili9163.c **** 	}
+ 328:lcd_ili9163.c **** 	
+ 329:lcd_ili9163.c ****     while (*pchString != '\0') {       
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 17
+
+
+ 330:lcd_ili9163.c ****         if (chXpos > (MAX_HORIZ - chSize / 2)) {
+ 331:lcd_ili9163.c **** 			chXpos = 0;
+ 332:lcd_ili9163.c **** 			chYpos += chSize;
+ 333:lcd_ili9163.c **** 			if (chYpos > (MAX_VERT - chSize)) {
+ 334:lcd_ili9163.c **** 				chYpos = chXpos = 0;
+ 335:lcd_ili9163.c **** 				lcd_setScreen(0x00);
+ 336:lcd_ili9163.c **** 			}
+ 337:lcd_ili9163.c **** 		}
+ 338:lcd_ili9163.c **** 		
+ 339:lcd_ili9163.c ****         display_char(chXpos, chYpos, *pchString, chSize, hwColor);
+ 340:lcd_ili9163.c ****         chXpos += chSize / 2;
+ 341:lcd_ili9163.c ****         pchString ++;
+ 342:lcd_ili9163.c ****     } 
+ 343:lcd_ili9163.c **** }
+ 344:lcd_ili9163.c **** */
+ 345:lcd_ili9163.c **** 
+ 346:lcd_ili9163.c **** void lcd_displayString(uint8_t x, uint8_t y, uint8_t* pcString, uint16_t fColor, uint16_t bColor)
+ 347:lcd_ili9163.c **** {
+ 576              		.loc 1 347 0
+ 577              		.cfi_startproc
+ 578              	.LVL83:
+ 579 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 580              		.cfi_def_cfa_offset 20
+ 581              		.cfi_offset 4, -20
+ 582              		.cfi_offset 5, -16
+ 583              		.cfi_offset 6, -12
+ 584              		.cfi_offset 7, -8
+ 585              		.cfi_offset 14, -4
+ 586 0002 85B0     		sub	sp, sp, #20
+ 587              		.cfi_def_cfa_offset 40
+ 588 0004 051C     		mov	r5, r0
+ 589 0006 0291     		str	r1, [sp, #8]
+ 590 0008 171C     		mov	r7, r2
+ 591 000a 0393     		str	r3, [sp, #12]
+ 592 000c 0AAB     		add	r3, sp, #40
+ 593              	.LVL84:
+ 594 000e 1C88     		ldrh	r4, [r3]
+ 595              	.LVL85:
+ 348:lcd_ili9163.c **** 	unsigned char ucl = 0;
+ 596              		.loc 1 348 0
+ 597 0010 0026     		mov	r6, #0
+ 349:lcd_ili9163.c **** 
+ 350:lcd_ili9163.c **** 	while(*pcString)
+ 598              		.loc 1 350 0
+ 599 0012 0AE0     		b	.L28
+ 600              	.LVL86:
+ 601              	.L29:
+ 351:lcd_ili9163.c **** 	{
+ 352:lcd_ili9163.c **** 
+ 353:lcd_ili9163.c **** 		lcd_putChar8x16(x + ucl * 8, y, *pcString, fColor, bColor);
+ 602              		.loc 1 353 0
+ 603 0014 F000     		lsl	r0, r6, #3
+ 604 0016 2818     		add	r0, r5, r0
+ 605 0018 C0B2     		uxtb	r0, r0
+ 606 001a 0094     		str	r4, [sp]
+ 607 001c 0299     		ldr	r1, [sp, #8]
+ 608 001e 039B     		ldr	r3, [sp, #12]
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 18
+
+
+ 609 0020 FFF7FEFF 		bl	lcd_putChar8x16
+ 610              	.LVL87:
+ 354:lcd_ili9163.c **** 		pcString++; ucl++;
+ 611              		.loc 1 354 0
+ 612 0024 0137     		add	r7, r7, #1
+ 613              	.LVL88:
+ 614 0026 0136     		add	r6, r6, #1
+ 615              	.LVL89:
+ 616 0028 F6B2     		uxtb	r6, r6
+ 617              	.LVL90:
+ 618              	.L28:
+ 350:lcd_ili9163.c **** 	{
+ 619              		.loc 1 350 0
+ 620 002a 3A78     		ldrb	r2, [r7]
+ 621 002c 002A     		cmp	r2, #0
+ 622 002e F1D1     		bne	.L29
+ 355:lcd_ili9163.c **** 	}
+ 356:lcd_ili9163.c **** }
+ 623              		.loc 1 356 0
+ 624 0030 05B0     		add	sp, sp, #20
+ 625              		@ sp needed
+ 626              	.LVL91:
+ 627              	.LVL92:
+ 628 0032 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 629              		.cfi_endproc
+ 630              	.LFE46:
+ 631              		.size	lcd_displayString, .-lcd_displayString
+ 632              		.section	.text.lcd_init,"ax",%progbits
+ 633              		.align	2
+ 634              		.global	lcd_init
+ 635              		.code	16
+ 636              		.thumb_func
+ 637              		.type	lcd_init, %function
+ 638              	lcd_init:
+ 639              	.LFB47:
+ 357:lcd_ili9163.c **** 
+ 358:lcd_ili9163.c **** 
+ 359:lcd_ili9163.c **** void lcd_init(void)
+ 360:lcd_ili9163.c **** {
+ 640              		.loc 1 360 0
+ 641              		.cfi_startproc
+ 642 0000 08B5     		push	{r3, lr}
+ 643              		.cfi_def_cfa_offset 8
+ 644              		.cfi_offset 3, -8
+ 645              		.cfi_offset 14, -4
+ 361:lcd_ili9163.c **** 	lcd_Reset();
+ 646              		.loc 1 361 0
+ 647 0002 FFF7FEFF 		bl	lcd_Reset
+ 648              	.LVL93:
+ 362:lcd_ili9163.c **** 	
+ 363:lcd_ili9163.c **** 	//lcd_writeCommand(LCD_SOFT_RESET);
+ 364:lcd_ili9163.c **** 	lcd_writeCommand(LCD_EXIT_SLEEP_MODE);
+ 649              		.loc 1 364 0
+ 650 0006 1120     		mov	r0, #17
+ 651 0008 FFF7FEFF 		bl	lcd_writeCommand
+ 652              	.LVL94:
+ 365:lcd_ili9163.c **** 	CyDelay(100);
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 19
+
+
+ 653              		.loc 1 365 0
+ 654 000c 6420     		mov	r0, #100
+ 655 000e FFF7FEFF 		bl	CyDelay
+ 656              	.LVL95:
+ 366:lcd_ili9163.c **** 	
+ 367:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_GAMMA_CURVE);
+ 657              		.loc 1 367 0
+ 658 0012 2620     		mov	r0, #38
+ 659 0014 FFF7FEFF 		bl	lcd_writeCommand
+ 660              	.LVL96:
+ 368:lcd_ili9163.c **** 	lcd_writeData(0x04); // Set Default Gamma
+ 661              		.loc 1 368 0
+ 662 0018 0420     		mov	r0, #4
+ 663 001a FFF7FEFF 		bl	lcd_writeData
+ 664              	.LVL97:
+ 369:lcd_ili9163.c **** 	
+ 370:lcd_ili9163.c **** 	lcd_writeData(LCD_ENTER_NORM_MODE);
+ 665              		.loc 1 370 0
+ 666 001e 1320     		mov	r0, #19
+ 667 0020 FFF7FEFF 		bl	lcd_writeData
+ 668              	.LVL98:
+ 371:lcd_ili9163.c **** 	
+ 372:lcd_ili9163.c **** 	lcd_writeCommand(LCD_POWER_CONTROL1);
+ 669              		.loc 1 372 0
+ 670 0024 C020     		mov	r0, #192
+ 671 0026 FFF7FEFF 		bl	lcd_writeCommand
+ 672              	.LVL99:
+ 373:lcd_ili9163.c **** 	lcd_writeData(0x0A); // VRH = 10:  GVDD = 4.3
+ 673              		.loc 1 373 0
+ 674 002a 0A20     		mov	r0, #10
+ 675 002c FFF7FEFF 		bl	lcd_writeData
+ 676              	.LVL100:
+ 374:lcd_ili9163.c **** 	lcd_writeData(0x02); // VC = 2: VCI1 = 2.65
+ 677              		.loc 1 374 0
+ 678 0030 0220     		mov	r0, #2
+ 679 0032 FFF7FEFF 		bl	lcd_writeData
+ 680              	.LVL101:
+ 375:lcd_ili9163.c **** 	
+ 376:lcd_ili9163.c **** 	lcd_writeCommand(LCD_POWER_CONTROL2);
+ 681              		.loc 1 376 0
+ 682 0036 C120     		mov	r0, #193
+ 683 0038 FFF7FEFF 		bl	lcd_writeCommand
+ 684              	.LVL102:
+ 377:lcd_ili9163.c **** 	lcd_writeData(0x02); // BT = 0: AVDD = 2xVCI1, VCL = -1xVCI1, VGH = 4xVCI1, VGL = -3xVCI1
+ 685              		.loc 1 377 0
+ 686 003c 0220     		mov	r0, #2
+ 687 003e FFF7FEFF 		bl	lcd_writeData
+ 688              	.LVL103:
+ 378:lcd_ili9163.c **** 
+ 379:lcd_ili9163.c **** 	//lcd_writeCommand(LCD_POWER_CONTROL3);
+ 380:lcd_ili9163.c **** 	//lcd_writeData(0x00); // Least power in current amplifier
+ 381:lcd_ili9163.c **** 	//lcd_writeData(0x07); // Booster Circ #1 =BCLK/8, Booster Circ #2&3 =BCLK/64
+ 382:lcd_ili9163.c **** 	
+ 383:lcd_ili9163.c **** 	//lcd_writeCommand(LCD_POWER_CONTROL4);
+ 384:lcd_ili9163.c **** 	//lcd_writeData(0x00); // Least power in current amplifier
+ 385:lcd_ili9163.c **** 	//lcd_writeData(0x07); // Booster Circ #1 =BCLK/8, Booster Circ #2&3 =BCLK/64
+ 386:lcd_ili9163.c **** 	
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 20
+
+
+ 387:lcd_ili9163.c **** 	lcd_writeCommand(LCD_VCOM_CONTROL1);
+ 689              		.loc 1 387 0
+ 690 0042 C520     		mov	r0, #197
+ 691 0044 FFF7FEFF 		bl	lcd_writeCommand
+ 692              	.LVL104:
+ 388:lcd_ili9163.c **** 	lcd_writeData(0x50); // 
+ 693              		.loc 1 388 0
+ 694 0048 5020     		mov	r0, #80
+ 695 004a FFF7FEFF 		bl	lcd_writeData
+ 696              	.LVL105:
+ 389:lcd_ili9163.c **** 	lcd_writeData(0x99); // 
+ 697              		.loc 1 389 0
+ 698 004e 9920     		mov	r0, #153
+ 699 0050 FFF7FEFF 		bl	lcd_writeData
+ 700              	.LVL106:
+ 390:lcd_ili9163.c **** 		
+ 391:lcd_ili9163.c **** 	lcd_writeCommand(LCD_VCOM_OFFSET_CONTROL);
+ 701              		.loc 1 391 0
+ 702 0054 C720     		mov	r0, #199
+ 703 0056 FFF7FEFF 		bl	lcd_writeCommand
+ 704              	.LVL107:
+ 392:lcd_ili9163.c **** 	lcd_writeData(0x00); // nVM = 0, VMF = 64: VCOMH output = VMH, VCOML output = VML
+ 705              		.loc 1 392 0
+ 706 005a 0020     		mov	r0, #0
+ 707 005c FFF7FEFF 		bl	lcd_writeData
+ 708              	.LVL108:
+ 393:lcd_ili9163.c **** 	
+ 394:lcd_ili9163.c **** 	lcd_writeCommand(LCD_EXIT_IDLE_MODE);
+ 709              		.loc 1 394 0
+ 710 0060 3820     		mov	r0, #56
+ 711 0062 FFF7FEFF 		bl	lcd_writeCommand
+ 712              	.LVL109:
+ 395:lcd_ili9163.c **** 	
+ 396:lcd_ili9163.c ****     /* 16 bits per pixel R5 G6 B5 */
+ 397:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_PIXEL_FMT);
+ 713              		.loc 1 397 0
+ 714 0066 3A20     		mov	r0, #58
+ 715 0068 FFF7FEFF 		bl	lcd_writeCommand
+ 716              	.LVL110:
+ 398:lcd_ili9163.c **** 	lcd_writeData(0x05); 
+ 717              		.loc 1 398 0
+ 718 006c 0520     		mov	r0, #5
+ 719 006e FFF7FEFF 		bl	lcd_writeData
+ 720              	.LVL111:
+ 399:lcd_ili9163.c **** 	
+ 400:lcd_ili9163.c **** 	lcd_writeCommand(LCD_FRAME_RATE_CTRL1);
+ 721              		.loc 1 400 0
+ 722 0072 B120     		mov	r0, #177
+ 723 0074 FFF7FEFF 		bl	lcd_writeCommand
+ 724              	.LVL112:
+ 401:lcd_ili9163.c **** 	lcd_writeData(0x08); // DIVA = 8
+ 725              		.loc 1 401 0
+ 726 0078 0820     		mov	r0, #8
+ 727 007a FFF7FEFF 		bl	lcd_writeData
+ 728              	.LVL113:
+ 402:lcd_ili9163.c **** 	lcd_writeData(0x02); // VPA = 9  Was value = 0x08
+ 729              		.loc 1 402 0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 21
+
+
+ 730 007e 0220     		mov	r0, #2
+ 731 0080 FFF7FEFF 		bl	lcd_writeData
+ 732              	.LVL114:
+ 403:lcd_ili9163.c **** 		
+ 404:lcd_ili9163.c **** 	
+ 405:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_COL_ADDRESS);
+ 733              		.loc 1 405 0
+ 734 0084 2A20     		mov	r0, #42
+ 735 0086 FFF7FEFF 		bl	lcd_writeCommand
+ 736              	.LVL115:
+ 406:lcd_ili9163.c **** 	lcd_writeData(0x00); // XSH
+ 737              		.loc 1 406 0
+ 738 008a 0020     		mov	r0, #0
+ 739 008c FFF7FEFF 		bl	lcd_writeData
+ 740              	.LVL116:
+ 407:lcd_ili9163.c **** 	lcd_writeData(0x00); // XSL
+ 741              		.loc 1 407 0
+ 742 0090 0020     		mov	r0, #0
+ 743 0092 FFF7FEFF 		bl	lcd_writeData
+ 744              	.LVL117:
+ 408:lcd_ili9163.c **** 	lcd_writeData(0x00); // XEH
+ 745              		.loc 1 408 0
+ 746 0096 0020     		mov	r0, #0
+ 747 0098 FFF7FEFF 		bl	lcd_writeData
+ 748              	.LVL118:
+ 409:lcd_ili9163.c **** 	lcd_writeData(0x7f); // XEL 128 pixels x
+ 749              		.loc 1 409 0
+ 750 009c 7F20     		mov	r0, #127
+ 751 009e FFF7FEFF 		bl	lcd_writeData
+ 752              	.LVL119:
+ 410:lcd_ili9163.c **** 	
+ 411:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_PAGE_ADDRESS);
+ 753              		.loc 1 411 0
+ 754 00a2 2B20     		mov	r0, #43
+ 755 00a4 FFF7FEFF 		bl	lcd_writeCommand
+ 756              	.LVL120:
+ 412:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 757              		.loc 1 412 0
+ 758 00a8 0020     		mov	r0, #0
+ 759 00aa FFF7FEFF 		bl	lcd_writeData
+ 760              	.LVL121:
+ 413:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 761              		.loc 1 413 0
+ 762 00ae 0020     		mov	r0, #0
+ 763 00b0 FFF7FEFF 		bl	lcd_writeData
+ 764              	.LVL122:
+ 414:lcd_ili9163.c **** 	lcd_writeData(0x00);
+ 765              		.loc 1 414 0
+ 766 00b4 0020     		mov	r0, #0
+ 767 00b6 FFF7FEFF 		bl	lcd_writeData
+ 768              	.LVL123:
+ 415:lcd_ili9163.c **** 	lcd_writeData(0x7f); // 128 pixels y
+ 769              		.loc 1 415 0
+ 770 00ba 7F20     		mov	r0, #127
+ 771 00bc FFF7FEFF 		bl	lcd_writeData
+ 772              	.LVL124:
+ 416:lcd_ili9163.c **** 	
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 22
+
+
+ 417:lcd_ili9163.c **** 	//lcd_writeCommand(LCD_DISPLAY_INVERSION);
+ 418:lcd_ili9163.c **** 	//lcd_writeData(0x07); // NLA = 1, NLB = 1, NLC = 1 (all on Frame Inversion)
+ 419:lcd_ili9163.c **** 	
+ 420:lcd_ili9163.c **** 	// Select display orientation
+ 421:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_ADDRESS_MODE);
+ 773              		.loc 1 421 0
+ 774 00c0 3620     		mov	r0, #54
+ 775 00c2 FFF7FEFF 		bl	lcd_writeCommand
+ 776              	.LVL125:
+ 422:lcd_ili9163.c **** 	lcd_writeData(0x00); //
+ 777              		.loc 1 422 0
+ 778 00c6 0020     		mov	r0, #0
+ 779 00c8 FFF7FEFF 		bl	lcd_writeData
+ 780              	.LVL126:
+ 423:lcd_ili9163.c **** 
+ 424:lcd_ili9163.c **** 	// Set the display to on
+ 425:lcd_ili9163.c **** 	lcd_writeCommand(LCD_SET_DISP_ON);
+ 781              		.loc 1 425 0
+ 782 00cc 2920     		mov	r0, #41
+ 783 00ce FFF7FEFF 		bl	lcd_writeCommand
+ 784              	.LVL127:
+ 426:lcd_ili9163.c **** 	
+ 427:lcd_ili9163.c **** 	lcd_writeCommand(LCD_EXIT_INVERT_MODE);
+ 785              		.loc 1 427 0
+ 786 00d2 2020     		mov	r0, #32
+ 787 00d4 FFF7FEFF 		bl	lcd_writeCommand
+ 788              	.LVL128:
+ 428:lcd_ili9163.c **** 	
+ 429:lcd_ili9163.c **** 	lcd_writeCommand(LCD_WRITE_MEM_START);
+ 789              		.loc 1 429 0
+ 790 00d8 2C20     		mov	r0, #44
+ 791 00da FFF7FEFF 		bl	lcd_writeCommand
+ 792              	.LVL129:
+ 430:lcd_ili9163.c **** 	
+ 431:lcd_ili9163.c **** }
+ 793              		.loc 1 431 0
+ 794              		@ sp needed
+ 795 00de 08BD     		pop	{r3, pc}
+ 796              		.cfi_endproc
+ 797              	.LFE47:
+ 798              		.size	lcd_init, .-lcd_init
+ 799              		.section	.rodata
+ 800              		.align	2
+ 801              		.set	.LANCHOR0,. + 0
+ 802              		.type	Font8x16, %object
+ 803              		.size	Font8x16, 1536
+ 804              	Font8x16:
+ 805 0000 00       		.byte	0
+ 806 0001 00       		.byte	0
+ 807 0002 00       		.byte	0
+ 808 0003 00       		.byte	0
+ 809 0004 00       		.byte	0
+ 810 0005 00       		.byte	0
+ 811 0006 00       		.byte	0
+ 812 0007 00       		.byte	0
+ 813 0008 00       		.byte	0
+ 814 0009 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 23
+
+
+ 815 000a 00       		.byte	0
+ 816 000b 00       		.byte	0
+ 817 000c 00       		.byte	0
+ 818 000d 00       		.byte	0
+ 819 000e 00       		.byte	0
+ 820 000f 00       		.byte	0
+ 821 0010 00       		.byte	0
+ 822 0011 00       		.byte	0
+ 823 0012 18       		.byte	24
+ 824 0013 3C       		.byte	60
+ 825 0014 3C       		.byte	60
+ 826 0015 3C       		.byte	60
+ 827 0016 18       		.byte	24
+ 828 0017 18       		.byte	24
+ 829 0018 18       		.byte	24
+ 830 0019 00       		.byte	0
+ 831 001a 18       		.byte	24
+ 832 001b 18       		.byte	24
+ 833 001c 00       		.byte	0
+ 834 001d 00       		.byte	0
+ 835 001e 00       		.byte	0
+ 836 001f 00       		.byte	0
+ 837 0020 00       		.byte	0
+ 838 0021 66       		.byte	102
+ 839 0022 66       		.byte	102
+ 840 0023 66       		.byte	102
+ 841 0024 24       		.byte	36
+ 842 0025 00       		.byte	0
+ 843 0026 00       		.byte	0
+ 844 0027 00       		.byte	0
+ 845 0028 00       		.byte	0
+ 846 0029 00       		.byte	0
+ 847 002a 00       		.byte	0
+ 848 002b 00       		.byte	0
+ 849 002c 00       		.byte	0
+ 850 002d 00       		.byte	0
+ 851 002e 00       		.byte	0
+ 852 002f 00       		.byte	0
+ 853 0030 00       		.byte	0
+ 854 0031 00       		.byte	0
+ 855 0032 00       		.byte	0
+ 856 0033 6C       		.byte	108
+ 857 0034 6C       		.byte	108
+ 858 0035 FE       		.byte	-2
+ 859 0036 6C       		.byte	108
+ 860 0037 6C       		.byte	108
+ 861 0038 6C       		.byte	108
+ 862 0039 FE       		.byte	-2
+ 863 003a 6C       		.byte	108
+ 864 003b 6C       		.byte	108
+ 865 003c 00       		.byte	0
+ 866 003d 00       		.byte	0
+ 867 003e 00       		.byte	0
+ 868 003f 00       		.byte	0
+ 869 0040 18       		.byte	24
+ 870 0041 18       		.byte	24
+ 871 0042 7C       		.byte	124
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 24
+
+
+ 872 0043 C6       		.byte	-58
+ 873 0044 C2       		.byte	-62
+ 874 0045 C0       		.byte	-64
+ 875 0046 7C       		.byte	124
+ 876 0047 06       		.byte	6
+ 877 0048 86       		.byte	-122
+ 878 0049 C6       		.byte	-58
+ 879 004a 7C       		.byte	124
+ 880 004b 18       		.byte	24
+ 881 004c 18       		.byte	24
+ 882 004d 00       		.byte	0
+ 883 004e 00       		.byte	0
+ 884 004f 00       		.byte	0
+ 885 0050 00       		.byte	0
+ 886 0051 00       		.byte	0
+ 887 0052 00       		.byte	0
+ 888 0053 00       		.byte	0
+ 889 0054 C2       		.byte	-62
+ 890 0055 C6       		.byte	-58
+ 891 0056 0C       		.byte	12
+ 892 0057 18       		.byte	24
+ 893 0058 30       		.byte	48
+ 894 0059 60       		.byte	96
+ 895 005a C6       		.byte	-58
+ 896 005b 86       		.byte	-122
+ 897 005c 00       		.byte	0
+ 898 005d 00       		.byte	0
+ 899 005e 00       		.byte	0
+ 900 005f 00       		.byte	0
+ 901 0060 00       		.byte	0
+ 902 0061 00       		.byte	0
+ 903 0062 38       		.byte	56
+ 904 0063 6C       		.byte	108
+ 905 0064 6C       		.byte	108
+ 906 0065 38       		.byte	56
+ 907 0066 76       		.byte	118
+ 908 0067 DC       		.byte	-36
+ 909 0068 CC       		.byte	-52
+ 910 0069 CC       		.byte	-52
+ 911 006a CC       		.byte	-52
+ 912 006b 76       		.byte	118
+ 913 006c 00       		.byte	0
+ 914 006d 00       		.byte	0
+ 915 006e 00       		.byte	0
+ 916 006f 00       		.byte	0
+ 917 0070 00       		.byte	0
+ 918 0071 30       		.byte	48
+ 919 0072 30       		.byte	48
+ 920 0073 30       		.byte	48
+ 921 0074 60       		.byte	96
+ 922 0075 00       		.byte	0
+ 923 0076 00       		.byte	0
+ 924 0077 00       		.byte	0
+ 925 0078 00       		.byte	0
+ 926 0079 00       		.byte	0
+ 927 007a 00       		.byte	0
+ 928 007b 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 25
+
+
+ 929 007c 00       		.byte	0
+ 930 007d 00       		.byte	0
+ 931 007e 00       		.byte	0
+ 932 007f 00       		.byte	0
+ 933 0080 00       		.byte	0
+ 934 0081 00       		.byte	0
+ 935 0082 0C       		.byte	12
+ 936 0083 18       		.byte	24
+ 937 0084 30       		.byte	48
+ 938 0085 30       		.byte	48
+ 939 0086 30       		.byte	48
+ 940 0087 30       		.byte	48
+ 941 0088 30       		.byte	48
+ 942 0089 30       		.byte	48
+ 943 008a 18       		.byte	24
+ 944 008b 0C       		.byte	12
+ 945 008c 00       		.byte	0
+ 946 008d 00       		.byte	0
+ 947 008e 00       		.byte	0
+ 948 008f 00       		.byte	0
+ 949 0090 00       		.byte	0
+ 950 0091 00       		.byte	0
+ 951 0092 30       		.byte	48
+ 952 0093 18       		.byte	24
+ 953 0094 0C       		.byte	12
+ 954 0095 0C       		.byte	12
+ 955 0096 0C       		.byte	12
+ 956 0097 0C       		.byte	12
+ 957 0098 0C       		.byte	12
+ 958 0099 0C       		.byte	12
+ 959 009a 18       		.byte	24
+ 960 009b 30       		.byte	48
+ 961 009c 00       		.byte	0
+ 962 009d 00       		.byte	0
+ 963 009e 00       		.byte	0
+ 964 009f 00       		.byte	0
+ 965 00a0 00       		.byte	0
+ 966 00a1 00       		.byte	0
+ 967 00a2 00       		.byte	0
+ 968 00a3 00       		.byte	0
+ 969 00a4 00       		.byte	0
+ 970 00a5 66       		.byte	102
+ 971 00a6 3C       		.byte	60
+ 972 00a7 FF       		.byte	-1
+ 973 00a8 3C       		.byte	60
+ 974 00a9 66       		.byte	102
+ 975 00aa 00       		.byte	0
+ 976 00ab 00       		.byte	0
+ 977 00ac 00       		.byte	0
+ 978 00ad 00       		.byte	0
+ 979 00ae 00       		.byte	0
+ 980 00af 00       		.byte	0
+ 981 00b0 00       		.byte	0
+ 982 00b1 00       		.byte	0
+ 983 00b2 00       		.byte	0
+ 984 00b3 00       		.byte	0
+ 985 00b4 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 26
+
+
+ 986 00b5 18       		.byte	24
+ 987 00b6 18       		.byte	24
+ 988 00b7 7E       		.byte	126
+ 989 00b8 18       		.byte	24
+ 990 00b9 18       		.byte	24
+ 991 00ba 00       		.byte	0
+ 992 00bb 00       		.byte	0
+ 993 00bc 00       		.byte	0
+ 994 00bd 00       		.byte	0
+ 995 00be 00       		.byte	0
+ 996 00bf 00       		.byte	0
+ 997 00c0 00       		.byte	0
+ 998 00c1 00       		.byte	0
+ 999 00c2 00       		.byte	0
+ 1000 00c3 00       		.byte	0
+ 1001 00c4 00       		.byte	0
+ 1002 00c5 00       		.byte	0
+ 1003 00c6 00       		.byte	0
+ 1004 00c7 00       		.byte	0
+ 1005 00c8 00       		.byte	0
+ 1006 00c9 18       		.byte	24
+ 1007 00ca 18       		.byte	24
+ 1008 00cb 18       		.byte	24
+ 1009 00cc 30       		.byte	48
+ 1010 00cd 00       		.byte	0
+ 1011 00ce 00       		.byte	0
+ 1012 00cf 00       		.byte	0
+ 1013 00d0 00       		.byte	0
+ 1014 00d1 00       		.byte	0
+ 1015 00d2 00       		.byte	0
+ 1016 00d3 00       		.byte	0
+ 1017 00d4 00       		.byte	0
+ 1018 00d5 00       		.byte	0
+ 1019 00d6 00       		.byte	0
+ 1020 00d7 FE       		.byte	-2
+ 1021 00d8 00       		.byte	0
+ 1022 00d9 00       		.byte	0
+ 1023 00da 00       		.byte	0
+ 1024 00db 00       		.byte	0
+ 1025 00dc 00       		.byte	0
+ 1026 00dd 00       		.byte	0
+ 1027 00de 00       		.byte	0
+ 1028 00df 00       		.byte	0
+ 1029 00e0 00       		.byte	0
+ 1030 00e1 00       		.byte	0
+ 1031 00e2 00       		.byte	0
+ 1032 00e3 00       		.byte	0
+ 1033 00e4 00       		.byte	0
+ 1034 00e5 00       		.byte	0
+ 1035 00e6 00       		.byte	0
+ 1036 00e7 00       		.byte	0
+ 1037 00e8 00       		.byte	0
+ 1038 00e9 00       		.byte	0
+ 1039 00ea 18       		.byte	24
+ 1040 00eb 18       		.byte	24
+ 1041 00ec 00       		.byte	0
+ 1042 00ed 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 27
+
+
+ 1043 00ee 00       		.byte	0
+ 1044 00ef 00       		.byte	0
+ 1045 00f0 00       		.byte	0
+ 1046 00f1 00       		.byte	0
+ 1047 00f2 00       		.byte	0
+ 1048 00f3 00       		.byte	0
+ 1049 00f4 02       		.byte	2
+ 1050 00f5 06       		.byte	6
+ 1051 00f6 0C       		.byte	12
+ 1052 00f7 18       		.byte	24
+ 1053 00f8 30       		.byte	48
+ 1054 00f9 60       		.byte	96
+ 1055 00fa C0       		.byte	-64
+ 1056 00fb 80       		.byte	-128
+ 1057 00fc 00       		.byte	0
+ 1058 00fd 00       		.byte	0
+ 1059 00fe 00       		.byte	0
+ 1060 00ff 00       		.byte	0
+ 1061 0100 00       		.byte	0
+ 1062 0101 00       		.byte	0
+ 1063 0102 7C       		.byte	124
+ 1064 0103 C6       		.byte	-58
+ 1065 0104 C6       		.byte	-58
+ 1066 0105 CE       		.byte	-50
+ 1067 0106 D6       		.byte	-42
+ 1068 0107 D6       		.byte	-42
+ 1069 0108 E6       		.byte	-26
+ 1070 0109 C6       		.byte	-58
+ 1071 010a C6       		.byte	-58
+ 1072 010b 7C       		.byte	124
+ 1073 010c 00       		.byte	0
+ 1074 010d 00       		.byte	0
+ 1075 010e 00       		.byte	0
+ 1076 010f 00       		.byte	0
+ 1077 0110 00       		.byte	0
+ 1078 0111 00       		.byte	0
+ 1079 0112 18       		.byte	24
+ 1080 0113 38       		.byte	56
+ 1081 0114 78       		.byte	120
+ 1082 0115 18       		.byte	24
+ 1083 0116 18       		.byte	24
+ 1084 0117 18       		.byte	24
+ 1085 0118 18       		.byte	24
+ 1086 0119 18       		.byte	24
+ 1087 011a 18       		.byte	24
+ 1088 011b 7E       		.byte	126
+ 1089 011c 00       		.byte	0
+ 1090 011d 00       		.byte	0
+ 1091 011e 00       		.byte	0
+ 1092 011f 00       		.byte	0
+ 1093 0120 00       		.byte	0
+ 1094 0121 00       		.byte	0
+ 1095 0122 7C       		.byte	124
+ 1096 0123 C6       		.byte	-58
+ 1097 0124 06       		.byte	6
+ 1098 0125 0C       		.byte	12
+ 1099 0126 18       		.byte	24
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 28
+
+
+ 1100 0127 30       		.byte	48
+ 1101 0128 60       		.byte	96
+ 1102 0129 C0       		.byte	-64
+ 1103 012a C6       		.byte	-58
+ 1104 012b FE       		.byte	-2
+ 1105 012c 00       		.byte	0
+ 1106 012d 00       		.byte	0
+ 1107 012e 00       		.byte	0
+ 1108 012f 00       		.byte	0
+ 1109 0130 00       		.byte	0
+ 1110 0131 00       		.byte	0
+ 1111 0132 7C       		.byte	124
+ 1112 0133 C6       		.byte	-58
+ 1113 0134 06       		.byte	6
+ 1114 0135 06       		.byte	6
+ 1115 0136 3C       		.byte	60
+ 1116 0137 06       		.byte	6
+ 1117 0138 06       		.byte	6
+ 1118 0139 06       		.byte	6
+ 1119 013a C6       		.byte	-58
+ 1120 013b 7C       		.byte	124
+ 1121 013c 00       		.byte	0
+ 1122 013d 00       		.byte	0
+ 1123 013e 00       		.byte	0
+ 1124 013f 00       		.byte	0
+ 1125 0140 00       		.byte	0
+ 1126 0141 00       		.byte	0
+ 1127 0142 0C       		.byte	12
+ 1128 0143 1C       		.byte	28
+ 1129 0144 3C       		.byte	60
+ 1130 0145 6C       		.byte	108
+ 1131 0146 CC       		.byte	-52
+ 1132 0147 FE       		.byte	-2
+ 1133 0148 0C       		.byte	12
+ 1134 0149 0C       		.byte	12
+ 1135 014a 0C       		.byte	12
+ 1136 014b 1E       		.byte	30
+ 1137 014c 00       		.byte	0
+ 1138 014d 00       		.byte	0
+ 1139 014e 00       		.byte	0
+ 1140 014f 00       		.byte	0
+ 1141 0150 00       		.byte	0
+ 1142 0151 00       		.byte	0
+ 1143 0152 FE       		.byte	-2
+ 1144 0153 C0       		.byte	-64
+ 1145 0154 C0       		.byte	-64
+ 1146 0155 C0       		.byte	-64
+ 1147 0156 FC       		.byte	-4
+ 1148 0157 0E       		.byte	14
+ 1149 0158 06       		.byte	6
+ 1150 0159 06       		.byte	6
+ 1151 015a C6       		.byte	-58
+ 1152 015b 7C       		.byte	124
+ 1153 015c 00       		.byte	0
+ 1154 015d 00       		.byte	0
+ 1155 015e 00       		.byte	0
+ 1156 015f 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 29
+
+
+ 1157 0160 00       		.byte	0
+ 1158 0161 00       		.byte	0
+ 1159 0162 38       		.byte	56
+ 1160 0163 60       		.byte	96
+ 1161 0164 C0       		.byte	-64
+ 1162 0165 C0       		.byte	-64
+ 1163 0166 FC       		.byte	-4
+ 1164 0167 C6       		.byte	-58
+ 1165 0168 C6       		.byte	-58
+ 1166 0169 C6       		.byte	-58
+ 1167 016a C6       		.byte	-58
+ 1168 016b 7C       		.byte	124
+ 1169 016c 00       		.byte	0
+ 1170 016d 00       		.byte	0
+ 1171 016e 00       		.byte	0
+ 1172 016f 00       		.byte	0
+ 1173 0170 00       		.byte	0
+ 1174 0171 00       		.byte	0
+ 1175 0172 FE       		.byte	-2
+ 1176 0173 C6       		.byte	-58
+ 1177 0174 06       		.byte	6
+ 1178 0175 06       		.byte	6
+ 1179 0176 0C       		.byte	12
+ 1180 0177 18       		.byte	24
+ 1181 0178 30       		.byte	48
+ 1182 0179 30       		.byte	48
+ 1183 017a 30       		.byte	48
+ 1184 017b 30       		.byte	48
+ 1185 017c 00       		.byte	0
+ 1186 017d 00       		.byte	0
+ 1187 017e 00       		.byte	0
+ 1188 017f 00       		.byte	0
+ 1189 0180 00       		.byte	0
+ 1190 0181 00       		.byte	0
+ 1191 0182 7C       		.byte	124
+ 1192 0183 C6       		.byte	-58
+ 1193 0184 C6       		.byte	-58
+ 1194 0185 C6       		.byte	-58
+ 1195 0186 7C       		.byte	124
+ 1196 0187 C6       		.byte	-58
+ 1197 0188 C6       		.byte	-58
+ 1198 0189 C6       		.byte	-58
+ 1199 018a C6       		.byte	-58
+ 1200 018b 7C       		.byte	124
+ 1201 018c 00       		.byte	0
+ 1202 018d 00       		.byte	0
+ 1203 018e 00       		.byte	0
+ 1204 018f 00       		.byte	0
+ 1205 0190 00       		.byte	0
+ 1206 0191 00       		.byte	0
+ 1207 0192 7C       		.byte	124
+ 1208 0193 C6       		.byte	-58
+ 1209 0194 C6       		.byte	-58
+ 1210 0195 C6       		.byte	-58
+ 1211 0196 7E       		.byte	126
+ 1212 0197 06       		.byte	6
+ 1213 0198 06       		.byte	6
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 30
+
+
+ 1214 0199 06       		.byte	6
+ 1215 019a 0C       		.byte	12
+ 1216 019b 78       		.byte	120
+ 1217 019c 00       		.byte	0
+ 1218 019d 00       		.byte	0
+ 1219 019e 00       		.byte	0
+ 1220 019f 00       		.byte	0
+ 1221 01a0 00       		.byte	0
+ 1222 01a1 00       		.byte	0
+ 1223 01a2 00       		.byte	0
+ 1224 01a3 00       		.byte	0
+ 1225 01a4 18       		.byte	24
+ 1226 01a5 18       		.byte	24
+ 1227 01a6 00       		.byte	0
+ 1228 01a7 00       		.byte	0
+ 1229 01a8 00       		.byte	0
+ 1230 01a9 18       		.byte	24
+ 1231 01aa 18       		.byte	24
+ 1232 01ab 00       		.byte	0
+ 1233 01ac 00       		.byte	0
+ 1234 01ad 00       		.byte	0
+ 1235 01ae 00       		.byte	0
+ 1236 01af 00       		.byte	0
+ 1237 01b0 00       		.byte	0
+ 1238 01b1 00       		.byte	0
+ 1239 01b2 00       		.byte	0
+ 1240 01b3 00       		.byte	0
+ 1241 01b4 18       		.byte	24
+ 1242 01b5 18       		.byte	24
+ 1243 01b6 00       		.byte	0
+ 1244 01b7 00       		.byte	0
+ 1245 01b8 00       		.byte	0
+ 1246 01b9 18       		.byte	24
+ 1247 01ba 18       		.byte	24
+ 1248 01bb 30       		.byte	48
+ 1249 01bc 00       		.byte	0
+ 1250 01bd 00       		.byte	0
+ 1251 01be 00       		.byte	0
+ 1252 01bf 00       		.byte	0
+ 1253 01c0 00       		.byte	0
+ 1254 01c1 00       		.byte	0
+ 1255 01c2 00       		.byte	0
+ 1256 01c3 06       		.byte	6
+ 1257 01c4 0C       		.byte	12
+ 1258 01c5 18       		.byte	24
+ 1259 01c6 30       		.byte	48
+ 1260 01c7 60       		.byte	96
+ 1261 01c8 30       		.byte	48
+ 1262 01c9 18       		.byte	24
+ 1263 01ca 0C       		.byte	12
+ 1264 01cb 06       		.byte	6
+ 1265 01cc 00       		.byte	0
+ 1266 01cd 00       		.byte	0
+ 1267 01ce 00       		.byte	0
+ 1268 01cf 00       		.byte	0
+ 1269 01d0 00       		.byte	0
+ 1270 01d1 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 31
+
+
+ 1271 01d2 00       		.byte	0
+ 1272 01d3 00       		.byte	0
+ 1273 01d4 00       		.byte	0
+ 1274 01d5 00       		.byte	0
+ 1275 01d6 FE       		.byte	-2
+ 1276 01d7 00       		.byte	0
+ 1277 01d8 00       		.byte	0
+ 1278 01d9 FE       		.byte	-2
+ 1279 01da 00       		.byte	0
+ 1280 01db 00       		.byte	0
+ 1281 01dc 00       		.byte	0
+ 1282 01dd 00       		.byte	0
+ 1283 01de 00       		.byte	0
+ 1284 01df 00       		.byte	0
+ 1285 01e0 00       		.byte	0
+ 1286 01e1 00       		.byte	0
+ 1287 01e2 00       		.byte	0
+ 1288 01e3 60       		.byte	96
+ 1289 01e4 30       		.byte	48
+ 1290 01e5 18       		.byte	24
+ 1291 01e6 0C       		.byte	12
+ 1292 01e7 06       		.byte	6
+ 1293 01e8 0C       		.byte	12
+ 1294 01e9 18       		.byte	24
+ 1295 01ea 30       		.byte	48
+ 1296 01eb 60       		.byte	96
+ 1297 01ec 00       		.byte	0
+ 1298 01ed 00       		.byte	0
+ 1299 01ee 00       		.byte	0
+ 1300 01ef 00       		.byte	0
+ 1301 01f0 00       		.byte	0
+ 1302 01f1 00       		.byte	0
+ 1303 01f2 7C       		.byte	124
+ 1304 01f3 C6       		.byte	-58
+ 1305 01f4 C6       		.byte	-58
+ 1306 01f5 0C       		.byte	12
+ 1307 01f6 18       		.byte	24
+ 1308 01f7 18       		.byte	24
+ 1309 01f8 18       		.byte	24
+ 1310 01f9 00       		.byte	0
+ 1311 01fa 18       		.byte	24
+ 1312 01fb 18       		.byte	24
+ 1313 01fc 00       		.byte	0
+ 1314 01fd 00       		.byte	0
+ 1315 01fe 00       		.byte	0
+ 1316 01ff 00       		.byte	0
+ 1317 0200 00       		.byte	0
+ 1318 0201 00       		.byte	0
+ 1319 0202 00       		.byte	0
+ 1320 0203 7C       		.byte	124
+ 1321 0204 C6       		.byte	-58
+ 1322 0205 C6       		.byte	-58
+ 1323 0206 DE       		.byte	-34
+ 1324 0207 DE       		.byte	-34
+ 1325 0208 DE       		.byte	-34
+ 1326 0209 DC       		.byte	-36
+ 1327 020a C0       		.byte	-64
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 32
+
+
+ 1328 020b 7C       		.byte	124
+ 1329 020c 00       		.byte	0
+ 1330 020d 00       		.byte	0
+ 1331 020e 00       		.byte	0
+ 1332 020f 00       		.byte	0
+ 1333 0210 00       		.byte	0
+ 1334 0211 00       		.byte	0
+ 1335 0212 10       		.byte	16
+ 1336 0213 38       		.byte	56
+ 1337 0214 6C       		.byte	108
+ 1338 0215 C6       		.byte	-58
+ 1339 0216 C6       		.byte	-58
+ 1340 0217 FE       		.byte	-2
+ 1341 0218 C6       		.byte	-58
+ 1342 0219 C6       		.byte	-58
+ 1343 021a C6       		.byte	-58
+ 1344 021b C6       		.byte	-58
+ 1345 021c 00       		.byte	0
+ 1346 021d 00       		.byte	0
+ 1347 021e 00       		.byte	0
+ 1348 021f 00       		.byte	0
+ 1349 0220 00       		.byte	0
+ 1350 0221 00       		.byte	0
+ 1351 0222 FC       		.byte	-4
+ 1352 0223 66       		.byte	102
+ 1353 0224 66       		.byte	102
+ 1354 0225 66       		.byte	102
+ 1355 0226 7C       		.byte	124
+ 1356 0227 66       		.byte	102
+ 1357 0228 66       		.byte	102
+ 1358 0229 66       		.byte	102
+ 1359 022a 66       		.byte	102
+ 1360 022b FC       		.byte	-4
+ 1361 022c 00       		.byte	0
+ 1362 022d 00       		.byte	0
+ 1363 022e 00       		.byte	0
+ 1364 022f 00       		.byte	0
+ 1365 0230 00       		.byte	0
+ 1366 0231 00       		.byte	0
+ 1367 0232 3C       		.byte	60
+ 1368 0233 66       		.byte	102
+ 1369 0234 C2       		.byte	-62
+ 1370 0235 C0       		.byte	-64
+ 1371 0236 C0       		.byte	-64
+ 1372 0237 C0       		.byte	-64
+ 1373 0238 C0       		.byte	-64
+ 1374 0239 C2       		.byte	-62
+ 1375 023a 66       		.byte	102
+ 1376 023b 3C       		.byte	60
+ 1377 023c 00       		.byte	0
+ 1378 023d 00       		.byte	0
+ 1379 023e 00       		.byte	0
+ 1380 023f 00       		.byte	0
+ 1381 0240 00       		.byte	0
+ 1382 0241 00       		.byte	0
+ 1383 0242 F8       		.byte	-8
+ 1384 0243 6C       		.byte	108
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 33
+
+
+ 1385 0244 66       		.byte	102
+ 1386 0245 66       		.byte	102
+ 1387 0246 66       		.byte	102
+ 1388 0247 66       		.byte	102
+ 1389 0248 66       		.byte	102
+ 1390 0249 66       		.byte	102
+ 1391 024a 6C       		.byte	108
+ 1392 024b F8       		.byte	-8
+ 1393 024c 00       		.byte	0
+ 1394 024d 00       		.byte	0
+ 1395 024e 00       		.byte	0
+ 1396 024f 00       		.byte	0
+ 1397 0250 00       		.byte	0
+ 1398 0251 00       		.byte	0
+ 1399 0252 FE       		.byte	-2
+ 1400 0253 66       		.byte	102
+ 1401 0254 62       		.byte	98
+ 1402 0255 68       		.byte	104
+ 1403 0256 78       		.byte	120
+ 1404 0257 68       		.byte	104
+ 1405 0258 60       		.byte	96
+ 1406 0259 62       		.byte	98
+ 1407 025a 66       		.byte	102
+ 1408 025b FE       		.byte	-2
+ 1409 025c 00       		.byte	0
+ 1410 025d 00       		.byte	0
+ 1411 025e 00       		.byte	0
+ 1412 025f 00       		.byte	0
+ 1413 0260 00       		.byte	0
+ 1414 0261 00       		.byte	0
+ 1415 0262 FE       		.byte	-2
+ 1416 0263 66       		.byte	102
+ 1417 0264 62       		.byte	98
+ 1418 0265 68       		.byte	104
+ 1419 0266 78       		.byte	120
+ 1420 0267 68       		.byte	104
+ 1421 0268 60       		.byte	96
+ 1422 0269 60       		.byte	96
+ 1423 026a 60       		.byte	96
+ 1424 026b F0       		.byte	-16
+ 1425 026c 00       		.byte	0
+ 1426 026d 00       		.byte	0
+ 1427 026e 00       		.byte	0
+ 1428 026f 00       		.byte	0
+ 1429 0270 00       		.byte	0
+ 1430 0271 00       		.byte	0
+ 1431 0272 3C       		.byte	60
+ 1432 0273 66       		.byte	102
+ 1433 0274 C2       		.byte	-62
+ 1434 0275 C0       		.byte	-64
+ 1435 0276 C0       		.byte	-64
+ 1436 0277 DE       		.byte	-34
+ 1437 0278 C6       		.byte	-58
+ 1438 0279 C6       		.byte	-58
+ 1439 027a 66       		.byte	102
+ 1440 027b 3A       		.byte	58
+ 1441 027c 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 34
+
+
+ 1442 027d 00       		.byte	0
+ 1443 027e 00       		.byte	0
+ 1444 027f 00       		.byte	0
+ 1445 0280 00       		.byte	0
+ 1446 0281 00       		.byte	0
+ 1447 0282 C6       		.byte	-58
+ 1448 0283 C6       		.byte	-58
+ 1449 0284 C6       		.byte	-58
+ 1450 0285 C6       		.byte	-58
+ 1451 0286 FE       		.byte	-2
+ 1452 0287 C6       		.byte	-58
+ 1453 0288 C6       		.byte	-58
+ 1454 0289 C6       		.byte	-58
+ 1455 028a C6       		.byte	-58
+ 1456 028b C6       		.byte	-58
+ 1457 028c 00       		.byte	0
+ 1458 028d 00       		.byte	0
+ 1459 028e 00       		.byte	0
+ 1460 028f 00       		.byte	0
+ 1461 0290 00       		.byte	0
+ 1462 0291 00       		.byte	0
+ 1463 0292 3C       		.byte	60
+ 1464 0293 18       		.byte	24
+ 1465 0294 18       		.byte	24
+ 1466 0295 18       		.byte	24
+ 1467 0296 18       		.byte	24
+ 1468 0297 18       		.byte	24
+ 1469 0298 18       		.byte	24
+ 1470 0299 18       		.byte	24
+ 1471 029a 18       		.byte	24
+ 1472 029b 3C       		.byte	60
+ 1473 029c 00       		.byte	0
+ 1474 029d 00       		.byte	0
+ 1475 029e 00       		.byte	0
+ 1476 029f 00       		.byte	0
+ 1477 02a0 00       		.byte	0
+ 1478 02a1 00       		.byte	0
+ 1479 02a2 1E       		.byte	30
+ 1480 02a3 0C       		.byte	12
+ 1481 02a4 0C       		.byte	12
+ 1482 02a5 0C       		.byte	12
+ 1483 02a6 0C       		.byte	12
+ 1484 02a7 0C       		.byte	12
+ 1485 02a8 CC       		.byte	-52
+ 1486 02a9 CC       		.byte	-52
+ 1487 02aa CC       		.byte	-52
+ 1488 02ab 78       		.byte	120
+ 1489 02ac 00       		.byte	0
+ 1490 02ad 00       		.byte	0
+ 1491 02ae 00       		.byte	0
+ 1492 02af 00       		.byte	0
+ 1493 02b0 00       		.byte	0
+ 1494 02b1 00       		.byte	0
+ 1495 02b2 E6       		.byte	-26
+ 1496 02b3 66       		.byte	102
+ 1497 02b4 6C       		.byte	108
+ 1498 02b5 6C       		.byte	108
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 35
+
+
+ 1499 02b6 78       		.byte	120
+ 1500 02b7 78       		.byte	120
+ 1501 02b8 6C       		.byte	108
+ 1502 02b9 66       		.byte	102
+ 1503 02ba 66       		.byte	102
+ 1504 02bb E6       		.byte	-26
+ 1505 02bc 00       		.byte	0
+ 1506 02bd 00       		.byte	0
+ 1507 02be 00       		.byte	0
+ 1508 02bf 00       		.byte	0
+ 1509 02c0 00       		.byte	0
+ 1510 02c1 00       		.byte	0
+ 1511 02c2 F0       		.byte	-16
+ 1512 02c3 60       		.byte	96
+ 1513 02c4 60       		.byte	96
+ 1514 02c5 60       		.byte	96
+ 1515 02c6 60       		.byte	96
+ 1516 02c7 60       		.byte	96
+ 1517 02c8 60       		.byte	96
+ 1518 02c9 62       		.byte	98
+ 1519 02ca 66       		.byte	102
+ 1520 02cb FE       		.byte	-2
+ 1521 02cc 00       		.byte	0
+ 1522 02cd 00       		.byte	0
+ 1523 02ce 00       		.byte	0
+ 1524 02cf 00       		.byte	0
+ 1525 02d0 00       		.byte	0
+ 1526 02d1 00       		.byte	0
+ 1527 02d2 C6       		.byte	-58
+ 1528 02d3 EE       		.byte	-18
+ 1529 02d4 FE       		.byte	-2
+ 1530 02d5 FE       		.byte	-2
+ 1531 02d6 D6       		.byte	-42
+ 1532 02d7 C6       		.byte	-58
+ 1533 02d8 C6       		.byte	-58
+ 1534 02d9 C6       		.byte	-58
+ 1535 02da C6       		.byte	-58
+ 1536 02db C6       		.byte	-58
+ 1537 02dc 00       		.byte	0
+ 1538 02dd 00       		.byte	0
+ 1539 02de 00       		.byte	0
+ 1540 02df 00       		.byte	0
+ 1541 02e0 00       		.byte	0
+ 1542 02e1 00       		.byte	0
+ 1543 02e2 C6       		.byte	-58
+ 1544 02e3 E6       		.byte	-26
+ 1545 02e4 F6       		.byte	-10
+ 1546 02e5 FE       		.byte	-2
+ 1547 02e6 DE       		.byte	-34
+ 1548 02e7 CE       		.byte	-50
+ 1549 02e8 C6       		.byte	-58
+ 1550 02e9 C6       		.byte	-58
+ 1551 02ea C6       		.byte	-58
+ 1552 02eb C6       		.byte	-58
+ 1553 02ec 00       		.byte	0
+ 1554 02ed 00       		.byte	0
+ 1555 02ee 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 36
+
+
+ 1556 02ef 00       		.byte	0
+ 1557 02f0 00       		.byte	0
+ 1558 02f1 00       		.byte	0
+ 1559 02f2 38       		.byte	56
+ 1560 02f3 6C       		.byte	108
+ 1561 02f4 C6       		.byte	-58
+ 1562 02f5 C6       		.byte	-58
+ 1563 02f6 C6       		.byte	-58
+ 1564 02f7 C6       		.byte	-58
+ 1565 02f8 C6       		.byte	-58
+ 1566 02f9 C6       		.byte	-58
+ 1567 02fa 6C       		.byte	108
+ 1568 02fb 38       		.byte	56
+ 1569 02fc 00       		.byte	0
+ 1570 02fd 00       		.byte	0
+ 1571 02fe 00       		.byte	0
+ 1572 02ff 00       		.byte	0
+ 1573 0300 00       		.byte	0
+ 1574 0301 00       		.byte	0
+ 1575 0302 FC       		.byte	-4
+ 1576 0303 66       		.byte	102
+ 1577 0304 66       		.byte	102
+ 1578 0305 66       		.byte	102
+ 1579 0306 7C       		.byte	124
+ 1580 0307 60       		.byte	96
+ 1581 0308 60       		.byte	96
+ 1582 0309 60       		.byte	96
+ 1583 030a 60       		.byte	96
+ 1584 030b F0       		.byte	-16
+ 1585 030c 00       		.byte	0
+ 1586 030d 00       		.byte	0
+ 1587 030e 00       		.byte	0
+ 1588 030f 00       		.byte	0
+ 1589 0310 00       		.byte	0
+ 1590 0311 00       		.byte	0
+ 1591 0312 7C       		.byte	124
+ 1592 0313 C6       		.byte	-58
+ 1593 0314 C6       		.byte	-58
+ 1594 0315 C6       		.byte	-58
+ 1595 0316 C6       		.byte	-58
+ 1596 0317 C6       		.byte	-58
+ 1597 0318 C6       		.byte	-58
+ 1598 0319 D6       		.byte	-42
+ 1599 031a DE       		.byte	-34
+ 1600 031b 7C       		.byte	124
+ 1601 031c 0C       		.byte	12
+ 1602 031d 0E       		.byte	14
+ 1603 031e 00       		.byte	0
+ 1604 031f 00       		.byte	0
+ 1605 0320 00       		.byte	0
+ 1606 0321 00       		.byte	0
+ 1607 0322 FC       		.byte	-4
+ 1608 0323 66       		.byte	102
+ 1609 0324 66       		.byte	102
+ 1610 0325 66       		.byte	102
+ 1611 0326 7C       		.byte	124
+ 1612 0327 6C       		.byte	108
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 37
+
+
+ 1613 0328 66       		.byte	102
+ 1614 0329 66       		.byte	102
+ 1615 032a 66       		.byte	102
+ 1616 032b E6       		.byte	-26
+ 1617 032c 00       		.byte	0
+ 1618 032d 00       		.byte	0
+ 1619 032e 00       		.byte	0
+ 1620 032f 00       		.byte	0
+ 1621 0330 00       		.byte	0
+ 1622 0331 00       		.byte	0
+ 1623 0332 7C       		.byte	124
+ 1624 0333 C6       		.byte	-58
+ 1625 0334 C6       		.byte	-58
+ 1626 0335 60       		.byte	96
+ 1627 0336 38       		.byte	56
+ 1628 0337 0C       		.byte	12
+ 1629 0338 06       		.byte	6
+ 1630 0339 C6       		.byte	-58
+ 1631 033a C6       		.byte	-58
+ 1632 033b 7C       		.byte	124
+ 1633 033c 00       		.byte	0
+ 1634 033d 00       		.byte	0
+ 1635 033e 00       		.byte	0
+ 1636 033f 00       		.byte	0
+ 1637 0340 00       		.byte	0
+ 1638 0341 00       		.byte	0
+ 1639 0342 7E       		.byte	126
+ 1640 0343 7E       		.byte	126
+ 1641 0344 5A       		.byte	90
+ 1642 0345 18       		.byte	24
+ 1643 0346 18       		.byte	24
+ 1644 0347 18       		.byte	24
+ 1645 0348 18       		.byte	24
+ 1646 0349 18       		.byte	24
+ 1647 034a 18       		.byte	24
+ 1648 034b 3C       		.byte	60
+ 1649 034c 00       		.byte	0
+ 1650 034d 00       		.byte	0
+ 1651 034e 00       		.byte	0
+ 1652 034f 00       		.byte	0
+ 1653 0350 00       		.byte	0
+ 1654 0351 00       		.byte	0
+ 1655 0352 C6       		.byte	-58
+ 1656 0353 C6       		.byte	-58
+ 1657 0354 C6       		.byte	-58
+ 1658 0355 C6       		.byte	-58
+ 1659 0356 C6       		.byte	-58
+ 1660 0357 C6       		.byte	-58
+ 1661 0358 C6       		.byte	-58
+ 1662 0359 C6       		.byte	-58
+ 1663 035a C6       		.byte	-58
+ 1664 035b 7C       		.byte	124
+ 1665 035c 00       		.byte	0
+ 1666 035d 00       		.byte	0
+ 1667 035e 00       		.byte	0
+ 1668 035f 00       		.byte	0
+ 1669 0360 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 38
+
+
+ 1670 0361 00       		.byte	0
+ 1671 0362 C6       		.byte	-58
+ 1672 0363 C6       		.byte	-58
+ 1673 0364 C6       		.byte	-58
+ 1674 0365 C6       		.byte	-58
+ 1675 0366 C6       		.byte	-58
+ 1676 0367 C6       		.byte	-58
+ 1677 0368 C6       		.byte	-58
+ 1678 0369 6C       		.byte	108
+ 1679 036a 38       		.byte	56
+ 1680 036b 10       		.byte	16
+ 1681 036c 00       		.byte	0
+ 1682 036d 00       		.byte	0
+ 1683 036e 00       		.byte	0
+ 1684 036f 00       		.byte	0
+ 1685 0370 00       		.byte	0
+ 1686 0371 00       		.byte	0
+ 1687 0372 C6       		.byte	-58
+ 1688 0373 C6       		.byte	-58
+ 1689 0374 C6       		.byte	-58
+ 1690 0375 C6       		.byte	-58
+ 1691 0376 C6       		.byte	-58
+ 1692 0377 D6       		.byte	-42
+ 1693 0378 D6       		.byte	-42
+ 1694 0379 FE       		.byte	-2
+ 1695 037a 6C       		.byte	108
+ 1696 037b 6C       		.byte	108
+ 1697 037c 00       		.byte	0
+ 1698 037d 00       		.byte	0
+ 1699 037e 00       		.byte	0
+ 1700 037f 00       		.byte	0
+ 1701 0380 00       		.byte	0
+ 1702 0381 00       		.byte	0
+ 1703 0382 C6       		.byte	-58
+ 1704 0383 C6       		.byte	-58
+ 1705 0384 6C       		.byte	108
+ 1706 0385 6C       		.byte	108
+ 1707 0386 38       		.byte	56
+ 1708 0387 38       		.byte	56
+ 1709 0388 6C       		.byte	108
+ 1710 0389 6C       		.byte	108
+ 1711 038a C6       		.byte	-58
+ 1712 038b C6       		.byte	-58
+ 1713 038c 00       		.byte	0
+ 1714 038d 00       		.byte	0
+ 1715 038e 00       		.byte	0
+ 1716 038f 00       		.byte	0
+ 1717 0390 00       		.byte	0
+ 1718 0391 00       		.byte	0
+ 1719 0392 66       		.byte	102
+ 1720 0393 66       		.byte	102
+ 1721 0394 66       		.byte	102
+ 1722 0395 66       		.byte	102
+ 1723 0396 3C       		.byte	60
+ 1724 0397 18       		.byte	24
+ 1725 0398 18       		.byte	24
+ 1726 0399 18       		.byte	24
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 39
+
+
+ 1727 039a 18       		.byte	24
+ 1728 039b 3C       		.byte	60
+ 1729 039c 00       		.byte	0
+ 1730 039d 00       		.byte	0
+ 1731 039e 00       		.byte	0
+ 1732 039f 00       		.byte	0
+ 1733 03a0 00       		.byte	0
+ 1734 03a1 00       		.byte	0
+ 1735 03a2 FE       		.byte	-2
+ 1736 03a3 C6       		.byte	-58
+ 1737 03a4 86       		.byte	-122
+ 1738 03a5 0C       		.byte	12
+ 1739 03a6 18       		.byte	24
+ 1740 03a7 30       		.byte	48
+ 1741 03a8 60       		.byte	96
+ 1742 03a9 C2       		.byte	-62
+ 1743 03aa C6       		.byte	-58
+ 1744 03ab FE       		.byte	-2
+ 1745 03ac 00       		.byte	0
+ 1746 03ad 00       		.byte	0
+ 1747 03ae 00       		.byte	0
+ 1748 03af 00       		.byte	0
+ 1749 03b0 00       		.byte	0
+ 1750 03b1 00       		.byte	0
+ 1751 03b2 3C       		.byte	60
+ 1752 03b3 30       		.byte	48
+ 1753 03b4 30       		.byte	48
+ 1754 03b5 30       		.byte	48
+ 1755 03b6 30       		.byte	48
+ 1756 03b7 30       		.byte	48
+ 1757 03b8 30       		.byte	48
+ 1758 03b9 30       		.byte	48
+ 1759 03ba 30       		.byte	48
+ 1760 03bb 3C       		.byte	60
+ 1761 03bc 00       		.byte	0
+ 1762 03bd 00       		.byte	0
+ 1763 03be 00       		.byte	0
+ 1764 03bf 00       		.byte	0
+ 1765 03c0 00       		.byte	0
+ 1766 03c1 00       		.byte	0
+ 1767 03c2 00       		.byte	0
+ 1768 03c3 80       		.byte	-128
+ 1769 03c4 C0       		.byte	-64
+ 1770 03c5 E0       		.byte	-32
+ 1771 03c6 70       		.byte	112
+ 1772 03c7 38       		.byte	56
+ 1773 03c8 1C       		.byte	28
+ 1774 03c9 0E       		.byte	14
+ 1775 03ca 06       		.byte	6
+ 1776 03cb 02       		.byte	2
+ 1777 03cc 00       		.byte	0
+ 1778 03cd 00       		.byte	0
+ 1779 03ce 00       		.byte	0
+ 1780 03cf 00       		.byte	0
+ 1781 03d0 00       		.byte	0
+ 1782 03d1 00       		.byte	0
+ 1783 03d2 3C       		.byte	60
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 40
+
+
+ 1784 03d3 0C       		.byte	12
+ 1785 03d4 0C       		.byte	12
+ 1786 03d5 0C       		.byte	12
+ 1787 03d6 0C       		.byte	12
+ 1788 03d7 0C       		.byte	12
+ 1789 03d8 0C       		.byte	12
+ 1790 03d9 0C       		.byte	12
+ 1791 03da 0C       		.byte	12
+ 1792 03db 3C       		.byte	60
+ 1793 03dc 00       		.byte	0
+ 1794 03dd 00       		.byte	0
+ 1795 03de 00       		.byte	0
+ 1796 03df 00       		.byte	0
+ 1797 03e0 10       		.byte	16
+ 1798 03e1 38       		.byte	56
+ 1799 03e2 6C       		.byte	108
+ 1800 03e3 C6       		.byte	-58
+ 1801 03e4 00       		.byte	0
+ 1802 03e5 00       		.byte	0
+ 1803 03e6 00       		.byte	0
+ 1804 03e7 00       		.byte	0
+ 1805 03e8 00       		.byte	0
+ 1806 03e9 00       		.byte	0
+ 1807 03ea 00       		.byte	0
+ 1808 03eb 00       		.byte	0
+ 1809 03ec 00       		.byte	0
+ 1810 03ed 00       		.byte	0
+ 1811 03ee 00       		.byte	0
+ 1812 03ef 00       		.byte	0
+ 1813 03f0 00       		.byte	0
+ 1814 03f1 00       		.byte	0
+ 1815 03f2 00       		.byte	0
+ 1816 03f3 00       		.byte	0
+ 1817 03f4 00       		.byte	0
+ 1818 03f5 00       		.byte	0
+ 1819 03f6 00       		.byte	0
+ 1820 03f7 00       		.byte	0
+ 1821 03f8 00       		.byte	0
+ 1822 03f9 00       		.byte	0
+ 1823 03fa 00       		.byte	0
+ 1824 03fb 00       		.byte	0
+ 1825 03fc 00       		.byte	0
+ 1826 03fd FF       		.byte	-1
+ 1827 03fe 00       		.byte	0
+ 1828 03ff 00       		.byte	0
+ 1829 0400 30       		.byte	48
+ 1830 0401 30       		.byte	48
+ 1831 0402 18       		.byte	24
+ 1832 0403 00       		.byte	0
+ 1833 0404 00       		.byte	0
+ 1834 0405 00       		.byte	0
+ 1835 0406 00       		.byte	0
+ 1836 0407 00       		.byte	0
+ 1837 0408 00       		.byte	0
+ 1838 0409 00       		.byte	0
+ 1839 040a 00       		.byte	0
+ 1840 040b 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 41
+
+
+ 1841 040c 00       		.byte	0
+ 1842 040d 00       		.byte	0
+ 1843 040e 00       		.byte	0
+ 1844 040f 00       		.byte	0
+ 1845 0410 00       		.byte	0
+ 1846 0411 00       		.byte	0
+ 1847 0412 00       		.byte	0
+ 1848 0413 00       		.byte	0
+ 1849 0414 00       		.byte	0
+ 1850 0415 78       		.byte	120
+ 1851 0416 0C       		.byte	12
+ 1852 0417 7C       		.byte	124
+ 1853 0418 CC       		.byte	-52
+ 1854 0419 CC       		.byte	-52
+ 1855 041a CC       		.byte	-52
+ 1856 041b 76       		.byte	118
+ 1857 041c 00       		.byte	0
+ 1858 041d 00       		.byte	0
+ 1859 041e 00       		.byte	0
+ 1860 041f 00       		.byte	0
+ 1861 0420 00       		.byte	0
+ 1862 0421 00       		.byte	0
+ 1863 0422 E0       		.byte	-32
+ 1864 0423 60       		.byte	96
+ 1865 0424 60       		.byte	96
+ 1866 0425 78       		.byte	120
+ 1867 0426 6C       		.byte	108
+ 1868 0427 66       		.byte	102
+ 1869 0428 66       		.byte	102
+ 1870 0429 66       		.byte	102
+ 1871 042a 66       		.byte	102
+ 1872 042b DC       		.byte	-36
+ 1873 042c 00       		.byte	0
+ 1874 042d 00       		.byte	0
+ 1875 042e 00       		.byte	0
+ 1876 042f 00       		.byte	0
+ 1877 0430 00       		.byte	0
+ 1878 0431 00       		.byte	0
+ 1879 0432 00       		.byte	0
+ 1880 0433 00       		.byte	0
+ 1881 0434 00       		.byte	0
+ 1882 0435 7C       		.byte	124
+ 1883 0436 C6       		.byte	-58
+ 1884 0437 C0       		.byte	-64
+ 1885 0438 C0       		.byte	-64
+ 1886 0439 C0       		.byte	-64
+ 1887 043a C6       		.byte	-58
+ 1888 043b 7C       		.byte	124
+ 1889 043c 00       		.byte	0
+ 1890 043d 00       		.byte	0
+ 1891 043e 00       		.byte	0
+ 1892 043f 00       		.byte	0
+ 1893 0440 00       		.byte	0
+ 1894 0441 00       		.byte	0
+ 1895 0442 1C       		.byte	28
+ 1896 0443 0C       		.byte	12
+ 1897 0444 0C       		.byte	12
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 42
+
+
+ 1898 0445 3C       		.byte	60
+ 1899 0446 6C       		.byte	108
+ 1900 0447 CC       		.byte	-52
+ 1901 0448 CC       		.byte	-52
+ 1902 0449 CC       		.byte	-52
+ 1903 044a CC       		.byte	-52
+ 1904 044b 76       		.byte	118
+ 1905 044c 00       		.byte	0
+ 1906 044d 00       		.byte	0
+ 1907 044e 00       		.byte	0
+ 1908 044f 00       		.byte	0
+ 1909 0450 00       		.byte	0
+ 1910 0451 00       		.byte	0
+ 1911 0452 00       		.byte	0
+ 1912 0453 00       		.byte	0
+ 1913 0454 00       		.byte	0
+ 1914 0455 7C       		.byte	124
+ 1915 0456 C6       		.byte	-58
+ 1916 0457 FE       		.byte	-2
+ 1917 0458 C0       		.byte	-64
+ 1918 0459 C0       		.byte	-64
+ 1919 045a C6       		.byte	-58
+ 1920 045b 7C       		.byte	124
+ 1921 045c 00       		.byte	0
+ 1922 045d 00       		.byte	0
+ 1923 045e 00       		.byte	0
+ 1924 045f 00       		.byte	0
+ 1925 0460 00       		.byte	0
+ 1926 0461 00       		.byte	0
+ 1927 0462 38       		.byte	56
+ 1928 0463 6C       		.byte	108
+ 1929 0464 64       		.byte	100
+ 1930 0465 60       		.byte	96
+ 1931 0466 F0       		.byte	-16
+ 1932 0467 60       		.byte	96
+ 1933 0468 60       		.byte	96
+ 1934 0469 60       		.byte	96
+ 1935 046a 60       		.byte	96
+ 1936 046b F0       		.byte	-16
+ 1937 046c 00       		.byte	0
+ 1938 046d 00       		.byte	0
+ 1939 046e 00       		.byte	0
+ 1940 046f 00       		.byte	0
+ 1941 0470 00       		.byte	0
+ 1942 0471 00       		.byte	0
+ 1943 0472 00       		.byte	0
+ 1944 0473 00       		.byte	0
+ 1945 0474 00       		.byte	0
+ 1946 0475 76       		.byte	118
+ 1947 0476 CC       		.byte	-52
+ 1948 0477 CC       		.byte	-52
+ 1949 0478 CC       		.byte	-52
+ 1950 0479 CC       		.byte	-52
+ 1951 047a CC       		.byte	-52
+ 1952 047b 7C       		.byte	124
+ 1953 047c 0C       		.byte	12
+ 1954 047d CC       		.byte	-52
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 43
+
+
+ 1955 047e 78       		.byte	120
+ 1956 047f 00       		.byte	0
+ 1957 0480 00       		.byte	0
+ 1958 0481 00       		.byte	0
+ 1959 0482 E0       		.byte	-32
+ 1960 0483 60       		.byte	96
+ 1961 0484 60       		.byte	96
+ 1962 0485 6C       		.byte	108
+ 1963 0486 76       		.byte	118
+ 1964 0487 66       		.byte	102
+ 1965 0488 66       		.byte	102
+ 1966 0489 66       		.byte	102
+ 1967 048a 66       		.byte	102
+ 1968 048b E6       		.byte	-26
+ 1969 048c 00       		.byte	0
+ 1970 048d 00       		.byte	0
+ 1971 048e 00       		.byte	0
+ 1972 048f 00       		.byte	0
+ 1973 0490 00       		.byte	0
+ 1974 0491 00       		.byte	0
+ 1975 0492 18       		.byte	24
+ 1976 0493 18       		.byte	24
+ 1977 0494 00       		.byte	0
+ 1978 0495 38       		.byte	56
+ 1979 0496 18       		.byte	24
+ 1980 0497 18       		.byte	24
+ 1981 0498 18       		.byte	24
+ 1982 0499 18       		.byte	24
+ 1983 049a 18       		.byte	24
+ 1984 049b 3C       		.byte	60
+ 1985 049c 00       		.byte	0
+ 1986 049d 00       		.byte	0
+ 1987 049e 00       		.byte	0
+ 1988 049f 00       		.byte	0
+ 1989 04a0 00       		.byte	0
+ 1990 04a1 00       		.byte	0
+ 1991 04a2 06       		.byte	6
+ 1992 04a3 06       		.byte	6
+ 1993 04a4 00       		.byte	0
+ 1994 04a5 0E       		.byte	14
+ 1995 04a6 06       		.byte	6
+ 1996 04a7 06       		.byte	6
+ 1997 04a8 06       		.byte	6
+ 1998 04a9 06       		.byte	6
+ 1999 04aa 06       		.byte	6
+ 2000 04ab 06       		.byte	6
+ 2001 04ac 66       		.byte	102
+ 2002 04ad 66       		.byte	102
+ 2003 04ae 3C       		.byte	60
+ 2004 04af 00       		.byte	0
+ 2005 04b0 00       		.byte	0
+ 2006 04b1 00       		.byte	0
+ 2007 04b2 E0       		.byte	-32
+ 2008 04b3 60       		.byte	96
+ 2009 04b4 60       		.byte	96
+ 2010 04b5 66       		.byte	102
+ 2011 04b6 6C       		.byte	108
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 44
+
+
+ 2012 04b7 78       		.byte	120
+ 2013 04b8 78       		.byte	120
+ 2014 04b9 6C       		.byte	108
+ 2015 04ba 66       		.byte	102
+ 2016 04bb E6       		.byte	-26
+ 2017 04bc 00       		.byte	0
+ 2018 04bd 00       		.byte	0
+ 2019 04be 00       		.byte	0
+ 2020 04bf 00       		.byte	0
+ 2021 04c0 00       		.byte	0
+ 2022 04c1 00       		.byte	0
+ 2023 04c2 38       		.byte	56
+ 2024 04c3 18       		.byte	24
+ 2025 04c4 18       		.byte	24
+ 2026 04c5 18       		.byte	24
+ 2027 04c6 18       		.byte	24
+ 2028 04c7 18       		.byte	24
+ 2029 04c8 18       		.byte	24
+ 2030 04c9 18       		.byte	24
+ 2031 04ca 18       		.byte	24
+ 2032 04cb 3C       		.byte	60
+ 2033 04cc 00       		.byte	0
+ 2034 04cd 00       		.byte	0
+ 2035 04ce 00       		.byte	0
+ 2036 04cf 00       		.byte	0
+ 2037 04d0 00       		.byte	0
+ 2038 04d1 00       		.byte	0
+ 2039 04d2 00       		.byte	0
+ 2040 04d3 00       		.byte	0
+ 2041 04d4 00       		.byte	0
+ 2042 04d5 EC       		.byte	-20
+ 2043 04d6 FE       		.byte	-2
+ 2044 04d7 D6       		.byte	-42
+ 2045 04d8 D6       		.byte	-42
+ 2046 04d9 D6       		.byte	-42
+ 2047 04da D6       		.byte	-42
+ 2048 04db D6       		.byte	-42
+ 2049 04dc 00       		.byte	0
+ 2050 04dd 00       		.byte	0
+ 2051 04de 00       		.byte	0
+ 2052 04df 00       		.byte	0
+ 2053 04e0 00       		.byte	0
+ 2054 04e1 00       		.byte	0
+ 2055 04e2 00       		.byte	0
+ 2056 04e3 00       		.byte	0
+ 2057 04e4 00       		.byte	0
+ 2058 04e5 DC       		.byte	-36
+ 2059 04e6 66       		.byte	102
+ 2060 04e7 66       		.byte	102
+ 2061 04e8 66       		.byte	102
+ 2062 04e9 66       		.byte	102
+ 2063 04ea 66       		.byte	102
+ 2064 04eb 66       		.byte	102
+ 2065 04ec 00       		.byte	0
+ 2066 04ed 00       		.byte	0
+ 2067 04ee 00       		.byte	0
+ 2068 04ef 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 45
+
+
+ 2069 04f0 00       		.byte	0
+ 2070 04f1 00       		.byte	0
+ 2071 04f2 00       		.byte	0
+ 2072 04f3 00       		.byte	0
+ 2073 04f4 00       		.byte	0
+ 2074 04f5 7C       		.byte	124
+ 2075 04f6 C6       		.byte	-58
+ 2076 04f7 C6       		.byte	-58
+ 2077 04f8 C6       		.byte	-58
+ 2078 04f9 C6       		.byte	-58
+ 2079 04fa C6       		.byte	-58
+ 2080 04fb 7C       		.byte	124
+ 2081 04fc 00       		.byte	0
+ 2082 04fd 00       		.byte	0
+ 2083 04fe 00       		.byte	0
+ 2084 04ff 00       		.byte	0
+ 2085 0500 00       		.byte	0
+ 2086 0501 00       		.byte	0
+ 2087 0502 00       		.byte	0
+ 2088 0503 00       		.byte	0
+ 2089 0504 00       		.byte	0
+ 2090 0505 DC       		.byte	-36
+ 2091 0506 66       		.byte	102
+ 2092 0507 66       		.byte	102
+ 2093 0508 66       		.byte	102
+ 2094 0509 66       		.byte	102
+ 2095 050a 66       		.byte	102
+ 2096 050b 7C       		.byte	124
+ 2097 050c 60       		.byte	96
+ 2098 050d 60       		.byte	96
+ 2099 050e F0       		.byte	-16
+ 2100 050f 00       		.byte	0
+ 2101 0510 00       		.byte	0
+ 2102 0511 00       		.byte	0
+ 2103 0512 00       		.byte	0
+ 2104 0513 00       		.byte	0
+ 2105 0514 00       		.byte	0
+ 2106 0515 76       		.byte	118
+ 2107 0516 CC       		.byte	-52
+ 2108 0517 CC       		.byte	-52
+ 2109 0518 CC       		.byte	-52
+ 2110 0519 CC       		.byte	-52
+ 2111 051a CC       		.byte	-52
+ 2112 051b 7C       		.byte	124
+ 2113 051c 0C       		.byte	12
+ 2114 051d 0C       		.byte	12
+ 2115 051e 1E       		.byte	30
+ 2116 051f 00       		.byte	0
+ 2117 0520 00       		.byte	0
+ 2118 0521 00       		.byte	0
+ 2119 0522 00       		.byte	0
+ 2120 0523 00       		.byte	0
+ 2121 0524 00       		.byte	0
+ 2122 0525 DC       		.byte	-36
+ 2123 0526 76       		.byte	118
+ 2124 0527 62       		.byte	98
+ 2125 0528 60       		.byte	96
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 46
+
+
+ 2126 0529 60       		.byte	96
+ 2127 052a 60       		.byte	96
+ 2128 052b F0       		.byte	-16
+ 2129 052c 00       		.byte	0
+ 2130 052d 00       		.byte	0
+ 2131 052e 00       		.byte	0
+ 2132 052f 00       		.byte	0
+ 2133 0530 00       		.byte	0
+ 2134 0531 00       		.byte	0
+ 2135 0532 00       		.byte	0
+ 2136 0533 00       		.byte	0
+ 2137 0534 00       		.byte	0
+ 2138 0535 7C       		.byte	124
+ 2139 0536 C6       		.byte	-58
+ 2140 0537 60       		.byte	96
+ 2141 0538 38       		.byte	56
+ 2142 0539 0C       		.byte	12
+ 2143 053a C6       		.byte	-58
+ 2144 053b 7C       		.byte	124
+ 2145 053c 00       		.byte	0
+ 2146 053d 00       		.byte	0
+ 2147 053e 00       		.byte	0
+ 2148 053f 00       		.byte	0
+ 2149 0540 00       		.byte	0
+ 2150 0541 00       		.byte	0
+ 2151 0542 10       		.byte	16
+ 2152 0543 30       		.byte	48
+ 2153 0544 30       		.byte	48
+ 2154 0545 FC       		.byte	-4
+ 2155 0546 30       		.byte	48
+ 2156 0547 30       		.byte	48
+ 2157 0548 30       		.byte	48
+ 2158 0549 30       		.byte	48
+ 2159 054a 36       		.byte	54
+ 2160 054b 1C       		.byte	28
+ 2161 054c 00       		.byte	0
+ 2162 054d 00       		.byte	0
+ 2163 054e 00       		.byte	0
+ 2164 054f 00       		.byte	0
+ 2165 0550 00       		.byte	0
+ 2166 0551 00       		.byte	0
+ 2167 0552 00       		.byte	0
+ 2168 0553 00       		.byte	0
+ 2169 0554 00       		.byte	0
+ 2170 0555 CC       		.byte	-52
+ 2171 0556 CC       		.byte	-52
+ 2172 0557 CC       		.byte	-52
+ 2173 0558 CC       		.byte	-52
+ 2174 0559 CC       		.byte	-52
+ 2175 055a CC       		.byte	-52
+ 2176 055b 76       		.byte	118
+ 2177 055c 00       		.byte	0
+ 2178 055d 00       		.byte	0
+ 2179 055e 00       		.byte	0
+ 2180 055f 00       		.byte	0
+ 2181 0560 00       		.byte	0
+ 2182 0561 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 47
+
+
+ 2183 0562 00       		.byte	0
+ 2184 0563 00       		.byte	0
+ 2185 0564 00       		.byte	0
+ 2186 0565 66       		.byte	102
+ 2187 0566 66       		.byte	102
+ 2188 0567 66       		.byte	102
+ 2189 0568 66       		.byte	102
+ 2190 0569 66       		.byte	102
+ 2191 056a 3C       		.byte	60
+ 2192 056b 18       		.byte	24
+ 2193 056c 00       		.byte	0
+ 2194 056d 00       		.byte	0
+ 2195 056e 00       		.byte	0
+ 2196 056f 00       		.byte	0
+ 2197 0570 00       		.byte	0
+ 2198 0571 00       		.byte	0
+ 2199 0572 00       		.byte	0
+ 2200 0573 00       		.byte	0
+ 2201 0574 00       		.byte	0
+ 2202 0575 C6       		.byte	-58
+ 2203 0576 C6       		.byte	-58
+ 2204 0577 C6       		.byte	-58
+ 2205 0578 D6       		.byte	-42
+ 2206 0579 D6       		.byte	-42
+ 2207 057a FE       		.byte	-2
+ 2208 057b 6C       		.byte	108
+ 2209 057c 00       		.byte	0
+ 2210 057d 00       		.byte	0
+ 2211 057e 00       		.byte	0
+ 2212 057f 00       		.byte	0
+ 2213 0580 00       		.byte	0
+ 2214 0581 00       		.byte	0
+ 2215 0582 00       		.byte	0
+ 2216 0583 00       		.byte	0
+ 2217 0584 00       		.byte	0
+ 2218 0585 C6       		.byte	-58
+ 2219 0586 6C       		.byte	108
+ 2220 0587 38       		.byte	56
+ 2221 0588 38       		.byte	56
+ 2222 0589 38       		.byte	56
+ 2223 058a 6C       		.byte	108
+ 2224 058b C6       		.byte	-58
+ 2225 058c 00       		.byte	0
+ 2226 058d 00       		.byte	0
+ 2227 058e 00       		.byte	0
+ 2228 058f 00       		.byte	0
+ 2229 0590 00       		.byte	0
+ 2230 0591 00       		.byte	0
+ 2231 0592 00       		.byte	0
+ 2232 0593 00       		.byte	0
+ 2233 0594 00       		.byte	0
+ 2234 0595 C6       		.byte	-58
+ 2235 0596 C6       		.byte	-58
+ 2236 0597 C6       		.byte	-58
+ 2237 0598 C6       		.byte	-58
+ 2238 0599 C6       		.byte	-58
+ 2239 059a C6       		.byte	-58
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 48
+
+
+ 2240 059b 7E       		.byte	126
+ 2241 059c 06       		.byte	6
+ 2242 059d 0C       		.byte	12
+ 2243 059e F8       		.byte	-8
+ 2244 059f 00       		.byte	0
+ 2245 05a0 00       		.byte	0
+ 2246 05a1 00       		.byte	0
+ 2247 05a2 00       		.byte	0
+ 2248 05a3 00       		.byte	0
+ 2249 05a4 00       		.byte	0
+ 2250 05a5 FE       		.byte	-2
+ 2251 05a6 CC       		.byte	-52
+ 2252 05a7 18       		.byte	24
+ 2253 05a8 30       		.byte	48
+ 2254 05a9 60       		.byte	96
+ 2255 05aa C6       		.byte	-58
+ 2256 05ab FE       		.byte	-2
+ 2257 05ac 00       		.byte	0
+ 2258 05ad 00       		.byte	0
+ 2259 05ae 00       		.byte	0
+ 2260 05af 00       		.byte	0
+ 2261 05b0 00       		.byte	0
+ 2262 05b1 00       		.byte	0
+ 2263 05b2 0E       		.byte	14
+ 2264 05b3 18       		.byte	24
+ 2265 05b4 18       		.byte	24
+ 2266 05b5 18       		.byte	24
+ 2267 05b6 70       		.byte	112
+ 2268 05b7 18       		.byte	24
+ 2269 05b8 18       		.byte	24
+ 2270 05b9 18       		.byte	24
+ 2271 05ba 18       		.byte	24
+ 2272 05bb 0E       		.byte	14
+ 2273 05bc 00       		.byte	0
+ 2274 05bd 00       		.byte	0
+ 2275 05be 00       		.byte	0
+ 2276 05bf 00       		.byte	0
+ 2277 05c0 00       		.byte	0
+ 2278 05c1 00       		.byte	0
+ 2279 05c2 18       		.byte	24
+ 2280 05c3 18       		.byte	24
+ 2281 05c4 18       		.byte	24
+ 2282 05c5 18       		.byte	24
+ 2283 05c6 00       		.byte	0
+ 2284 05c7 18       		.byte	24
+ 2285 05c8 18       		.byte	24
+ 2286 05c9 18       		.byte	24
+ 2287 05ca 18       		.byte	24
+ 2288 05cb 18       		.byte	24
+ 2289 05cc 00       		.byte	0
+ 2290 05cd 00       		.byte	0
+ 2291 05ce 00       		.byte	0
+ 2292 05cf 00       		.byte	0
+ 2293 05d0 00       		.byte	0
+ 2294 05d1 00       		.byte	0
+ 2295 05d2 70       		.byte	112
+ 2296 05d3 18       		.byte	24
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 49
+
+
+ 2297 05d4 18       		.byte	24
+ 2298 05d5 18       		.byte	24
+ 2299 05d6 0E       		.byte	14
+ 2300 05d7 18       		.byte	24
+ 2301 05d8 18       		.byte	24
+ 2302 05d9 18       		.byte	24
+ 2303 05da 18       		.byte	24
+ 2304 05db 70       		.byte	112
+ 2305 05dc 00       		.byte	0
+ 2306 05dd 00       		.byte	0
+ 2307 05de 00       		.byte	0
+ 2308 05df 00       		.byte	0
+ 2309 05e0 00       		.byte	0
+ 2310 05e1 00       		.byte	0
+ 2311 05e2 76       		.byte	118
+ 2312 05e3 DC       		.byte	-36
+ 2313 05e4 00       		.byte	0
+ 2314 05e5 00       		.byte	0
+ 2315 05e6 00       		.byte	0
+ 2316 05e7 00       		.byte	0
+ 2317 05e8 00       		.byte	0
+ 2318 05e9 00       		.byte	0
+ 2319 05ea 00       		.byte	0
+ 2320 05eb 00       		.byte	0
+ 2321 05ec 00       		.byte	0
+ 2322 05ed 00       		.byte	0
+ 2323 05ee 00       		.byte	0
+ 2324 05ef 00       		.byte	0
+ 2325 05f0 00       		.byte	0
+ 2326 05f1 00       		.byte	0
+ 2327 05f2 00       		.byte	0
+ 2328 05f3 00       		.byte	0
+ 2329 05f4 10       		.byte	16
+ 2330 05f5 38       		.byte	56
+ 2331 05f6 6C       		.byte	108
+ 2332 05f7 C6       		.byte	-58
+ 2333 05f8 C6       		.byte	-58
+ 2334 05f9 C6       		.byte	-58
+ 2335 05fa FE       		.byte	-2
+ 2336 05fb 00       		.byte	0
+ 2337 05fc 00       		.byte	0
+ 2338 05fd 00       		.byte	0
+ 2339 05fe 00       		.byte	0
+ 2340 05ff 00       		.byte	0
+ 2341              		.text
+ 2342              	.Letext0:
+ 2343              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 2344              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 2345              		.file 4 "Generated_Source\\PSoC4/cytypes.h"
+ 2346              		.file 5 "8X16.h"
+ 2347              		.file 6 "Generated_Source\\PSoC4/OLED_Reset.h"
+ 2348              		.file 7 "Generated_Source\\PSoC4/CyLib.h"
+ 2349              		.file 8 "Generated_Source\\PSoC4/OLED_DC.h"
+ 2350              		.file 9 "Generated_Source\\PSoC4/SPI_Master_SPI_UART.h"
+ 2351              		.section	.debug_info,"",%progbits
+ 2352              	.Ldebug_info0:
+ 2353 0000 A80A0000 		.4byte	0xaa8
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 50
+
+
+ 2354 0004 0400     		.2byte	0x4
+ 2355 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 2356 000a 04       		.byte	0x4
+ 2357 000b 01       		.uleb128 0x1
+ 2358 000c 78010000 		.4byte	.LASF51
+ 2359 0010 01       		.byte	0x1
+ 2360 0011 E8000000 		.4byte	.LASF52
+ 2361 0015 93020000 		.4byte	.LASF53
+ 2362 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 2363 001d 00000000 		.4byte	0
+ 2364 0021 00000000 		.4byte	.Ldebug_line0
+ 2365 0025 02       		.uleb128 0x2
+ 2366 0026 01       		.byte	0x1
+ 2367 0027 06       		.byte	0x6
+ 2368 0028 1B020000 		.4byte	.LASF0
+ 2369 002c 03       		.uleb128 0x3
+ 2370 002d 4E010000 		.4byte	.LASF3
+ 2371 0031 02       		.byte	0x2
+ 2372 0032 1D       		.byte	0x1d
+ 2373 0033 37000000 		.4byte	0x37
+ 2374 0037 02       		.uleb128 0x2
+ 2375 0038 01       		.byte	0x1
+ 2376 0039 08       		.byte	0x8
+ 2377 003a 06020000 		.4byte	.LASF1
+ 2378 003e 02       		.uleb128 0x2
+ 2379 003f 02       		.byte	0x2
+ 2380 0040 05       		.byte	0x5
+ 2381 0041 39000000 		.4byte	.LASF2
+ 2382 0045 03       		.uleb128 0x3
+ 2383 0046 A6000000 		.4byte	.LASF4
+ 2384 004a 02       		.byte	0x2
+ 2385 004b 2B       		.byte	0x2b
+ 2386 004c 50000000 		.4byte	0x50
+ 2387 0050 02       		.uleb128 0x2
+ 2388 0051 02       		.byte	0x2
+ 2389 0052 07       		.byte	0x7
+ 2390 0053 68020000 		.4byte	.LASF5
+ 2391 0057 02       		.uleb128 0x2
+ 2392 0058 04       		.byte	0x4
+ 2393 0059 05       		.byte	0x5
+ 2394 005a 35010000 		.4byte	.LASF6
+ 2395 005e 03       		.uleb128 0x3
+ 2396 005f 85000000 		.4byte	.LASF7
+ 2397 0063 02       		.byte	0x2
+ 2398 0064 41       		.byte	0x41
+ 2399 0065 69000000 		.4byte	0x69
+ 2400 0069 02       		.uleb128 0x2
+ 2401 006a 04       		.byte	0x4
+ 2402 006b 07       		.byte	0x7
+ 2403 006c EA020000 		.4byte	.LASF8
+ 2404 0070 02       		.uleb128 0x2
+ 2405 0071 08       		.byte	0x8
+ 2406 0072 05       		.byte	0x5
+ 2407 0073 16010000 		.4byte	.LASF9
+ 2408 0077 02       		.uleb128 0x2
+ 2409 0078 08       		.byte	0x8
+ 2410 0079 07       		.byte	0x7
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 51
+
+
+ 2411 007a 27020000 		.4byte	.LASF10
+ 2412 007e 04       		.uleb128 0x4
+ 2413 007f 04       		.byte	0x4
+ 2414 0080 05       		.byte	0x5
+ 2415 0081 696E7400 		.ascii	"int\000"
+ 2416 0085 02       		.uleb128 0x2
+ 2417 0086 04       		.byte	0x4
+ 2418 0087 07       		.byte	0x7
+ 2419 0088 4C020000 		.4byte	.LASF11
+ 2420 008c 03       		.uleb128 0x3
+ 2421 008d DA000000 		.4byte	.LASF12
+ 2422 0091 03       		.byte	0x3
+ 2423 0092 15       		.byte	0x15
+ 2424 0093 2C000000 		.4byte	0x2c
+ 2425 0097 03       		.uleb128 0x3
+ 2426 0098 59020000 		.4byte	.LASF13
+ 2427 009c 03       		.byte	0x3
+ 2428 009d 21       		.byte	0x21
+ 2429 009e 45000000 		.4byte	0x45
+ 2430 00a2 03       		.uleb128 0x3
+ 2431 00a3 3E020000 		.4byte	.LASF14
+ 2432 00a7 03       		.byte	0x3
+ 2433 00a8 2D       		.byte	0x2d
+ 2434 00a9 5E000000 		.4byte	0x5e
+ 2435 00ad 05       		.uleb128 0x5
+ 2436 00ae E2000000 		.4byte	.LASF15
+ 2437 00b2 04       		.byte	0x4
+ 2438 00b3 B901     		.2byte	0x1b9
+ 2439 00b5 37000000 		.4byte	0x37
+ 2440 00b9 05       		.uleb128 0x5
+ 2441 00ba D3020000 		.4byte	.LASF16
+ 2442 00be 04       		.byte	0x4
+ 2443 00bf BB01     		.2byte	0x1bb
+ 2444 00c1 69000000 		.4byte	0x69
+ 2445 00c5 02       		.uleb128 0x2
+ 2446 00c6 04       		.byte	0x4
+ 2447 00c7 04       		.byte	0x4
+ 2448 00c8 10010000 		.4byte	.LASF17
+ 2449 00cc 02       		.uleb128 0x2
+ 2450 00cd 08       		.byte	0x8
+ 2451 00ce 04       		.byte	0x4
+ 2452 00cf FC020000 		.4byte	.LASF18
+ 2453 00d3 02       		.uleb128 0x2
+ 2454 00d4 01       		.byte	0x1
+ 2455 00d5 08       		.byte	0x8
+ 2456 00d6 7B020000 		.4byte	.LASF19
+ 2457 00da 02       		.uleb128 0x2
+ 2458 00db 04       		.byte	0x4
+ 2459 00dc 07       		.byte	0x7
+ 2460 00dd 43000000 		.4byte	.LASF20
+ 2461 00e1 06       		.uleb128 0x6
+ 2462 00e2 9C000000 		.4byte	.LASF21
+ 2463 00e6 01       		.byte	0x1
+ 2464 00e7 27       		.byte	0x27
+ 2465 00e8 00000000 		.4byte	.LFB37
+ 2466 00ec 28000000 		.4byte	.LFE37-.LFB37
+ 2467 00f0 01       		.uleb128 0x1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 52
+
+
+ 2468 00f1 9C       		.byte	0x9c
+ 2469 00f2 67010000 		.4byte	0x167
+ 2470 00f6 07       		.uleb128 0x7
+ 2471 00f7 08000000 		.4byte	.LVL0
+ 2472 00fb 300A0000 		.4byte	0xa30
+ 2473 00ff 09010000 		.4byte	0x109
+ 2474 0103 08       		.uleb128 0x8
+ 2475 0104 01       		.uleb128 0x1
+ 2476 0105 50       		.byte	0x50
+ 2477 0106 01       		.uleb128 0x1
+ 2478 0107 31       		.byte	0x31
+ 2479 0108 00       		.byte	0
+ 2480 0109 07       		.uleb128 0x7
+ 2481 010a 0E000000 		.4byte	.LVL1
+ 2482 010e 410A0000 		.4byte	0xa41
+ 2483 0112 1C010000 		.4byte	0x11c
+ 2484 0116 08       		.uleb128 0x8
+ 2485 0117 01       		.uleb128 0x1
+ 2486 0118 50       		.byte	0x50
+ 2487 0119 01       		.uleb128 0x1
+ 2488 011a 31       		.byte	0x31
+ 2489 011b 00       		.byte	0
+ 2490 011c 07       		.uleb128 0x7
+ 2491 011d 14000000 		.4byte	.LVL2
+ 2492 0121 300A0000 		.4byte	0xa30
+ 2493 0125 2F010000 		.4byte	0x12f
+ 2494 0129 08       		.uleb128 0x8
+ 2495 012a 01       		.uleb128 0x1
+ 2496 012b 50       		.byte	0x50
+ 2497 012c 01       		.uleb128 0x1
+ 2498 012d 30       		.byte	0x30
+ 2499 012e 00       		.byte	0
+ 2500 012f 07       		.uleb128 0x7
+ 2501 0130 1A000000 		.4byte	.LVL3
+ 2502 0134 410A0000 		.4byte	0xa41
+ 2503 0138 43010000 		.4byte	0x143
+ 2504 013c 08       		.uleb128 0x8
+ 2505 013d 01       		.uleb128 0x1
+ 2506 013e 50       		.byte	0x50
+ 2507 013f 02       		.uleb128 0x2
+ 2508 0140 08       		.byte	0x8
+ 2509 0141 32       		.byte	0x32
+ 2510 0142 00       		.byte	0
+ 2511 0143 07       		.uleb128 0x7
+ 2512 0144 20000000 		.4byte	.LVL4
+ 2513 0148 300A0000 		.4byte	0xa30
+ 2514 014c 56010000 		.4byte	0x156
+ 2515 0150 08       		.uleb128 0x8
+ 2516 0151 01       		.uleb128 0x1
+ 2517 0152 50       		.byte	0x50
+ 2518 0153 01       		.uleb128 0x1
+ 2519 0154 31       		.byte	0x31
+ 2520 0155 00       		.byte	0
+ 2521 0156 09       		.uleb128 0x9
+ 2522 0157 26000000 		.4byte	.LVL5
+ 2523 015b 410A0000 		.4byte	0xa41
+ 2524 015f 08       		.uleb128 0x8
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 53
+
+
+ 2525 0160 01       		.uleb128 0x1
+ 2526 0161 50       		.byte	0x50
+ 2527 0162 02       		.uleb128 0x2
+ 2528 0163 08       		.byte	0x8
+ 2529 0164 78       		.byte	0x78
+ 2530 0165 00       		.byte	0
+ 2531 0166 00       		.byte	0
+ 2532 0167 06       		.uleb128 0x6
+ 2533 0168 6E000000 		.4byte	.LASF22
+ 2534 016c 01       		.byte	0x1
+ 2535 016d 3D       		.byte	0x3d
+ 2536 016e 00000000 		.4byte	.LFB38
+ 2537 0172 1E000000 		.4byte	.LFE38-.LFB38
+ 2538 0176 01       		.uleb128 0x1
+ 2539 0177 9C       		.byte	0x9c
+ 2540 0178 C5010000 		.4byte	0x1c5
+ 2541 017c 0A       		.uleb128 0xa
+ 2542 017d 8E020000 		.4byte	.LASF24
+ 2543 0181 01       		.byte	0x1
+ 2544 0182 3D       		.byte	0x3d
+ 2545 0183 8C000000 		.4byte	0x8c
+ 2546 0187 00000000 		.4byte	.LLST0
+ 2547 018b 07       		.uleb128 0x7
+ 2548 018c 0A000000 		.4byte	.LVL8
+ 2549 0190 520A0000 		.4byte	0xa52
+ 2550 0194 9E010000 		.4byte	0x19e
+ 2551 0198 08       		.uleb128 0x8
+ 2552 0199 01       		.uleb128 0x1
+ 2553 019a 50       		.byte	0x50
+ 2554 019b 01       		.uleb128 0x1
+ 2555 019c 31       		.byte	0x31
+ 2556 019d 00       		.byte	0
+ 2557 019e 07       		.uleb128 0x7
+ 2558 019f 10000000 		.4byte	.LVL9
+ 2559 01a3 630A0000 		.4byte	0xa63
+ 2560 01a7 B2010000 		.4byte	0x1b2
+ 2561 01ab 08       		.uleb128 0x8
+ 2562 01ac 01       		.uleb128 0x1
+ 2563 01ad 50       		.byte	0x50
+ 2564 01ae 02       		.uleb128 0x2
+ 2565 01af 74       		.byte	0x74
+ 2566 01b0 00       		.sleb128 0
+ 2567 01b1 00       		.byte	0
+ 2568 01b2 0B       		.uleb128 0xb
+ 2569 01b3 14000000 		.4byte	.LVL10
+ 2570 01b7 750A0000 		.4byte	0xa75
+ 2571 01bb 0B       		.uleb128 0xb
+ 2572 01bc 1C000000 		.4byte	.LVL11
+ 2573 01c0 810A0000 		.4byte	0xa81
+ 2574 01c4 00       		.byte	0
+ 2575 01c5 06       		.uleb128 0x6
+ 2576 01c6 DA020000 		.4byte	.LASF23
+ 2577 01ca 01       		.byte	0x1
+ 2578 01cb 57       		.byte	0x57
+ 2579 01cc 00000000 		.4byte	.LFB39
+ 2580 01d0 32000000 		.4byte	.LFE39-.LFB39
+ 2581 01d4 01       		.uleb128 0x1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 54
+
+
+ 2582 01d5 9C       		.byte	0x9c
+ 2583 01d6 67020000 		.4byte	0x267
+ 2584 01da 0A       		.uleb128 0xa
+ 2585 01db 8E020000 		.4byte	.LASF24
+ 2586 01df 01       		.byte	0x1
+ 2587 01e0 57       		.byte	0x57
+ 2588 01e1 97000000 		.4byte	0x97
+ 2589 01e5 21000000 		.4byte	.LLST1
+ 2590 01e9 0C       		.uleb128 0xc
+ 2591 01ea 2E030000 		.4byte	.LASF25
+ 2592 01ee 01       		.byte	0x1
+ 2593 01ef 59       		.byte	0x59
+ 2594 01f0 8C000000 		.4byte	0x8c
+ 2595 01f4 42000000 		.4byte	.LLST2
+ 2596 01f8 0C       		.uleb128 0xc
+ 2597 01f9 34030000 		.4byte	.LASF26
+ 2598 01fd 01       		.byte	0x1
+ 2599 01fe 59       		.byte	0x59
+ 2600 01ff 8C000000 		.4byte	0x8c
+ 2601 0203 55000000 		.4byte	.LLST3
+ 2602 0207 07       		.uleb128 0x7
+ 2603 0208 0C000000 		.4byte	.LVL16
+ 2604 020c 520A0000 		.4byte	0xa52
+ 2605 0210 1A020000 		.4byte	0x21a
+ 2606 0214 08       		.uleb128 0x8
+ 2607 0215 01       		.uleb128 0x1
+ 2608 0216 50       		.byte	0x50
+ 2609 0217 01       		.uleb128 0x1
+ 2610 0218 31       		.byte	0x31
+ 2611 0219 00       		.byte	0
+ 2612 021a 07       		.uleb128 0x7
+ 2613 021b 12000000 		.4byte	.LVL17
+ 2614 021f 630A0000 		.4byte	0xa63
+ 2615 0223 2E020000 		.4byte	0x22e
+ 2616 0227 08       		.uleb128 0x8
+ 2617 0228 01       		.uleb128 0x1
+ 2618 0229 50       		.byte	0x50
+ 2619 022a 02       		.uleb128 0x2
+ 2620 022b 75       		.byte	0x75
+ 2621 022c 00       		.sleb128 0
+ 2622 022d 00       		.byte	0
+ 2623 022e 0B       		.uleb128 0xb
+ 2624 022f 16000000 		.4byte	.LVL18
+ 2625 0233 750A0000 		.4byte	0xa75
+ 2626 0237 0B       		.uleb128 0xb
+ 2627 0238 1E000000 		.4byte	.LVL19
+ 2628 023c 810A0000 		.4byte	0xa81
+ 2629 0240 07       		.uleb128 0x7
+ 2630 0241 24000000 		.4byte	.LVL20
+ 2631 0245 630A0000 		.4byte	0xa63
+ 2632 0249 54020000 		.4byte	0x254
+ 2633 024d 08       		.uleb128 0x8
+ 2634 024e 01       		.uleb128 0x1
+ 2635 024f 50       		.byte	0x50
+ 2636 0250 02       		.uleb128 0x2
+ 2637 0251 74       		.byte	0x74
+ 2638 0252 00       		.sleb128 0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 55
+
+
+ 2639 0253 00       		.byte	0
+ 2640 0254 0B       		.uleb128 0xb
+ 2641 0255 28000000 		.4byte	.LVL21
+ 2642 0259 750A0000 		.4byte	0xa75
+ 2643 025d 0B       		.uleb128 0xb
+ 2644 025e 30000000 		.4byte	.LVL22
+ 2645 0262 810A0000 		.4byte	0xa81
+ 2646 0266 00       		.byte	0
+ 2647 0267 06       		.uleb128 0x6
+ 2648 0268 24010000 		.4byte	.LASF27
+ 2649 026c 01       		.byte	0x1
+ 2650 026d 82       		.byte	0x82
+ 2651 026e 00000000 		.4byte	.LFB40
+ 2652 0272 1E000000 		.4byte	.LFE40-.LFB40
+ 2653 0276 01       		.uleb128 0x1
+ 2654 0277 9C       		.byte	0x9c
+ 2655 0278 C5020000 		.4byte	0x2c5
+ 2656 027c 0A       		.uleb128 0xa
+ 2657 027d 42030000 		.4byte	.LASF28
+ 2658 0281 01       		.byte	0x1
+ 2659 0282 82       		.byte	0x82
+ 2660 0283 8C000000 		.4byte	0x8c
+ 2661 0287 76000000 		.4byte	.LLST4
+ 2662 028b 07       		.uleb128 0x7
+ 2663 028c 0A000000 		.4byte	.LVL27
+ 2664 0290 520A0000 		.4byte	0xa52
+ 2665 0294 9E020000 		.4byte	0x29e
+ 2666 0298 08       		.uleb128 0x8
+ 2667 0299 01       		.uleb128 0x1
+ 2668 029a 50       		.byte	0x50
+ 2669 029b 01       		.uleb128 0x1
+ 2670 029c 30       		.byte	0x30
+ 2671 029d 00       		.byte	0
+ 2672 029e 07       		.uleb128 0x7
+ 2673 029f 10000000 		.4byte	.LVL28
+ 2674 02a3 630A0000 		.4byte	0xa63
+ 2675 02a7 B2020000 		.4byte	0x2b2
+ 2676 02ab 08       		.uleb128 0x8
+ 2677 02ac 01       		.uleb128 0x1
+ 2678 02ad 50       		.byte	0x50
+ 2679 02ae 02       		.uleb128 0x2
+ 2680 02af 74       		.byte	0x74
+ 2681 02b0 00       		.sleb128 0
+ 2682 02b1 00       		.byte	0
+ 2683 02b2 0B       		.uleb128 0xb
+ 2684 02b3 14000000 		.4byte	.LVL29
+ 2685 02b7 750A0000 		.4byte	0xa75
+ 2686 02bb 0B       		.uleb128 0xb
+ 2687 02bc 1C000000 		.4byte	.LVL30
+ 2688 02c0 810A0000 		.4byte	0xa81
+ 2689 02c4 00       		.byte	0
+ 2690 02c5 06       		.uleb128 0x6
+ 2691 02c6 90000000 		.4byte	.LASF29
+ 2692 02ca 01       		.byte	0x1
+ 2693 02cb 9F       		.byte	0x9f
+ 2694 02cc 00000000 		.4byte	.LFB41
+ 2695 02d0 4E000000 		.4byte	.LFE41-.LFB41
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 56
+
+
+ 2696 02d4 01       		.uleb128 0x1
+ 2697 02d5 9C       		.byte	0x9c
+ 2698 02d6 E7030000 		.4byte	0x3e7
+ 2699 02da 0D       		.uleb128 0xd
+ 2700 02db 583100   		.ascii	"X1\000"
+ 2701 02de 01       		.byte	0x1
+ 2702 02df 9F       		.byte	0x9f
+ 2703 02e0 8C000000 		.4byte	0x8c
+ 2704 02e4 97000000 		.4byte	.LLST5
+ 2705 02e8 0D       		.uleb128 0xd
+ 2706 02e9 593100   		.ascii	"Y1\000"
+ 2707 02ec 01       		.byte	0x1
+ 2708 02ed 9F       		.byte	0x9f
+ 2709 02ee 8C000000 		.4byte	0x8c
+ 2710 02f2 B8000000 		.4byte	.LLST6
+ 2711 02f6 0D       		.uleb128 0xd
+ 2712 02f7 583200   		.ascii	"X2\000"
+ 2713 02fa 01       		.byte	0x1
+ 2714 02fb 9F       		.byte	0x9f
+ 2715 02fc 8C000000 		.4byte	0x8c
+ 2716 0300 D9000000 		.4byte	.LLST7
+ 2717 0304 0D       		.uleb128 0xd
+ 2718 0305 593200   		.ascii	"Y2\000"
+ 2719 0308 01       		.byte	0x1
+ 2720 0309 9F       		.byte	0x9f
+ 2721 030a 8C000000 		.4byte	0x8c
+ 2722 030e FA000000 		.4byte	.LLST8
+ 2723 0312 07       		.uleb128 0x7
+ 2724 0313 10000000 		.4byte	.LVL33
+ 2725 0317 67020000 		.4byte	0x267
+ 2726 031b 26030000 		.4byte	0x326
+ 2727 031f 08       		.uleb128 0x8
+ 2728 0320 01       		.uleb128 0x1
+ 2729 0321 50       		.byte	0x50
+ 2730 0322 02       		.uleb128 0x2
+ 2731 0323 08       		.byte	0x8
+ 2732 0324 2A       		.byte	0x2a
+ 2733 0325 00       		.byte	0
+ 2734 0326 07       		.uleb128 0x7
+ 2735 0327 16000000 		.4byte	.LVL34
+ 2736 032b 67010000 		.4byte	0x167
+ 2737 032f 39030000 		.4byte	0x339
+ 2738 0333 08       		.uleb128 0x8
+ 2739 0334 01       		.uleb128 0x1
+ 2740 0335 50       		.byte	0x50
+ 2741 0336 01       		.uleb128 0x1
+ 2742 0337 30       		.byte	0x30
+ 2743 0338 00       		.byte	0
+ 2744 0339 07       		.uleb128 0x7
+ 2745 033a 1C000000 		.4byte	.LVL35
+ 2746 033e 67010000 		.4byte	0x167
+ 2747 0342 4D030000 		.4byte	0x34d
+ 2748 0346 08       		.uleb128 0x8
+ 2749 0347 01       		.uleb128 0x1
+ 2750 0348 50       		.byte	0x50
+ 2751 0349 02       		.uleb128 0x2
+ 2752 034a 77       		.byte	0x77
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 57
+
+
+ 2753 034b 00       		.sleb128 0
+ 2754 034c 00       		.byte	0
+ 2755 034d 07       		.uleb128 0x7
+ 2756 034e 22000000 		.4byte	.LVL36
+ 2757 0352 67010000 		.4byte	0x167
+ 2758 0356 60030000 		.4byte	0x360
+ 2759 035a 08       		.uleb128 0x8
+ 2760 035b 01       		.uleb128 0x1
+ 2761 035c 50       		.byte	0x50
+ 2762 035d 01       		.uleb128 0x1
+ 2763 035e 30       		.byte	0x30
+ 2764 035f 00       		.byte	0
+ 2765 0360 07       		.uleb128 0x7
+ 2766 0361 28000000 		.4byte	.LVL37
+ 2767 0365 67010000 		.4byte	0x167
+ 2768 0369 74030000 		.4byte	0x374
+ 2769 036d 08       		.uleb128 0x8
+ 2770 036e 01       		.uleb128 0x1
+ 2771 036f 50       		.byte	0x50
+ 2772 0370 02       		.uleb128 0x2
+ 2773 0371 76       		.byte	0x76
+ 2774 0372 00       		.sleb128 0
+ 2775 0373 00       		.byte	0
+ 2776 0374 07       		.uleb128 0x7
+ 2777 0375 2E000000 		.4byte	.LVL38
+ 2778 0379 67020000 		.4byte	0x267
+ 2779 037d 88030000 		.4byte	0x388
+ 2780 0381 08       		.uleb128 0x8
+ 2781 0382 01       		.uleb128 0x1
+ 2782 0383 50       		.byte	0x50
+ 2783 0384 02       		.uleb128 0x2
+ 2784 0385 08       		.byte	0x8
+ 2785 0386 2B       		.byte	0x2b
+ 2786 0387 00       		.byte	0
+ 2787 0388 07       		.uleb128 0x7
+ 2788 0389 34000000 		.4byte	.LVL39
+ 2789 038d 67010000 		.4byte	0x167
+ 2790 0391 9B030000 		.4byte	0x39b
+ 2791 0395 08       		.uleb128 0x8
+ 2792 0396 01       		.uleb128 0x1
+ 2793 0397 50       		.byte	0x50
+ 2794 0398 01       		.uleb128 0x1
+ 2795 0399 30       		.byte	0x30
+ 2796 039a 00       		.byte	0
+ 2797 039b 07       		.uleb128 0x7
+ 2798 039c 3A000000 		.4byte	.LVL40
+ 2799 03a0 67010000 		.4byte	0x167
+ 2800 03a4 AF030000 		.4byte	0x3af
+ 2801 03a8 08       		.uleb128 0x8
+ 2802 03a9 01       		.uleb128 0x1
+ 2803 03aa 50       		.byte	0x50
+ 2804 03ab 02       		.uleb128 0x2
+ 2805 03ac 75       		.byte	0x75
+ 2806 03ad 00       		.sleb128 0
+ 2807 03ae 00       		.byte	0
+ 2808 03af 07       		.uleb128 0x7
+ 2809 03b0 40000000 		.4byte	.LVL41
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 58
+
+
+ 2810 03b4 67010000 		.4byte	0x167
+ 2811 03b8 C2030000 		.4byte	0x3c2
+ 2812 03bc 08       		.uleb128 0x8
+ 2813 03bd 01       		.uleb128 0x1
+ 2814 03be 50       		.byte	0x50
+ 2815 03bf 01       		.uleb128 0x1
+ 2816 03c0 30       		.byte	0x30
+ 2817 03c1 00       		.byte	0
+ 2818 03c2 07       		.uleb128 0x7
+ 2819 03c3 46000000 		.4byte	.LVL42
+ 2820 03c7 67010000 		.4byte	0x167
+ 2821 03cb D6030000 		.4byte	0x3d6
+ 2822 03cf 08       		.uleb128 0x8
+ 2823 03d0 01       		.uleb128 0x1
+ 2824 03d1 50       		.byte	0x50
+ 2825 03d2 02       		.uleb128 0x2
+ 2826 03d3 74       		.byte	0x74
+ 2827 03d4 00       		.sleb128 0
+ 2828 03d5 00       		.byte	0
+ 2829 03d6 09       		.uleb128 0x9
+ 2830 03d7 4C000000 		.4byte	.LVL43
+ 2831 03db 67020000 		.4byte	0x267
+ 2832 03df 08       		.uleb128 0x8
+ 2833 03e0 01       		.uleb128 0x1
+ 2834 03e1 50       		.byte	0x50
+ 2835 03e2 02       		.uleb128 0x2
+ 2836 03e3 08       		.byte	0x8
+ 2837 03e4 2C       		.byte	0x2c
+ 2838 03e5 00       		.byte	0
+ 2839 03e6 00       		.byte	0
+ 2840 03e7 06       		.uleb128 0x6
+ 2841 03e8 B1000000 		.4byte	.LASF30
+ 2842 03ec 01       		.byte	0x1
+ 2843 03ed B1       		.byte	0xb1
+ 2844 03ee 00000000 		.4byte	.LFB42
+ 2845 03f2 24000000 		.4byte	.LFE42-.LFB42
+ 2846 03f6 01       		.uleb128 0x1
+ 2847 03f7 9C       		.byte	0x9c
+ 2848 03f8 8A040000 		.4byte	0x48a
+ 2849 03fc 0D       		.uleb128 0xd
+ 2850 03fd 7800     		.ascii	"x\000"
+ 2851 03ff 01       		.byte	0x1
+ 2852 0400 B1       		.byte	0xb1
+ 2853 0401 97000000 		.4byte	0x97
+ 2854 0405 1B010000 		.4byte	.LLST9
+ 2855 0409 0D       		.uleb128 0xd
+ 2856 040a 7900     		.ascii	"y\000"
+ 2857 040c 01       		.byte	0x1
+ 2858 040d B1       		.byte	0xb1
+ 2859 040e 97000000 		.4byte	0x97
+ 2860 0412 3C010000 		.4byte	.LLST10
+ 2861 0416 0A       		.uleb128 0xa
+ 2862 0417 00000000 		.4byte	.LASF31
+ 2863 041b 01       		.byte	0x1
+ 2864 041c B1       		.byte	0xb1
+ 2865 041d 97000000 		.4byte	0x97
+ 2866 0421 5D010000 		.4byte	.LLST11
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 59
+
+
+ 2867 0425 07       		.uleb128 0x7
+ 2868 0426 10000000 		.4byte	.LVL48
+ 2869 042a C5020000 		.4byte	0x2c5
+ 2870 042e 4F040000 		.4byte	0x44f
+ 2871 0432 08       		.uleb128 0x8
+ 2872 0433 01       		.uleb128 0x1
+ 2873 0434 53       		.byte	0x53
+ 2874 0435 03       		.uleb128 0x3
+ 2875 0436 F3       		.byte	0xf3
+ 2876 0437 01       		.uleb128 0x1
+ 2877 0438 51       		.byte	0x51
+ 2878 0439 08       		.uleb128 0x8
+ 2879 043a 01       		.uleb128 0x1
+ 2880 043b 52       		.byte	0x52
+ 2881 043c 03       		.uleb128 0x3
+ 2882 043d F3       		.byte	0xf3
+ 2883 043e 01       		.uleb128 0x1
+ 2884 043f 50       		.byte	0x50
+ 2885 0440 08       		.uleb128 0x8
+ 2886 0441 01       		.uleb128 0x1
+ 2887 0442 51       		.byte	0x51
+ 2888 0443 03       		.uleb128 0x3
+ 2889 0444 F3       		.byte	0xf3
+ 2890 0445 01       		.uleb128 0x1
+ 2891 0446 51       		.byte	0x51
+ 2892 0447 08       		.uleb128 0x8
+ 2893 0448 01       		.uleb128 0x1
+ 2894 0449 50       		.byte	0x50
+ 2895 044a 03       		.uleb128 0x3
+ 2896 044b F3       		.byte	0xf3
+ 2897 044c 01       		.uleb128 0x1
+ 2898 044d 50       		.byte	0x50
+ 2899 044e 00       		.byte	0
+ 2900 044f 07       		.uleb128 0x7
+ 2901 0450 16000000 		.4byte	.LVL49
+ 2902 0454 67020000 		.4byte	0x267
+ 2903 0458 63040000 		.4byte	0x463
+ 2904 045c 08       		.uleb128 0x8
+ 2905 045d 01       		.uleb128 0x1
+ 2906 045e 50       		.byte	0x50
+ 2907 045f 02       		.uleb128 0x2
+ 2908 0460 08       		.byte	0x8
+ 2909 0461 2C       		.byte	0x2c
+ 2910 0462 00       		.byte	0
+ 2911 0463 07       		.uleb128 0x7
+ 2912 0464 1C000000 		.4byte	.LVL50
+ 2913 0468 67010000 		.4byte	0x167
+ 2914 046c 79040000 		.4byte	0x479
+ 2915 0470 08       		.uleb128 0x8
+ 2916 0471 01       		.uleb128 0x1
+ 2917 0472 50       		.byte	0x50
+ 2918 0473 04       		.uleb128 0x4
+ 2919 0474 74       		.byte	0x74
+ 2920 0475 00       		.sleb128 0
+ 2921 0476 38       		.byte	0x38
+ 2922 0477 25       		.byte	0x25
+ 2923 0478 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 60
+
+
+ 2924 0479 09       		.uleb128 0x9
+ 2925 047a 22000000 		.4byte	.LVL51
+ 2926 047e 67010000 		.4byte	0x167
+ 2927 0482 08       		.uleb128 0x8
+ 2928 0483 01       		.uleb128 0x1
+ 2929 0484 50       		.byte	0x50
+ 2930 0485 02       		.uleb128 0x2
+ 2931 0486 74       		.byte	0x74
+ 2932 0487 00       		.sleb128 0
+ 2933 0488 00       		.byte	0
+ 2934 0489 00       		.byte	0
+ 2935 048a 06       		.uleb128 0x6
+ 2936 048b 06000000 		.4byte	.LASF32
+ 2937 048f 01       		.byte	0x1
+ 2938 0490 C2       		.byte	0xc2
+ 2939 0491 00000000 		.4byte	.LFB43
+ 2940 0495 58000000 		.4byte	.LFE43-.LFB43
+ 2941 0499 01       		.uleb128 0x1
+ 2942 049a 9C       		.byte	0x9c
+ 2943 049b FF040000 		.4byte	0x4ff
+ 2944 049f 0A       		.uleb128 0xa
+ 2945 04a0 28030000 		.4byte	.LASF33
+ 2946 04a4 01       		.byte	0x1
+ 2947 04a5 C2       		.byte	0xc2
+ 2948 04a6 97000000 		.4byte	0x97
+ 2949 04aa 7E010000 		.4byte	.LLST12
+ 2950 04ae 0E       		.uleb128 0xe
+ 2951 04af 47020000 		.4byte	.LASF34
+ 2952 04b3 01       		.byte	0x1
+ 2953 04b4 C4       		.byte	0xc4
+ 2954 04b5 FF040000 		.4byte	0x4ff
+ 2955 04b9 02       		.uleb128 0x2
+ 2956 04ba 91       		.byte	0x91
+ 2957 04bb 76       		.sleb128 -10
+ 2958 04bc 0E       		.uleb128 0xe
+ 2959 04bd 23030000 		.4byte	.LASF35
+ 2960 04c1 01       		.byte	0x1
+ 2961 04c2 C4       		.byte	0xc4
+ 2962 04c3 FF040000 		.4byte	0x4ff
+ 2963 04c7 02       		.uleb128 0x2
+ 2964 04c8 91       		.byte	0x91
+ 2965 04c9 74       		.sleb128 -12
+ 2966 04ca 07       		.uleb128 0x7
+ 2967 04cb 12000000 		.4byte	.LVL54
+ 2968 04cf C5020000 		.4byte	0x2c5
+ 2969 04d3 EE040000 		.4byte	0x4ee
+ 2970 04d7 08       		.uleb128 0x8
+ 2971 04d8 01       		.uleb128 0x1
+ 2972 04d9 53       		.byte	0x53
+ 2973 04da 02       		.uleb128 0x2
+ 2974 04db 08       		.byte	0x8
+ 2975 04dc 7F       		.byte	0x7f
+ 2976 04dd 08       		.uleb128 0x8
+ 2977 04de 01       		.uleb128 0x1
+ 2978 04df 52       		.byte	0x52
+ 2979 04e0 02       		.uleb128 0x2
+ 2980 04e1 08       		.byte	0x8
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 61
+
+
+ 2981 04e2 7F       		.byte	0x7f
+ 2982 04e3 08       		.uleb128 0x8
+ 2983 04e4 01       		.uleb128 0x1
+ 2984 04e5 51       		.byte	0x51
+ 2985 04e6 01       		.uleb128 0x1
+ 2986 04e7 30       		.byte	0x30
+ 2987 04e8 08       		.uleb128 0x8
+ 2988 04e9 01       		.uleb128 0x1
+ 2989 04ea 50       		.byte	0x50
+ 2990 04eb 01       		.uleb128 0x1
+ 2991 04ec 30       		.byte	0x30
+ 2992 04ed 00       		.byte	0
+ 2993 04ee 09       		.uleb128 0x9
+ 2994 04ef 28000000 		.4byte	.LVL55
+ 2995 04f3 C5010000 		.4byte	0x1c5
+ 2996 04f7 08       		.uleb128 0x8
+ 2997 04f8 01       		.uleb128 0x1
+ 2998 04f9 50       		.byte	0x50
+ 2999 04fa 02       		.uleb128 0x2
+ 3000 04fb 74       		.byte	0x74
+ 3001 04fc 00       		.sleb128 0
+ 3002 04fd 00       		.byte	0
+ 3003 04fe 00       		.byte	0
+ 3004 04ff 0F       		.uleb128 0xf
+ 3005 0500 97000000 		.4byte	0x97
+ 3006 0504 06       		.uleb128 0x6
+ 3007 0505 F6000000 		.4byte	.LASF36
+ 3008 0509 01       		.byte	0x1
+ 3009 050a DA       		.byte	0xda
+ 3010 050b 00000000 		.4byte	.LFB44
+ 3011 050f 34000000 		.4byte	.LFE44-.LFB44
+ 3012 0513 01       		.uleb128 0x1
+ 3013 0514 9C       		.byte	0x9c
+ 3014 0515 AF050000 		.4byte	0x5af
+ 3015 0519 0A       		.uleb128 0xa
+ 3016 051a 62020000 		.4byte	.LASF37
+ 3017 051e 01       		.byte	0x1
+ 3018 051f DA       		.byte	0xda
+ 3019 0520 AF050000 		.4byte	0x5af
+ 3020 0524 9F010000 		.4byte	.LLST13
+ 3021 0528 0A       		.uleb128 0xa
+ 3022 0529 1E030000 		.4byte	.LASF38
+ 3023 052d 01       		.byte	0x1
+ 3024 052e DA       		.byte	0xda
+ 3025 052f A2000000 		.4byte	0xa2
+ 3026 0533 CB010000 		.4byte	.LLST14
+ 3027 0537 07       		.uleb128 0x7
+ 3028 0538 12000000 		.4byte	.LVL59
+ 3029 053c C5020000 		.4byte	0x2c5
+ 3030 0540 5B050000 		.4byte	0x55b
+ 3031 0544 08       		.uleb128 0x8
+ 3032 0545 01       		.uleb128 0x1
+ 3033 0546 53       		.byte	0x53
+ 3034 0547 02       		.uleb128 0x2
+ 3035 0548 08       		.byte	0x8
+ 3036 0549 7F       		.byte	0x7f
+ 3037 054a 08       		.uleb128 0x8
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 62
+
+
+ 3038 054b 01       		.uleb128 0x1
+ 3039 054c 52       		.byte	0x52
+ 3040 054d 02       		.uleb128 0x2
+ 3041 054e 08       		.byte	0x8
+ 3042 054f 7F       		.byte	0x7f
+ 3043 0550 08       		.uleb128 0x8
+ 3044 0551 01       		.uleb128 0x1
+ 3045 0552 51       		.byte	0x51
+ 3046 0553 01       		.uleb128 0x1
+ 3047 0554 30       		.byte	0x30
+ 3048 0555 08       		.uleb128 0x8
+ 3049 0556 01       		.uleb128 0x1
+ 3050 0557 50       		.byte	0x50
+ 3051 0558 01       		.uleb128 0x1
+ 3052 0559 30       		.byte	0x30
+ 3053 055a 00       		.byte	0
+ 3054 055b 07       		.uleb128 0x7
+ 3055 055c 18000000 		.4byte	.LVL60
+ 3056 0560 67020000 		.4byte	0x267
+ 3057 0564 6F050000 		.4byte	0x56f
+ 3058 0568 08       		.uleb128 0x8
+ 3059 0569 01       		.uleb128 0x1
+ 3060 056a 50       		.byte	0x50
+ 3061 056b 02       		.uleb128 0x2
+ 3062 056c 08       		.byte	0x8
+ 3063 056d 2C       		.byte	0x2c
+ 3064 056e 00       		.byte	0
+ 3065 056f 07       		.uleb128 0x7
+ 3066 0570 1E000000 		.4byte	.LVL61
+ 3067 0574 520A0000 		.4byte	0xa52
+ 3068 0578 82050000 		.4byte	0x582
+ 3069 057c 08       		.uleb128 0x8
+ 3070 057d 01       		.uleb128 0x1
+ 3071 057e 50       		.byte	0x50
+ 3072 057f 01       		.uleb128 0x1
+ 3073 0580 31       		.byte	0x31
+ 3074 0581 00       		.byte	0
+ 3075 0582 07       		.uleb128 0x7
+ 3076 0583 26000000 		.4byte	.LVL62
+ 3077 0587 890A0000 		.4byte	0xa89
+ 3078 058b 9C050000 		.4byte	0x59c
+ 3079 058f 08       		.uleb128 0x8
+ 3080 0590 01       		.uleb128 0x1
+ 3081 0591 51       		.byte	0x51
+ 3082 0592 02       		.uleb128 0x2
+ 3083 0593 74       		.byte	0x74
+ 3084 0594 00       		.sleb128 0
+ 3085 0595 08       		.uleb128 0x8
+ 3086 0596 01       		.uleb128 0x1
+ 3087 0597 50       		.byte	0x50
+ 3088 0598 02       		.uleb128 0x2
+ 3089 0599 75       		.byte	0x75
+ 3090 059a 00       		.sleb128 0
+ 3091 059b 00       		.byte	0
+ 3092 059c 0B       		.uleb128 0xb
+ 3093 059d 2A000000 		.4byte	.LVL63
+ 3094 05a1 750A0000 		.4byte	0xa75
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 63
+
+
+ 3095 05a5 0B       		.uleb128 0xb
+ 3096 05a6 32000000 		.4byte	.LVL64
+ 3097 05aa 810A0000 		.4byte	0xa81
+ 3098 05ae 00       		.byte	0
+ 3099 05af 10       		.uleb128 0x10
+ 3100 05b0 04       		.byte	0x4
+ 3101 05b1 B5050000 		.4byte	0x5b5
+ 3102 05b5 11       		.uleb128 0x11
+ 3103 05b6 8C000000 		.4byte	0x8c
+ 3104 05ba 06       		.uleb128 0x6
+ 3105 05bb 3E010000 		.4byte	.LASF39
+ 3106 05bf 01       		.byte	0x1
+ 3107 05c0 F2       		.byte	0xf2
+ 3108 05c1 00000000 		.4byte	.LFB45
+ 3109 05c5 68000000 		.4byte	.LFE45-.LFB45
+ 3110 05c9 01       		.uleb128 0x1
+ 3111 05ca 9C       		.byte	0x9c
+ 3112 05cb 89060000 		.4byte	0x689
+ 3113 05cf 0D       		.uleb128 0xd
+ 3114 05d0 7800     		.ascii	"x\000"
+ 3115 05d2 01       		.byte	0x1
+ 3116 05d3 F2       		.byte	0xf2
+ 3117 05d4 8C000000 		.4byte	0x8c
+ 3118 05d8 F7010000 		.4byte	.LLST15
+ 3119 05dc 0D       		.uleb128 0xd
+ 3120 05dd 7900     		.ascii	"y\000"
+ 3121 05df 01       		.byte	0x1
+ 3122 05e0 F2       		.byte	0xf2
+ 3123 05e1 8C000000 		.4byte	0x8c
+ 3124 05e5 18020000 		.4byte	.LLST16
+ 3125 05e9 0D       		.uleb128 0xd
+ 3126 05ea 6300     		.ascii	"c\000"
+ 3127 05ec 01       		.byte	0x1
+ 3128 05ed F2       		.byte	0xf2
+ 3129 05ee D3000000 		.4byte	0xd3
+ 3130 05f2 39020000 		.4byte	.LLST17
+ 3131 05f6 0A       		.uleb128 0xa
+ 3132 05f7 14000000 		.4byte	.LASF40
+ 3133 05fb 01       		.byte	0x1
+ 3134 05fc F2       		.byte	0xf2
+ 3135 05fd 97000000 		.4byte	0x97
+ 3136 0601 5A020000 		.4byte	.LLST18
+ 3137 0605 0A       		.uleb128 0xa
+ 3138 0606 14020000 		.4byte	.LASF41
+ 3139 060a 01       		.byte	0x1
+ 3140 060b F2       		.byte	0xf2
+ 3141 060c 97000000 		.4byte	0x97
+ 3142 0610 7B020000 		.4byte	.LLST19
+ 3143 0614 12       		.uleb128 0x12
+ 3144 0615 6900     		.ascii	"i\000"
+ 3145 0617 01       		.byte	0x1
+ 3146 0618 F4       		.byte	0xf4
+ 3147 0619 85000000 		.4byte	0x85
+ 3148 061d A7020000 		.4byte	.LLST20
+ 3149 0621 12       		.uleb128 0x12
+ 3150 0622 6A00     		.ascii	"j\000"
+ 3151 0624 01       		.byte	0x1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 64
+
+
+ 3152 0625 F4       		.byte	0xf4
+ 3153 0626 85000000 		.4byte	0x85
+ 3154 062a C6020000 		.4byte	.LLST21
+ 3155 062e 13       		.uleb128 0x13
+ 3156 062f 28000000 		.4byte	.LBB2
+ 3157 0633 2E000000 		.4byte	.LBE2-.LBB2
+ 3158 0637 6F060000 		.4byte	0x66f
+ 3159 063b 12       		.uleb128 0x12
+ 3160 063c 6D00     		.ascii	"m\000"
+ 3161 063e 01       		.byte	0x1
+ 3162 063f FB       		.byte	0xfb
+ 3163 0640 37000000 		.4byte	0x37
+ 3164 0644 E5020000 		.4byte	.LLST22
+ 3165 0648 07       		.uleb128 0x7
+ 3166 0649 44000000 		.4byte	.LVL76
+ 3167 064d C5010000 		.4byte	0x1c5
+ 3168 0651 5E060000 		.4byte	0x65e
+ 3169 0655 08       		.uleb128 0x8
+ 3170 0656 01       		.uleb128 0x1
+ 3171 0657 50       		.byte	0x50
+ 3172 0658 04       		.uleb128 0x4
+ 3173 0659 91       		.byte	0x91
+ 3174 065a 64       		.sleb128 -28
+ 3175 065b 94       		.byte	0x94
+ 3176 065c 02       		.byte	0x2
+ 3177 065d 00       		.byte	0
+ 3178 065e 09       		.uleb128 0x9
+ 3179 065f 4C000000 		.4byte	.LVL77
+ 3180 0663 C5010000 		.4byte	0x1c5
+ 3181 0667 08       		.uleb128 0x8
+ 3182 0668 01       		.uleb128 0x1
+ 3183 0669 50       		.byte	0x50
+ 3184 066a 02       		.uleb128 0x2
+ 3185 066b 75       		.byte	0x75
+ 3186 066c 00       		.sleb128 0
+ 3187 066d 00       		.byte	0
+ 3188 066e 00       		.byte	0
+ 3189 066f 0B       		.uleb128 0xb
+ 3190 0670 1E000000 		.4byte	.LVL71
+ 3191 0674 C5020000 		.4byte	0x2c5
+ 3192 0678 09       		.uleb128 0x9
+ 3193 0679 24000000 		.4byte	.LVL72
+ 3194 067d 67020000 		.4byte	0x267
+ 3195 0681 08       		.uleb128 0x8
+ 3196 0682 01       		.uleb128 0x1
+ 3197 0683 50       		.byte	0x50
+ 3198 0684 02       		.uleb128 0x2
+ 3199 0685 08       		.byte	0x8
+ 3200 0686 2C       		.byte	0x2c
+ 3201 0687 00       		.byte	0
+ 3202 0688 00       		.byte	0
+ 3203 0689 14       		.uleb128 0x14
+ 3204 068a BF000000 		.4byte	.LASF42
+ 3205 068e 01       		.byte	0x1
+ 3206 068f 5A01     		.2byte	0x15a
+ 3207 0691 00000000 		.4byte	.LFB46
+ 3208 0695 34000000 		.4byte	.LFE46-.LFB46
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 65
+
+
+ 3209 0699 01       		.uleb128 0x1
+ 3210 069a 9C       		.byte	0x9c
+ 3211 069b 28070000 		.4byte	0x728
+ 3212 069f 15       		.uleb128 0x15
+ 3213 06a0 7800     		.ascii	"x\000"
+ 3214 06a2 01       		.byte	0x1
+ 3215 06a3 5A01     		.2byte	0x15a
+ 3216 06a5 8C000000 		.4byte	0x8c
+ 3217 06a9 03030000 		.4byte	.LLST23
+ 3218 06ad 15       		.uleb128 0x15
+ 3219 06ae 7900     		.ascii	"y\000"
+ 3220 06b0 01       		.byte	0x1
+ 3221 06b1 5A01     		.2byte	0x15a
+ 3222 06b3 8C000000 		.4byte	0x8c
+ 3223 06b7 24030000 		.4byte	.LLST24
+ 3224 06bb 16       		.uleb128 0x16
+ 3225 06bc 7C000000 		.4byte	.LASF43
+ 3226 06c0 01       		.byte	0x1
+ 3227 06c1 5A01     		.2byte	0x15a
+ 3228 06c3 28070000 		.4byte	0x728
+ 3229 06c7 45030000 		.4byte	.LLST25
+ 3230 06cb 16       		.uleb128 0x16
+ 3231 06cc 14000000 		.4byte	.LASF40
+ 3232 06d0 01       		.byte	0x1
+ 3233 06d1 5A01     		.2byte	0x15a
+ 3234 06d3 97000000 		.4byte	0x97
+ 3235 06d7 63030000 		.4byte	.LLST26
+ 3236 06db 16       		.uleb128 0x16
+ 3237 06dc 14020000 		.4byte	.LASF41
+ 3238 06e0 01       		.byte	0x1
+ 3239 06e1 5A01     		.2byte	0x15a
+ 3240 06e3 97000000 		.4byte	0x97
+ 3241 06e7 84030000 		.4byte	.LLST27
+ 3242 06eb 17       		.uleb128 0x17
+ 3243 06ec 75636C00 		.ascii	"ucl\000"
+ 3244 06f0 01       		.byte	0x1
+ 3245 06f1 5C01     		.2byte	0x15c
+ 3246 06f3 37000000 		.4byte	0x37
+ 3247 06f7 B0030000 		.4byte	.LLST28
+ 3248 06fb 09       		.uleb128 0x9
+ 3249 06fc 24000000 		.4byte	.LVL87
+ 3250 0700 BA050000 		.4byte	0x5ba
+ 3251 0704 08       		.uleb128 0x8
+ 3252 0705 01       		.uleb128 0x1
+ 3253 0706 53       		.byte	0x53
+ 3254 0707 04       		.uleb128 0x4
+ 3255 0708 91       		.byte	0x91
+ 3256 0709 64       		.sleb128 -28
+ 3257 070a 94       		.byte	0x94
+ 3258 070b 02       		.byte	0x2
+ 3259 070c 08       		.uleb128 0x8
+ 3260 070d 01       		.uleb128 0x1
+ 3261 070e 51       		.byte	0x51
+ 3262 070f 04       		.uleb128 0x4
+ 3263 0710 91       		.byte	0x91
+ 3264 0711 60       		.sleb128 -32
+ 3265 0712 94       		.byte	0x94
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 66
+
+
+ 3266 0713 01       		.byte	0x1
+ 3267 0714 08       		.uleb128 0x8
+ 3268 0715 01       		.uleb128 0x1
+ 3269 0716 50       		.byte	0x50
+ 3270 0717 07       		.uleb128 0x7
+ 3271 0718 76       		.byte	0x76
+ 3272 0719 00       		.sleb128 0
+ 3273 071a 33       		.byte	0x33
+ 3274 071b 24       		.byte	0x24
+ 3275 071c 75       		.byte	0x75
+ 3276 071d 00       		.sleb128 0
+ 3277 071e 22       		.byte	0x22
+ 3278 071f 08       		.uleb128 0x8
+ 3279 0720 02       		.uleb128 0x2
+ 3280 0721 7D       		.byte	0x7d
+ 3281 0722 00       		.sleb128 0
+ 3282 0723 02       		.uleb128 0x2
+ 3283 0724 74       		.byte	0x74
+ 3284 0725 00       		.sleb128 0
+ 3285 0726 00       		.byte	0
+ 3286 0727 00       		.byte	0
+ 3287 0728 10       		.uleb128 0x10
+ 3288 0729 04       		.byte	0x4
+ 3289 072a 8C000000 		.4byte	0x8c
+ 3290 072e 14       		.uleb128 0x14
+ 3291 072f D1000000 		.4byte	.LASF44
+ 3292 0733 01       		.byte	0x1
+ 3293 0734 6701     		.2byte	0x167
+ 3294 0736 00000000 		.4byte	.LFB47
+ 3295 073a E0000000 		.4byte	.LFE47-.LFB47
+ 3296 073e 01       		.uleb128 0x1
+ 3297 073f 9C       		.byte	0x9c
+ 3298 0740 090A0000 		.4byte	0xa09
+ 3299 0744 0B       		.uleb128 0xb
+ 3300 0745 06000000 		.4byte	.LVL93
+ 3301 0749 E1000000 		.4byte	0xe1
+ 3302 074d 07       		.uleb128 0x7
+ 3303 074e 0C000000 		.4byte	.LVL94
+ 3304 0752 67020000 		.4byte	0x267
+ 3305 0756 60070000 		.4byte	0x760
+ 3306 075a 08       		.uleb128 0x8
+ 3307 075b 01       		.uleb128 0x1
+ 3308 075c 50       		.byte	0x50
+ 3309 075d 01       		.uleb128 0x1
+ 3310 075e 41       		.byte	0x41
+ 3311 075f 00       		.byte	0
+ 3312 0760 07       		.uleb128 0x7
+ 3313 0761 12000000 		.4byte	.LVL95
+ 3314 0765 410A0000 		.4byte	0xa41
+ 3315 0769 74070000 		.4byte	0x774
+ 3316 076d 08       		.uleb128 0x8
+ 3317 076e 01       		.uleb128 0x1
+ 3318 076f 50       		.byte	0x50
+ 3319 0770 02       		.uleb128 0x2
+ 3320 0771 08       		.byte	0x8
+ 3321 0772 64       		.byte	0x64
+ 3322 0773 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 67
+
+
+ 3323 0774 07       		.uleb128 0x7
+ 3324 0775 18000000 		.4byte	.LVL96
+ 3325 0779 67020000 		.4byte	0x267
+ 3326 077d 88070000 		.4byte	0x788
+ 3327 0781 08       		.uleb128 0x8
+ 3328 0782 01       		.uleb128 0x1
+ 3329 0783 50       		.byte	0x50
+ 3330 0784 02       		.uleb128 0x2
+ 3331 0785 08       		.byte	0x8
+ 3332 0786 26       		.byte	0x26
+ 3333 0787 00       		.byte	0
+ 3334 0788 07       		.uleb128 0x7
+ 3335 0789 1E000000 		.4byte	.LVL97
+ 3336 078d 67010000 		.4byte	0x167
+ 3337 0791 9B070000 		.4byte	0x79b
+ 3338 0795 08       		.uleb128 0x8
+ 3339 0796 01       		.uleb128 0x1
+ 3340 0797 50       		.byte	0x50
+ 3341 0798 01       		.uleb128 0x1
+ 3342 0799 34       		.byte	0x34
+ 3343 079a 00       		.byte	0
+ 3344 079b 07       		.uleb128 0x7
+ 3345 079c 24000000 		.4byte	.LVL98
+ 3346 07a0 67010000 		.4byte	0x167
+ 3347 07a4 AE070000 		.4byte	0x7ae
+ 3348 07a8 08       		.uleb128 0x8
+ 3349 07a9 01       		.uleb128 0x1
+ 3350 07aa 50       		.byte	0x50
+ 3351 07ab 01       		.uleb128 0x1
+ 3352 07ac 43       		.byte	0x43
+ 3353 07ad 00       		.byte	0
+ 3354 07ae 07       		.uleb128 0x7
+ 3355 07af 2A000000 		.4byte	.LVL99
+ 3356 07b3 67020000 		.4byte	0x267
+ 3357 07b7 C2070000 		.4byte	0x7c2
+ 3358 07bb 08       		.uleb128 0x8
+ 3359 07bc 01       		.uleb128 0x1
+ 3360 07bd 50       		.byte	0x50
+ 3361 07be 02       		.uleb128 0x2
+ 3362 07bf 09       		.byte	0x9
+ 3363 07c0 C0       		.byte	0xc0
+ 3364 07c1 00       		.byte	0
+ 3365 07c2 07       		.uleb128 0x7
+ 3366 07c3 30000000 		.4byte	.LVL100
+ 3367 07c7 67010000 		.4byte	0x167
+ 3368 07cb D5070000 		.4byte	0x7d5
+ 3369 07cf 08       		.uleb128 0x8
+ 3370 07d0 01       		.uleb128 0x1
+ 3371 07d1 50       		.byte	0x50
+ 3372 07d2 01       		.uleb128 0x1
+ 3373 07d3 3A       		.byte	0x3a
+ 3374 07d4 00       		.byte	0
+ 3375 07d5 07       		.uleb128 0x7
+ 3376 07d6 36000000 		.4byte	.LVL101
+ 3377 07da 67010000 		.4byte	0x167
+ 3378 07de E8070000 		.4byte	0x7e8
+ 3379 07e2 08       		.uleb128 0x8
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 68
+
+
+ 3380 07e3 01       		.uleb128 0x1
+ 3381 07e4 50       		.byte	0x50
+ 3382 07e5 01       		.uleb128 0x1
+ 3383 07e6 32       		.byte	0x32
+ 3384 07e7 00       		.byte	0
+ 3385 07e8 07       		.uleb128 0x7
+ 3386 07e9 3C000000 		.4byte	.LVL102
+ 3387 07ed 67020000 		.4byte	0x267
+ 3388 07f1 FC070000 		.4byte	0x7fc
+ 3389 07f5 08       		.uleb128 0x8
+ 3390 07f6 01       		.uleb128 0x1
+ 3391 07f7 50       		.byte	0x50
+ 3392 07f8 02       		.uleb128 0x2
+ 3393 07f9 09       		.byte	0x9
+ 3394 07fa C1       		.byte	0xc1
+ 3395 07fb 00       		.byte	0
+ 3396 07fc 07       		.uleb128 0x7
+ 3397 07fd 42000000 		.4byte	.LVL103
+ 3398 0801 67010000 		.4byte	0x167
+ 3399 0805 0F080000 		.4byte	0x80f
+ 3400 0809 08       		.uleb128 0x8
+ 3401 080a 01       		.uleb128 0x1
+ 3402 080b 50       		.byte	0x50
+ 3403 080c 01       		.uleb128 0x1
+ 3404 080d 32       		.byte	0x32
+ 3405 080e 00       		.byte	0
+ 3406 080f 07       		.uleb128 0x7
+ 3407 0810 48000000 		.4byte	.LVL104
+ 3408 0814 67020000 		.4byte	0x267
+ 3409 0818 23080000 		.4byte	0x823
+ 3410 081c 08       		.uleb128 0x8
+ 3411 081d 01       		.uleb128 0x1
+ 3412 081e 50       		.byte	0x50
+ 3413 081f 02       		.uleb128 0x2
+ 3414 0820 09       		.byte	0x9
+ 3415 0821 C5       		.byte	0xc5
+ 3416 0822 00       		.byte	0
+ 3417 0823 07       		.uleb128 0x7
+ 3418 0824 4E000000 		.4byte	.LVL105
+ 3419 0828 67010000 		.4byte	0x167
+ 3420 082c 37080000 		.4byte	0x837
+ 3421 0830 08       		.uleb128 0x8
+ 3422 0831 01       		.uleb128 0x1
+ 3423 0832 50       		.byte	0x50
+ 3424 0833 02       		.uleb128 0x2
+ 3425 0834 08       		.byte	0x8
+ 3426 0835 50       		.byte	0x50
+ 3427 0836 00       		.byte	0
+ 3428 0837 07       		.uleb128 0x7
+ 3429 0838 54000000 		.4byte	.LVL106
+ 3430 083c 67010000 		.4byte	0x167
+ 3431 0840 4B080000 		.4byte	0x84b
+ 3432 0844 08       		.uleb128 0x8
+ 3433 0845 01       		.uleb128 0x1
+ 3434 0846 50       		.byte	0x50
+ 3435 0847 02       		.uleb128 0x2
+ 3436 0848 09       		.byte	0x9
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 69
+
+
+ 3437 0849 99       		.byte	0x99
+ 3438 084a 00       		.byte	0
+ 3439 084b 07       		.uleb128 0x7
+ 3440 084c 5A000000 		.4byte	.LVL107
+ 3441 0850 67020000 		.4byte	0x267
+ 3442 0854 5F080000 		.4byte	0x85f
+ 3443 0858 08       		.uleb128 0x8
+ 3444 0859 01       		.uleb128 0x1
+ 3445 085a 50       		.byte	0x50
+ 3446 085b 02       		.uleb128 0x2
+ 3447 085c 09       		.byte	0x9
+ 3448 085d C7       		.byte	0xc7
+ 3449 085e 00       		.byte	0
+ 3450 085f 07       		.uleb128 0x7
+ 3451 0860 60000000 		.4byte	.LVL108
+ 3452 0864 67010000 		.4byte	0x167
+ 3453 0868 72080000 		.4byte	0x872
+ 3454 086c 08       		.uleb128 0x8
+ 3455 086d 01       		.uleb128 0x1
+ 3456 086e 50       		.byte	0x50
+ 3457 086f 01       		.uleb128 0x1
+ 3458 0870 30       		.byte	0x30
+ 3459 0871 00       		.byte	0
+ 3460 0872 07       		.uleb128 0x7
+ 3461 0873 66000000 		.4byte	.LVL109
+ 3462 0877 67020000 		.4byte	0x267
+ 3463 087b 86080000 		.4byte	0x886
+ 3464 087f 08       		.uleb128 0x8
+ 3465 0880 01       		.uleb128 0x1
+ 3466 0881 50       		.byte	0x50
+ 3467 0882 02       		.uleb128 0x2
+ 3468 0883 08       		.byte	0x8
+ 3469 0884 38       		.byte	0x38
+ 3470 0885 00       		.byte	0
+ 3471 0886 07       		.uleb128 0x7
+ 3472 0887 6C000000 		.4byte	.LVL110
+ 3473 088b 67020000 		.4byte	0x267
+ 3474 088f 9A080000 		.4byte	0x89a
+ 3475 0893 08       		.uleb128 0x8
+ 3476 0894 01       		.uleb128 0x1
+ 3477 0895 50       		.byte	0x50
+ 3478 0896 02       		.uleb128 0x2
+ 3479 0897 08       		.byte	0x8
+ 3480 0898 3A       		.byte	0x3a
+ 3481 0899 00       		.byte	0
+ 3482 089a 07       		.uleb128 0x7
+ 3483 089b 72000000 		.4byte	.LVL111
+ 3484 089f 67010000 		.4byte	0x167
+ 3485 08a3 AD080000 		.4byte	0x8ad
+ 3486 08a7 08       		.uleb128 0x8
+ 3487 08a8 01       		.uleb128 0x1
+ 3488 08a9 50       		.byte	0x50
+ 3489 08aa 01       		.uleb128 0x1
+ 3490 08ab 35       		.byte	0x35
+ 3491 08ac 00       		.byte	0
+ 3492 08ad 07       		.uleb128 0x7
+ 3493 08ae 78000000 		.4byte	.LVL112
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 70
+
+
+ 3494 08b2 67020000 		.4byte	0x267
+ 3495 08b6 C1080000 		.4byte	0x8c1
+ 3496 08ba 08       		.uleb128 0x8
+ 3497 08bb 01       		.uleb128 0x1
+ 3498 08bc 50       		.byte	0x50
+ 3499 08bd 02       		.uleb128 0x2
+ 3500 08be 09       		.byte	0x9
+ 3501 08bf B1       		.byte	0xb1
+ 3502 08c0 00       		.byte	0
+ 3503 08c1 07       		.uleb128 0x7
+ 3504 08c2 7E000000 		.4byte	.LVL113
+ 3505 08c6 67010000 		.4byte	0x167
+ 3506 08ca D4080000 		.4byte	0x8d4
+ 3507 08ce 08       		.uleb128 0x8
+ 3508 08cf 01       		.uleb128 0x1
+ 3509 08d0 50       		.byte	0x50
+ 3510 08d1 01       		.uleb128 0x1
+ 3511 08d2 38       		.byte	0x38
+ 3512 08d3 00       		.byte	0
+ 3513 08d4 07       		.uleb128 0x7
+ 3514 08d5 84000000 		.4byte	.LVL114
+ 3515 08d9 67010000 		.4byte	0x167
+ 3516 08dd E7080000 		.4byte	0x8e7
+ 3517 08e1 08       		.uleb128 0x8
+ 3518 08e2 01       		.uleb128 0x1
+ 3519 08e3 50       		.byte	0x50
+ 3520 08e4 01       		.uleb128 0x1
+ 3521 08e5 32       		.byte	0x32
+ 3522 08e6 00       		.byte	0
+ 3523 08e7 07       		.uleb128 0x7
+ 3524 08e8 8A000000 		.4byte	.LVL115
+ 3525 08ec 67020000 		.4byte	0x267
+ 3526 08f0 FB080000 		.4byte	0x8fb
+ 3527 08f4 08       		.uleb128 0x8
+ 3528 08f5 01       		.uleb128 0x1
+ 3529 08f6 50       		.byte	0x50
+ 3530 08f7 02       		.uleb128 0x2
+ 3531 08f8 08       		.byte	0x8
+ 3532 08f9 2A       		.byte	0x2a
+ 3533 08fa 00       		.byte	0
+ 3534 08fb 07       		.uleb128 0x7
+ 3535 08fc 90000000 		.4byte	.LVL116
+ 3536 0900 67010000 		.4byte	0x167
+ 3537 0904 0E090000 		.4byte	0x90e
+ 3538 0908 08       		.uleb128 0x8
+ 3539 0909 01       		.uleb128 0x1
+ 3540 090a 50       		.byte	0x50
+ 3541 090b 01       		.uleb128 0x1
+ 3542 090c 30       		.byte	0x30
+ 3543 090d 00       		.byte	0
+ 3544 090e 07       		.uleb128 0x7
+ 3545 090f 96000000 		.4byte	.LVL117
+ 3546 0913 67010000 		.4byte	0x167
+ 3547 0917 21090000 		.4byte	0x921
+ 3548 091b 08       		.uleb128 0x8
+ 3549 091c 01       		.uleb128 0x1
+ 3550 091d 50       		.byte	0x50
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 71
+
+
+ 3551 091e 01       		.uleb128 0x1
+ 3552 091f 30       		.byte	0x30
+ 3553 0920 00       		.byte	0
+ 3554 0921 07       		.uleb128 0x7
+ 3555 0922 9C000000 		.4byte	.LVL118
+ 3556 0926 67010000 		.4byte	0x167
+ 3557 092a 34090000 		.4byte	0x934
+ 3558 092e 08       		.uleb128 0x8
+ 3559 092f 01       		.uleb128 0x1
+ 3560 0930 50       		.byte	0x50
+ 3561 0931 01       		.uleb128 0x1
+ 3562 0932 30       		.byte	0x30
+ 3563 0933 00       		.byte	0
+ 3564 0934 07       		.uleb128 0x7
+ 3565 0935 A2000000 		.4byte	.LVL119
+ 3566 0939 67010000 		.4byte	0x167
+ 3567 093d 48090000 		.4byte	0x948
+ 3568 0941 08       		.uleb128 0x8
+ 3569 0942 01       		.uleb128 0x1
+ 3570 0943 50       		.byte	0x50
+ 3571 0944 02       		.uleb128 0x2
+ 3572 0945 08       		.byte	0x8
+ 3573 0946 7F       		.byte	0x7f
+ 3574 0947 00       		.byte	0
+ 3575 0948 07       		.uleb128 0x7
+ 3576 0949 A8000000 		.4byte	.LVL120
+ 3577 094d 67020000 		.4byte	0x267
+ 3578 0951 5C090000 		.4byte	0x95c
+ 3579 0955 08       		.uleb128 0x8
+ 3580 0956 01       		.uleb128 0x1
+ 3581 0957 50       		.byte	0x50
+ 3582 0958 02       		.uleb128 0x2
+ 3583 0959 08       		.byte	0x8
+ 3584 095a 2B       		.byte	0x2b
+ 3585 095b 00       		.byte	0
+ 3586 095c 07       		.uleb128 0x7
+ 3587 095d AE000000 		.4byte	.LVL121
+ 3588 0961 67010000 		.4byte	0x167
+ 3589 0965 6F090000 		.4byte	0x96f
+ 3590 0969 08       		.uleb128 0x8
+ 3591 096a 01       		.uleb128 0x1
+ 3592 096b 50       		.byte	0x50
+ 3593 096c 01       		.uleb128 0x1
+ 3594 096d 30       		.byte	0x30
+ 3595 096e 00       		.byte	0
+ 3596 096f 07       		.uleb128 0x7
+ 3597 0970 B4000000 		.4byte	.LVL122
+ 3598 0974 67010000 		.4byte	0x167
+ 3599 0978 82090000 		.4byte	0x982
+ 3600 097c 08       		.uleb128 0x8
+ 3601 097d 01       		.uleb128 0x1
+ 3602 097e 50       		.byte	0x50
+ 3603 097f 01       		.uleb128 0x1
+ 3604 0980 30       		.byte	0x30
+ 3605 0981 00       		.byte	0
+ 3606 0982 07       		.uleb128 0x7
+ 3607 0983 BA000000 		.4byte	.LVL123
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 72
+
+
+ 3608 0987 67010000 		.4byte	0x167
+ 3609 098b 95090000 		.4byte	0x995
+ 3610 098f 08       		.uleb128 0x8
+ 3611 0990 01       		.uleb128 0x1
+ 3612 0991 50       		.byte	0x50
+ 3613 0992 01       		.uleb128 0x1
+ 3614 0993 30       		.byte	0x30
+ 3615 0994 00       		.byte	0
+ 3616 0995 07       		.uleb128 0x7
+ 3617 0996 C0000000 		.4byte	.LVL124
+ 3618 099a 67010000 		.4byte	0x167
+ 3619 099e A9090000 		.4byte	0x9a9
+ 3620 09a2 08       		.uleb128 0x8
+ 3621 09a3 01       		.uleb128 0x1
+ 3622 09a4 50       		.byte	0x50
+ 3623 09a5 02       		.uleb128 0x2
+ 3624 09a6 08       		.byte	0x8
+ 3625 09a7 7F       		.byte	0x7f
+ 3626 09a8 00       		.byte	0
+ 3627 09a9 07       		.uleb128 0x7
+ 3628 09aa C6000000 		.4byte	.LVL125
+ 3629 09ae 67020000 		.4byte	0x267
+ 3630 09b2 BD090000 		.4byte	0x9bd
+ 3631 09b6 08       		.uleb128 0x8
+ 3632 09b7 01       		.uleb128 0x1
+ 3633 09b8 50       		.byte	0x50
+ 3634 09b9 02       		.uleb128 0x2
+ 3635 09ba 08       		.byte	0x8
+ 3636 09bb 36       		.byte	0x36
+ 3637 09bc 00       		.byte	0
+ 3638 09bd 07       		.uleb128 0x7
+ 3639 09be CC000000 		.4byte	.LVL126
+ 3640 09c2 67010000 		.4byte	0x167
+ 3641 09c6 D0090000 		.4byte	0x9d0
+ 3642 09ca 08       		.uleb128 0x8
+ 3643 09cb 01       		.uleb128 0x1
+ 3644 09cc 50       		.byte	0x50
+ 3645 09cd 01       		.uleb128 0x1
+ 3646 09ce 30       		.byte	0x30
+ 3647 09cf 00       		.byte	0
+ 3648 09d0 07       		.uleb128 0x7
+ 3649 09d1 D2000000 		.4byte	.LVL127
+ 3650 09d5 67020000 		.4byte	0x267
+ 3651 09d9 E4090000 		.4byte	0x9e4
+ 3652 09dd 08       		.uleb128 0x8
+ 3653 09de 01       		.uleb128 0x1
+ 3654 09df 50       		.byte	0x50
+ 3655 09e0 02       		.uleb128 0x2
+ 3656 09e1 08       		.byte	0x8
+ 3657 09e2 29       		.byte	0x29
+ 3658 09e3 00       		.byte	0
+ 3659 09e4 07       		.uleb128 0x7
+ 3660 09e5 D8000000 		.4byte	.LVL128
+ 3661 09e9 67020000 		.4byte	0x267
+ 3662 09ed F8090000 		.4byte	0x9f8
+ 3663 09f1 08       		.uleb128 0x8
+ 3664 09f2 01       		.uleb128 0x1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 73
+
+
+ 3665 09f3 50       		.byte	0x50
+ 3666 09f4 02       		.uleb128 0x2
+ 3667 09f5 08       		.byte	0x8
+ 3668 09f6 20       		.byte	0x20
+ 3669 09f7 00       		.byte	0
+ 3670 09f8 09       		.uleb128 0x9
+ 3671 09f9 DE000000 		.4byte	.LVL129
+ 3672 09fd 67020000 		.4byte	0x267
+ 3673 0a01 08       		.uleb128 0x8
+ 3674 0a02 01       		.uleb128 0x1
+ 3675 0a03 50       		.byte	0x50
+ 3676 0a04 02       		.uleb128 0x2
+ 3677 0a05 08       		.byte	0x8
+ 3678 0a06 2C       		.byte	0x2c
+ 3679 0a07 00       		.byte	0
+ 3680 0a08 00       		.byte	0
+ 3681 0a09 18       		.uleb128 0x18
+ 3682 0a0a 37000000 		.4byte	0x37
+ 3683 0a0e 1A0A0000 		.4byte	0xa1a
+ 3684 0a12 19       		.uleb128 0x19
+ 3685 0a13 DA000000 		.4byte	0xda
+ 3686 0a17 FF05     		.2byte	0x5ff
+ 3687 0a19 00       		.byte	0
+ 3688 0a1a 0E       		.uleb128 0xe
+ 3689 0a1b 07010000 		.4byte	.LASF45
+ 3690 0a1f 05       		.byte	0x5
+ 3691 0a20 0D       		.byte	0xd
+ 3692 0a21 2B0A0000 		.4byte	0xa2b
+ 3693 0a25 05       		.uleb128 0x5
+ 3694 0a26 03       		.byte	0x3
+ 3695 0a27 00000000 		.4byte	Font8x16
+ 3696 0a2b 11       		.uleb128 0x11
+ 3697 0a2c 090A0000 		.4byte	0xa09
+ 3698 0a30 1A       		.uleb128 0x1a
+ 3699 0a31 4A030000 		.4byte	.LASF46
+ 3700 0a35 06       		.byte	0x6
+ 3701 0a36 33       		.byte	0x33
+ 3702 0a37 410A0000 		.4byte	0xa41
+ 3703 0a3b 1B       		.uleb128 0x1b
+ 3704 0a3c AD000000 		.4byte	0xad
+ 3705 0a40 00       		.byte	0
+ 3706 0a41 1A       		.uleb128 0x1a
+ 3707 0a42 3A030000 		.4byte	.LASF47
+ 3708 0a46 07       		.byte	0x7
+ 3709 0a47 D9       		.byte	0xd9
+ 3710 0a48 520A0000 		.4byte	0xa52
+ 3711 0a4c 1B       		.uleb128 0x1b
+ 3712 0a4d B9000000 		.4byte	0xb9
+ 3713 0a51 00       		.byte	0
+ 3714 0a52 1A       		.uleb128 0x1a
+ 3715 0a53 80020000 		.4byte	.LASF48
+ 3716 0a57 08       		.byte	0x8
+ 3717 0a58 33       		.byte	0x33
+ 3718 0a59 630A0000 		.4byte	0xa63
+ 3719 0a5d 1B       		.uleb128 0x1b
+ 3720 0a5e AD000000 		.4byte	0xad
+ 3721 0a62 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 74
+
+
+ 3722 0a63 1C       		.uleb128 0x1c
+ 3723 0a64 1B000000 		.4byte	.LASF49
+ 3724 0a68 09       		.byte	0x9
+ 3725 0a69 3A03     		.2byte	0x33a
+ 3726 0a6b 750A0000 		.4byte	0xa75
+ 3727 0a6f 1B       		.uleb128 0x1b
+ 3728 0a70 B9000000 		.4byte	0xb9
+ 3729 0a74 00       		.byte	0
+ 3730 0a75 1D       		.uleb128 0x1d
+ 3731 0a76 4C000000 		.4byte	.LASF54
+ 3732 0a7a 09       		.byte	0x9
+ 3733 0a7b 3403     		.2byte	0x334
+ 3734 0a7d B9000000 		.4byte	0xb9
+ 3735 0a81 1E       		.uleb128 0x1e
+ 3736 0a82 58010000 		.4byte	.LASF55
+ 3737 0a86 09       		.byte	0x9
+ 3738 0a87 3503     		.2byte	0x335
+ 3739 0a89 1C       		.uleb128 0x1c
+ 3740 0a8a 03030000 		.4byte	.LASF50
+ 3741 0a8e 09       		.byte	0x9
+ 3742 0a8f 3B03     		.2byte	0x33b
+ 3743 0a91 A00A0000 		.4byte	0xaa0
+ 3744 0a95 1B       		.uleb128 0x1b
+ 3745 0a96 A00A0000 		.4byte	0xaa0
+ 3746 0a9a 1B       		.uleb128 0x1b
+ 3747 0a9b B9000000 		.4byte	0xb9
+ 3748 0a9f 00       		.byte	0
+ 3749 0aa0 10       		.uleb128 0x10
+ 3750 0aa1 04       		.byte	0x4
+ 3751 0aa2 A60A0000 		.4byte	0xaa6
+ 3752 0aa6 11       		.uleb128 0x11
+ 3753 0aa7 AD000000 		.4byte	0xad
+ 3754 0aab 00       		.byte	0
+ 3755              		.section	.debug_abbrev,"",%progbits
+ 3756              	.Ldebug_abbrev0:
+ 3757 0000 01       		.uleb128 0x1
+ 3758 0001 11       		.uleb128 0x11
+ 3759 0002 01       		.byte	0x1
+ 3760 0003 25       		.uleb128 0x25
+ 3761 0004 0E       		.uleb128 0xe
+ 3762 0005 13       		.uleb128 0x13
+ 3763 0006 0B       		.uleb128 0xb
+ 3764 0007 03       		.uleb128 0x3
+ 3765 0008 0E       		.uleb128 0xe
+ 3766 0009 1B       		.uleb128 0x1b
+ 3767 000a 0E       		.uleb128 0xe
+ 3768 000b 55       		.uleb128 0x55
+ 3769 000c 17       		.uleb128 0x17
+ 3770 000d 11       		.uleb128 0x11
+ 3771 000e 01       		.uleb128 0x1
+ 3772 000f 10       		.uleb128 0x10
+ 3773 0010 17       		.uleb128 0x17
+ 3774 0011 00       		.byte	0
+ 3775 0012 00       		.byte	0
+ 3776 0013 02       		.uleb128 0x2
+ 3777 0014 24       		.uleb128 0x24
+ 3778 0015 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 75
+
+
+ 3779 0016 0B       		.uleb128 0xb
+ 3780 0017 0B       		.uleb128 0xb
+ 3781 0018 3E       		.uleb128 0x3e
+ 3782 0019 0B       		.uleb128 0xb
+ 3783 001a 03       		.uleb128 0x3
+ 3784 001b 0E       		.uleb128 0xe
+ 3785 001c 00       		.byte	0
+ 3786 001d 00       		.byte	0
+ 3787 001e 03       		.uleb128 0x3
+ 3788 001f 16       		.uleb128 0x16
+ 3789 0020 00       		.byte	0
+ 3790 0021 03       		.uleb128 0x3
+ 3791 0022 0E       		.uleb128 0xe
+ 3792 0023 3A       		.uleb128 0x3a
+ 3793 0024 0B       		.uleb128 0xb
+ 3794 0025 3B       		.uleb128 0x3b
+ 3795 0026 0B       		.uleb128 0xb
+ 3796 0027 49       		.uleb128 0x49
+ 3797 0028 13       		.uleb128 0x13
+ 3798 0029 00       		.byte	0
+ 3799 002a 00       		.byte	0
+ 3800 002b 04       		.uleb128 0x4
+ 3801 002c 24       		.uleb128 0x24
+ 3802 002d 00       		.byte	0
+ 3803 002e 0B       		.uleb128 0xb
+ 3804 002f 0B       		.uleb128 0xb
+ 3805 0030 3E       		.uleb128 0x3e
+ 3806 0031 0B       		.uleb128 0xb
+ 3807 0032 03       		.uleb128 0x3
+ 3808 0033 08       		.uleb128 0x8
+ 3809 0034 00       		.byte	0
+ 3810 0035 00       		.byte	0
+ 3811 0036 05       		.uleb128 0x5
+ 3812 0037 16       		.uleb128 0x16
+ 3813 0038 00       		.byte	0
+ 3814 0039 03       		.uleb128 0x3
+ 3815 003a 0E       		.uleb128 0xe
+ 3816 003b 3A       		.uleb128 0x3a
+ 3817 003c 0B       		.uleb128 0xb
+ 3818 003d 3B       		.uleb128 0x3b
+ 3819 003e 05       		.uleb128 0x5
+ 3820 003f 49       		.uleb128 0x49
+ 3821 0040 13       		.uleb128 0x13
+ 3822 0041 00       		.byte	0
+ 3823 0042 00       		.byte	0
+ 3824 0043 06       		.uleb128 0x6
+ 3825 0044 2E       		.uleb128 0x2e
+ 3826 0045 01       		.byte	0x1
+ 3827 0046 3F       		.uleb128 0x3f
+ 3828 0047 19       		.uleb128 0x19
+ 3829 0048 03       		.uleb128 0x3
+ 3830 0049 0E       		.uleb128 0xe
+ 3831 004a 3A       		.uleb128 0x3a
+ 3832 004b 0B       		.uleb128 0xb
+ 3833 004c 3B       		.uleb128 0x3b
+ 3834 004d 0B       		.uleb128 0xb
+ 3835 004e 27       		.uleb128 0x27
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 76
+
+
+ 3836 004f 19       		.uleb128 0x19
+ 3837 0050 11       		.uleb128 0x11
+ 3838 0051 01       		.uleb128 0x1
+ 3839 0052 12       		.uleb128 0x12
+ 3840 0053 06       		.uleb128 0x6
+ 3841 0054 40       		.uleb128 0x40
+ 3842 0055 18       		.uleb128 0x18
+ 3843 0056 9742     		.uleb128 0x2117
+ 3844 0058 19       		.uleb128 0x19
+ 3845 0059 01       		.uleb128 0x1
+ 3846 005a 13       		.uleb128 0x13
+ 3847 005b 00       		.byte	0
+ 3848 005c 00       		.byte	0
+ 3849 005d 07       		.uleb128 0x7
+ 3850 005e 898201   		.uleb128 0x4109
+ 3851 0061 01       		.byte	0x1
+ 3852 0062 11       		.uleb128 0x11
+ 3853 0063 01       		.uleb128 0x1
+ 3854 0064 31       		.uleb128 0x31
+ 3855 0065 13       		.uleb128 0x13
+ 3856 0066 01       		.uleb128 0x1
+ 3857 0067 13       		.uleb128 0x13
+ 3858 0068 00       		.byte	0
+ 3859 0069 00       		.byte	0
+ 3860 006a 08       		.uleb128 0x8
+ 3861 006b 8A8201   		.uleb128 0x410a
+ 3862 006e 00       		.byte	0
+ 3863 006f 02       		.uleb128 0x2
+ 3864 0070 18       		.uleb128 0x18
+ 3865 0071 9142     		.uleb128 0x2111
+ 3866 0073 18       		.uleb128 0x18
+ 3867 0074 00       		.byte	0
+ 3868 0075 00       		.byte	0
+ 3869 0076 09       		.uleb128 0x9
+ 3870 0077 898201   		.uleb128 0x4109
+ 3871 007a 01       		.byte	0x1
+ 3872 007b 11       		.uleb128 0x11
+ 3873 007c 01       		.uleb128 0x1
+ 3874 007d 31       		.uleb128 0x31
+ 3875 007e 13       		.uleb128 0x13
+ 3876 007f 00       		.byte	0
+ 3877 0080 00       		.byte	0
+ 3878 0081 0A       		.uleb128 0xa
+ 3879 0082 05       		.uleb128 0x5
+ 3880 0083 00       		.byte	0
+ 3881 0084 03       		.uleb128 0x3
+ 3882 0085 0E       		.uleb128 0xe
+ 3883 0086 3A       		.uleb128 0x3a
+ 3884 0087 0B       		.uleb128 0xb
+ 3885 0088 3B       		.uleb128 0x3b
+ 3886 0089 0B       		.uleb128 0xb
+ 3887 008a 49       		.uleb128 0x49
+ 3888 008b 13       		.uleb128 0x13
+ 3889 008c 02       		.uleb128 0x2
+ 3890 008d 17       		.uleb128 0x17
+ 3891 008e 00       		.byte	0
+ 3892 008f 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 77
+
+
+ 3893 0090 0B       		.uleb128 0xb
+ 3894 0091 898201   		.uleb128 0x4109
+ 3895 0094 00       		.byte	0
+ 3896 0095 11       		.uleb128 0x11
+ 3897 0096 01       		.uleb128 0x1
+ 3898 0097 31       		.uleb128 0x31
+ 3899 0098 13       		.uleb128 0x13
+ 3900 0099 00       		.byte	0
+ 3901 009a 00       		.byte	0
+ 3902 009b 0C       		.uleb128 0xc
+ 3903 009c 34       		.uleb128 0x34
+ 3904 009d 00       		.byte	0
+ 3905 009e 03       		.uleb128 0x3
+ 3906 009f 0E       		.uleb128 0xe
+ 3907 00a0 3A       		.uleb128 0x3a
+ 3908 00a1 0B       		.uleb128 0xb
+ 3909 00a2 3B       		.uleb128 0x3b
+ 3910 00a3 0B       		.uleb128 0xb
+ 3911 00a4 49       		.uleb128 0x49
+ 3912 00a5 13       		.uleb128 0x13
+ 3913 00a6 02       		.uleb128 0x2
+ 3914 00a7 17       		.uleb128 0x17
+ 3915 00a8 00       		.byte	0
+ 3916 00a9 00       		.byte	0
+ 3917 00aa 0D       		.uleb128 0xd
+ 3918 00ab 05       		.uleb128 0x5
+ 3919 00ac 00       		.byte	0
+ 3920 00ad 03       		.uleb128 0x3
+ 3921 00ae 08       		.uleb128 0x8
+ 3922 00af 3A       		.uleb128 0x3a
+ 3923 00b0 0B       		.uleb128 0xb
+ 3924 00b1 3B       		.uleb128 0x3b
+ 3925 00b2 0B       		.uleb128 0xb
+ 3926 00b3 49       		.uleb128 0x49
+ 3927 00b4 13       		.uleb128 0x13
+ 3928 00b5 02       		.uleb128 0x2
+ 3929 00b6 17       		.uleb128 0x17
+ 3930 00b7 00       		.byte	0
+ 3931 00b8 00       		.byte	0
+ 3932 00b9 0E       		.uleb128 0xe
+ 3933 00ba 34       		.uleb128 0x34
+ 3934 00bb 00       		.byte	0
+ 3935 00bc 03       		.uleb128 0x3
+ 3936 00bd 0E       		.uleb128 0xe
+ 3937 00be 3A       		.uleb128 0x3a
+ 3938 00bf 0B       		.uleb128 0xb
+ 3939 00c0 3B       		.uleb128 0x3b
+ 3940 00c1 0B       		.uleb128 0xb
+ 3941 00c2 49       		.uleb128 0x49
+ 3942 00c3 13       		.uleb128 0x13
+ 3943 00c4 02       		.uleb128 0x2
+ 3944 00c5 18       		.uleb128 0x18
+ 3945 00c6 00       		.byte	0
+ 3946 00c7 00       		.byte	0
+ 3947 00c8 0F       		.uleb128 0xf
+ 3948 00c9 35       		.uleb128 0x35
+ 3949 00ca 00       		.byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 78
+
+
+ 3950 00cb 49       		.uleb128 0x49
+ 3951 00cc 13       		.uleb128 0x13
+ 3952 00cd 00       		.byte	0
+ 3953 00ce 00       		.byte	0
+ 3954 00cf 10       		.uleb128 0x10
+ 3955 00d0 0F       		.uleb128 0xf
+ 3956 00d1 00       		.byte	0
+ 3957 00d2 0B       		.uleb128 0xb
+ 3958 00d3 0B       		.uleb128 0xb
+ 3959 00d4 49       		.uleb128 0x49
+ 3960 00d5 13       		.uleb128 0x13
+ 3961 00d6 00       		.byte	0
+ 3962 00d7 00       		.byte	0
+ 3963 00d8 11       		.uleb128 0x11
+ 3964 00d9 26       		.uleb128 0x26
+ 3965 00da 00       		.byte	0
+ 3966 00db 49       		.uleb128 0x49
+ 3967 00dc 13       		.uleb128 0x13
+ 3968 00dd 00       		.byte	0
+ 3969 00de 00       		.byte	0
+ 3970 00df 12       		.uleb128 0x12
+ 3971 00e0 34       		.uleb128 0x34
+ 3972 00e1 00       		.byte	0
+ 3973 00e2 03       		.uleb128 0x3
+ 3974 00e3 08       		.uleb128 0x8
+ 3975 00e4 3A       		.uleb128 0x3a
+ 3976 00e5 0B       		.uleb128 0xb
+ 3977 00e6 3B       		.uleb128 0x3b
+ 3978 00e7 0B       		.uleb128 0xb
+ 3979 00e8 49       		.uleb128 0x49
+ 3980 00e9 13       		.uleb128 0x13
+ 3981 00ea 02       		.uleb128 0x2
+ 3982 00eb 17       		.uleb128 0x17
+ 3983 00ec 00       		.byte	0
+ 3984 00ed 00       		.byte	0
+ 3985 00ee 13       		.uleb128 0x13
+ 3986 00ef 0B       		.uleb128 0xb
+ 3987 00f0 01       		.byte	0x1
+ 3988 00f1 11       		.uleb128 0x11
+ 3989 00f2 01       		.uleb128 0x1
+ 3990 00f3 12       		.uleb128 0x12
+ 3991 00f4 06       		.uleb128 0x6
+ 3992 00f5 01       		.uleb128 0x1
+ 3993 00f6 13       		.uleb128 0x13
+ 3994 00f7 00       		.byte	0
+ 3995 00f8 00       		.byte	0
+ 3996 00f9 14       		.uleb128 0x14
+ 3997 00fa 2E       		.uleb128 0x2e
+ 3998 00fb 01       		.byte	0x1
+ 3999 00fc 3F       		.uleb128 0x3f
+ 4000 00fd 19       		.uleb128 0x19
+ 4001 00fe 03       		.uleb128 0x3
+ 4002 00ff 0E       		.uleb128 0xe
+ 4003 0100 3A       		.uleb128 0x3a
+ 4004 0101 0B       		.uleb128 0xb
+ 4005 0102 3B       		.uleb128 0x3b
+ 4006 0103 05       		.uleb128 0x5
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 79
+
+
+ 4007 0104 27       		.uleb128 0x27
+ 4008 0105 19       		.uleb128 0x19
+ 4009 0106 11       		.uleb128 0x11
+ 4010 0107 01       		.uleb128 0x1
+ 4011 0108 12       		.uleb128 0x12
+ 4012 0109 06       		.uleb128 0x6
+ 4013 010a 40       		.uleb128 0x40
+ 4014 010b 18       		.uleb128 0x18
+ 4015 010c 9742     		.uleb128 0x2117
+ 4016 010e 19       		.uleb128 0x19
+ 4017 010f 01       		.uleb128 0x1
+ 4018 0110 13       		.uleb128 0x13
+ 4019 0111 00       		.byte	0
+ 4020 0112 00       		.byte	0
+ 4021 0113 15       		.uleb128 0x15
+ 4022 0114 05       		.uleb128 0x5
+ 4023 0115 00       		.byte	0
+ 4024 0116 03       		.uleb128 0x3
+ 4025 0117 08       		.uleb128 0x8
+ 4026 0118 3A       		.uleb128 0x3a
+ 4027 0119 0B       		.uleb128 0xb
+ 4028 011a 3B       		.uleb128 0x3b
+ 4029 011b 05       		.uleb128 0x5
+ 4030 011c 49       		.uleb128 0x49
+ 4031 011d 13       		.uleb128 0x13
+ 4032 011e 02       		.uleb128 0x2
+ 4033 011f 17       		.uleb128 0x17
+ 4034 0120 00       		.byte	0
+ 4035 0121 00       		.byte	0
+ 4036 0122 16       		.uleb128 0x16
+ 4037 0123 05       		.uleb128 0x5
+ 4038 0124 00       		.byte	0
+ 4039 0125 03       		.uleb128 0x3
+ 4040 0126 0E       		.uleb128 0xe
+ 4041 0127 3A       		.uleb128 0x3a
+ 4042 0128 0B       		.uleb128 0xb
+ 4043 0129 3B       		.uleb128 0x3b
+ 4044 012a 05       		.uleb128 0x5
+ 4045 012b 49       		.uleb128 0x49
+ 4046 012c 13       		.uleb128 0x13
+ 4047 012d 02       		.uleb128 0x2
+ 4048 012e 17       		.uleb128 0x17
+ 4049 012f 00       		.byte	0
+ 4050 0130 00       		.byte	0
+ 4051 0131 17       		.uleb128 0x17
+ 4052 0132 34       		.uleb128 0x34
+ 4053 0133 00       		.byte	0
+ 4054 0134 03       		.uleb128 0x3
+ 4055 0135 08       		.uleb128 0x8
+ 4056 0136 3A       		.uleb128 0x3a
+ 4057 0137 0B       		.uleb128 0xb
+ 4058 0138 3B       		.uleb128 0x3b
+ 4059 0139 05       		.uleb128 0x5
+ 4060 013a 49       		.uleb128 0x49
+ 4061 013b 13       		.uleb128 0x13
+ 4062 013c 02       		.uleb128 0x2
+ 4063 013d 17       		.uleb128 0x17
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 80
+
+
+ 4064 013e 00       		.byte	0
+ 4065 013f 00       		.byte	0
+ 4066 0140 18       		.uleb128 0x18
+ 4067 0141 01       		.uleb128 0x1
+ 4068 0142 01       		.byte	0x1
+ 4069 0143 49       		.uleb128 0x49
+ 4070 0144 13       		.uleb128 0x13
+ 4071 0145 01       		.uleb128 0x1
+ 4072 0146 13       		.uleb128 0x13
+ 4073 0147 00       		.byte	0
+ 4074 0148 00       		.byte	0
+ 4075 0149 19       		.uleb128 0x19
+ 4076 014a 21       		.uleb128 0x21
+ 4077 014b 00       		.byte	0
+ 4078 014c 49       		.uleb128 0x49
+ 4079 014d 13       		.uleb128 0x13
+ 4080 014e 2F       		.uleb128 0x2f
+ 4081 014f 05       		.uleb128 0x5
+ 4082 0150 00       		.byte	0
+ 4083 0151 00       		.byte	0
+ 4084 0152 1A       		.uleb128 0x1a
+ 4085 0153 2E       		.uleb128 0x2e
+ 4086 0154 01       		.byte	0x1
+ 4087 0155 3F       		.uleb128 0x3f
+ 4088 0156 19       		.uleb128 0x19
+ 4089 0157 03       		.uleb128 0x3
+ 4090 0158 0E       		.uleb128 0xe
+ 4091 0159 3A       		.uleb128 0x3a
+ 4092 015a 0B       		.uleb128 0xb
+ 4093 015b 3B       		.uleb128 0x3b
+ 4094 015c 0B       		.uleb128 0xb
+ 4095 015d 27       		.uleb128 0x27
+ 4096 015e 19       		.uleb128 0x19
+ 4097 015f 3C       		.uleb128 0x3c
+ 4098 0160 19       		.uleb128 0x19
+ 4099 0161 01       		.uleb128 0x1
+ 4100 0162 13       		.uleb128 0x13
+ 4101 0163 00       		.byte	0
+ 4102 0164 00       		.byte	0
+ 4103 0165 1B       		.uleb128 0x1b
+ 4104 0166 05       		.uleb128 0x5
+ 4105 0167 00       		.byte	0
+ 4106 0168 49       		.uleb128 0x49
+ 4107 0169 13       		.uleb128 0x13
+ 4108 016a 00       		.byte	0
+ 4109 016b 00       		.byte	0
+ 4110 016c 1C       		.uleb128 0x1c
+ 4111 016d 2E       		.uleb128 0x2e
+ 4112 016e 01       		.byte	0x1
+ 4113 016f 3F       		.uleb128 0x3f
+ 4114 0170 19       		.uleb128 0x19
+ 4115 0171 03       		.uleb128 0x3
+ 4116 0172 0E       		.uleb128 0xe
+ 4117 0173 3A       		.uleb128 0x3a
+ 4118 0174 0B       		.uleb128 0xb
+ 4119 0175 3B       		.uleb128 0x3b
+ 4120 0176 05       		.uleb128 0x5
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 81
+
+
+ 4121 0177 27       		.uleb128 0x27
+ 4122 0178 19       		.uleb128 0x19
+ 4123 0179 3C       		.uleb128 0x3c
+ 4124 017a 19       		.uleb128 0x19
+ 4125 017b 01       		.uleb128 0x1
+ 4126 017c 13       		.uleb128 0x13
+ 4127 017d 00       		.byte	0
+ 4128 017e 00       		.byte	0
+ 4129 017f 1D       		.uleb128 0x1d
+ 4130 0180 2E       		.uleb128 0x2e
+ 4131 0181 00       		.byte	0
+ 4132 0182 3F       		.uleb128 0x3f
+ 4133 0183 19       		.uleb128 0x19
+ 4134 0184 03       		.uleb128 0x3
+ 4135 0185 0E       		.uleb128 0xe
+ 4136 0186 3A       		.uleb128 0x3a
+ 4137 0187 0B       		.uleb128 0xb
+ 4138 0188 3B       		.uleb128 0x3b
+ 4139 0189 05       		.uleb128 0x5
+ 4140 018a 27       		.uleb128 0x27
+ 4141 018b 19       		.uleb128 0x19
+ 4142 018c 49       		.uleb128 0x49
+ 4143 018d 13       		.uleb128 0x13
+ 4144 018e 3C       		.uleb128 0x3c
+ 4145 018f 19       		.uleb128 0x19
+ 4146 0190 00       		.byte	0
+ 4147 0191 00       		.byte	0
+ 4148 0192 1E       		.uleb128 0x1e
+ 4149 0193 2E       		.uleb128 0x2e
+ 4150 0194 00       		.byte	0
+ 4151 0195 3F       		.uleb128 0x3f
+ 4152 0196 19       		.uleb128 0x19
+ 4153 0197 03       		.uleb128 0x3
+ 4154 0198 0E       		.uleb128 0xe
+ 4155 0199 3A       		.uleb128 0x3a
+ 4156 019a 0B       		.uleb128 0xb
+ 4157 019b 3B       		.uleb128 0x3b
+ 4158 019c 05       		.uleb128 0x5
+ 4159 019d 27       		.uleb128 0x27
+ 4160 019e 19       		.uleb128 0x19
+ 4161 019f 3C       		.uleb128 0x3c
+ 4162 01a0 19       		.uleb128 0x19
+ 4163 01a1 00       		.byte	0
+ 4164 01a2 00       		.byte	0
+ 4165 01a3 00       		.byte	0
+ 4166              		.section	.debug_loc,"",%progbits
+ 4167              	.Ldebug_loc0:
+ 4168              	.LLST0:
+ 4169 0000 00000000 		.4byte	.LVL6
+ 4170 0004 06000000 		.4byte	.LVL7
+ 4171 0008 0100     		.2byte	0x1
+ 4172 000a 50       		.byte	0x50
+ 4173 000b 06000000 		.4byte	.LVL7
+ 4174 000f 1E000000 		.4byte	.LFE38
+ 4175 0013 0400     		.2byte	0x4
+ 4176 0015 F3       		.byte	0xf3
+ 4177 0016 01       		.uleb128 0x1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 82
+
+
+ 4178 0017 50       		.byte	0x50
+ 4179 0018 9F       		.byte	0x9f
+ 4180 0019 00000000 		.4byte	0
+ 4181 001d 00000000 		.4byte	0
+ 4182              	.LLST1:
+ 4183 0021 00000000 		.4byte	.LVL12
+ 4184 0025 08000000 		.4byte	.LVL15
+ 4185 0029 0100     		.2byte	0x1
+ 4186 002b 50       		.byte	0x50
+ 4187 002c 08000000 		.4byte	.LVL15
+ 4188 0030 32000000 		.4byte	.LFE39
+ 4189 0034 0400     		.2byte	0x4
+ 4190 0036 F3       		.byte	0xf3
+ 4191 0037 01       		.uleb128 0x1
+ 4192 0038 50       		.byte	0x50
+ 4193 0039 9F       		.byte	0x9f
+ 4194 003a 00000000 		.4byte	0
+ 4195 003e 00000000 		.4byte	0
+ 4196              	.LLST2:
+ 4197 0042 04000000 		.4byte	.LVL13
+ 4198 0046 30000000 		.4byte	.LVL24
+ 4199 004a 0100     		.2byte	0x1
+ 4200 004c 55       		.byte	0x55
+ 4201 004d 00000000 		.4byte	0
+ 4202 0051 00000000 		.4byte	0
+ 4203              	.LLST3:
+ 4204 0055 06000000 		.4byte	.LVL14
+ 4205 0059 30000000 		.4byte	.LVL23
+ 4206 005d 0100     		.2byte	0x1
+ 4207 005f 54       		.byte	0x54
+ 4208 0060 30000000 		.4byte	.LVL23
+ 4209 0064 32000000 		.4byte	.LFE39
+ 4210 0068 0400     		.2byte	0x4
+ 4211 006a F3       		.byte	0xf3
+ 4212 006b 01       		.uleb128 0x1
+ 4213 006c 50       		.byte	0x50
+ 4214 006d 9F       		.byte	0x9f
+ 4215 006e 00000000 		.4byte	0
+ 4216 0072 00000000 		.4byte	0
+ 4217              	.LLST4:
+ 4218 0076 00000000 		.4byte	.LVL25
+ 4219 007a 06000000 		.4byte	.LVL26
+ 4220 007e 0100     		.2byte	0x1
+ 4221 0080 50       		.byte	0x50
+ 4222 0081 06000000 		.4byte	.LVL26
+ 4223 0085 1E000000 		.4byte	.LFE40
+ 4224 0089 0400     		.2byte	0x4
+ 4225 008b F3       		.byte	0xf3
+ 4226 008c 01       		.uleb128 0x1
+ 4227 008d 50       		.byte	0x50
+ 4228 008e 9F       		.byte	0x9f
+ 4229 008f 00000000 		.4byte	0
+ 4230 0093 00000000 		.4byte	0
+ 4231              	.LLST5:
+ 4232 0097 00000000 		.4byte	.LVL31
+ 4233 009b 0C000000 		.4byte	.LVL32
+ 4234 009f 0100     		.2byte	0x1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 83
+
+
+ 4235 00a1 50       		.byte	0x50
+ 4236 00a2 0C000000 		.4byte	.LVL32
+ 4237 00a6 4E000000 		.4byte	.LFE41
+ 4238 00aa 0400     		.2byte	0x4
+ 4239 00ac F3       		.byte	0xf3
+ 4240 00ad 01       		.uleb128 0x1
+ 4241 00ae 50       		.byte	0x50
+ 4242 00af 9F       		.byte	0x9f
+ 4243 00b0 00000000 		.4byte	0
+ 4244 00b4 00000000 		.4byte	0
+ 4245              	.LLST6:
+ 4246 00b8 00000000 		.4byte	.LVL31
+ 4247 00bc 0F000000 		.4byte	.LVL33-1
+ 4248 00c0 0100     		.2byte	0x1
+ 4249 00c2 51       		.byte	0x51
+ 4250 00c3 0F000000 		.4byte	.LVL33-1
+ 4251 00c7 4E000000 		.4byte	.LFE41
+ 4252 00cb 0400     		.2byte	0x4
+ 4253 00cd F3       		.byte	0xf3
+ 4254 00ce 01       		.uleb128 0x1
+ 4255 00cf 51       		.byte	0x51
+ 4256 00d0 9F       		.byte	0x9f
+ 4257 00d1 00000000 		.4byte	0
+ 4258 00d5 00000000 		.4byte	0
+ 4259              	.LLST7:
+ 4260 00d9 00000000 		.4byte	.LVL31
+ 4261 00dd 0F000000 		.4byte	.LVL33-1
+ 4262 00e1 0100     		.2byte	0x1
+ 4263 00e3 52       		.byte	0x52
+ 4264 00e4 0F000000 		.4byte	.LVL33-1
+ 4265 00e8 4E000000 		.4byte	.LFE41
+ 4266 00ec 0400     		.2byte	0x4
+ 4267 00ee F3       		.byte	0xf3
+ 4268 00ef 01       		.uleb128 0x1
+ 4269 00f0 52       		.byte	0x52
+ 4270 00f1 9F       		.byte	0x9f
+ 4271 00f2 00000000 		.4byte	0
+ 4272 00f6 00000000 		.4byte	0
+ 4273              	.LLST8:
+ 4274 00fa 00000000 		.4byte	.LVL31
+ 4275 00fe 0F000000 		.4byte	.LVL33-1
+ 4276 0102 0100     		.2byte	0x1
+ 4277 0104 53       		.byte	0x53
+ 4278 0105 0F000000 		.4byte	.LVL33-1
+ 4279 0109 4E000000 		.4byte	.LFE41
+ 4280 010d 0400     		.2byte	0x4
+ 4281 010f F3       		.byte	0xf3
+ 4282 0110 01       		.uleb128 0x1
+ 4283 0111 53       		.byte	0x53
+ 4284 0112 9F       		.byte	0x9f
+ 4285 0113 00000000 		.4byte	0
+ 4286 0117 00000000 		.4byte	0
+ 4287              	.LLST9:
+ 4288 011b 00000000 		.4byte	.LVL44
+ 4289 011f 0A000000 		.4byte	.LVL46
+ 4290 0123 0100     		.2byte	0x1
+ 4291 0125 50       		.byte	0x50
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 84
+
+
+ 4292 0126 0A000000 		.4byte	.LVL46
+ 4293 012a 24000000 		.4byte	.LFE42
+ 4294 012e 0400     		.2byte	0x4
+ 4295 0130 F3       		.byte	0xf3
+ 4296 0131 01       		.uleb128 0x1
+ 4297 0132 50       		.byte	0x50
+ 4298 0133 9F       		.byte	0x9f
+ 4299 0134 00000000 		.4byte	0
+ 4300 0138 00000000 		.4byte	0
+ 4301              	.LLST10:
+ 4302 013c 00000000 		.4byte	.LVL44
+ 4303 0140 0C000000 		.4byte	.LVL47
+ 4304 0144 0100     		.2byte	0x1
+ 4305 0146 51       		.byte	0x51
+ 4306 0147 0C000000 		.4byte	.LVL47
+ 4307 014b 24000000 		.4byte	.LFE42
+ 4308 014f 0400     		.2byte	0x4
+ 4309 0151 F3       		.byte	0xf3
+ 4310 0152 01       		.uleb128 0x1
+ 4311 0153 51       		.byte	0x51
+ 4312 0154 9F       		.byte	0x9f
+ 4313 0155 00000000 		.4byte	0
+ 4314 0159 00000000 		.4byte	0
+ 4315              	.LLST11:
+ 4316 015d 00000000 		.4byte	.LVL44
+ 4317 0161 06000000 		.4byte	.LVL45
+ 4318 0165 0100     		.2byte	0x1
+ 4319 0167 52       		.byte	0x52
+ 4320 0168 06000000 		.4byte	.LVL45
+ 4321 016c 24000000 		.4byte	.LFE42
+ 4322 0170 0400     		.2byte	0x4
+ 4323 0172 F3       		.byte	0xf3
+ 4324 0173 01       		.uleb128 0x1
+ 4325 0174 52       		.byte	0x52
+ 4326 0175 9F       		.byte	0x9f
+ 4327 0176 00000000 		.4byte	0
+ 4328 017a 00000000 		.4byte	0
+ 4329              	.LLST12:
+ 4330 017e 00000000 		.4byte	.LVL52
+ 4331 0182 08000000 		.4byte	.LVL53
+ 4332 0186 0100     		.2byte	0x1
+ 4333 0188 50       		.byte	0x50
+ 4334 0189 08000000 		.4byte	.LVL53
+ 4335 018d 58000000 		.4byte	.LFE43
+ 4336 0191 0400     		.2byte	0x4
+ 4337 0193 F3       		.byte	0xf3
+ 4338 0194 01       		.uleb128 0x1
+ 4339 0195 50       		.byte	0x50
+ 4340 0196 9F       		.byte	0x9f
+ 4341 0197 00000000 		.4byte	0
+ 4342 019b 00000000 		.4byte	0
+ 4343              	.LLST13:
+ 4344 019f 00000000 		.4byte	.LVL56
+ 4345 01a3 08000000 		.4byte	.LVL57
+ 4346 01a7 0100     		.2byte	0x1
+ 4347 01a9 50       		.byte	0x50
+ 4348 01aa 08000000 		.4byte	.LVL57
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 85
+
+
+ 4349 01ae 32000000 		.4byte	.LVL66
+ 4350 01b2 0100     		.2byte	0x1
+ 4351 01b4 55       		.byte	0x55
+ 4352 01b5 32000000 		.4byte	.LVL66
+ 4353 01b9 34000000 		.4byte	.LFE44
+ 4354 01bd 0400     		.2byte	0x4
+ 4355 01bf F3       		.byte	0xf3
+ 4356 01c0 01       		.uleb128 0x1
+ 4357 01c1 50       		.byte	0x50
+ 4358 01c2 9F       		.byte	0x9f
+ 4359 01c3 00000000 		.4byte	0
+ 4360 01c7 00000000 		.4byte	0
+ 4361              	.LLST14:
+ 4362 01cb 00000000 		.4byte	.LVL56
+ 4363 01cf 0A000000 		.4byte	.LVL58
+ 4364 01d3 0100     		.2byte	0x1
+ 4365 01d5 51       		.byte	0x51
+ 4366 01d6 0A000000 		.4byte	.LVL58
+ 4367 01da 32000000 		.4byte	.LVL65
+ 4368 01de 0100     		.2byte	0x1
+ 4369 01e0 54       		.byte	0x54
+ 4370 01e1 32000000 		.4byte	.LVL65
+ 4371 01e5 34000000 		.4byte	.LFE44
+ 4372 01e9 0400     		.2byte	0x4
+ 4373 01eb F3       		.byte	0xf3
+ 4374 01ec 01       		.uleb128 0x1
+ 4375 01ed 51       		.byte	0x51
+ 4376 01ee 9F       		.byte	0x9f
+ 4377 01ef 00000000 		.4byte	0
+ 4378 01f3 00000000 		.4byte	0
+ 4379              	.LLST15:
+ 4380 01f7 00000000 		.4byte	.LVL67
+ 4381 01fb 1D000000 		.4byte	.LVL71-1
+ 4382 01ff 0100     		.2byte	0x1
+ 4383 0201 50       		.byte	0x50
+ 4384 0202 1D000000 		.4byte	.LVL71-1
+ 4385 0206 68000000 		.4byte	.LFE45
+ 4386 020a 0400     		.2byte	0x4
+ 4387 020c F3       		.byte	0xf3
+ 4388 020d 01       		.uleb128 0x1
+ 4389 020e 50       		.byte	0x50
+ 4390 020f 9F       		.byte	0x9f
+ 4391 0210 00000000 		.4byte	0
+ 4392 0214 00000000 		.4byte	0
+ 4393              	.LLST16:
+ 4394 0218 00000000 		.4byte	.LVL67
+ 4395 021c 1D000000 		.4byte	.LVL71-1
+ 4396 0220 0100     		.2byte	0x1
+ 4397 0222 51       		.byte	0x51
+ 4398 0223 1D000000 		.4byte	.LVL71-1
+ 4399 0227 68000000 		.4byte	.LFE45
+ 4400 022b 0400     		.2byte	0x4
+ 4401 022d F3       		.byte	0xf3
+ 4402 022e 01       		.uleb128 0x1
+ 4403 022f 51       		.byte	0x51
+ 4404 0230 9F       		.byte	0x9f
+ 4405 0231 00000000 		.4byte	0
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 86
+
+
+ 4406 0235 00000000 		.4byte	0
+ 4407              	.LLST17:
+ 4408 0239 00000000 		.4byte	.LVL67
+ 4409 023d 12000000 		.4byte	.LVL69
+ 4410 0241 0100     		.2byte	0x1
+ 4411 0243 52       		.byte	0x52
+ 4412 0244 12000000 		.4byte	.LVL69
+ 4413 0248 68000000 		.4byte	.LFE45
+ 4414 024c 0400     		.2byte	0x4
+ 4415 024e F3       		.byte	0xf3
+ 4416 024f 01       		.uleb128 0x1
+ 4417 0250 52       		.byte	0x52
+ 4418 0251 9F       		.byte	0x9f
+ 4419 0252 00000000 		.4byte	0
+ 4420 0256 00000000 		.4byte	0
+ 4421              	.LLST18:
+ 4422 025a 00000000 		.4byte	.LVL67
+ 4423 025e 0E000000 		.4byte	.LVL68
+ 4424 0262 0100     		.2byte	0x1
+ 4425 0264 53       		.byte	0x53
+ 4426 0265 0E000000 		.4byte	.LVL68
+ 4427 0269 68000000 		.4byte	.LFE45
+ 4428 026d 0400     		.2byte	0x4
+ 4429 026f F3       		.byte	0xf3
+ 4430 0270 01       		.uleb128 0x1
+ 4431 0271 53       		.byte	0x53
+ 4432 0272 9F       		.byte	0x9f
+ 4433 0273 00000000 		.4byte	0
+ 4434 0277 00000000 		.4byte	0
+ 4435              	.LLST19:
+ 4436 027b 00000000 		.4byte	.LVL67
+ 4437 027f 0E000000 		.4byte	.LVL68
+ 4438 0283 0200     		.2byte	0x2
+ 4439 0285 91       		.byte	0x91
+ 4440 0286 00       		.sleb128 0
+ 4441 0287 0E000000 		.4byte	.LVL68
+ 4442 028b 16000000 		.4byte	.LVL70
+ 4443 028f 0200     		.2byte	0x2
+ 4444 0291 73       		.byte	0x73
+ 4445 0292 00       		.sleb128 0
+ 4446 0293 16000000 		.4byte	.LVL70
+ 4447 0297 68000000 		.4byte	.LFE45
+ 4448 029b 0200     		.2byte	0x2
+ 4449 029d 91       		.byte	0x91
+ 4450 029e 00       		.sleb128 0
+ 4451 029f 00000000 		.4byte	0
+ 4452 02a3 00000000 		.4byte	0
+ 4453              	.LLST20:
+ 4454 02a7 24000000 		.4byte	.LVL72
+ 4455 02ab 28000000 		.4byte	.LVL73
+ 4456 02af 0200     		.2byte	0x2
+ 4457 02b1 30       		.byte	0x30
+ 4458 02b2 9F       		.byte	0x9f
+ 4459 02b3 28000000 		.4byte	.LVL73
+ 4460 02b7 5E000000 		.4byte	.LVL82
+ 4461 02bb 0100     		.2byte	0x1
+ 4462 02bd 56       		.byte	0x56
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 87
+
+
+ 4463 02be 00000000 		.4byte	0
+ 4464 02c2 00000000 		.4byte	0
+ 4465              	.LLST21:
+ 4466 02c6 34000000 		.4byte	.LVL74
+ 4467 02ca 38000000 		.4byte	.LVL75
+ 4468 02ce 0200     		.2byte	0x2
+ 4469 02d0 30       		.byte	0x30
+ 4470 02d1 9F       		.byte	0x9f
+ 4471 02d2 38000000 		.4byte	.LVL75
+ 4472 02d6 58000000 		.4byte	.LVL81
+ 4473 02da 0100     		.2byte	0x1
+ 4474 02dc 57       		.byte	0x57
+ 4475 02dd 00000000 		.4byte	0
+ 4476 02e1 00000000 		.4byte	0
+ 4477              	.LLST22:
+ 4478 02e5 34000000 		.4byte	.LVL74
+ 4479 02e9 4E000000 		.4byte	.LVL78
+ 4480 02ed 0100     		.2byte	0x1
+ 4481 02ef 54       		.byte	0x54
+ 4482 02f0 50000000 		.4byte	.LVL79
+ 4483 02f4 58000000 		.4byte	.LVL81
+ 4484 02f8 0100     		.2byte	0x1
+ 4485 02fa 54       		.byte	0x54
+ 4486 02fb 00000000 		.4byte	0
+ 4487 02ff 00000000 		.4byte	0
+ 4488              	.LLST23:
+ 4489 0303 00000000 		.4byte	.LVL83
+ 4490 0307 14000000 		.4byte	.LVL86
+ 4491 030b 0100     		.2byte	0x1
+ 4492 030d 50       		.byte	0x50
+ 4493 030e 14000000 		.4byte	.LVL86
+ 4494 0312 34000000 		.4byte	.LFE46
+ 4495 0316 0400     		.2byte	0x4
+ 4496 0318 F3       		.byte	0xf3
+ 4497 0319 01       		.uleb128 0x1
+ 4498 031a 50       		.byte	0x50
+ 4499 031b 9F       		.byte	0x9f
+ 4500 031c 00000000 		.4byte	0
+ 4501 0320 00000000 		.4byte	0
+ 4502              	.LLST24:
+ 4503 0324 00000000 		.4byte	.LVL83
+ 4504 0328 14000000 		.4byte	.LVL86
+ 4505 032c 0100     		.2byte	0x1
+ 4506 032e 51       		.byte	0x51
+ 4507 032f 14000000 		.4byte	.LVL86
+ 4508 0333 34000000 		.4byte	.LFE46
+ 4509 0337 0400     		.2byte	0x4
+ 4510 0339 F3       		.byte	0xf3
+ 4511 033a 01       		.uleb128 0x1
+ 4512 033b 51       		.byte	0x51
+ 4513 033c 9F       		.byte	0x9f
+ 4514 033d 00000000 		.4byte	0
+ 4515 0341 00000000 		.4byte	0
+ 4516              	.LLST25:
+ 4517 0345 00000000 		.4byte	.LVL83
+ 4518 0349 14000000 		.4byte	.LVL86
+ 4519 034d 0100     		.2byte	0x1
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 88
+
+
+ 4520 034f 52       		.byte	0x52
+ 4521 0350 14000000 		.4byte	.LVL86
+ 4522 0354 32000000 		.4byte	.LVL92
+ 4523 0358 0100     		.2byte	0x1
+ 4524 035a 57       		.byte	0x57
+ 4525 035b 00000000 		.4byte	0
+ 4526 035f 00000000 		.4byte	0
+ 4527              	.LLST26:
+ 4528 0363 00000000 		.4byte	.LVL83
+ 4529 0367 0E000000 		.4byte	.LVL84
+ 4530 036b 0100     		.2byte	0x1
+ 4531 036d 53       		.byte	0x53
+ 4532 036e 0E000000 		.4byte	.LVL84
+ 4533 0372 34000000 		.4byte	.LFE46
+ 4534 0376 0400     		.2byte	0x4
+ 4535 0378 F3       		.byte	0xf3
+ 4536 0379 01       		.uleb128 0x1
+ 4537 037a 53       		.byte	0x53
+ 4538 037b 9F       		.byte	0x9f
+ 4539 037c 00000000 		.4byte	0
+ 4540 0380 00000000 		.4byte	0
+ 4541              	.LLST27:
+ 4542 0384 00000000 		.4byte	.LVL83
+ 4543 0388 0E000000 		.4byte	.LVL84
+ 4544 038c 0200     		.2byte	0x2
+ 4545 038e 91       		.byte	0x91
+ 4546 038f 00       		.sleb128 0
+ 4547 0390 0E000000 		.4byte	.LVL84
+ 4548 0394 14000000 		.4byte	.LVL86
+ 4549 0398 0200     		.2byte	0x2
+ 4550 039a 73       		.byte	0x73
+ 4551 039b 00       		.sleb128 0
+ 4552 039c 14000000 		.4byte	.LVL86
+ 4553 03a0 34000000 		.4byte	.LFE46
+ 4554 03a4 0200     		.2byte	0x2
+ 4555 03a6 91       		.byte	0x91
+ 4556 03a7 00       		.sleb128 0
+ 4557 03a8 00000000 		.4byte	0
+ 4558 03ac 00000000 		.4byte	0
+ 4559              	.LLST28:
+ 4560 03b0 10000000 		.4byte	.LVL85
+ 4561 03b4 14000000 		.4byte	.LVL86
+ 4562 03b8 0200     		.2byte	0x2
+ 4563 03ba 30       		.byte	0x30
+ 4564 03bb 9F       		.byte	0x9f
+ 4565 03bc 14000000 		.4byte	.LVL86
+ 4566 03c0 28000000 		.4byte	.LVL89
+ 4567 03c4 0100     		.2byte	0x1
+ 4568 03c6 56       		.byte	0x56
+ 4569 03c7 2A000000 		.4byte	.LVL90
+ 4570 03cb 32000000 		.4byte	.LVL91
+ 4571 03cf 0100     		.2byte	0x1
+ 4572 03d1 56       		.byte	0x56
+ 4573 03d2 00000000 		.4byte	0
+ 4574 03d6 00000000 		.4byte	0
+ 4575              		.section	.debug_aranges,"",%progbits
+ 4576 0000 6C000000 		.4byte	0x6c
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 89
+
+
+ 4577 0004 0200     		.2byte	0x2
+ 4578 0006 00000000 		.4byte	.Ldebug_info0
+ 4579 000a 04       		.byte	0x4
+ 4580 000b 00       		.byte	0
+ 4581 000c 0000     		.2byte	0
+ 4582 000e 0000     		.2byte	0
+ 4583 0010 00000000 		.4byte	.LFB37
+ 4584 0014 28000000 		.4byte	.LFE37-.LFB37
+ 4585 0018 00000000 		.4byte	.LFB38
+ 4586 001c 1E000000 		.4byte	.LFE38-.LFB38
+ 4587 0020 00000000 		.4byte	.LFB39
+ 4588 0024 32000000 		.4byte	.LFE39-.LFB39
+ 4589 0028 00000000 		.4byte	.LFB40
+ 4590 002c 1E000000 		.4byte	.LFE40-.LFB40
+ 4591 0030 00000000 		.4byte	.LFB41
+ 4592 0034 4E000000 		.4byte	.LFE41-.LFB41
+ 4593 0038 00000000 		.4byte	.LFB42
+ 4594 003c 24000000 		.4byte	.LFE42-.LFB42
+ 4595 0040 00000000 		.4byte	.LFB43
+ 4596 0044 58000000 		.4byte	.LFE43-.LFB43
+ 4597 0048 00000000 		.4byte	.LFB44
+ 4598 004c 34000000 		.4byte	.LFE44-.LFB44
+ 4599 0050 00000000 		.4byte	.LFB45
+ 4600 0054 68000000 		.4byte	.LFE45-.LFB45
+ 4601 0058 00000000 		.4byte	.LFB46
+ 4602 005c 34000000 		.4byte	.LFE46-.LFB46
+ 4603 0060 00000000 		.4byte	.LFB47
+ 4604 0064 E0000000 		.4byte	.LFE47-.LFB47
+ 4605 0068 00000000 		.4byte	0
+ 4606 006c 00000000 		.4byte	0
+ 4607              		.section	.debug_ranges,"",%progbits
+ 4608              	.Ldebug_ranges0:
+ 4609 0000 00000000 		.4byte	.LFB37
+ 4610 0004 28000000 		.4byte	.LFE37
+ 4611 0008 00000000 		.4byte	.LFB38
+ 4612 000c 1E000000 		.4byte	.LFE38
+ 4613 0010 00000000 		.4byte	.LFB39
+ 4614 0014 32000000 		.4byte	.LFE39
+ 4615 0018 00000000 		.4byte	.LFB40
+ 4616 001c 1E000000 		.4byte	.LFE40
+ 4617 0020 00000000 		.4byte	.LFB41
+ 4618 0024 4E000000 		.4byte	.LFE41
+ 4619 0028 00000000 		.4byte	.LFB42
+ 4620 002c 24000000 		.4byte	.LFE42
+ 4621 0030 00000000 		.4byte	.LFB43
+ 4622 0034 58000000 		.4byte	.LFE43
+ 4623 0038 00000000 		.4byte	.LFB44
+ 4624 003c 34000000 		.4byte	.LFE44
+ 4625 0040 00000000 		.4byte	.LFB45
+ 4626 0044 68000000 		.4byte	.LFE45
+ 4627 0048 00000000 		.4byte	.LFB46
+ 4628 004c 34000000 		.4byte	.LFE46
+ 4629 0050 00000000 		.4byte	.LFB47
+ 4630 0054 E0000000 		.4byte	.LFE47
+ 4631 0058 00000000 		.4byte	0
+ 4632 005c 00000000 		.4byte	0
+ 4633              		.section	.debug_line,"",%progbits
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 90
+
+
+ 4634              	.Ldebug_line0:
+ 4635 0000 FF020000 		.section	.debug_str,"MS",%progbits,1
+ 4635      02008B01 
+ 4635      00000201 
+ 4635      FB0E0D00 
+ 4635      01010101 
+ 4636              	.LASF31:
+ 4637 0000 636F6C6F 		.ascii	"color\000"
+ 4637      7200
+ 4638              	.LASF32:
+ 4639 0006 6C63645F 		.ascii	"lcd_setScreen\000"
+ 4639      73657453 
+ 4639      63726565 
+ 4639      6E00
+ 4640              	.LASF40:
+ 4641 0014 66436F6C 		.ascii	"fColor\000"
+ 4641      6F7200
+ 4642              	.LASF49:
+ 4643 001b 5350495F 		.ascii	"SPI_Master_SpiUartWriteTxData\000"
+ 4643      4D617374 
+ 4643      65725F53 
+ 4643      70695561 
+ 4643      72745772 
+ 4644              	.LASF2:
+ 4645 0039 73686F72 		.ascii	"short int\000"
+ 4645      7420696E 
+ 4645      7400
+ 4646              	.LASF20:
+ 4647 0043 73697A65 		.ascii	"sizetype\000"
+ 4647      74797065 
+ 4647      00
+ 4648              	.LASF54:
+ 4649 004c 5350495F 		.ascii	"SPI_Master_SpiUartGetRxBufferSize\000"
+ 4649      4D617374 
+ 4649      65725F53 
+ 4649      70695561 
+ 4649      72744765 
+ 4650              	.LASF22:
+ 4651 006e 6C63645F 		.ascii	"lcd_writeData\000"
+ 4651      77726974 
+ 4651      65446174 
+ 4651      6100
+ 4652              	.LASF43:
+ 4653 007c 70635374 		.ascii	"pcString\000"
+ 4653      72696E67 
+ 4653      00
+ 4654              	.LASF7:
+ 4655 0085 5F5F7569 		.ascii	"__uint32_t\000"
+ 4655      6E743332 
+ 4655      5F7400
+ 4656              	.LASF29:
+ 4657 0090 6C63645F 		.ascii	"lcd_SetAddr\000"
+ 4657      53657441 
+ 4657      64647200 
+ 4658              	.LASF21:
+ 4659 009c 6C63645F 		.ascii	"lcd_Reset\000"
+ 4659      52657365 
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 91
+
+
+ 4659      7400
+ 4660              	.LASF4:
+ 4661 00a6 5F5F7569 		.ascii	"__uint16_t\000"
+ 4661      6E743136 
+ 4661      5F7400
+ 4662              	.LASF30:
+ 4663 00b1 6C63645F 		.ascii	"lcd_drawPixel\000"
+ 4663      64726177 
+ 4663      50697865 
+ 4663      6C00
+ 4664              	.LASF42:
+ 4665 00bf 6C63645F 		.ascii	"lcd_displayString\000"
+ 4665      64697370 
+ 4665      6C617953 
+ 4665      7472696E 
+ 4665      6700
+ 4666              	.LASF44:
+ 4667 00d1 6C63645F 		.ascii	"lcd_init\000"
+ 4667      696E6974 
+ 4667      00
+ 4668              	.LASF12:
+ 4669 00da 75696E74 		.ascii	"uint8_t\000"
+ 4669      385F7400 
+ 4670              	.LASF15:
+ 4671 00e2 75696E74 		.ascii	"uint8\000"
+ 4671      3800
+ 4672              	.LASF52:
+ 4673 00e8 6C63645F 		.ascii	"lcd_ili9163.c\000"
+ 4673      696C6939 
+ 4673      3136332E 
+ 4673      6300
+ 4674              	.LASF36:
+ 4675 00f6 6C63645F 		.ascii	"lcd_displayImage\000"
+ 4675      64697370 
+ 4675      6C617949 
+ 4675      6D616765 
+ 4675      00
+ 4676              	.LASF45:
+ 4677 0107 466F6E74 		.ascii	"Font8x16\000"
+ 4677      38783136 
+ 4677      00
+ 4678              	.LASF17:
+ 4679 0110 666C6F61 		.ascii	"float\000"
+ 4679      7400
+ 4680              	.LASF9:
+ 4681 0116 6C6F6E67 		.ascii	"long long int\000"
+ 4681      206C6F6E 
+ 4681      6720696E 
+ 4681      7400
+ 4682              	.LASF27:
+ 4683 0124 6C63645F 		.ascii	"lcd_writeCommand\000"
+ 4683      77726974 
+ 4683      65436F6D 
+ 4683      6D616E64 
+ 4683      00
+ 4684              	.LASF6:
+ 4685 0135 6C6F6E67 		.ascii	"long int\000"
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 92
+
+
+ 4685      20696E74 
+ 4685      00
+ 4686              	.LASF39:
+ 4687 013e 6C63645F 		.ascii	"lcd_putChar8x16\000"
+ 4687      70757443 
+ 4687      68617238 
+ 4687      78313600 
+ 4688              	.LASF3:
+ 4689 014e 5F5F7569 		.ascii	"__uint8_t\000"
+ 4689      6E74385F 
+ 4689      7400
+ 4690              	.LASF55:
+ 4691 0158 5350495F 		.ascii	"SPI_Master_SpiUartClearRxBuffer\000"
+ 4691      4D617374 
+ 4691      65725F53 
+ 4691      70695561 
+ 4691      7274436C 
+ 4692              	.LASF51:
+ 4693 0178 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 4693      4320342E 
+ 4693      392E3320 
+ 4693      32303135 
+ 4693      30333033 
+ 4694 01ab 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0 -mthumb -g -O"
+ 4694      20726576 
+ 4694      6973696F 
+ 4694      6E203232 
+ 4694      31323230 
+ 4695 01de 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 4695      66756E63 
+ 4695      74696F6E 
+ 4695      2D736563 
+ 4695      74696F6E 
+ 4696              	.LASF1:
+ 4697 0206 756E7369 		.ascii	"unsigned char\000"
+ 4697      676E6564 
+ 4697      20636861 
+ 4697      7200
+ 4698              	.LASF41:
+ 4699 0214 62436F6C 		.ascii	"bColor\000"
+ 4699      6F7200
+ 4700              	.LASF0:
+ 4701 021b 7369676E 		.ascii	"signed char\000"
+ 4701      65642063 
+ 4701      68617200 
+ 4702              	.LASF10:
+ 4703 0227 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 4703      206C6F6E 
+ 4703      6720756E 
+ 4703      7369676E 
+ 4703      65642069 
+ 4704              	.LASF14:
+ 4705 023e 75696E74 		.ascii	"uint32_t\000"
+ 4705      33325F74 
+ 4705      00
+ 4706              	.LASF34:
+ 4707 0247 58436E74 		.ascii	"XCnt\000"
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 93
+
+
+ 4707      00
+ 4708              	.LASF11:
+ 4709 024c 756E7369 		.ascii	"unsigned int\000"
+ 4709      676E6564 
+ 4709      20696E74 
+ 4709      00
+ 4710              	.LASF13:
+ 4711 0259 75696E74 		.ascii	"uint16_t\000"
+ 4711      31365F74 
+ 4711      00
+ 4712              	.LASF37:
+ 4713 0262 496D6167 		.ascii	"Image\000"
+ 4713      6500
+ 4714              	.LASF5:
+ 4715 0268 73686F72 		.ascii	"short unsigned int\000"
+ 4715      7420756E 
+ 4715      7369676E 
+ 4715      65642069 
+ 4715      6E7400
+ 4716              	.LASF19:
+ 4717 027b 63686172 		.ascii	"char\000"
+ 4717      00
+ 4718              	.LASF48:
+ 4719 0280 4F4C4544 		.ascii	"OLED_DC_Write\000"
+ 4719      5F44435F 
+ 4719      57726974 
+ 4719      6500
+ 4720              	.LASF24:
+ 4721 028e 64617461 		.ascii	"data\000"
+ 4721      00
+ 4722              	.LASF53:
+ 4723 0293 433A5C55 		.ascii	"C:\\Users\\ROUSSMA\\Documents\\PSoC Creator\\RGB_OL"
+ 4723      73657273 
+ 4723      5C524F55 
+ 4723      53534D41 
+ 4723      5C446F63 
+ 4724 02c1 45445C52 		.ascii	"ED\\RGB_OLED.cydsn\000"
+ 4724      47425F4F 
+ 4724      4C45442E 
+ 4724      63796473 
+ 4724      6E00
+ 4725              	.LASF16:
+ 4726 02d3 75696E74 		.ascii	"uint32\000"
+ 4726      333200
+ 4727              	.LASF23:
+ 4728 02da 6C63645F 		.ascii	"lcd_writeData16\000"
+ 4728      77726974 
+ 4728      65446174 
+ 4728      61313600 
+ 4729              	.LASF8:
+ 4730 02ea 6C6F6E67 		.ascii	"long unsigned int\000"
+ 4730      20756E73 
+ 4730      69676E65 
+ 4730      6420696E 
+ 4730      7400
+ 4731              	.LASF18:
+ 4732 02fc 646F7562 		.ascii	"double\000"
+ARM GAS  C:\Users\ROUSSMA\AppData\Local\Temp\ccEAUgI3.s 			page 94
+
+
+ 4732      6C6500
+ 4733              	.LASF50:
+ 4734 0303 5350495F 		.ascii	"SPI_Master_SpiUartPutArray\000"
+ 4734      4D617374 
+ 4734      65725F53 
+ 4734      70695561 
+ 4734      72745075 
+ 4735              	.LASF38:
+ 4736 031e 73697A65 		.ascii	"size\000"
+ 4736      00
+ 4737              	.LASF35:
+ 4738 0323 59436E74 		.ascii	"YCnt\000"
+ 4738      00
+ 4739              	.LASF33:
+ 4740 0328 436F6C6F 		.ascii	"Color\000"
+ 4740      7200
+ 4741              	.LASF25:
+ 4742 032e 64617461 		.ascii	"data1\000"
+ 4742      3100
+ 4743              	.LASF26:
+ 4744 0334 64617461 		.ascii	"data2\000"
+ 4744      3200
+ 4745              	.LASF47:
+ 4746 033a 43794465 		.ascii	"CyDelay\000"
+ 4746      6C617900 
+ 4747              	.LASF28:
+ 4748 0342 636F6D6D 		.ascii	"command\000"
+ 4748      616E6400 
+ 4749              	.LASF46:
+ 4750 034a 4F4C4544 		.ascii	"OLED_Reset_Write\000"
+ 4750      5F526573 
+ 4750      65745F57 
+ 4750      72697465 
+ 4750      00
+ 4751              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
