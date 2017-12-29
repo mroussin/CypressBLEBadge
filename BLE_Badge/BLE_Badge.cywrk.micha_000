@@ -286,35 +286,10 @@
 <v>BLE_Badge\RGB_LCD\PSoC 4 Architecture TRM</v>
 <v>BLE_Badge\RGB_LCD\PSoC 4200 BLE Family Datasheet</v>
 <v>BLE_Badge\RGB_LCD\System Reference Guides</v>
-<v>BLE_Badge\RGB_LCD\System Reference Guides\cy_boot_v5_60</v>
-<v>BLE_Badge\RGB_LCD\System Reference Guides\cy_dmac_v1_10</v>
-<v>BLE_Badge\RGB_LCD\System Reference Guides\cy_lfclk_v1_20</v>
-<v>BLE_Badge\RGB_LCD\cy_pins_v2_20</v>
-<v>BLE_Badge\RGB_LCD\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
-<v>BLE_Badge\RGB_LCD\Gnd_v1_0.pdf</v>
-<v>BLE_Badge\RGB_LCD\Power_v1_0.pdf</v>
-<v>BLE_Badge\RGB_LCD\SCB_P4_v3_20.pdf</v>
 <v>BLE_Badge\RGB_OLED</v>
 <v>BLE_Badge\RGB_OLED\PSoC 4 Architecture TRM</v>
 <v>BLE_Badge\RGB_OLED\PSoC 4200 BLE Family Datasheet</v>
 <v>BLE_Badge\RGB_OLED\System Reference Guides</v>
-<v>BLE_Badge\RGB_OLED\System Reference Guides\cy_boot_v5_50</v>
-<v>BLE_Badge\RGB_OLED\System Reference Guides\cy_dmac_v1_10</v>
-<v>BLE_Badge\RGB_OLED\System Reference Guides\cy_lfclk_v1_10</v>
-<v>BLE_Badge\RGB_OLED\BLE_v3_30.pdf</v>
-<v>BLE_Badge\RGB_OLED\CapSense_CSD_P4_v2_60.pdf</v>
-<v>BLE_Badge\RGB_OLED\cy_clock_v2_20</v>
-<v>BLE_Badge\RGB_OLED\cy_clock_v2_20\cy_clock_v2_20.pdf</v>
-<v>BLE_Badge\RGB_OLED\cy_isr_v1_70.pdf</v>
-<v>BLE_Badge\RGB_OLED\cy_pins_v2_20</v>
-<v>BLE_Badge\RGB_OLED\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
-<v>BLE_Badge\RGB_OLED\Gnd_v1_0.pdf</v>
-<v>BLE_Badge\RGB_OLED\Power_v1_0.pdf</v>
-<v>BLE_Badge\RGB_OLED\RTC_P4_v1_10.pdf</v>
-<v>BLE_Badge\RGB_OLED\SCB_P4_v3_20</v>
-<v>BLE_Badge\RGB_OLED\SCB_P4_v3_20\SCB_P4_v3_20.pdf</v>
-<v>BLE_Badge\RGB_OLED\TCPWM_P4_v2_10</v>
-<v>BLE_Badge\RGB_OLED\TCPWM_P4_v2_10\TCPWM_P4_v2_10.pdf</v>
 </ExpandedNodeIds>
 <VisibleNodeIds>
 <v>BLE_Badge</v>
@@ -322,31 +297,10 @@
 <v>BLE_Badge\RGB_LCD\PSoC 4 Architecture TRM</v>
 <v>BLE_Badge\RGB_LCD\PSoC 4200 BLE Family Datasheet</v>
 <v>BLE_Badge\RGB_LCD\System Reference Guides</v>
-<v>BLE_Badge\RGB_LCD\System Reference Guides\cy_boot_v5_60</v>
-<v>BLE_Badge\RGB_LCD\System Reference Guides\cy_dmac_v1_10</v>
-<v>BLE_Badge\RGB_LCD\System Reference Guides\cy_lfclk_v1_20</v>
-<v>BLE_Badge\RGB_LCD\cy_pins_v2_20</v>
-<v>BLE_Badge\RGB_LCD\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
-<v>BLE_Badge\RGB_LCD\Gnd_v1_0.pdf</v>
-<v>BLE_Badge\RGB_LCD\Power_v1_0.pdf</v>
-<v>BLE_Badge\RGB_LCD\SCB_P4_v3_20.pdf</v>
 <v>BLE_Badge\RGB_OLED</v>
 <v>BLE_Badge\RGB_OLED\PSoC 4 Architecture TRM</v>
 <v>BLE_Badge\RGB_OLED\PSoC 4200 BLE Family Datasheet</v>
 <v>BLE_Badge\RGB_OLED\System Reference Guides</v>
-<v>BLE_Badge\RGB_OLED\System Reference Guides\cy_boot_v5_50</v>
-<v>BLE_Badge\RGB_OLED\System Reference Guides\cy_dmac_v1_10</v>
-<v>BLE_Badge\RGB_OLED\System Reference Guides\cy_lfclk_v1_10</v>
-<v>BLE_Badge\RGB_OLED\BLE_v3_30.pdf</v>
-<v>BLE_Badge\RGB_OLED\CapSense_CSD_P4_v2_60.pdf</v>
-<v>BLE_Badge\RGB_OLED\cy_clock_v2_20</v>
-<v>BLE_Badge\RGB_OLED\cy_clock_v2_20\cy_clock_v2_20.pdf</v>
-<v>BLE_Badge\RGB_OLED\cy_isr_v1_70.pdf</v>
-<v>BLE_Badge\RGB_OLED\cy_pins_v2_20</v>
-<v>BLE_Badge\RGB_OLED\cy_pins_v2_20\cy_pins_v2_20.pdf</v>
-<v>BLE_Badge\RGB_OLED\Gnd_v1_0.pdf</v>
-<v>BLE_Badge\RGB_OLED\Power_v1_0.pdf</v>
-<v>BLE_Badge\RGB_OLED\RTC_P4_v1_10.pdf</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStatesV2>
@@ -360,17 +314,14 @@
 </userData>
 </CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
 <Unloaded />
-<OpenDocs>
-<name v=".\RGB_LCD.cydsn\TopDesign\TopDesign.cysch" />
-<name v=".\RGB_OLED.cydsn\TopDesign\TopDesign.cysch" />
-</OpenDocs>
+<OpenDocs />
 <OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
 
   Actipro Docking/MDI for WinForms
   Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
   http://www.actiprosoftware.com
 
---><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1041, 402" SelectedTabbedMdiWindow="a6195ac9-7864-4972-a0a7-db016685ca04"><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="41e12db0-3868-417c-be5c-d50e05dd4dd8" /><DocumentWindow Key="C:\Users\micha_000\Documents\GitHub\CypressBLEBadge\RGB_OLED\RGB_LCD.cydsn\TopDesign\TopDesign.cysch" Guid="a6195ac9-7864-4972-a0a7-db016685ca04" /><DocumentWindow Key="C:\Users\micha_000\Documents\GitHub\CypressBLEBadge\RGB_OLED\RGB_OLED.cydsn\TopDesign\TopDesign.cysch" Guid="cdf87c9c-4f1d-43bd-9b69-26ce54e77dd6" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1139, 402" SelectedTabbedMdiWindow="41e12db0-3868-417c-be5c-d50e05dd4dd8"><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="41e12db0-3868-417c-be5c-d50e05dd4dd8" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
